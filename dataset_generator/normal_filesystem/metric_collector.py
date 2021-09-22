@@ -6,7 +6,7 @@ import sys, traceback
 from subprocess import check_output
 
 src_ip = "127.0.0.1"
-dst_ip = "134.197.94.220"
+dst_ip = "134.197.94.236"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu

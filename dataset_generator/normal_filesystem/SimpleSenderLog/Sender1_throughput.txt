@@ -57,3 +57,5 @@
 20-09-2021 16:36:29 22 Network thr:0.0Mb/s
 20-09-2021 16:36:30 22 Network thr:0.0Mb/s
 20-09-2021 16:36:31 22 Network thr:0.0Mb/s
+22-09-2021 11:58:35 22 Network thr:6.0Mb/s
+22-09-2021 11:58:36 22 Network thr:0.0Mb/s
