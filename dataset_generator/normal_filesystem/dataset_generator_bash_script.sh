@@ -1,7 +1,7 @@
 #!/bin/bash
 
 wait_period=0
-ethernet_interface_name='eth0'
+ethernet_interface_name='enp0s31f6'
 while true
 do
     echo "wait period ${wait_period}"
@@ -33,7 +33,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 1 &
+        python3 ../utilitie/read_test.py 1 &
         sleep 5;
         python3 metric_collector.py 1 &
         sleep 60;
@@ -46,7 +46,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 2 &
+        python3 ../utilitie/read_test.py 2 &
         sleep 5;
         python3 metric_collector.py 2 &
         sleep 60;
@@ -59,7 +59,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 3 &
+        python3 ../utilitie/read_test.py 3 &
         sleep 5;
         python3 metric_collector.py 3 &
         sleep 60;
@@ -72,7 +72,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 4 &
+        python3 ../utilitie/read_test.py 4 &
         sleep 5;
         python3 metric_collector.py 4 &
         sleep 60;
@@ -85,7 +85,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 5 &
+        python3 ../utilitie/read_test.py 5 &
         sleep 5;
         python3 metric_collector.py 5 &
         sleep 60;
@@ -98,7 +98,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 6 &
+        python3 ../utilitie/read_test.py 6 &
         sleep 5;
         python3 metric_collector.py 6 &
         sleep 60;
@@ -111,7 +111,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 7 &
+        python3 ../utilitie/read_test.py 7 &
         sleep 5;
         python3 metric_collector.py 7 &
         sleep 60;
@@ -124,7 +124,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 8 &
+        python3 ../utilitie/read_test.py 8 &
         sleep 5;
         python3 metric_collector.py 8 &
         sleep 60;
@@ -137,7 +137,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 9 &
+        python3 ../utilitie/read_test.py 9 &
         sleep 5;
         python3 metric_collector.py 9 &
         sleep 60;
@@ -150,7 +150,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 10 &
+        python3 ../utilitie/read_test.py 10 &
         sleep 5;
         python3 metric_collector.py 10 &
         sleep 60;
@@ -163,7 +163,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 11 &
+        python3 ../utilitie/read_test.py 11 &
         sleep 5;
         python3 metric_collector.py 11 &
         sleep 60;
@@ -176,7 +176,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 12 &
+        python3 ../utilitie/read_test.py 12 &
         sleep 5;
         python3 metric_collector.py 12 &
         sleep 60;
@@ -189,7 +189,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 13 &
+        python3 ../utilitie/read_test.py 13 &
         sleep 5;
         python3 metric_collector.py 13 &
         sleep 60;
@@ -202,7 +202,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 14 &
+        python3 ../utilitie/read_test.py 14 &
         sleep 5;
         python3 metric_collector.py 14 &
         sleep 60;
@@ -215,7 +215,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 15 &
+        python3 ../utilitie/read_test.py 15 &
         sleep 5;
         python3 metric_collector.py 15 &
         sleep 60;
@@ -228,7 +228,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 read_test.py 16 &
+        python3 ../utilitie/read_test.py 16 &
         sleep 5;
         python3 metric_collector.py 16 &
         sleep 60;
@@ -241,7 +241,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 4 &
+        python3 ../utilitie/write_test.py 4 &
         sleep 5;
         python3 metric_collector.py 17 &
         sleep 60;
@@ -254,7 +254,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 8 &
+        python3 ../utilitie/write_test.py 8 &
         sleep 5;
         python3 metric_collector.py 18 &
         sleep 60;
@@ -267,7 +267,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 12 &
+        python3 ../utilitie/write_test.py 12 &
         sleep 5;
         python3 metric_collector.py 19 &
         sleep 60;
@@ -280,7 +280,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 16 &
+        python3 ../utilitie/write_test.py 16 &
         sleep 5;
         python3 metric_collector.py 20 &
         sleep 60;
@@ -293,7 +293,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 20 &
+        python3 ../utilitie/write_test.py 20 &
         sleep 5;
         python3 metric_collector.py 21 &
         sleep 60;
@@ -306,7 +306,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 24 &
+        python3 ../utilitie/write_test.py 24 &
         sleep 5;
         python3 metric_collector.py 22 &
         sleep 60;
@@ -319,7 +319,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 28 &
+        python3 ../utilitie/write_test.py 28 &
         sleep 5;
         python3 metric_collector.py 23 &
         sleep 60;
@@ -332,7 +332,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 32 &
+        python3 ../utilitie/write_test.py 32 &
         sleep 5;
         python3 metric_collector.py 24 &
         sleep 60;
@@ -345,7 +345,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 36 &
+        python3 ../utilitie/write_test.py 36 &
         sleep 5;
         python3 metric_collector.py 25 &
         sleep 60;
@@ -358,7 +358,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 40 &
+        python3 ../utilitie/write_test.py 40 &
         sleep 5;
         python3 metric_collector.py 26 &
         sleep 60;
@@ -371,7 +371,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 44 &
+        python3 ../utilitie/write_test.py 44 &
         sleep 5;
         python3 metric_collector.py 27 &
         sleep 60;
@@ -384,7 +384,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 48 &
+        python3 ../utilitie/write_test.py 48 &
         sleep 5;
         python3 metric_collector.py 28 &
         sleep 60;
@@ -397,7 +397,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 64 &
+        python3 ../utilitie/write_test.py 64 &
         sleep 5;
         python3 metric_collector.py 29 &
         sleep 60;
@@ -410,7 +410,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 72 &
+        python3 ../utilitie/write_test.py 72 &
         sleep 5;
         python3 metric_collector.py 30 &
         sleep 60;
@@ -423,7 +423,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 96 &
+        python3 ../utilitie/write_test.py 96 &
         sleep 5;
         python3 metric_collector.py 31 &
         sleep 60;
@@ -436,7 +436,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        python3 write_test.py 128 &
+        python3 ../utilitie/write_test.py 128 &
         sleep 5;
         python3 metric_collector.py 32 &
         sleep 60;
@@ -477,7 +477,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        # TODO check if with or with out "" is true
+        # T ODO check if with or with out "" is true
         stress-ng --vm-bytes "$(awk '/MemAvailable/{printf "%d\n", $2 * 0.98;}' < /proc/meminfo)"k --vm-keep -m 10  &
         sleep 5;
         python3 metric_collector.py 35 &
@@ -709,7 +709,7 @@ do
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
-        tc qdisc del dev $ethernet_interface_name root;
+        tc qdisc del dev $ethernet_interface_name root;[DEFAULT]
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 52: "network" reorder 0.5%
