@@ -23,7 +23,7 @@ pid = 0
 is_transfer_done = False
 
 
-# TODO check if this is necessary for normal filesystem
+# T ODO check if this is necessary for normal filesystem
 # mdt_parent_path = '/proc/fs/lustre/mdc/'
 
 class FileTransferThread(threading.Thread):
@@ -40,7 +40,7 @@ class FileTransferThread(threading.Thread):
 def transfer_file(i):
     global pid, label_value
     output_file = open("./logs/file_transfer_stat.txt", "a+")
-    # TODO check why use SimpleSender2 for label 29
+    # T ODO check why use SimpleSender2 for label 29
     # if label_value == 29:
     #     comm_ss = ['java', 'SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
@@ -173,7 +173,7 @@ def get_disk_stat():
     return read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util
 
 
-# TODO check if these function is needed for normal filesystem:
+# T ODO check if these function is needed for normal filesystem:
 #  process_mds_rpc, process_mdt_stat, process_ost_stat, get_mdt_stat
 # def process_mds_rpc(mdt_path):
 #     proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
@@ -348,8 +348,8 @@ def collect_stat():
                                 if len(item.strip()) > 0:
                                     first_list.append(item)
 
-                            # TODO WHAT INDEX IS CORRECT?
-                            # TODO WHAT is the output of ss -t -i command?
+                            # T ODO WHAT INDEX IS CORRECT?
+                            #  WHAT is the output of ss -t -i command?
                             send_buffer_value = int(first_list[1].strip())
                             # send_buffer_value = int(first_list[7].strip())
                             # send_buffer_value = int(first_list[-3].strip())
