@@ -493,9 +493,9 @@ def collect_stat():
                         epoc_count += 1
                         print(epoc_count)
                         if epoc_count % 10 == 0:
-                            print("transferring file.... ", epoc_count)
+                            print("transferring file.... ", epoc_count, "label: ", label_value)
                             if epoc_count % 100 == 0:
-                                print("transferring file.... ", epoc_count)
+                                print("transferring file.... ", epoc_count, "label: ", label_value)
                                 epoc_count = 0
                             write_thread = fileWriteThread(main_output_string, label_value)
                             write_thread.start()
