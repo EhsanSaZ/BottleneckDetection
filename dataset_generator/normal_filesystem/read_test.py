@@ -29,7 +29,7 @@ class ReadThread(Thread):
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
                             break
-                print("done", self.filename)
+                # print("done", self.filename)
 
 
 thread_number = int(sys.argv[1])
