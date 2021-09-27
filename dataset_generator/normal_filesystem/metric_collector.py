@@ -42,10 +42,10 @@ def transfer_file(i):
     output_file = open("./logs/file_transfer_stat.txt", "a+")
     # T ODO check why use SimpleSender2 for label 29
     # if label_value == 29:
-    #     comm_ss = ['java', 'SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
+    #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
-    #     comm_ss = ['java', 'SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', 'SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
     pid = check_output(['pidof', '-s', 'java', 'SimpleSender1.java'])
