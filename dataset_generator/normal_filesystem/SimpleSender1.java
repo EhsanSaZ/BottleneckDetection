@@ -152,7 +152,6 @@ public class SimpleSender1 {
         int port = Integer.valueOf(args[1]);
         String path = args[2];
         int label = Integer.valueOf(args[3]);
-        System.out.println("dfsfsfsdfsdffffffffffffffffffffff");
         SimpleSender1 fc = new SimpleSender1(destIp, port);
         try {
             fc.sendFile(path,label);
