@@ -6,7 +6,7 @@ import sys, traceback
 from subprocess import check_output
 
 src_ip = "127.0.0.1"
-dst_ip = "134.197.94.236"
+dst_ip = "134.197.94.203"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
@@ -491,7 +491,6 @@ def collect_stat():
                         main_output_string += output_string
 
                         epoc_count += 1
-                        print(epoc_count)
                         if epoc_count % 10 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
                             if epoc_count % 100 == 0:
