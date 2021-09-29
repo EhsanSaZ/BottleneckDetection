@@ -158,7 +158,7 @@ class Model_Run:
         if not model_name:
             model_name = self.model_name
         df = df.sample(frac=1).reset_index(drop=True)
-        X = df.drop(df.columns[len(df.columns) - 1], 1)
+        X = df.drop(df.columns[len(df.columns) - 1], axis=1)
         Y = df[df.columns[len(df.columns) - 1]]
         total_labels = len(dict(Counter(Y)))
 
@@ -211,7 +211,7 @@ class Model_Run:
 
     def predict_with_other(self, clf, df):
         df = df.sample(frac=1).reset_index(drop=True)
-        X = df.drop(df.columns[len(df.columns) - 1], 1)
+        X = df.drop(df.columns[len(df.columns) - 1], axis=1)
         Y = df[df.columns[len(df.columns) - 1]]
         y_pred = clf.predict(X)
         return metrics.accuracy_score(Y, y_pred)
@@ -225,11 +225,11 @@ class Model_Run:
         display(HTML("<b>Running Accuracy for %s</b>" % model_name_to_model[model_name]))
 
         df_a = df_a.sample(frac=1).reset_index(drop=True)
-        X_a = df_a.drop(df_a.columns[len(df_a.columns) - 1], 1)
+        X_a = df_a.drop(df_a.columns[len(df_a.columns) - 1], axis=1)
         y_a = df_a[df_a.columns[len(df_a.columns) - 1]]
 
         df_b = df_b.sample(frac=1).reset_index(drop=True)
-        X_b = df_b.drop(df_b.columns[len(df_b.columns) - 1], 1)
+        X_b = df_b.drop(df_b.columns[len(df_b.columns) - 1], axis=1)
         y_b = df_b[df_b.columns[len(df_b.columns) - 1]]
 
         clf_a = self.generate_with_all(X_a, y_a, model_name)
@@ -268,7 +268,7 @@ class Model_Run:
 
     def test_all_classifier(self, df):
         df = df.sample(frac=1).reset_index(drop=True)
-        X = df.drop(df.columns[len(df.columns) - 1], 1)
+        X = df.drop(df.columns[len(df.columns) - 1], axis=1)
         Y = df[df.columns[len(df.columns) - 1]]
         total_labels = len(dict(Counter(Y)))
         self.model_to_name = {"RF": "Random Forest", "DT": "Decision Tree", "MLP": "MLP Classifier",
@@ -301,7 +301,7 @@ class Model_Run:
 
     def mlp_grid_search(self, df):
         df = df.sample(frac=1).reset_index(drop=True)
-        X = df.drop(df.columns[len(df.columns) - 1], 1)
+        X = df.drop(df.columns[len(df.columns) - 1], axis=1)
         Y = df[df.columns[len(df.columns) - 1]]
         total_labels = len(dict(Counter(Y)))
 
@@ -335,7 +335,7 @@ class Model_Run:
         if not model_name:
             model_name = self.model_name
         df = df.sample(frac=1).reset_index(drop=True)
-        X = df.drop(df.columns[len(df.columns) - 1], 1)
+        X = df.drop(df.columns[len(df.columns) - 1], axis=1)
         Y = df[df.columns[len(df.columns) - 1]]
         total_labels = len(dict(Counter(Y)))
 
@@ -413,7 +413,7 @@ class Grouped_Labels:
 
 def get_Xy(df):
     df = df.sample(frac=1).reset_index(drop=True)
-    X = df.drop(df.columns[len(df.columns) - 1], 1)
+    X = df.drop(df.columns[len(df.columns) - 1], axis=1)
     Y = df[df.columns[len(df.columns) - 1]]
     return X, Y
 
