@@ -411,7 +411,9 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/DTNS"
+folder_dir = "./csv_logs/DTNS/"
+if not folder_dir.endswith('/'):
+    src_path = src_path + "/"
 serialize_file = folder_dir.split("/")[-2]
 csv_to_python = CSV_to_Proto(folder_dir, serialize_file)
 csv_to_python.add_all_dataset_files(csv_to_python.folder_name)
