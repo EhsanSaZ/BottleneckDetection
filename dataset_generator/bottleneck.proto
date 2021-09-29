@@ -275,6 +275,7 @@ message BottleneckFile {
         AWS = 1;
         CC = 2;
         AWS_FXS = 3;
+        UNDEFINED = 4;
     }
     optional Network network_type = 16;
     optional float created_time_utc = 17;
