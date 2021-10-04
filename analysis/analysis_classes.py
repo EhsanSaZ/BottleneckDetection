@@ -243,10 +243,11 @@ class Model_Run:
         y_pred_a = clf_b.predict(X_a)
         print("\tAccuracy:", metrics.accuracy_score(y_a, y_pred_a))
 
-    def add_to_dataset(self, df, dataset_name="A", acc_df=[]):
-        for model_name in ["RF", "DT", "MLP"]:
-            acc_df.append({"DataSet": dataset_name, "Model": model_name, "Accuracy": cl.run_model(df_a, model_name)})
-        return acc_df
+    # TODO fix this function
+    # def add_to_dataset(self, df, dataset_name="A", acc_df=[]):
+    #     for model_name in ["RF", "DT", "MLP"]:
+    #         acc_df.append({"DataSet": dataset_name, "Model": model_name, "Accuracy": cl.run_model(df_a, model_name)})
+    #     return acc_df
 
     def plot_combined_acc(self, data_acc):
         sns.catplot(x="DataSet",  # x variable name
