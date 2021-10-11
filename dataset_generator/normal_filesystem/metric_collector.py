@@ -66,8 +66,8 @@ def transfer_file(i):
         strings.replace("\r", "\n")
 
 
-def get_disk_stat():
-    global drive_name
+def get_disk_stat(drive_name):
+    # global drive_name
     proc = Popen(['iostat', '-x', drive_name], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     parts = res.split("\n")
@@ -410,7 +410,7 @@ def collect_stat():
 
                         system_value_list = collect_system_metrics(pid)
                         buffer_value_list = get_buffer_value()
-                        read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util = get_disk_stat()
+                        read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util = get_disk_stat(drive_name)
                         output_string = str(avg_rtt_value)+","+str(p_avg_value) + ","+str(avg_cwnd_value)+","+str(avg_rto_value)+","+\
                                     str(avg_byte_ack)+","+str(avg_seg_out) +","+str(retrans)+","+\
                                     str(avg_mss_value)+","+str(avg_ssthresh_value) + ","+str(avg_seg_in)+","+\
