@@ -208,3 +208,253 @@ def get_mdt_stat(mdt_paths):
         value_list += process_mdt_stat(mdt_parent_path + path)
     return value_list
 
+
+def collect_stat():
+    isparallel_file_system = False
+    proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
+    res = proc.communicate()[0]
+    parts = res.split("\n")
+
+    for x in parts:
+        if "lustre" in x:
+            isparallel_file_system = True
+
+    if isparallel_file_system:
+        # TODO check this works correctly
+        mdt_paths = []
+        proc = Popen(['ls', '-l', mdt_parent_path], universal_newlines=True, stdout=PIPE)
+        res = proc.communicate()[0]
+        res_parts = res.split("\n")
+        for line in res_parts:
+            if len(line.strip()) > 0:
+                if "total" not in line:
+                    parts = line.split(" ")
+                    # print(parts)
+                    mdt_paths.append(parts[-1])
+        is_controller_port = True
+        total_string = ""
+        start = time.time()
+        initial_time = time.time()
+        total_rtt_value = 0
+        total_pacing_rate = 0
+        is_first_time = True
+        avg_wait_time = 0
+        total_wait_time = 0
+        total_cwnd_value = 0
+        total_rto_value = 0
+        byte_ack = 0
+        byte_ack_so_far = 0
+        data_segs_out = 0
+        segs_out = 0
+        data_seg_out_so_far = 0
+        seg_out_so_far = 0
+        segs_in = 0
+        seg_in_so_far = 0
+        retrans = 0
+        total_ssthresh_value = 0
+        total_ost_read = 0
+        send = 0
+        unacked = 0
+        rcv_space = 0
+        time_diff = 0
+        epoc_time = 0
+        has_transfer_started = False
+        sleep_time = .1
+        epoc_count = 0
+        main_output_string = ""
+        total_mss_value = 0
+        send_buffer_value = 0
+
+        while 1:
+            ### NETWORK METRICS ###
+            global is_transfer_done
+
+            if is_transfer_done:
+                break
+            try:
+                comm_ss = ['ss', '-tanp', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip]
+                ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
+                line_in_ss = str(ss_proc.stdout.read())
+                if line_in_ss.count(dst_ip) >= 1:
+                    if (is_first_time):
+                        initial_time = time.time()
+                        is_first_time = False
+
+                    parts = line_in_ss.split("\\n")
+
+                    # for part in parts:
+                    #     print(part)
+
+                    time_diff += 1
+                    epoc_time += 1
+
+                    for x in range(len(parts)):
+                        if dst_ip in parts[x] and port_number in parts[x]:
+                            first_parts = parts[x].split(" ")
+                            first_list = []
+                            for item in first_parts:
+                                if len(item.strip()) > 0:
+                                    first_list.append(item)
+
+                            send_buffer_value = int(first_list[1].strip())
+                            sender_part = first_list[-1].strip()
+                            user_parts = sender_part.split(",")
+                            process_id_part = user_parts[1].strip()
+                            equal_index = process_id_part.find("=")
+                            # TODO check this process_id with global pid
+                            process_id = int(process_id_part[equal_index + 1:])
+
+                            if (is_first_time):
+                                initial_time = time.time()
+                                is_first_time = False
+
+                            metrics_line = parts[x + 1].strip("\\t").strip()
+                            metrics_parts = metrics_line.split(" ")
+
+                            for y in range(len(metrics_parts)):
+                                if "data_segs_out" in metrics_parts[y]:
+                                    pass
+                                elif "rto" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    total_rto_value = value
+
+                                elif "rtt" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    e_index = metrics_parts[y].find("/")
+                                    value = float(metrics_parts[y][s_index + 1:e_index])
+                                    total_rtt_value = value
+
+                                elif "mss" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    # print("value ",value)
+                                    total_mss_value = value
+
+                                elif "cwnd" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    total_cwnd_value = value
+
+                                elif "ssthresh" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    total_ssthresh_value = value
+
+                                elif "bytes_acked" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    byte_ack = (value - byte_ack_so_far)
+                                    byte_ack_so_far = value
+
+                                elif "segs_out" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    # print("value ", value)
+                                    # print("seg_out_so_far ", seg_out_so_far)
+                                    segs_out = (value - seg_out_so_far)
+                                    seg_out_so_far = value
+
+                                elif "segs_in" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    segs_in = (value - seg_in_so_far)
+                                    seg_in_so_far = value
+
+                                elif "send" in metrics_parts[y]:
+                                    value = metrics_parts[y + 1].strip()
+                                    send = value
+
+                                elif "pacing_rate" in metrics_parts[y]:
+                                    value = metrics_parts[y + 1].strip()
+                                    total_pacing_rate = value
+
+                                elif "unacked" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    unacked = value
+
+                                elif "retrans" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    e_index = metrics_parts[y].find("/")
+                                    value = float(metrics_parts[y][s_index + 1:e_index])
+                                    retrans = value
+
+                                elif "rcv_space" in metrics_parts[y]:
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    rcv_space = value
+                                # TODO COMPLETE THIS PART!
+                    if time_diff >= (.1 / sleep_time):
+                        avg_rto_value = total_rto_value
+                        avg_rtt_value = total_rtt_value
+                        avg_mss_value = total_mss_value
+                        avg_cwnd_value = total_cwnd_value
+                        avg_ssthresh_value = total_ssthresh_value
+                        avg_byte_ack = byte_ack / (1024 * 1024)
+                        avg_seg_out = segs_out
+                        avg_seg_in = segs_in
+                        avg_send_value = send
+                        p_avg_value = total_pacing_rate
+                        avg_unacked_value = unacked
+                        avg_retrans = retrans
+                        avg_rcv_space = rcv_space
+
+                    system_value_list = collect_system_metrics(process_id)
+                    buffer_value_list = get_buffer_value()
+                    # TODO check these functions to work correctly
+                    ost_path = collect_file_path_info(process_id)
+                    ost_value_list = process_ost_stat(ost_path)
+                    mdt_value_list = get_mdt_stat(mdt_paths)
+
+                    output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(avg_cwnd_value) + "," + \
+                                    str(avg_rto_value) + "," + str(avg_byte_ack) + "," + str(avg_seg_out) + "," + \
+                                    str(retrans) + "," + str(avg_mss_value) + "," + str(avg_ssthresh_value) + "," + \
+                                    str(avg_seg_in) + "," + str(avg_send_value) + "," + str(avg_unacked_value) + "," + \
+                                    str(avg_rcv_space) + "," + str(send_buffer_value)
+
+                    for item in system_value_list:
+                        output_string += "," + str(item)
+                    for item in buffer_value_list:
+                        output_string += "," + str(item)
+                    for item in ost_value_list:
+                        output_string += "," + str(item)
+                    for item in mdt_value_list:
+                        output_string += "," + str(item)
+
+                    output_string += "," + str(label_value) + "\n"
+                    main_output_string += output_string
+
+                    epoc_count += 1
+                    if epoc_count % 10 == 0:
+                        print("transferring file.... ", epoc_count, "label: ", label_value)
+                        if epoc_count % 100 == 0:
+                            print("transferring file.... ", epoc_count, "label: ", label_value)
+                            epoc_count = 0
+                        write_thread = fileWriteThread(main_output_string, label_value)
+                        write_thread.start()
+                        main_output_string = ""
+
+            except:
+                traceback.print_exc()
+            time.sleep(sleep_time)
+
+
+class fileWriteThread(threading.Thread):
+    def __init__(self, metric_string, label_value):
+        threading.Thread.__init__(self)
+        self.metric_string = metric_string
+        self.label_value = label_value
+
+    def run(self):
+        output_file = open("./logs/dataset_"+str(self.label_value)+".csv","a+")
+        output_file.write(str(self.metric_string))
+        output_file.flush()
+        output_file.close()
+
+class statThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self):
+        collect_stat()
