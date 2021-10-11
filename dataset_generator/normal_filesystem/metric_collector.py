@@ -6,9 +6,10 @@ import sys, traceback
 from subprocess import check_output
 
 from dataset_generator.utilities.system_metric_collector import collect_system_metrics
+from dataset_generator.utilities.butter_value_collector import get_buffer_value
 
 src_ip = "127.0.0.1"
-dst_ip = "127.0.0.1"
+dst_ip = "134.197.95.155"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
@@ -63,28 +64,6 @@ def transfer_file(i):
         # if not line.decode("utf-8"):
         #     break
         strings.replace("\r", "\n")
-
-
-def get_buffer_value():
-    value_list = []
-
-    proc = Popen(['cat', '/proc/sys/net/ipv4/tcp_rmem'], universal_newlines=True, stdout=PIPE)
-    res = proc.communicate()[0]
-    res_parts = res.split("\t")
-    for line in res_parts:
-        if len(line.strip()) > 0:
-            value = int(line.strip())
-            value_list.append(value)
-
-    proc = Popen(['cat', '/proc/sys/net/ipv4/tcp_wmem'], universal_newlines=True, stdout=PIPE)
-    res = proc.communicate()[0]
-    res_parts = res.split("\t")
-    for line in res_parts:
-        if len(line.strip()) > 0:
-            value = int(line.strip())
-            value_list.append(value)
-
-    return value_list
 
 
 def get_disk_stat():
