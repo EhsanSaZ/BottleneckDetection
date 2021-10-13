@@ -5,12 +5,11 @@ import subprocess
 import sys, traceback
 from subprocess import check_output
 
-from dataset_generator.utilities.system_metric_collector import collect_system_metrics
-from dataset_generator.utilities.butter_value_collector import get_buffer_value
-from dataset_generator.utilities.disk_stat_collector import get_disk_stat
-
+from system_metric_collector import collect_system_metrics
+from butter_value_collector import get_buffer_value
+from disk_stat_collector import get_disk_stat
 src_ip = "127.0.0.1"
-dst_ip = "134.197.95.155"
+dst_ip = "134.197.95.145"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
