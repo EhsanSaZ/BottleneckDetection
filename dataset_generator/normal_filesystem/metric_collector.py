@@ -204,7 +204,7 @@ def collect_stat():
         time_diff = 0
         epoc_time = 0
         has_transfer_started = False
-        sleep_time = .1
+        sleep_time = 1
         epoc_count = 0
         main_output_string = ""
         total_mss_value = 0
