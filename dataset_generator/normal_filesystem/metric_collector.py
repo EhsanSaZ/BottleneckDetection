@@ -336,19 +336,19 @@ def collect_stat():
                                     rcv_space = value
 
                     if time_diff >= (.1 / sleep_time):
-                        avg_rto_value = total_rto_value / time_diff
-                        avg_rtt_value = total_rtt_value / time_diff
-                        avg_mss_value = total_mss_value / time_diff
-                        avg_cwnd_value = total_cwnd_value / time_diff
-                        avg_ssthresh_value = total_ssthresh_value / time_diff
+                        avg_rto_value = total_rto_value
+                        avg_rtt_value = total_rtt_value
+                        avg_mss_value = total_mss_value
+                        avg_cwnd_value = total_cwnd_value
+                        avg_ssthresh_value = total_ssthresh_value
                         avg_byte_ack = byte_ack / (1024 * 1024)
                         avg_seg_out = segs_out
                         avg_seg_in = segs_in
                         avg_send_value = send
                         p_avg_value = total_pacing_rate
                         avg_unacked_value = unacked
-                        avg_retrans = retrans / time_diff
-                        avg_rcv_space = rcv_space / time_diff
+                        avg_retrans = retrans
+                        avg_rcv_space = rcv_space
 
                         # print("Individual values")
                         # print("1 ",avg_rto_value)
