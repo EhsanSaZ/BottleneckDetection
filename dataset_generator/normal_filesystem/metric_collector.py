@@ -4,6 +4,7 @@ from subprocess import PIPE, Popen
 import subprocess
 import sys, traceback
 from subprocess import check_output
+import re
 
 from system_metric_collector import collect_system_metrics
 from butter_value_collector import get_buffer_value
@@ -257,47 +258,48 @@ def collect_stat():
                             # print("metric parts ", metrics_parts)
 
                             for y in range(len(metrics_parts)):
-                                if "data_segs_out" in metrics_parts[y]:
+                                metrics_parts_y = metrics_parts[y]
+                                if re.search(r'\bdata_segs_out\b', metrics_parts[y]):
                                     pass
                                     # s_index = metrics_parts[y].find(":")
                                     # value = float(metrics_parts[y][s_index+1:])
                                     # data_segs_out=(value-data_seg_out_so_far)
                                     # data_seg_out_so_far = value
 
-                                elif "rto" in metrics_parts[y]:
+                                elif re.search(r'\brto\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     total_rto_value = value
 
-                                elif "rtt" in metrics_parts[y]:
+                                elif re.search(r'\brtt\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     e_index = metrics_parts[y].find("/")
                                     value = float(metrics_parts[y][s_index + 1:e_index])
                                     total_rtt_value = value
 
-                                elif "mss" in metrics_parts[y]:
+                                elif re.search(r'\bmss\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     # print("value ",value)
                                     total_mss_value = value
 
-                                elif "cwnd" in metrics_parts[y]:
+                                elif re.search(r'\bcwnd\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     total_cwnd_value = value
-
-                                elif "ssthresh" in metrics_parts[y]:
+                                    
+                                elif re.search(r'\bssthresh\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     total_ssthresh_value = value
 
-                                elif "bytes_acked" in metrics_parts[y]:
+                                elif re.search(r'\bbytes_acked\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     byte_ack = (value - byte_ack_so_far)
                                     byte_ack_so_far = value
 
-                                elif "segs_out" in metrics_parts[y]:
+                                elif re.search(r'\bsegs_out\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     # print("value ", value)
@@ -305,32 +307,32 @@ def collect_stat():
                                     segs_out = (value - seg_out_so_far)
                                     seg_out_so_far = value
 
-                                elif "segs_in" in metrics_parts[y]:
+                                elif re.search(r'\bsegs_in\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     segs_in = (value - seg_in_so_far)
                                     seg_in_so_far = value
 
-                                elif "send" in metrics_parts[y]:
+                                elif re.search(r'\bsend\b', metrics_parts[y]):
                                     value = metrics_parts[y + 1].strip()
                                     send = value
 
-                                elif "pacing_rate" in metrics_parts[y]:
+                                elif re.search(r'\bpacing_rate\b', metrics_parts[y]):
                                     value = metrics_parts[y + 1].strip()
                                     total_pacing_rate = value
 
-                                elif "unacked" in metrics_parts[y]:
+                                elif re.search(r'\bunacked\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     unacked = value
 
-                                elif "retrans" in metrics_parts[y]:
+                                elif re.search(r'\bretrans\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     e_index = metrics_parts[y].find("/")
                                     value = float(metrics_parts[y][s_index + 1:e_index])
                                     retrans = value
 
-                                elif "rcv_space" in metrics_parts[y]:
+                                elif re.search(r'\brcv_space\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     rcv_space = value
