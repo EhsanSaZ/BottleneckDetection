@@ -446,13 +446,97 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 33: "cpu"
+    #generate a random variable if it is even do the if part 33: "cpu" 10 % cpu load on all cores
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        stress -c 2 &
+        stress-ng -c 0 -l 10 &
         sleep 5;
         python3 metric_collector.py 33 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 56: "cpu" 20 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 20 &
+        sleep 5;
+        python3 metric_collector.py 56 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 57: "cpu" 30 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 30 &
+        sleep 5;
+        python3 metric_collector.py 57 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 58: "cpu" 40 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 40 &
+        sleep 5;
+        python3 metric_collector.py 58 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 59: "cpu" 50 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 50 &
+        sleep 5;
+        python3 metric_collector.py 59 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 60: "cpu" 60 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 60 &
+        sleep 5;
+        python3 metric_collector.py 60 &
+        sleep $main_sleep_time;
+        killall stress;
+        killall -9 python3;
+        killall -9 java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 61: "cpu" 70 % cpu load on all cores
+    number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress-ng -c 0 -l 70 &
+        sleep 5;
+        python3 metric_collector.py 61 &
         sleep $main_sleep_time;
         killall stress;
         killall -9 python3;
