@@ -2,6 +2,7 @@
 
 wait_period=0
 ethernet_interface_name='enp0s31f6'
+main_slip_time=60
 while true
 do
     echo "wait period ${wait_period}"
@@ -23,7 +24,7 @@ do
     #############################################################
     # run metric_collector with label value 0 for normal situation 0: "normal"
     python3 metric_collector.py 0 &
-    sleep 60;
+    sleep $main_sleep_time;
     killall -9 python3;
     killall -9 java;
     wait_period=$(($wait_period+60));
@@ -36,7 +37,7 @@ do
         python3 ../utilities/read_test.py 1 &
         sleep 5;
         python3 metric_collector.py 1 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -49,7 +50,7 @@ do
         python3 ../utilities/read_test.py 2 &
         sleep 5;
         python3 metric_collector.py 2 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -62,7 +63,7 @@ do
         python3 ../utilities/read_test.py 3 &
         sleep 5;
         python3 metric_collector.py 3 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -75,7 +76,7 @@ do
         python3 ../utilities/read_test.py 4 &
         sleep 5;
         python3 metric_collector.py 4 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -88,7 +89,7 @@ do
         python3 ../utilities/read_test.py 5 &
         sleep 5;
         python3 metric_collector.py 5 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -101,7 +102,7 @@ do
         python3 ../utilities/read_test.py 6 &
         sleep 5;
         python3 metric_collector.py 6 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -114,7 +115,7 @@ do
         python3 ../utilities/read_test.py 7 &
         sleep 5;
         python3 metric_collector.py 7 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -127,7 +128,7 @@ do
         python3 ../utilities/read_test.py 8 &
         sleep 5;
         python3 metric_collector.py 8 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -140,7 +141,7 @@ do
         python3 ../utilities/read_test.py 9 &
         sleep 5;
         python3 metric_collector.py 9 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -153,7 +154,7 @@ do
         python3 ../utilities/read_test.py 10 &
         sleep 5;
         python3 metric_collector.py 10 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -166,7 +167,7 @@ do
         python3 ../utilities/read_test.py 11 &
         sleep 5;
         python3 metric_collector.py 11 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -179,7 +180,7 @@ do
         python3 ../utilities/read_test.py 12 &
         sleep 5;
         python3 metric_collector.py 12 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -192,7 +193,7 @@ do
         python3 ../utilities/read_test.py 13 &
         sleep 5;
         python3 metric_collector.py 13 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -205,7 +206,7 @@ do
         python3 ../utilities/read_test.py 14 &
         sleep 5;
         python3 metric_collector.py 14 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -218,7 +219,7 @@ do
         python3 ../utilities/read_test.py 15 &
         sleep 5;
         python3 metric_collector.py 15 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -231,7 +232,7 @@ do
         python3 ../utilities/read_test.py 16 &
         sleep 5;
         python3 metric_collector.py 16 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -244,7 +245,7 @@ do
         python3 ../utilities/write_test.py 4 &
         sleep 5;
         python3 metric_collector.py 17 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -257,7 +258,7 @@ do
         python3 ../utilities/write_test.py 8 &
         sleep 5;
         python3 metric_collector.py 18 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -270,7 +271,7 @@ do
         python3 ../utilities/write_test.py 12 &
         sleep 5;
         python3 metric_collector.py 19 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -283,7 +284,7 @@ do
         python3 ../utilities/write_test.py 16 &
         sleep 5;
         python3 metric_collector.py 20 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -296,7 +297,7 @@ do
         python3 ../utilities/write_test.py 20 &
         sleep 5;
         python3 metric_collector.py 21 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -309,7 +310,7 @@ do
         python3 ../utilities/write_test.py 24 &
         sleep 5;
         python3 metric_collector.py 22 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -322,7 +323,7 @@ do
         python3 ../utilities/write_test.py 28 &
         sleep 5;
         python3 metric_collector.py 23 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -335,7 +336,7 @@ do
         python3 ../utilities/write_test.py 32 &
         sleep 5;
         python3 metric_collector.py 24 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -348,7 +349,7 @@ do
         python3 ../utilities/write_test.py 36 &
         sleep 5;
         python3 metric_collector.py 25 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -361,7 +362,7 @@ do
         python3 ../utilities/write_test.py 40 &
         sleep 5;
         python3 metric_collector.py 26 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -374,7 +375,7 @@ do
         python3 ../utilities/write_test.py 44 &
         sleep 5;
         python3 metric_collector.py 27 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -387,7 +388,7 @@ do
         python3 ../utilities/write_test.py 48 &
         sleep 5;
         python3 metric_collector.py 28 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -400,7 +401,7 @@ do
         python3 ../utilities/write_test.py 64 &
         sleep 5;
         python3 metric_collector.py 29 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -413,7 +414,7 @@ do
         python3 ../utilities/write_test.py 72 &
         sleep 5;
         python3 metric_collector.py 30 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -426,7 +427,7 @@ do
         python3 ../utilities/write_test.py 96 &
         sleep 5;
         python3 metric_collector.py 31 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -439,7 +440,7 @@ do
         python3 ../utilities/write_test.py 128 &
         sleep 5;
         python3 metric_collector.py 32 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -452,7 +453,7 @@ do
         stress -c 2 &
         sleep 5;
         python3 metric_collector.py 33 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall stress;
         killall -9 python3;
         killall -9 java;
@@ -466,7 +467,7 @@ do
         stress -i 10 &
         sleep 5;
         python3 metric_collector.py 34 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 stress;
         killall -9 python3;
         killall -9 java;
@@ -481,7 +482,7 @@ do
         stress-ng --vm-bytes "$(awk '/MemAvailable/{printf "%d\n", $2 * 0.98;}' < /proc/meminfo)"k --vm-keep -m 10  &
         sleep 5;
         python3 metric_collector.py 35 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
@@ -495,7 +496,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem loss 0.5%;
         sleep 5;
         python3 metric_collector.py 36 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -509,7 +510,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem loss 0.1%;
         sleep 5;
         python3 metric_collector.py 37 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -523,7 +524,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem loss 0.05%;
         sleep 5;
         python3 metric_collector.py 38 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -537,7 +538,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem loss 1%;
         sleep 5;
         python3 metric_collector.py 39 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -551,7 +552,7 @@ do
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.01ms 0.01ms distribution normal;
         sleep 5;
         python3 metric_collector.py 40 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -565,7 +566,7 @@ do
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.02ms 0.01ms distribution normal;
         sleep 5;
         python3 metric_collector.py 41 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -579,7 +580,7 @@ do
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.03ms 0.01ms distribution normal;
         sleep 5;
         python3 metric_collector.py 42 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -593,7 +594,7 @@ do
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.04ms 0.01ms distribution normal;
         sleep 5;
         python3 metric_collector.py 43 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -607,7 +608,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem duplicate 0.5%;
         sleep 5;
         python3 metric_collector.py 44 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -621,7 +622,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem duplicate 0.1%;
         sleep 5;
         python3 metric_collector.py 45 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -635,7 +636,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem duplicate 0.05%;
         sleep 5;
         python3 metric_collector.py 46 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -649,7 +650,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem duplicate 1%;
         sleep 5;
         python3 metric_collector.py 47 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -663,7 +664,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.5%;
         sleep 5;
         python3 metric_collector.py 48 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -677,7 +678,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.1%;
         sleep 5;
         python3 metric_collector.py 49 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -691,7 +692,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.05%;
         sleep 5;
         python3 metric_collector.py 50 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -705,7 +706,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem corrupt 1%;
         sleep 5;
         python3 metric_collector.py 51 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -719,7 +720,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem reorder 0.5% delay 1ms;
         sleep 5;
         python3 metric_collector.py 52 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -733,7 +734,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem reorder 0.1% delay 1ms;
         sleep 5;
         python3 metric_collector.py 53 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -747,7 +748,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem reorder 0.05% delay 1ms;
         sleep 5;
         python3 metric_collector.py 54 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -761,7 +762,7 @@ do
         tc qdisc add dev $ethernet_interface_name root netem reorder 1% delay 1ms;
         sleep 5;
         python3 metric_collector.py 55 &
-        sleep 60;
+        sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -775,7 +776,7 @@ do
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 600Mbit burst 32Mbit limit 30000;
 #        sleep 5;
 #        python3 metric_collector.py 56 &
-#        sleep 60;
+#        sleep $main_sleep_time;
 #        killall -9 python3;
 #        killall -9 java;
 #        wait_period=$(($wait_period+60));
@@ -788,7 +789,7 @@ do
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 500Mbit burst 32Mbit limit 30000;
 #        sleep 5;
 #        python3 metric_collector.py 57 &
-#        sleep 60;
+#        sleep $main_sleep_time;
 #        killall -9 python3;
 #        killall -9 java;
 #        wait_period=$(($wait_period+60));
@@ -801,7 +802,7 @@ do
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 550Mbit burst 32Mbit limit 30000;
 #        sleep 5;
 #        python3 metric_collector.py 58 &
-#        sleep 60;
+#        sleep $main_sleep_time;
 #        killall -9 python3;
 #        killall -9 java;
 #        wait_period=$(($wait_period+60));
@@ -814,7 +815,7 @@ do
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 580Mbit burst 32Mbit limit 30000;
 #        sleep 5;
 #        python3 metric_collector.py 59 &
-#        sleep 60;
+#        sleep $main_sleep_time;
 #        killall -9 python3;
 #        killall -9 java;
 #        wait_period=$(($wait_period+60));
