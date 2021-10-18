@@ -2,7 +2,7 @@
 
 wait_period=0
 ethernet_interface_name='enp0s31f6'
-main_slip_time=60
+main_sleep_time=60
 while true
 do
     echo "wait period ${wait_period}"
