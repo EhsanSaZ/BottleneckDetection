@@ -2,7 +2,7 @@
 
 wait_period=0
 ethernet_interface_name='enp0s31f6'
-main_sleep_time=60
+main_sleep_time=15
 while true
 do
     echo "wait period ${wait_period}"
@@ -454,7 +454,7 @@ do
         sleep 5;
         python3 metric_collector.py 33 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -468,7 +468,7 @@ do
         sleep 5;
         python3 metric_collector.py 56 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -482,7 +482,7 @@ do
         sleep 5;
         python3 metric_collector.py 57 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -496,7 +496,7 @@ do
         sleep 5;
         python3 metric_collector.py 58 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -510,7 +510,7 @@ do
         sleep 5;
         python3 metric_collector.py 59 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -524,7 +524,7 @@ do
         sleep 5;
         python3 metric_collector.py 60 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
@@ -538,7 +538,7 @@ do
         sleep 5;
         python3 metric_collector.py 61 &
         sleep $main_sleep_time;
-        killall stress;
+        killall -9 stress-ng;
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
