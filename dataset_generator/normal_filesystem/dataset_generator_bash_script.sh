@@ -460,11 +460,11 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 56: "cpu" 20 % cpu load on all cores
+    #generate a random variable if it is even do the if part 56: "cpu" 30 % cpu load on all cores
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        stress-ng -c 0 -l 20 &
+        stress-ng -c 0 -l 30 &
         sleep 5;
         python3 metric_collector.py 56 &
         sleep $main_sleep_time;
@@ -474,11 +474,11 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 57: "cpu" 30 % cpu load on all cores
+    #generate a random variable if it is even do the if part 57: "cpu" 70 % cpu load on all cores
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        stress-ng -c 0 -l 30 &
+        stress-ng -c 0 -l 70 &
         sleep 5;
         python3 metric_collector.py 57 &
         sleep $main_sleep_time;
@@ -488,55 +488,13 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 58: "cpu" 40 % cpu load on all cores
+    #generate a random variable if it is even do the if part 58: "cpu" 100 % cpu load on all cores
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        stress-ng -c 0 -l 40 &
+        stress-ng -c 0 -l 100 &
         sleep 5;
         python3 metric_collector.py 58 &
-        sleep $main_sleep_time;
-        killall -9 stress-ng;
-        killall -9 python3;
-        killall -9 java;
-        wait_period=$(($wait_period+60));
-        sleep 5;
-    fi
-    #generate a random variable if it is even do the if part 59: "cpu" 50 % cpu load on all cores
-    number=$RANDOM
-    if [ $((number%2)) -eq 0 ]
-    then
-        stress-ng -c 0 -l 50 &
-        sleep 5;
-        python3 metric_collector.py 59 &
-        sleep $main_sleep_time;
-        killall -9 stress-ng;
-        killall -9 python3;
-        killall -9 java;
-        wait_period=$(($wait_period+60));
-        sleep 5;
-    fi
-    #generate a random variable if it is even do the if part 60: "cpu" 60 % cpu load on all cores
-    number=$RANDOM
-    if [ $((number%2)) -eq 0 ]
-    then
-        stress-ng -c 0 -l 60 &
-        sleep 5;
-        python3 metric_collector.py 60 &
-        sleep $main_sleep_time;
-        killall -9 stress-ng;
-        killall -9 python3;
-        killall -9 java;
-        wait_period=$(($wait_period+60));
-        sleep 5;
-    fi
-    #generate a random variable if it is even do the if part 61: "cpu" 70 % cpu load on all cores
-    number=$RANDOM
-    if [ $((number%2)) -eq 0 ]
-    then
-        stress-ng -c 0 -l 70 &
-        sleep 5;
-        python3 metric_collector.py 61 &
         sleep $main_sleep_time;
         killall -9 stress-ng;
         killall -9 python3;
@@ -629,11 +587,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 40: "network" delay 0.01ms
+    #generate a random variable if it is even do the if part 40: "network" delay 0.1ms 0.1
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.01ms 0.01ms distribution normal;
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1   distribution normal;
         sleep 5;
         python3 metric_collector.py 40 &
         sleep $main_sleep_time;
@@ -643,11 +601,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 41: "network" delay 0.02ms
+    #generate a random variable if it is even do the if part 41: "network" delay 0.1ms 0.5ms
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.02ms 0.01ms distribution normal;
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.5ms distribution normal;
         sleep 5;
         python3 metric_collector.py 41 &
         sleep $main_sleep_time;
@@ -657,11 +615,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 42: "network" delay 0.03ms
+    #generate a random variable if it is even do the if part 42: "network" delay 0.1ms 1ms
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.03ms 0.01ms distribution normal;
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 1ms distribution normal;
         sleep 5;
         python3 metric_collector.py 42 &
         sleep $main_sleep_time;
@@ -671,11 +629,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 43: "network" delay 0.04ms
+    #generate a random variable if it is even do the if part 43: "network" delay 0.1ms 2ms
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.04ms 0.01ms distribution normal;
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 2ms distribution normal;
         sleep 5;
         python3 metric_collector.py 43 &
         sleep $main_sleep_time;
@@ -685,11 +643,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 44: "network" duplicate 0.5%
+    #generate a random variable if it is even do the if part 44: "network" duplicate 10%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem duplicate 0.5%;
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 10%;
         sleep 5;
         python3 metric_collector.py 44 &
         sleep $main_sleep_time;
@@ -699,11 +657,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 45: "network" duplicate 0.1%
+    #generate a random variable if it is even do the if part 45: "network" duplicate 15%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem duplicate 0.1%;
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 15%;
         sleep 5;
         python3 metric_collector.py 45 &
         sleep $main_sleep_time;
@@ -713,11 +671,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 46: "network" duplicate 0.05%
+    #generate a random variable if it is even do the if part 46: "network" duplicate 20%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem duplicate 0.05%;
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 20%;
         sleep 5;
         python3 metric_collector.py 46 &
         sleep $main_sleep_time;
@@ -727,11 +685,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 47: "network" duplicate 1%
+    #generate a random variable if it is even do the if part 47: "network" duplicate 25%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem duplicate 1%;
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 25%;
         sleep 5;
         python3 metric_collector.py 47 &
         sleep $main_sleep_time;
@@ -794,14 +752,14 @@ do
         killall -9 python3;
         killall -9 java;
         wait_period=$(($wait_period+60));
-        tc qdisc del dev $ethernet_interface_name root;[DEFAULT]
+        tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 52: "network" reorder 0.5%
+    #generate a random variable if it is even do the if part 52: "network" reorder 10%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem reorder 0.5% delay 1ms;
+        tc qdisc add dev $ethernet_interface_name root netem reorder 10% delay 1ms;
         sleep 5;
         python3 metric_collector.py 52 &
         sleep $main_sleep_time;
@@ -811,11 +769,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 53: "network" reorder 0.1%
+    #generate a random variable if it is even do the if part 53: "network" reorder 15%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem reorder 0.1% delay 1ms;
+        tc qdisc add dev $ethernet_interface_name root netem reorder 15% delay 1ms;
         sleep 5;
         python3 metric_collector.py 53 &
         sleep $main_sleep_time;
@@ -825,11 +783,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 54: "network" reorder 0.05%
+    #generate a random variable if it is even do the if part 54: "network" reorder 20%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem reorder 0.05% delay 1ms;
+        tc qdisc add dev $ethernet_interface_name root netem reorder 20% delay 1ms;
         sleep 5;
         python3 metric_collector.py 54 &
         sleep $main_sleep_time;
@@ -839,11 +797,11 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
-    #generate a random variable if it is even do the if part 55: "network" reorder 1%
+    #generate a random variable if it is even do the if part 55: "network" reorder 25%
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        tc qdisc add dev $ethernet_interface_name root netem reorder 1% delay 1ms;
+        tc qdisc add dev $ethernet_interface_name root netem reorder 25% delay 1ms;
         sleep 5;
         python3 metric_collector.py 55 &
         sleep $main_sleep_time;
