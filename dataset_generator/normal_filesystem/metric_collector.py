@@ -197,6 +197,7 @@ def collect_stat():
         segs_in = 0
         seg_in_so_far = 0
         retrans = 0
+        retrans_so_far = 0
         total_ssthresh_value = 0
         total_ost_read = 0
         send = 0
@@ -327,10 +328,10 @@ def collect_stat():
                                     unacked = value
 
                                 elif re.search(r'\bretrans\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    e_index = metrics_parts[y].find("/")
-                                    value = float(metrics_parts[y][s_index + 1:e_index])
-                                    retrans = value
+                                    s_index = metrics_parts[y].find("/")
+                                    value = float(metrics_parts[y][s_index:])
+                                    retrans = value - retrans_so_far
+                                    retrans_so_far = value
 
                                 elif re.search(r'\brcv_space\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
