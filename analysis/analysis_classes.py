@@ -79,16 +79,17 @@ class TransferAnalysis:
                            168: 'create_md2', 169: 'enqueue_md2', 170: 'getattr_md2', 171: 'intent_lock_md2',
                            172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
-                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2', 182: 'label_value'}
+                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
+                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen', 184: 'label_value'}
 
         if self.log_type == "normal":
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 95)) + [182]  # list(range(1, 95)) + [182]
+                                              78] + list(range(87, 95)) + [182, 183, 184]  # list(range(1, 95)) + [182]
         elif self.log_type == "luster":
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 183))
+                                              78] + list(range(87, 185))
         else:
-            self.keys = list(range(1, 95)) + [182]
+            self.keys = list(range(1, 95)) + [182, 183, 184]
         self.headers = [self.id_to_attr[i] for i in self.keys]
         self.get_dataframe_from_array()
         # self.remove_not_needed_cols() #To remove columns whose feature importance is close to 0
@@ -106,7 +107,6 @@ class TransferAnalysis:
         self.df = pd.DataFrame(log_list)
         self.df_16 = pd.DataFrame(log_list_16, columns=self.headers)
 
-    # T ODO what is this ??
     def get_bottleneck_log_to_dict(self, log):
         new_log = {}
         # print (len(self.keys))
