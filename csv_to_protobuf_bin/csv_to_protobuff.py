@@ -58,7 +58,8 @@ class CSV_to_Proto:
                            168: 'create_md2', 169: 'enqueue_md2', 170: 'getattr_md2', 171: 'intent_lock_md2',
                            172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
-                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2', 182: 'label_value'}
+                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2', 
+                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen', 184: 'label_value'}
         self.attr_to_id = {}
         for i in self.id_to_attr:
             self.attr_to_id[self.id_to_attr[i]] = i
@@ -86,7 +87,8 @@ class CSV_to_Proto:
                           155: 'int', 156: 'int', 157: 'int', 158: 'int', 159: 'int', 160: 'int', 161: 'int',
                           162: 'int', 163: 'int', 164: 'int', 165: 'int', 166: 'int', 167: 'int', 168: 'int',
                           169: 'int', 170: 'int', 171: 'int', 172: 'int', 173: 'int', 174: 'int', 175: 'int',
-                          176: 'int', 177: 'int', 178: 'int', 179: 'int', 180: 'int', 181: 'int', 182: 'int'}
+                          176: 'int', 177: 'int', 178: 'int', 179: 'int', 180: 'int', 181: 'int',
+                          182: 'float', 183: 'float', 184: 'int'}
         self.filetype = {0: {}, 1: {'read_threads': 1}, 2: {'read_threads': 2}, 3: {'read_threads': 3},
                          4: {'read_threads': 4}, 5: {'read_threads': 5}, 6: {'read_threads': 6}, 7: {'read_threads': 7},
                          8: {'read_threads': 8}, 9: {'read_threads': 9}, 10: {'read_threads': 10},
@@ -97,24 +99,26 @@ class CSV_to_Proto:
                          23: {'write_threads': 28}, 24: {'write_threads': 32}, 25: {'write_threads': 36},
                          26: {'write_threads': 40}, 27: {'write_threads': 44}, 28: {'write_threads': 48},
                          29: {'write_threads': 64}, 30: {'write_threads': 72}, 31: {'write_threads': 96},
-                         32: {'write_threads': 128}, 33: {'cpu_stress': 2}, 34: {'io_stress': 10},
+                         32: {'write_threads': 128}, 33: {'cpu_stress': 10}, 34: {'io_stress': 10},
                          35: {'mem_stress': 0.98}, 36: {'link_loss': 0.5}, 37: {'link_loss': 0.1},
                          38: {'link_loss': 0.05}, 39: {'link_loss': 1},
-                         40: {'link_delay': 0.02, "link_delay_distribution": 0},
-                         41: {'link_delay': 0.03, "link_delay_distribution": 0},
-                         42: {'link_delay': 0.04, "link_delay_distribution": 0},
-                         43: {'link_delay': 0.05, "link_delay_distribution": 0}, 44: {'link_duplicate': 0.5},
-                         45: {'link_duplicate': 0.1}, 46: {'link_duplicate': 0.05}, 47: {'link_duplicate': 1},
-                         48: {'link_corrupt': 0.5}, 49: {'link_corrupt': 0.1}, 50: {'link_corrupt': 0.05},
-                         51: {'link_corrupt': 1}, 52: {'link_delay': 1.0, 'link_reorder': 0.5},
-                         53: {'link_delay': 1.0, 'link_reorder': 0.1}, 54: {'link_delay': 1.0, 'link_reorder': 0.05},
-                         55: {'link_delay': 1.0, 'link_reorder': 1}}
+                         40: {'link_delay': 0.1, "link_delay_distribution": 0.1},
+                         41: {'link_delay': 0.1, "link_delay_distribution": 0.5},
+                         42: {'link_delay': 0.1, "link_delay_distribution": 1},
+                         43: {'link_delay': 0.1, "link_delay_distribution": 2},
+                         44: {'link_duplicate': 10}, 45: {'link_duplicate': 15},
+                         46: {'link_duplicate': 20}, 47: {'link_duplicate': 25},
+                         48: {'link_corrupt': 0.5}, 49: {'link_corrupt': 0.1},
+                         50: {'link_corrupt': 0.05}, 51: {'link_corrupt': 1},
+                         52: {'link_delay': 1.0, 'link_reorder': 10}, 53: {'link_delay': 1.0, 'link_reorder': 15},
+                         54: {'link_delay': 1.0, 'link_reorder': 20}, 55: {'link_delay': 1.0, 'link_reorder': 25},
+                         56: {'cpu_stress': 30}, 57: {'cpu_stress': 70}, 58: {'cpu_stress': 100}}
         self.protobuff_files = {}
         if self.file_system == "normal":
-            self.keys = list(range(1, 95)) + [182]
+            self.keys = list(range(1, 95)) + [182, 183, 184]
         else:
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 183))
+                                              78] + list(range(87, 185))
 
     def read_csv(self, filename):
         data = []
@@ -388,6 +392,7 @@ class CSV_to_Proto:
                 if "dataset" in filename and "csv" in filename:
                     print("[+] Starting for %s" % (filename))
                     self.write_to_proto(folder + "/" + filename)
+        # TODO check saving cvs data to binary file for parallel file system works fine
         elif self.file_system == "lustre":
             folder_list = glob.glob(folder + "*")
             mainDict, headers = self.read_data_from_folder_file(folder_list)
