@@ -20,7 +20,8 @@ do
     #                  36: "network", 37: "network", 38: "network", 39: "network",
     #                  40: "network", 41: "network", 42: "network", 43: "network", 44: "network",
     #                  45: "network", 46: "network", 47: "network", 48: "network", 49: "network",
-    #                  50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network"}
+    #                  50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network",
+    #                  56: "cpu", 57: "cpu", 58: "cpu"}
     #############################################################
     # run metric_collector with label value 0 for normal situation 0: "normal"
     python3 metric_collector.py 0 &
