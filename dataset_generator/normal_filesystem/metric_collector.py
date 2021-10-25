@@ -212,7 +212,7 @@ def collect_stat():
         total_mss_value = 0
         send_buffer_value = 0
         dsack_dups = 0
-        reord_seen_so_far = 0
+        dsack_dups_so_far = 0
         reord_seen = 0
         reord_seen_so_far = 0
 
