@@ -10,7 +10,7 @@ from system_metric_collector import collect_system_metrics
 from butter_value_collector import get_buffer_value
 from disk_stat_collector import get_disk_stat
 src_ip = "127.0.0.1"
-dst_ip = "134.197.95.145"
+dst_ip = "134.197.94.98"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
@@ -211,6 +211,10 @@ def collect_stat():
         main_output_string = ""
         total_mss_value = 0
         send_buffer_value = 0
+        dsack_dups = 0
+        reord_seen_so_far = 0
+        reord_seen = 0
+        reord_seen_so_far = 0
 
         while 1:
             ### NETWORK METRICS ###
@@ -329,7 +333,7 @@ def collect_stat():
 
                                 elif re.search(r'\bretrans\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find("/")
-                                    value = float(metrics_parts[y][s_index:])
+                                    value = float(metrics_parts[y][s_index + 1:])
                                     retrans = value - retrans_so_far
                                     retrans_so_far = value
 
@@ -337,6 +341,18 @@ def collect_stat():
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     rcv_space = value
+
+                                elif re.search(r'\bdsack_dups\b', metrics_parts[y]):
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    dsack_dups = value - dsack_dups_so_far
+                                    dsack_dups_so_far = value
+
+                                elif re.search(r'\breord_seen\b', metrics_parts[y]):
+                                    s_index = metrics_parts[y].find(":")
+                                    value = float(metrics_parts[y][s_index + 1:])
+                                    reord_seen = value - reord_seen_so_far
+                                    reord_seen_so_far = value
 
                     if time_diff >= (.1 / sleep_time):
                         avg_rto_value = total_rto_value
@@ -352,7 +368,8 @@ def collect_stat():
                         avg_unacked_value = unacked
                         avg_retrans = retrans
                         avg_rcv_space = rcv_space
-
+                        avg_dsack_dups = dsack_dups
+                        avg_reord_seen = reord_seen
                         # print("Individual values")
                         # print("1 ",avg_rto_value)
                         # print("2, ",avg_rtt_value)
@@ -384,6 +401,9 @@ def collect_stat():
                             output_string += "," + str(item)
                         for item in buffer_value_list:
                             output_string += "," + str(item)
+
+                        output_string += "," + str(avg_dsack_dups)
+                        output_string += "," + str(avg_reord_seen)
                         output_string += "," + str(label_value) + "\n"
                         main_output_string += output_string
 
