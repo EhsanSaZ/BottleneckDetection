@@ -224,10 +224,10 @@ def collect_stat():
                 break
             # If the pid is 0, then the transfer thread is not started yet or the global pid is not updated yet
             # So it is not possible to collect for system metrics, then just skip this iteration
-            if pid == 0:
-                continue
+            # if pid == 0:
+            #     continue
             try:
-                comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip]
+                comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip + ":" + port_number]
                 ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
                 line_in_ss = str(ss_proc.stdout.read())
                 if line_in_ss.count(dst_ip) >= 1:
