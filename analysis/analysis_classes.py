@@ -361,7 +361,8 @@ class Grouped_Labels:
                                36: "network", 37: "network", 38: "network", 39: "network",
                                40: "network", 41: "network", 42: "network", 43: "network", 44: "network",
                                45: "network", 46: "network", 47: "network", 48: "network", 49: "network",
-                               50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network"
+                               50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network",
+                               56: "cpu", 57: "cpu", 58: "cpu"
                                }
         self.label_to_cate = {0: 0, 1: 1, 2: 1, 3: 1, 4: 1,
                               5: 1, 6: 1, 7: 1, 8: 1, 9: 1,
@@ -373,7 +374,8 @@ class Grouped_Labels:
                               36: 7, 37: 7, 38: 7, 39: 7,
                               40: 8, 41: 8, 42: 8, 43: 8, 44: 9,
                               45: 9, 46: 9, 47: 9, 48: 10, 49: 10,
-                              50: 10, 51: 10, 52: 11, 53: 11, 54: 11, 55: 11}
+                              50: 10, 51: 10, 52: 11, 53: 11, 54: 11, 55: 11,
+                              56: 4, 57:4, 58: 4}
 
     def grouped_label(self, df):
         error_to_label = {"normal": 0, "read": 1, "write": 2, "cpu": 3, "io": 4, "mem": 5, "network": 6}
