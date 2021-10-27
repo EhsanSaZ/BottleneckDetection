@@ -2,7 +2,7 @@
 
 wait_period=0
 ethernet_interface_name='enp0s31f6'
-main_sleep_time=15
+main_sleep_time=30
 while true
 do
     echo "wait period ${wait_period}"
@@ -32,7 +32,7 @@ do
     sleep 5;
 
     #generate a random variable if it is even do the if part 1: "read" with 1 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 1 &
@@ -45,7 +45,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 2: "read" with 2 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 2 &
@@ -58,7 +58,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 3: "read" with 3 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 3 &
@@ -71,7 +71,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 4: "read" with 4 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 4 &
@@ -84,7 +84,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 5: "read" with 5 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 5 &
@@ -97,7 +97,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 6: "read" with 6 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 6 &
@@ -110,7 +110,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 7: "read" with 7 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 7 &
@@ -123,7 +123,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 8: "read" with 8 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 8 &
@@ -136,7 +136,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 9: "read" with 9 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 9 &
@@ -149,7 +149,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 10: "read" with 10 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 10 &
@@ -162,7 +162,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 11: "read" with 11 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 11 &
@@ -175,7 +175,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 12: "read" with 12 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 12 &
@@ -188,7 +188,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 13: "read" with 13 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 13 &
@@ -201,7 +201,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 14: "read" with 14 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 14 &
@@ -214,7 +214,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 15: "read" with 15 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 15 &
@@ -227,7 +227,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 16: "read" with 16 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 16 &
@@ -240,7 +240,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 17: "write" with 4 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 4 &
@@ -253,7 +253,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 18: "write" with 8 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 8 &
@@ -266,7 +266,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 19: "write" with 12 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 12 &
@@ -279,7 +279,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 20: "write" with 16 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 16 &
@@ -292,7 +292,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 21: "write" with 20 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 20 &
@@ -305,7 +305,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 22: "write" with 24 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 24 &
@@ -318,7 +318,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 23: "write" with 28 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 28 &
@@ -331,7 +331,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 24: "write" with 32 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 32 &
@@ -344,7 +344,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 25: "write" with 36 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 36 &
@@ -357,7 +357,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 26: "write" with 40 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 40 &
@@ -370,7 +370,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 27: "write" with 44 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 44 &
@@ -383,7 +383,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 28: "write" with 48 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 48 &
@@ -396,7 +396,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 29: "write" with 64 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 64 &
@@ -409,7 +409,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 30: "write" with 72 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 72 &
@@ -422,7 +422,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 31: "write" with 96 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 96 &
@@ -435,7 +435,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if 32: "write" with 128 thread
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/write_test.py 128 &
@@ -448,7 +448,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 33: "cpu" 10 % cpu load on all cores
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         stress-ng -c 0 -l 10 &
@@ -462,7 +462,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 56: "cpu" 30 % cpu load on all cores
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         stress-ng -c 0 -l 30 &
@@ -476,7 +476,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 57: "cpu" 70 % cpu load on all cores
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         stress-ng -c 0 -l 70 &
@@ -490,7 +490,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 58: "cpu" 100 % cpu load on all cores
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         stress-ng -c 0 -l 100 &
@@ -504,7 +504,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 34: "io"
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         stress -i 10 &
@@ -518,7 +518,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 35: "mem"
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         # T ODO check if with or with out "" is true
@@ -533,7 +533,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 36: "network" loss 0.5%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem loss 0.5%;
@@ -547,7 +547,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 37: "network" loss 0.1%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem loss 0.1%;
@@ -561,7 +561,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 38: "network" loss 0.05%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem loss 0.05%;
@@ -575,7 +575,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 39: "network" loss 1%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem loss 1%;
@@ -589,7 +589,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 40: "network" delay 0.1ms 0.1
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1ms distribution normal;
@@ -603,7 +603,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 41: "network" delay 0.1ms 0.5ms
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.5ms distribution normal;
@@ -617,7 +617,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 42: "network" delay 0.1ms 1ms
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 1ms distribution normal;
@@ -631,7 +631,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 43: "network" delay 0.1ms 2ms
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 2ms distribution normal;
@@ -645,7 +645,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 44: "network" duplicate 10%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem duplicate 10%;
@@ -659,7 +659,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 45: "network" duplicate 15%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem duplicate 15%;
@@ -673,7 +673,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 46: "network" duplicate 20%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem duplicate 20%;
@@ -687,7 +687,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 47: "network" duplicate 25%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem duplicate 25%;
@@ -701,7 +701,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 48: "network" corrupt 0.5%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.5%;
@@ -715,7 +715,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 49: "network" corrupt 0.1%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.1%;
@@ -729,7 +729,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 50: "network" corrupt 0.05%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.05%;
@@ -743,7 +743,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 51: "network" corrupt 1%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem corrupt 1%;
@@ -757,7 +757,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 52: "network" reorder 10%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem reorder 10% delay 1ms;
@@ -771,7 +771,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 53: "network" reorder 15%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem reorder 15% delay 1ms;
@@ -785,7 +785,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 54: "network" reorder 20%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem reorder 20% delay 1ms;
@@ -799,7 +799,7 @@ do
         sleep 5;
     fi
     #generate a random variable if it is even do the if part 55: "network" reorder 25%
-    number=$RANDOM
+    # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
         tc qdisc add dev $ethernet_interface_name root netem reorder 25% delay 1ms;
@@ -813,7 +813,7 @@ do
         sleep 5;
     fi
 #    #generate a random variable if it is even do the if
-#    number=$RANDOM
+#    # number=$RANDOM
 #    if [ $((number%2)) -eq 0 ]
 #    then
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 600Mbit burst 32Mbit limit 30000;
@@ -826,7 +826,7 @@ do
 #        tc qdisc del dev $ethernet_interface_name root;
 #        sleep 5;
 #    fi
-#    number=$RANDOM
+#    # number=$RANDOM
 #    if [ $((number%2)) -eq 0 ]
 #    then
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 500Mbit burst 32Mbit limit 30000;
@@ -839,7 +839,7 @@ do
 #        tc qdisc del dev $ethernet_interface_name root;
 #        sleep 5;
 #    fi
-#    number=$RANDOM
+#    # number=$RANDOM
 #    if [ $((number%2)) -eq 0 ]
 #    then
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 550Mbit burst 32Mbit limit 30000;
@@ -852,7 +852,7 @@ do
 #        tc qdisc del dev $ethernet_interface_name root;
 #        sleep 5;
 #    fi
-#    number=$RANDOM
+#    # number=$RANDOM
 #    if [ $((number%2)) -eq 0 ]
 #    then
 #        tc qdisc add dev $ethernet_interface_name root tbf rate 580Mbit burst 32Mbit limit 30000;
