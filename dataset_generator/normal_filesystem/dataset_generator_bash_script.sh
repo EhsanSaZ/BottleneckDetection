@@ -592,7 +592,7 @@ do
     number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
-        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1   distribution normal;
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1ms distribution normal;
         sleep 5;
         python3 metric_collector.py 40 &
         sleep $main_sleep_time;
