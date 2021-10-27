@@ -5,9 +5,8 @@ import subprocess
 import sys, traceback
 from subprocess import check_output
 
-from dataset_generator.utilities.system_metric_collector import collect_system_metrics
-from dataset_generator.utilities.butter_value_collector import get_buffer_value
-from dataset_generator.utilities.disk_stat_collector import get_disk_stat
+from dataset_generator import ncollect_system_metrics
+from dataset_generator import get_buffer_value
 
 src_ip = "127.0.0.1"
 dst_ip = "127.0.0.1"
