@@ -59,6 +59,7 @@ do
     fi
     #generate a random variable if it is even do the if part 3: "read" with 3 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 3 &
@@ -72,6 +73,7 @@ do
     fi
     #generate a random variable if it is even do the if part 4: "read" with 4 thread
     # number=$RANDOM
+    number=0
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 4 &
@@ -85,6 +87,7 @@ do
     fi
     #generate a random variable if it is even do the if part 5: "read" with 5 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 5 &
@@ -98,6 +101,7 @@ do
     fi
     #generate a random variable if it is even do the if part 6: "read" with 6 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 6 &
@@ -111,6 +115,7 @@ do
     fi
     #generate a random variable if it is even do the if part 7: "read" with 7 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 7 &
@@ -124,6 +129,7 @@ do
     fi
     #generate a random variable if it is even do the if part 8: "read" with 8 thread
     # number=$RANDOM
+    number=0
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 8 &
@@ -135,6 +141,7 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
+    number=1
     #generate a random variable if it is even do the if part 9: "read" with 9 thread
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
@@ -150,6 +157,7 @@ do
     fi
     #generate a random variable if it is even do the if part 10: "read" with 10 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 10 &
@@ -163,6 +171,7 @@ do
     fi
     #generate a random variable if it is even do the if part 11: "read" with 11 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 11 &
@@ -176,6 +185,7 @@ do
     fi
     #generate a random variable if it is even do the if part 12: "read" with 12 thread
     # number=$RANDOM
+    number=0
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 12 &
@@ -189,6 +199,7 @@ do
     fi
     #generate a random variable if it is even do the if part 13: "read" with 13 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 13 &
@@ -202,6 +213,7 @@ do
     fi
     #generate a random variable if it is even do the if part 14: "read" with 14 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 14 &
@@ -215,6 +227,7 @@ do
     fi
     #generate a random variable if it is even do the if part 15: "read" with 15 thread
     # number=$RANDOM
+    number=1
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 15 &
@@ -228,6 +241,7 @@ do
     fi
     #generate a random variable if it is even do the if part 16: "read" with 16 thread
     # number=$RANDOM
+    number=0
     if [ $((number%2)) -eq 0 ]
     then
         python3 ../utilities/read_test.py 16 &
