@@ -216,6 +216,25 @@ def collect_stat():
         reord_seen = 0
         reord_seen_so_far = 0
 
+        time_interval = 0
+        time_so_far = 0
+        rd_ios = 0
+        rd_ios_so_far = 0
+        rd_merges = 0
+        rd_merges_so_far = 0
+        rd_sectors = 0
+        rd_sectors_so_far = 0
+        rd_ticks = 0
+        rd_ticks_so_far = 0
+        wr_ios = 0
+        wr_ios_so_far = 0
+        wr_merges = 0
+        wr_merges_so_far = 0
+        wr_sectors = 0
+        wr_sectors_so_far = 0
+        wr_ticks = 0
+        wr_ticks_so_far = 0
+
         while 1:
             ### NETWORK METRICS ###
             global is_transfer_done
@@ -233,7 +252,7 @@ def collect_stat():
                 if line_in_ss.count(dst_ip) >= 1:
                     if (is_first_time):
                         initial_time = time.time()
-                        is_first_time = False
+                        # is_first_time = False
 
                     parts = line_in_ss.split("\\n")
 
@@ -260,7 +279,7 @@ def collect_stat():
 
                             if (is_first_time):
                                 initial_time = time.time()
-                                is_first_time = False
+                                # is_first_time = False
 
                             metrics_line = parts[x + 1].strip("\\t").strip()
                             metrics_parts = metrics_line.split(" ")
@@ -393,6 +412,28 @@ def collect_stat():
                         system_value_list = collect_system_metrics(pid)
                         buffer_value_list = get_buffer_value()
                         read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util = get_disk_stat(drive_name)
+                        time_value, rd_ios_value, rd_merges_value, rd_sectors_value, rd_ticks_value, wr_ios_value, wr_merges_value, wr_sectors_value, wr_ticks_value = get_disk_stat(drive_name)
+
+                        time_interval = time_value - time_so_far
+                        time_so_far = time_value
+
+                        rd_ios = rd_ios_value - rd_ios_so_far
+                        rd_ios_so_far = rd_ios_value
+                        rd_merges = rd_merges_value - rd_merges_so_far
+                        rd_merges_so_far = rd_merges_value
+                        rd_sectors = rd_sectors_value - rd_sectors_so_far
+                        rd_sectors_so_far = rd_sectors_value
+                        rd_ticks = rd_ticks_value - rd_ticks_so_far
+                        rd_ticks_so_far = rd_ticks_value
+                        wr_ios = wr_ios_value - wr_ios_so_far
+                        wr_ios_so_far = wr_ios_value
+                        wr_merges = wr_merges_value - wr_merges_so_far
+                        wr_merges_so_far = wr_merges_value
+                        wr_sectors = wr_sectors_value - wr_sectors_so_far
+                        wr_sectors_so_far = wr_sectors_value
+                        wr_ticks = wr_ticks_value - wr_ticks_so_far
+                        wr_ticks_so_far = wr_ticks_value
+                        # TODO calculate disk metrics from scratch
                         output_string = str(avg_rtt_value)+","+str(p_avg_value) + ","+str(avg_cwnd_value)+","+str(avg_rto_value)+","+\
                                     str(avg_byte_ack)+","+str(avg_seg_out) +","+str(retrans)+","+\
                                     str(avg_mss_value)+","+str(avg_ssthresh_value) + ","+str(avg_seg_in)+","+\
@@ -409,7 +450,10 @@ def collect_stat():
                         output_string += "," + str(avg_dsack_dups)
                         output_string += "," + str(avg_reord_seen)
                         output_string += "," + str(label_value) + "\n"
-                        main_output_string += output_string
+                        if not is_first_time:
+                            main_output_string += output_string
+                        else:
+                            is_first_time = False
 
                         epoc_count += 1
                         if epoc_count % 10 == 0:
