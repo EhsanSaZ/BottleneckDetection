@@ -10,23 +10,23 @@ def get_disk_stat(drive_name):
     parts = res.split()
     parts_filtered = list(filter(None, parts))
 
-    rd_ios = parts_filtered[0]  # number of read I/Os processed
-    rd_merges = parts_filtered[1]  # number of read I/Os merged with in-queue I/O
-    rd_sectors = parts_filtered[2]  # number of sectors read
-    rd_ticks = parts_filtered[3]  # total wait time for read requests
-    wr_ios = parts_filtered[4]  # number of write I/Os processed
-    wr_merges = parts_filtered[5]  # number of write I/Os merged with in-queue I/O
-    wr_sectors = parts_filtered[6]  # number of sectors written
-    wr_ticks = parts_filtered[7]  # total wait time for write requests
-    # in_flight = parts_filtered[8]  # number of I/Os currently in flight
-    # io_ticks = parts_filtered[9]  # total time this block device has been active
-    # time_in_queue = parts_filtered[10]  # total wait time for all requests
-    # d_ios = parts_filtered[11]  # number of discard I/Os processed
-    # d_merges = parts_filtered[12]  # number of discard I/Os merged with in-queue I/O
-    # d_sectors = parts_filtered[13]  # number of sectors discarded
-    # d_ticks = parts_filtered[14]  # total wait time for discard requests
-    # fl_ios = parts_filtered[15]  # number of flush I/Os processed
-    # fl_ticks = parts_filtered[16]  # total wait time for flush requests
+    rd_ios = float(parts_filtered[0]) # number of read I/Os processed
+    rd_merges = float(parts_filtered[1])  # number of read I/Os merged with in-queue I/O
+    rd_sectors = float(parts_filtered[2])  # number of sectors read
+    rd_ticks = float(parts_filtered[3])  # total wait time for read requests
+    wr_ios = float(parts_filtered[4])  # number of write I/Os processed
+    wr_merges = float(parts_filtered[5])  # number of write I/Os merged with in-queue I/O
+    wr_sectors = float(parts_filtered[6])  # number of sectors written
+    wr_ticks = float(parts_filtered[7])  # total wait time for write requests
+    # in_flight = float(parts_filtered[8])  # number of I/Os currently in flight
+    # io_ticks = float(parts_filtered[9])  # total time this block device has been active
+    time_in_queue = float(parts_filtered[10])  # total wait time for all requests
+    # d_ios = float(parts_filtered[11])  # number of discard I/Os processed
+    # d_merges = float(parts_filtered[12])  # number of discard I/Os merged with in-queue I/O
+    # d_sectors = float(parts_filtered[13])  # number of sectors discarded
+    # d_ticks = float(parts_filtered[14])  # total wait time for discard requests
+    # fl_ios = float(parts_filtered[15])  # number of flush I/Os processed
+    # fl_ticks = float(parts_filtered[16])  # total wait time for flush requests
 
     # proc = Popen(['iostat', '-x', drive_name], universal_newlines=True, stdout=PIPE)
     # res = proc.communicate()[0]
@@ -66,4 +66,4 @@ def get_disk_stat(drive_name):
     #         util = lst_by_key.get("%util") or "0.0"  # lst_without_space[15]
     # # print(read_req," ",write_req," ",rkB," ",wkB," ",rrqm," ",wrqm," ",rrqm_perc," ",wrqm_perc," ",r_await," ",w_await," ",areq_sz," ",rareq_sz," ",wareq_sz," ",svctm," ",util)
     # return read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util
-    return time_sec, rd_ios, rd_merges, rd_sectors, rd_ticks, wr_ios, wr_merges, wr_sectors, wr_ticks
+    return time_sec, rd_ios, rd_merges, rd_sectors, rd_ticks, wr_ios, wr_merges, wr_sectors, wr_ticks, time_in_queue
