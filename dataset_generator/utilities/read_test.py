@@ -1,7 +1,9 @@
 import glob
+import subprocess
 import time
 from threading import Thread
 import sys
+import random
 """
 This file is run by a bash script to put the disk under the stress of reading bytes
 The argument is the number of threads
@@ -18,13 +20,16 @@ class ReadThread(Thread):
 
     def __init__(self, filename):
         Thread.__init__(self)
-        self.filename = filename
+        self.folder_name = filename
 
     def run(self):
-        all_files = glob.glob(src_path + "*")
+        all_files = glob.glob(src_path + self.folder_name + "/*")
+        random.shuffle(all_files)
         while True:
+            proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
             for file_ in all_files:
-                with open(file_, 'rb') as f:
+                print("Reading " + file_)
+                with open(file_, 'rb', buffering=0) as f:
                     while True:
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
@@ -35,7 +40,7 @@ class ReadThread(Thread):
 thread_number = int(sys.argv[1])
 start_time = time.time()
 threads = []
-for x in range(thread_number):
+for x in range(thread_number+1):
     new_thread = ReadThread(str(x % max_thread_name))
     new_thread.start()
     threads.append(new_thread)
