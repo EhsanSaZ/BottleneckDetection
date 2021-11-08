@@ -411,7 +411,7 @@ def collect_stat():
                                     str(avg_mss_value)+","+str(avg_ssthresh_value) + ","+str(avg_seg_in)+","+\
                                     str(avg_send_value)+","+str(avg_unacked_value) + ","+str(avg_rcv_space)+","+\
                                     str(send_buffer_value)+","+str(read_req)+","+str(write_req)+","+str(rkB)+","+str(wkB)+","+str(rrqm)+","+str(wrqm)+","+\
-                                    str(rrqm_perc)+","+str(wrqm_perc)+","+str(r_await)+","+str(w_await)+","+str(aqu_sz)+","+str(rareq_sz)+","+str(wareq_sz)+","+str(svctm)+","+str(util)
+                                    str(rrqm_perc)+","+str(wrqm_perc)+","+str(r_await)+","+str(w_await)+","+str(areq_sz)+","+str(rareq_sz)+","+str(wareq_sz)+","+str(svctm)+","+str(util)
 
                         global label_value
                         for item in system_value_list:
