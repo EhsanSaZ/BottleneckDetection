@@ -216,27 +216,19 @@ def collect_stat():
         reord_seen = 0
         reord_seen_so_far = 0
 
-        time_interval = 0
-        time_so_far = 0
-        rd_ios = 0
-        rd_ios_so_far = 0
-        rd_merges = 0
-        rd_merges_so_far = 0
-        rd_sectors = 0
-        rd_sectors_so_far = 0
-        rd_ticks = 0
-        rd_ticks_so_far = 0
-        wr_ios = 0
-        wr_ios_so_far = 0
-        wr_merges = 0
-        wr_merges_so_far = 0
-        wr_sectors = 0
-        wr_sectors_so_far = 0
-        wr_ticks = 0
-        wr_ticks_so_far = 0
-        time_in_queue = 0
-        time_in_queue_so_far = 0
-        sector_conversion_fctr = 2
+        disk_io_so_far_dict = {
+            "time_so_far": 0,
+            "rd_ios_so_far": 0,
+            "rd_merges_so_far": 0,
+            "rd_sectors_so_far": 0,
+            "rd_ticks_so_far": 0,
+            "wr_ios_so_far": 0,
+            "wr_merges_so_far": 0,
+            "wr_sectors_so_far": 0,
+            "wr_ticks_so_far": 0,
+            "time_in_queue_so_far": 0,
+            "sector_conversion_fctr": 2
+        }
         while 1:
             ### NETWORK METRICS ###
             global is_transfer_done
@@ -413,46 +405,7 @@ def collect_stat():
 
                         system_value_list = collect_system_metrics(pid)
                         buffer_value_list = get_buffer_value()
-                        # read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util = get_disk_stat(drive_name)
-                        time_value, rd_ios_value, rd_merges_value, rd_sectors_value, rd_ticks_value, wr_ios_value, wr_merges_value, wr_sectors_value, wr_ticks_value, time_in_queue_value = get_disk_stat(drive_name)
-
-                        time_interval = time_value - time_so_far
-                        time_so_far = time_value
-                        rd_ios = rd_ios_value - rd_ios_so_far
-                        rd_ios_so_far = rd_ios_value
-                        rd_merges = rd_merges_value - rd_merges_so_far
-                        rd_merges_so_far = rd_merges_value
-                        rd_sectors = rd_sectors_value - rd_sectors_so_far
-                        rd_sectors_so_far = rd_sectors_value
-                        rd_ticks = rd_ticks_value - rd_ticks_so_far
-                        rd_ticks_so_far = rd_ticks_value
-                        wr_ios = wr_ios_value - wr_ios_so_far
-                        wr_ios_so_far = wr_ios_value
-                        wr_merges = wr_merges_value - wr_merges_so_far
-                        wr_merges_so_far = wr_merges_value
-                        wr_sectors = wr_sectors_value - wr_sectors_so_far
-                        wr_sectors_so_far = wr_sectors_value
-                        wr_ticks = wr_ticks_value - wr_ticks_so_far
-                        wr_ticks_so_far = wr_ticks_value
-                        time_in_queue = time_in_queue_value - time_in_queue_so_far
-                        time_in_queue_so_far = time_in_queue_value
-
-                        read_req = float(rd_ios) / time_interval
-                        write_req = float(wr_ios) / time_interval
-                        rkB = float(rd_sectors) / sector_conversion_fctr / time_interval
-                        wkB = float(wr_sectors) / sector_conversion_fctr / time_interval
-                        rrqm = float(rd_merges) / time_interval
-                        wrqm = float(wr_merges) / time_interval
-                        rrqm_perc = float(rd_merges) * 100 / (rd_merges + rd_ios) if (rd_merges + rd_ios) else 0.0
-                        wrqm_perc = float(wr_merges) * 100 / (wr_merges + wr_ios) if (wr_merges + wr_ios) else 0.0
-                        r_await = float(rd_ticks) / rd_ios if rd_ios else 0.0
-                        w_await = float(wr_ticks) / wr_ios if wr_ios else 0.0
-                        aqu_sz = time_in_queue / 1000.0
-                        rareq_sz = float(rd_sectors) / sector_conversion_fctr / rd_ios if rd_ios else 0.0
-                        wareq_sz = float(wr_sectors) / sector_conversion_fctr / wr_ios if wr_ios else 0.0
-                        svctm = 0
-                        #TODO calculate utils if needed in future
-                        util = 0
+                        read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util, disk_io_so_far_dict = get_disk_stat(drive_name, disk_io_so_far_dict)
                         output_string = str(avg_rtt_value)+","+str(p_avg_value) + ","+str(avg_cwnd_value)+","+str(avg_rto_value)+","+\
                                     str(avg_byte_ack)+","+str(avg_seg_out) +","+str(retrans)+","+\
                                     str(avg_mss_value)+","+str(avg_ssthresh_value) + ","+str(avg_seg_in)+","+\

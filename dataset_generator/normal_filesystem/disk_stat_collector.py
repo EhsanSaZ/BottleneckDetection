@@ -2,25 +2,23 @@ import time
 from subprocess import Popen, PIPE
 
 
-def get_disk_stat(drive_name):
+def get_disk_stat(drive_name, disk_io_so_far_dict=None):
     # global drive_name
+    if disk_io_so_far_dict is None:
+        disk_io_so_far_dict = {"sector_conversion_fctr": 2}
     proc = Popen(['cat', '/sys/block/{drive_name}/stat'.format(drive_name=drive_name)], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     time_sec = time.time()
     parts = res.split()
     parts_filtered = list(filter(None, parts))
-
-    rd_ios = float(parts_filtered[0]) # number of read I/Os processed
-    rd_merges = float(parts_filtered[1])  # number of read I/Os merged with in-queue I/O
-    rd_sectors = float(parts_filtered[2])  # number of sectors read
-    rd_ticks = float(parts_filtered[3])  # total wait time for read requests
-    wr_ios = float(parts_filtered[4])  # number of write I/Os processed
-    wr_merges = float(parts_filtered[5])  # number of write I/Os merged with in-queue I/O
-    wr_sectors = float(parts_filtered[6])  # number of sectors written
-    wr_ticks = float(parts_filtered[7])  # total wait time for write requests
+    disk_io_latest_values = {"sector_conversion_fctr": 2, "time_so_far": time_sec,
+                             "rd_ios_so_far": float(parts_filtered[0]), "rd_merges_so_far": float(parts_filtered[1]),
+                             "rd_sectors_so_far": float(parts_filtered[2]), "rd_ticks_so_far": float(parts_filtered[3]),
+                             "wr_ios_so_far": float(parts_filtered[4]), "wr_merges_so_far": float(parts_filtered[5]),
+                             "wr_sectors_so_far": float(parts_filtered[6]), "wr_ticks_so_far": float(parts_filtered[7]),
+                             "time_in_queue_so_far": float(parts_filtered[10])}
     # in_flight = float(parts_filtered[8])  # number of I/Os currently in flight
     # io_ticks = float(parts_filtered[9])  # total time this block device has been active
-    time_in_queue = float(parts_filtered[10])  # total wait time for all requests
     # d_ios = float(parts_filtered[11])  # number of discard I/Os processed
     # d_merges = float(parts_filtered[12])  # number of discard I/Os merged with in-queue I/O
     # d_sectors = float(parts_filtered[13])  # number of sectors discarded
@@ -65,5 +63,35 @@ def get_disk_stat(drive_name):
     #         svctm = lst_by_key.get("svctm") or "0.0"  # lst_without_space[14]
     #         util = lst_by_key.get("%util") or "0.0"  # lst_without_space[15]
     # # print(read_req," ",write_req," ",rkB," ",wkB," ",rrqm," ",wrqm," ",rrqm_perc," ",wrqm_perc," ",r_await," ",w_await," ",areq_sz," ",rareq_sz," ",wareq_sz," ",svctm," ",util)
-    # return read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util
-    return time_sec, rd_ios, rd_merges, rd_sectors, rd_ticks, wr_ios, wr_merges, wr_sectors, wr_ticks, time_in_queue
+
+    time_interval = disk_io_latest_values.get("time_so_far") - (disk_io_so_far_dict.get("time_so_far") or 0)
+    rd_ios = float(disk_io_latest_values.get("rd_ios_so_far") - (disk_io_so_far_dict.get("rd_ios_so_far") or 0))
+    rd_merges = float(disk_io_latest_values.get("rd_merges_so_far") - (disk_io_so_far_dict.get("rd_merges_so_far") or 0))
+    rd_sectors = float(disk_io_latest_values.get("rd_sectors_so_far") - (disk_io_so_far_dict.get("rd_sectors_so_far") or 0))
+    rd_ticks = float(disk_io_latest_values.get("rd_ticks_so_far") - (disk_io_so_far_dict.get("rd_ticks_so_far") or 0))
+    wr_ios = float(disk_io_latest_values.get("wr_ios_so_far") - (disk_io_so_far_dict.get("wr_ios_so_far") or 0))
+    wr_merges = float(disk_io_latest_values.get("wr_merges_so_far") - (disk_io_so_far_dict.get("wr_merges_so_far") or 0))
+    wr_sectors = float(disk_io_latest_values.get("wr_sectors_so_far") - (disk_io_so_far_dict.get("wr_sectors_so_far") or 0))
+    wr_ticks = float(disk_io_latest_values.get("wr_ticks_so_far") - (disk_io_so_far_dict.get("wr_ticks_so_far") or 0))
+    time_in_queue = disk_io_latest_values.get("time_in_queue_so_far") - (disk_io_so_far_dict.get("time_in_queue_so_far") or 0)
+
+    read_req = rd_ios / time_interval
+    write_req = wr_ios / time_interval
+    rkB = rd_sectors / disk_io_so_far_dict.get("sector_conversion_fctr") / time_interval
+    wkB = wr_sectors / disk_io_so_far_dict.get("sector_conversion_fctr") / time_interval
+    rrqm = rd_merges / time_interval
+    wrqm = wr_merges / time_interval
+    rrqm_perc = rd_merges * 100 / (rd_merges + rd_ios) if (rd_merges + rd_ios) else 0.0
+    wrqm_perc = wr_merges * 100 / (wr_merges + wr_ios) if (wr_merges + wr_ios) else 0.0
+    r_await = rd_ticks / rd_ios if rd_ios else 0.0
+    w_await = wr_ticks / wr_ios if wr_ios else 0.0
+    aqu_sz = time_in_queue / 1000.0
+    rareq_sz = rd_sectors / disk_io_so_far_dict.get("sector_conversion_fctr") / rd_ios if rd_ios else 0.0
+    wareq_sz = wr_sectors / disk_io_so_far_dict.get("sector_conversion_fctr") / wr_ios if wr_ios else 0.0
+    svctm = 0
+    # TODO calculate utils if needed in future
+    util = 0
+
+    # return time_sec, rd_ios_value, rd_merges_value, rd_sectors_value, rd_ticks_value, wr_ios_value, wr_merges_value, wr_sectors_value, wr_ticks_value, time_in_queue_value
+    return read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, aqu_sz, rareq_sz, wareq_sz, svctm, util, disk_io_latest_values
+
