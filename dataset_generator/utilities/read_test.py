@@ -8,7 +8,7 @@ import random
 This file is run by a bash script to put the disk under the stress of reading bytes
 The argument is the number of threads
 """
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 1024 * 512
 max_thread_name = 18
 src_path = "/home/esaeedizade/Desktop/diskReadStress/"
 
@@ -25,8 +25,9 @@ class ReadThread(Thread):
     def run(self):
         all_files = glob.glob(src_path + self.folder_name + "/*")
         random.shuffle(all_files)
+        file_count = 0
+        proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
         while True:
-            proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
             for file_ in all_files:
                 print("Reading " + file_)
                 with open(file_, 'rb', buffering=0) as f:
@@ -34,7 +35,11 @@ class ReadThread(Thread):
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
                             break
-                # print("done", self.filename)
+                file_count += 1
+                if file_count == len(all_files):
+                    print(" Start a new round")
+                    file_count = 0
+                    proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
 
 
 thread_number = int(sys.argv[1])
