@@ -1,4 +1,8 @@
+import mmap
+import os
+import string
 import time
+import random
 from subprocess import Popen
 from threading import Thread
 import sys
@@ -18,12 +22,26 @@ class WriteThread(Thread):
     def __init__(self, filename):
         Thread.__init__(self)
         self.filename = filename
+        # 1024 numbers of char 1KB
+        self.chars = b'hoJSYBSWQyRtiPaopCIDuEgJWtivHVGBCcbiEpMmSBJRbLQdkreQMCPjNmHzapxKATPuHDCbhAJsTFdUeHYOOTkMNrKOOgoQBXPCHlyuiIfdxBoRSNnoZyoAbOYyDqCXJpxIhXIwLghHjQICdSJkoeNkjmzItdIVBDZTGZtXYofFSzvLWrvhmNJbEjNrCrsZYqYrrbYhwNYcVpmlUWgatBWBXrDVSukNFqrJbPygfOEdHiOMTxhpCBElBFRCpXqhIXiKCGahpSbzddVuDctliHtKiiOPmYHXwzaNiEwxQKcOUvvHFrOvXICSzJYbhlaMbDUytAyhmBiDGdNzOaedSqqACZDHBgogKxChyWGMFJxhZLcgrLUtkfVLaJlvQXboMnZDXRkfacLcXXHRLTrsoulCbxWNYjtUtIIiHOTxfnIljchCHabggeUYiFcEQxrRQNdYgiabRntjGEqvulcsFvBYzpqXOXQaqArZNZSkHOPoSuCUGzAIWtSsQPnydEfFVqzcUxZoKcfXRnYmiComMlVmAaiMWMfxEZWtflMCxprTpbskkULlShXSnYEGVKlqaTuGyNxYWiNDATtwlEPbtvBollSIGBcEsqeZOooqguokEjvFexHIxtGcyLForkgMFaVAKEZrwRNVWRGuPLjvlPVUWmmxmWwrKvJLrPhuXTzfjEhyygvVeeRBmXPXuDhvvpxPjVbrwOaKBEyfHgeevKlRspFeocwzBmEAguzqzZlHYJjQTDSQUMlUiUHgeuURcVqyKuPCUWpjoolfwzipOoNFfqMYBDIGWnbLCcaPgNyLQGBQHWQnwntfLdPUXvGpiFQiHrAXHUzklHLrDGIbsrqwKuvwePZJvaPesgMyuxQKeqKikyuvDdrFGEgaZvSzHXmDbYjrCmiULlTPuXfieMqexAQroDXEmhFukhrcHqyCWCQHhkypFKvPBDQNzRyGKVsmvVUVtOPxvXwcItqGtxFlmDUMsKQMDPliQnHPiKxQTitThuOpADNPWdWPBHLC'  # 1
 
     def run(self):
         while True:
-            proc = Popen(['touch', base_path + self.filename])
+            # strategy 1:
+            proc = Popen(['touch', base_path + self.filename + ".txt"])
             proc.communicate()
-            proc2 = Popen(['rm', base_path + self.filename])
+            with open(base_path + self.filename, 'wb', buffering=0) as f:
+                for i in range(1024):
+                    f.write(self.chars)
+                    # f.flush()
+            # strategy 2:
+            # m = mmap.mmap(-1, 1024)
+            # fd = os.open(base_path + self.filename + ".txt", os.O_CREAT | os.O_DIRECT | os.O_WRONLY)
+            # m.write(self.chars)
+            # for i in range(1024):
+            #     os.write(fd, m)
+            # os.close(fd)
+            proc2 = Popen(['rm', base_path + self.filename + ".txt"])
             proc2.communicate()
 
 
