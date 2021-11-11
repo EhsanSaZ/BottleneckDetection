@@ -1,4 +1,5 @@
 import glob
+import os
 import subprocess
 import time
 from threading import Thread
@@ -25,21 +26,22 @@ class ReadThread(Thread):
     def run(self):
         all_files = glob.glob(src_path + self.folder_name + "/*")
         random.shuffle(all_files)
-        file_count = 0
-        proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
+        # file_count = 0
+        # proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
         while True:
             for file_ in all_files:
+                proc = subprocess.run(['vmtouch -ve ' + str(file_)], stdout=subprocess.PIPE, universal_newlines=True, shell=True)
                 print("Reading " + file_)
                 with open(file_, 'rb', buffering=0) as f:
                     while True:
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
                             break
-                file_count += 1
-                if file_count == len(all_files):
-                    print(" Start a new round")
-                    file_count = 0
-                    proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
+                # file_count += 1
+                # if file_count == len(all_files):
+                #     print(" Start a new round")
+                #     file_count = 0
+                #     proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
 
 
 thread_number = int(sys.argv[1])
