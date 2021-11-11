@@ -27,7 +27,7 @@ public class SimpleSender1 {
     long startTime;
     boolean debug = false;
 
-	int yy  = 1;
+	int yy  = 0;
 	int FileCount;
 
 
@@ -62,7 +62,20 @@ public class SimpleSender1 {
             System.out.println(e);
         }
     }
-
+    public void clearCache(String path){
+        // clear the cache for this file
+            try {
+                Process process = Runtime.getRuntime().exec("vmtouch -ve " + path);
+                int exitVal = process.waitFor();
+                if (exitVal != 0) {
+                    System.out.println("Can't clear the cache");
+                }
+            } catch (IOException e) {
+		        e.printStackTrace();
+            } catch (InterruptedException e) {
+		            e.printStackTrace();
+	        }
+    }
     public void sendFile(String path, int label) throws IOException {
 
         new MonitorThread(label).start();
@@ -90,6 +103,7 @@ public class SimpleSender1 {
 
         byte[] buffer = new byte[128 * 1024];
         int n;
+        this.clearCache(path);
         while (true) {
             FiverFile currentFile = null;
             synchronized (files) {
@@ -124,7 +138,9 @@ public class SimpleSender1 {
                     totalTransferredBytes += n;
                     dos.write(buffer, 0, n);
                 }
-           
+            fis.close();
+            yy ++;
+            System.out.println("FileCount: " + yy);
         	if (yy  == FileCount){
 				// System.out.println("Checksum END File "  +  " time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 				// System.out.println("FileCount: " + FileCount);
@@ -135,12 +151,10 @@ public class SimpleSender1 {
                 for (FiverFile f : originalfiles) {
                     files.add(f);
                 }
+                this.clearCache(path);
                 yy=0;
 			}
-			
-            yy ++;
-            System.out.println("FileCount: " + yy);
-            fis.close();
+
                    
         }
     }
@@ -209,7 +223,7 @@ public class SimpleSender1 {
         @Override
         public void run() {
             try {
-                BufferedWriter out = new BufferedWriter(new FileWriter("./SimpleSenderLog/Sender1_throughput.txt", true));
+                BufferedWriter out = new BufferedWriter(new FileWriter("../normal_filesystem/SimpleSenderLog/Sender1_throughput.txt", true));
                 out.write(this.output); 
                 out.close(); 
             } catch (Exception e) {
