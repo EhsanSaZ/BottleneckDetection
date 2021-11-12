@@ -32,6 +32,7 @@ class TransferAnalysis:
     def __init__(self, filename):
         self.bottleneck_logs = BottleneckFiles()
         self.log_type = "normal" if "FXS" not in filename else "luster"
+        # TODO CC IS NOT CORRECT
         self.log_type = "cc"
         try:
             with open(filename, 'rb') as bfile:
@@ -80,16 +81,17 @@ class TransferAnalysis:
                            172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
                            180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
-                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen', 184: 'label_value'}
+                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
+                           184: 'system_cpu_percent', 185: 'system_memory_percent', 186: 'label_value'}
 
         if self.log_type == "normal":
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 95)) + [182, 183, 184]  # list(range(1, 95)) + [182]
+                                              78] + list(range(87, 95)) + [182, 183, 184, 185, 186]  # list(range(1, 95)) + [182]
         elif self.log_type == "luster":
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 185))
+                                              78] + list(range(87, 187))
         else:
-            self.keys = list(range(1, 95)) + [182, 183, 184]
+            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]
         self.headers = [self.id_to_attr[i] for i in self.keys]
         self.get_dataframe_from_array()
         # self.remove_not_needed_cols() #To remove columns whose feature importance is close to 0
