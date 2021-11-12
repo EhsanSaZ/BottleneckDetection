@@ -258,8 +258,10 @@ message BottleneckLog {
     float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
     float avg_reord_seen = 183;
 
+    float system_cpu_percent = 184;
+    float system_memory_percent = 185; // 184-185 are new System Metrics
     /* Field 184 is the label of the experiment used.*/
-    int32 label_value = 184; //The label of the experiment used.
+    int32 label_value = 186; //The label of the experiment used.
 
 }
 
