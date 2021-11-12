@@ -5,6 +5,7 @@ import subprocess
 import sys, traceback
 from subprocess import check_output
 import re
+import psutil
 
 from system_metric_collector import collect_system_metrics
 from butter_value_collector import get_buffer_value
@@ -421,6 +422,10 @@ def collect_stat():
 
                         output_string += "," + str(avg_dsack_dups)
                         output_string += "," + str(avg_reord_seen)
+
+                        output_string += "," + str(psutil.cpu_percent())
+                        output_string += "," + str(psutil.virtual_memory().percent)
+
                         output_string += "," + str(label_value) + "\n"
                         if not is_first_time:
                             main_output_string += output_string
