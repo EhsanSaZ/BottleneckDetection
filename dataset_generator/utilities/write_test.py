@@ -22,9 +22,8 @@ class WriteThread(Thread):
     def __init__(self, filename):
         Thread.__init__(self)
         self.filename = filename
-        # 1024 numbers of char 1KB
-        self.chars = b'hoJSYBSWQyRtiPaopCIDuEgJWtivHVGBCcbiEpMmSBJRbLQdkreQMCPjNmHzapxKATPuHDCbhAJsTFdUeHYOOTkMNrKOOgoQBXPCHlyuiIfdxBoRSNnoZyoAbOYyDqCXJpxIhXIwLghHjQICdSJkoeNkjmzItdIVBDZTGZtXYofFSzvLWrvhmNJbEjNrCrsZYqYrrbYhwNYcVpmlUWgatBWBXrDVSukNFqrJbPygfOEdHiOMTxhpCBElBFRCpXqhIXiKCGahpSbzddVuDctliHtKiiOPmYHXwzaNiEwxQKcOUvvHFrOvXICSzJYbhlaMbDUytAyhmBiDGdNzOaedSqqACZDHBgogKxChyWGMFJxhZLcgrLUtkfVLaJlvQXboMnZDXRkfacLcXXHRLTrsoulCbxWNYjtUtIIiHOTxfnIljchCHabggeUYiFcEQxrRQNdYgiabRntjGEqvulcsFvBYzpqXOXQaqArZNZSkHOPoSuCUGzAIWtSsQPnydEfFVqzcUxZoKcfXRnYmiComMlVmAaiMWMfxEZWtflMCxprTpbskkULlShXSnYEGVKlqaTuGyNxYWiNDATtwlEPbtvBollSIGBcEsqeZOooqguokEjvFexHIxtGcyLForkgMFaVAKEZrwRNVWRGuPLjvlPVUWmmxmWwrKvJLrPhuXTzfjEhyygvVeeRBmXPXuDhvvpxPjVbrwOaKBEyfHgeevKlRspFeocwzBmEAguzqzZlHYJjQTDSQUMlUiUHgeuURcVqyKuPCUWpjoolfwzipOoNFfqMYBDIGWnbLCcaPgNyLQGBQHWQnwntfLdPUXvGpiFQiHrAXHUzklHLrDGIbsrqwKuvwePZJvaPesgMyuxQKeqKikyuvDdrFGEgaZvSzHXmDbYjrCmiULlTPuXfieMqexAQroDXEmhFukhrcHqyCWCQHhkypFKvPBDQNzRyGKVsmvVUVtOPxvXwcItqGtxFlmDUMsKQMDPliQnHPiKxQTitThuOpADNPWdWPBHLC'  # 1
-
+        # 1024 bytes data - 1KB
+        self.chars = rnd = os.urandom(1024)
     def run(self):
         while True:
             # strategy 1:
