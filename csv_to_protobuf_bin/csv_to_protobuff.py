@@ -59,7 +59,8 @@ class CSV_to_Proto:
                            172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
                            180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2', 
-                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen', 184: 'label_value'}
+                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
+                           184: 'system_cpu_percent', 185: 'system_memory_percent', 186: 'label_value'}
         self.attr_to_id = {}
         for i in self.id_to_attr:
             self.attr_to_id[self.id_to_attr[i]] = i
@@ -88,7 +89,7 @@ class CSV_to_Proto:
                           162: 'int', 163: 'int', 164: 'int', 165: 'int', 166: 'int', 167: 'int', 168: 'int',
                           169: 'int', 170: 'int', 171: 'int', 172: 'int', 173: 'int', 174: 'int', 175: 'int',
                           176: 'int', 177: 'int', 178: 'int', 179: 'int', 180: 'int', 181: 'int',
-                          182: 'float', 183: 'float', 184: 'int'}
+                          182: 'float', 183: 'float', 184: 'float', 185: 'float', 186: 'int'}
         self.filetype = {0: {}, 1: {'read_threads': 1}, 2: {'read_threads': 2}, 3: {'read_threads': 3},
                          4: {'read_threads': 4}, 5: {'read_threads': 5}, 6: {'read_threads': 6}, 7: {'read_threads': 7},
                          8: {'read_threads': 8}, 9: {'read_threads': 9}, 10: {'read_threads': 10},
@@ -115,10 +116,10 @@ class CSV_to_Proto:
                          56: {'cpu_stress': 30}, 57: {'cpu_stress': 70}, 58: {'cpu_stress': 100}}
         self.protobuff_files = {}
         if self.file_system == "normal":
-            self.keys = list(range(1, 95)) + [182, 183, 184]
+            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]
         else:
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 185))
+                                              78] + list(range(87, 187))
 
     def read_csv(self, filename):
         data = []
