@@ -2,7 +2,7 @@ import traceback
 from subprocess import Popen, PIPE
 
 
-def collect_system_metrics(pid_str):
+def collect_system_metrics(pid_str, sender_process):
     pid = int(pid_str.strip())
 
     value_list = []
@@ -40,16 +40,18 @@ def collect_system_metrics(pid_str):
 
     # create process to collect cpu memory metrics
     try:
-        proc = Popen(['ps', '-p', str(pid).strip(), '-o', '%cpu,%mem'], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
-        res_parts = res.split("\n")
-        for line in res_parts:
-            if len(line.strip()) > 0:
-                if "%CPU" not in line:
-                    parts = line.split(" ")
-                    for x in parts:
-                        if len(x.strip()) > 0:
-                            value_list.append(float(x))
+        value_list.append(float(sender_process.cpu_percent()))
+        value_list.append(float(sender_process.memory_percent()))
+        # proc = Popen(['ps', '-p', str(pid).strip(), '-o', '%cpu,%mem'], universal_newlines=True, stdout=PIPE)
+        # res = proc.communicate()[0]
+        # res_parts = res.split("\n")
+        # for line in res_parts:
+        #     if len(line.strip()) > 0:
+        #         if "%CPU" not in line:
+        #             parts = line.split(" ")
+        #             for x in parts:
+        #                 if len(x.strip()) > 0:
+        #                     value_list.append(float(x))
     except:
         traceback.print_exc()
         print("cpu mem is not possible")

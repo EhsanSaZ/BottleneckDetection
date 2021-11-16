@@ -25,6 +25,7 @@ start_time_global = time.time()
 label_value = int(sys.argv[1])
 should_run = True
 pid = 0
+sender_process = None
 is_transfer_done = False
 
 
@@ -43,7 +44,7 @@ class FileTransferThread(threading.Thread):
 
 
 def transfer_file(i):
-    global pid, label_value
+    global pid, label_value, sender_process
     output_file = open("./logs/file_transfer_stat.txt", "a+")
     # T ODO check why use SimpleSender2 for label 29
     # if label_value == 29:
@@ -55,6 +56,7 @@ def transfer_file(i):
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
     pid = check_output(['pidof', '-s', 'java', 'SimpleSender1.java'])
     print(pid)
+    sender_process = psutil.Process(int(pid))
     # global label_value
     output_file.write("label = " + str(label_value) + "\n")
     output_file.write("start time = " + time.ctime() + "\n")
@@ -238,8 +240,8 @@ def collect_stat():
                 break
             # If the pid is 0, then the transfer thread is not started yet or the global pid is not updated yet
             # So it is not possible to collect for system metrics, then just skip this iteration
-            # if pid == 0:
-            #     continue
+            if sender_process is None: # or pid == 0
+                continue
             try:
                 comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip + ":" + port_number]
                 ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
@@ -404,7 +406,7 @@ def collect_stat():
                         # print("13, ",avg_rcv_space)
                         # print("14 ", data_segs_out)
 
-                        system_value_list = collect_system_metrics(pid)
+                        system_value_list = collect_system_metrics(pid, sender_process)
                         buffer_value_list = get_buffer_value()
                         read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util, disk_io_so_far_dict = get_disk_stat(drive_name, disk_io_so_far_dict)
                         output_string = str(avg_rtt_value)+","+str(p_avg_value) + ","+str(avg_cwnd_value)+","+str(avg_rto_value)+","+\
