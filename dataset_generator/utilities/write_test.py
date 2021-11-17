@@ -29,7 +29,7 @@ class WriteThread(Thread):
             # strategy 1:
             proc = Popen(['touch', base_path + self.filename + ".txt"])
             proc.communicate()
-            with open(base_path + self.filename, 'wb', buffering=0) as f:
+            with open(base_path + self.filename + ".txt", 'wb', buffering=0) as f:
                 for i in range(1024):
                     f.write(self.chars)
                     # f.flush()
