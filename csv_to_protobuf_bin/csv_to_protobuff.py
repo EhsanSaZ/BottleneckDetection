@@ -113,7 +113,9 @@ class CSV_to_Proto:
                          50: {'link_corrupt': 0.05}, 51: {'link_corrupt': 1},
                          52: {'link_delay': 1.0, 'link_reorder': 10}, 53: {'link_delay': 1.0, 'link_reorder': 15},
                          54: {'link_delay': 1.0, 'link_reorder': 20}, 55: {'link_delay': 1.0, 'link_reorder': 25},
-                         56: {'cpu_stress': 30}, 57: {'cpu_stress': 70}, 58: {'cpu_stress': 100}}
+                         56: {'cpu_stress': 30}, 57: {'cpu_stress': 70}, 58: {'cpu_stress': 100},
+                         59: {'max_buffer_size_ratio': 0.5},  60: {'max_buffer_size_ratio': 0.25},
+                         61: {'max_buffer_size_ratio': 0.125}}
         self.protobuff_files = {}
         if self.file_system == "normal":
             self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]

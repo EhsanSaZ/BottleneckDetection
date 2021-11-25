@@ -370,7 +370,7 @@ class Grouped_Labels:
                                40: "network", 41: "network", 42: "network", 43: "network", 44: "network",
                                45: "network", 46: "network", 47: "network", 48: "network", 49: "network",
                                50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network",
-                               56: "cpu", 57: "cpu", 58: "cpu"
+                               56: "cpu", 57: "cpu", 58: "cpu", 59: "network", 60: "network", 61: "network"
                                }
         self.label_to_cate = {0: 0, 1: 1, 2: 1, 3: 1, 4: 1,
                               5: 1, 6: 1, 7: 1, 8: 1, 9: 1,
