@@ -69,6 +69,11 @@ def transfer_file(i):
 # TODO check this function work correctly
 def collect_file_path_info(pid):
     proc = Popen(['ls', '-l', '/proc/' + str(pid).strip() + '/fd/'], universal_newlines=True, stdout=PIPE)
+    #total 0
+    #lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
+    #lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 1 -> /dev/pts/98
+    #lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 2 -> /dev/pts/98
+    #lr-x------ 1 ehsansa sub102 64 Nov 22 14:09 3 -> /home/ehsansa/sample_text.txt
     res = proc.communicate()[0]
     # print(res)
     res_parts = res.split("\n")
@@ -78,6 +83,15 @@ def collect_file_path_info(pid):
                 slash_index = line.rfind(">")
                 file_name = line[slash_index + 1:].strip()
                 proc = Popen(['lfs', 'getstripe', file_name], universal_newlines=True, stdout=PIPE)
+                #/expanse/lustre/scratch/ehsansa/temp_project/sample_text.txt
+                #lmm_stripe_count:  1
+                #lmm_stripe_size:   1048576
+                #lmm_pattern:       raid0
+                #lmm_layout_gen:    0
+                #lmm_stripe_offset: 61
+                #	obdidx		 objid		 objid		 group
+                #	    61	      10861858	     0xa5bd22	   0xac0000400
+                #
                 res1 = proc.communicate()[0]
                 res_parts1 = res1.split("\n")
                 for x in range(len(res_parts1)):
@@ -92,6 +106,12 @@ def collect_file_path_info(pid):
                             parts = res_parts1[x].strip().split("l_ost_idx: ")[1].split(",")
                             ost_number = int(parts[0].strip())
                         proc = Popen(['ls', '-l', '/proc/fs/lustre/osc'], universal_newlines=True, stdout=PIPE)
+                        #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0045-osc-ffff92b94ed33000
+                        #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b900cb0000
+                        #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b94ed33000
+                        #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b900cb0000
+                        #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b94ed33000
+                        # TODO base 10 to hex
                         res = proc.communicate()[0]
                         parts = res.split("\n")
                         for x in range(1, len(parts)):
@@ -119,6 +139,22 @@ def process_ost_stat(ost_path):
     proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     res_parts = res.split("\n")
+    #snapshot_time             1637627183.394337 secs.usecs
+    #req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
+    #req_active                393906200 samples [reqs] 1 8243 1164349055 731470318467
+    #read_bytes                299768458 samples [bytes] 0 4194304 6895163247966 -3193831078871982772
+    #write_bytes               10208130 samples [bytes] 1 4194304 10917616761706 4366299781827334380
+    #ost_setattr               8288718 samples [usec] 37 6862915 2072463399 268309705137179
+    #ost_read                  299768458 samples [usec] 60 17820911 271513537128 5512071507059074
+    #ost_write                 10208130 samples [usec] 86 15329179 98396534435 5245570501603571
+    #ost_get_info              5086 samples [usec] 94 234665 2150496 74601868096
+    #ost_connect               2 samples [usec] 39418 394674 434092 157321345000
+    #ost_punch                 2025537 samples [usec] 44 4425929 658817331 125468513749227
+    #ost_statfs                4583100 samples [usec] 34 2354832 1137583809 27790060662971
+    #ost_sync                  85484 samples [usec] 35 2683564 407420351 20564344321901
+    #ost_quotactl              1070893 samples [usec] 38 1131469 294654538 2901933400418
+    #ldlm_cancel               31083060 samples [usec] 31 12008431 99565826195 17460575057288663
+    #obd_ping                  43765 samples [usec] 52 130743 28356809 55768300189
     for metric_line in res_parts:
         if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line:
             tokens = str(metric_line).split(" ")
