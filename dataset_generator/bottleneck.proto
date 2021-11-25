@@ -295,6 +295,7 @@ message BottleneckFile {
     }
     optional Network network_type = 16;
     optional float created_time_utc = 17;
+    float max_buffer_size_ratio = 18;
 }
 message BottleneckFiles {
     repeated BottleneckFile logs = 1;
