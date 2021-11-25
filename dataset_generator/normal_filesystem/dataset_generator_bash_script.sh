@@ -826,6 +826,57 @@ do
         tc qdisc del dev $ethernet_interface_name root;
         sleep 5;
     fi
+    #generate a random variable if it is even do the if part 59: tcp send_buffer_max_value 43690 // 0.5 of default
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        echo 'net.ipv4.tcp_wmem= 1024 87380 43690' >> /etc/sysctl.conf
+        sysctl -p
+        sleep 5;
+        python3 metric_collector.py 59 &
+        sleep $main_sleep_time;
+        killall -9 python3;
+        killall -9 java;
+        echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        sysctl -p
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 59: tcp send_buffer_max_value 21845 // 0.25 of default
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        echo 'net.ipv4.tcp_wmem= 1024 87380 21845' >> /etc/sysctl.conf
+        sysctl -p
+        sleep 5;
+        python3 metric_collector.py 60 &
+        sleep $main_sleep_time;
+        killall -9 python3;
+        killall -9 java;
+        echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        sysctl -p
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 59: tcp send_buffer_max_value 10922 // 0.125 of default
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        echo 'net.ipv4.tcp_wmem= 1024 87380 10922' >> /etc/sysctl.conf
+        sysctl -p
+        sleep 5;
+        python3 metric_collector.py 61 &
+        sleep $main_sleep_time;
+        killall -9 python3;
+        killall -9 java;
+        echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        sysctl -p
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
 #    #generate a random variable if it is even do the if
 #    # number=$RANDOM
 #    if [ $((number%2)) -eq 0 ]
