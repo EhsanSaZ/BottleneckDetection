@@ -90,6 +90,12 @@ class TransferAnalysis:
         elif self.log_type == "luster":
             self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
                                               78] + list(range(87, 187))
+        elif self.log_type == "cc":
+            # list range 30, 88 are related to the process and are not available in general and shouldnt be used?
+            self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
+                        [54, 57, 58, 76] + \
+                        [87, 88, 89, 90, 91, 92, 93, 94] + \
+                        [182, 183, 184, 185, 186]
         else:
             self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]
         self.headers = [self.id_to_attr[i] for i in self.keys]
