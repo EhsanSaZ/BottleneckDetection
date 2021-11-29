@@ -9,7 +9,7 @@ import re
 import psutil
 
 from system_metric_collector import collect_system_metrics
-from butter_value_collector import get_buffer_value
+from buffer_value_collector import get_buffer_value
 from disk_stat_collector import get_disk_stat
 src_ip = "127.0.0.1"
 dst_ip = "134.197.94.98"
