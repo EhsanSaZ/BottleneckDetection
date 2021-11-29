@@ -1,0 +1,1 @@
+This directory contains sender1_throughput.txt file. This file is created by the simpleSender1.java located in utilities directory
