@@ -831,6 +831,7 @@ do
     if [ $((number%2)) -eq 0 ]
     then
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 1024 87380 43690' >> /etc/sysctl.conf
         sysctl -p
         sleep 5;
@@ -838,7 +839,9 @@ do
         sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        rm tcp_wmem_original_val
         sysctl -p
         wait_period=$(($wait_period+60));
         sleep 5;
@@ -848,6 +851,7 @@ do
     if [ $((number%2)) -eq 0 ]
     then
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 1024 87380 21845' >> /etc/sysctl.conf
         sysctl -p
         sleep 5;
@@ -855,7 +859,9 @@ do
         sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        rm tcp_wmem_original_val
         sysctl -p
         wait_period=$(($wait_period+60));
         sleep 5;
@@ -865,6 +871,7 @@ do
     if [ $((number%2)) -eq 0 ]
     then
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 1024 87380 10922' >> /etc/sysctl.conf
         sysctl -p
         sleep 5;
@@ -872,7 +879,9 @@ do
         sleep $main_sleep_time;
         killall -9 python3;
         killall -9 java;
+        sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
+        rm tcp_wmem_original_val
         sysctl -p
         wait_period=$(($wait_period+60));
         sleep 5;
