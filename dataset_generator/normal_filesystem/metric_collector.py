@@ -1,5 +1,6 @@
 import threading
 import time
+from pathlib import Path
 from subprocess import PIPE, Popen
 import subprocess
 import sys, traceback
@@ -468,6 +469,9 @@ class statThread(threading.Thread):
     def run(self):
         collect_stat()
 
+
+Path("./logs").mkdir(parents=True, exist_ok=True)
+Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
 stat_thread.start()
