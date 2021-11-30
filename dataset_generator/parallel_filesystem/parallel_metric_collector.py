@@ -82,6 +82,11 @@ def collect_file_path_info(pid):
             if src_path in line:
                 slash_index = line.rfind(">")
                 file_name = line[slash_index + 1:].strip()
+
+                first_slash_index = file_name.find("/")
+                second_slash_index = file_name.find("/", first_slash_index)
+                file_mount_point = file_name[first_slash_index+1: first_slash_index + second_slash_index]
+
                 proc = Popen(['lfs', 'getstripe', file_name], universal_newlines=True, stdout=PIPE)
                 #/expanse/lustre/scratch/ehsansa/temp_project/sample_text.txt
                 #lmm_stripe_count:  1
@@ -105,28 +110,32 @@ def collect_file_path_info(pid):
                         else:
                             parts = res_parts1[x].strip().split("l_ost_idx: ")[1].split(",")
                             ost_number = int(parts[0].strip())
+                        # Convert obdidx or l_ost_idx from 10 base into hex
+                        hex_ost_number = hex(int(ost_number))
+                        x_insex = hex_ost_number.rfind("x")
+                        hex_ost_number = hex_ost_number[x_insex+1:]
                         proc = Popen(['ls', '-l', '/proc/fs/lustre/osc'], universal_newlines=True, stdout=PIPE)
                         #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0045-osc-ffff92b94ed33000
                         #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b900cb0000
                         #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b94ed33000
                         #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b900cb0000
                         #dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b94ed33000
-                        # TODO base 10 to hex
                         res = proc.communicate()[0]
                         parts = res.split("\n")
+                        ost_str = "-OST" + '{0:04d}'.format(hex_ost_number)
                         for x in range(1, len(parts)):
                             ost_name_parts = parts[x].split(" ")
                             for part in ost_name_parts:
-                                if "OST" in part:
+                                if file_mount_point in part and ost_str in part and "OST" in part:
                                     first_dash_index = part.find("-")
-                                    sencond_dash_index = part.find("-", first_dash_index)
+                                    second_dash_index = part.find("-", first_dash_index + 1)
 
-                                    firstpart = part[:first_dash_index]
-                                    secondpart = part[first_dash_index + sencond_dash_index:]
+                                    first_part = part[:first_dash_index]
+                                    second_part = part[second_dash_index+1:]
 
-                                    ost_str = "-OST" + '{0:04d}'.format(ost_number)
+                                    # ost_str = "-OST" + '{0:04d}'.format(hex_ost_number)
 
-                                    ost_path = '/proc/fs/lustre/osc/' + firstpart + ost_str + secondpart
+                                    ost_path = '/proc/fs/lustre/osc/' + first_part + ost_str + second_part
 
                                     # print(ost_path)
                                     return ost_path
