@@ -71,105 +71,6 @@ def transfer_file(i):
         strings.replace("\r", "\n")
 
 
-# T ODO check if these function is needed for normal filesystem:
-#  process_mds_rpc, process_mdt_stat, process_ost_stat, get_mdt_stat
-# def process_mds_rpc(mdt_path):
-#     proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
-#     res = proc.communicate()[0]
-#     res_parts = res.split("\n")
-#     value_list = []
-#     for metric_line in res_parts:
-#         if "avg_waittime:" in metric_line:
-#             s_index = metric_line.find(":")
-#             e_index = metric_line.find("usec")
-#             avg_waittime = float(metric_line[s_index + 1:e_index].strip())
-#             value_list.append(avg_waittime)
-#         #            print(avg_waittime)
-#
-#         if "inflight:" in metric_line:
-#             s_index = metric_line.find(":")
-#             inflight = float(metric_line[s_index + 1:].strip())
-#             value_list.append(inflight)
-#         #            print(inflight)
-#
-#         if "unregistering:" in metric_line:
-#             s_index = metric_line.find(":")
-#             unregistering = float(metric_line[s_index + 1:].strip())
-#             value_list.append(unregistering)
-#         #            print(unregistering)
-#
-#         if "timeouts:" in metric_line:
-#             s_index = metric_line.find(":")
-#             timeouts = float(metric_line[s_index + 1:].strip())
-#             value_list.append(timeouts)
-#     #            print(timeouts)
-#     return value_list
-
-# def process_mdt_stat(mdt_path):
-#     value_list=[]
-#     proc = Popen(['cat', mdt_path+"/stats"], universal_newlines=True, stdout=PIPE)
-#     res = proc.communicate()[0]
-#     res_parts = res.split("\n")
-#     for metric_line in res_parts:
-#         if len(metric_line.strip())>0 and "snapshot_time" not in metric_line:
-#             tokens = str(metric_line).split(" ")
-#             value = float(tokens[len(tokens)-2])
-#             value_list.append(value)
-#     # print(value_list)
-#
-#     proc = Popen(['cat', mdt_path+"/md_stats"], universal_newlines=True, stdout=PIPE)
-#     res = proc.communicate()[0]
-#     res_parts = res.split("\n")
-#     for metric_line in res_parts:
-#         if len(metric_line.strip())>0 and "snapshot_time" not in metric_line:
-#             tokens = str(metric_line).split(" ")
-#             value = float(tokens[len(tokens)-3])
-#             value_list.append(value)
-#     # print(value_list)
-#
-#     return value_list
-
-# def process_ost_stat(ost_path):
-#     value_list=[]
-#     proc = Popen(['cat', ost_path+"/stats"], universal_newlines=True, stdout=PIPE)
-#     res = proc.communicate()[0]
-#     res_parts = res.split("\n")
-#     for metric_line in res_parts:
-#         if len(metric_line.strip())>0 and "snapshot_time" not in metric_line:
-#             tokens = str(metric_line).split(" ")
-#             value = float(tokens[len(tokens)-2])
-#             value_list.append(value)
-#     # print(value_list)
-#
-#     proc = Popen(['cat', ost_path+"/rpc_stats"], universal_newlines=True, stdout=PIPE)
-#     res = proc.communicate()[0]
-#     res_parts = res.split("\n")
-#     for metric_line in res_parts:
-#         if "pending read pages" in metric_line:
-#             index = metric_line.find(":")
-#             value = float(metric_line[index+1:])
-#             # total_pending_page+=value
-#             value_list.append(value)
-#
-#         if "read RPCs in flight" in metric_line:
-#             index = metric_line.find(":")
-#             value = float(metric_line[index+1:])
-#             # total_pending_rpc+=value
-#             value_list.append(value)
-#     # print(value_list)
-#     return value_list
-
-# def get_mdt_stat(mdt_paths):
-#     global mdt_parent_path
-#     value_list=[]
-#     for path in mdt_paths:
-#         value_list+= process_mds_rpc(mdt_parent_path+path)
-#         # print(" val 1 ",value_list)
-#         value_list+=process_mdt_stat(mdt_parent_path+path)
-#         # print("val 2 ",value_list)
-#     # print("final",value_list)
-#     return value_list
-
 def collect_stat():
     isparallel_file_system = False
     proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
@@ -313,7 +214,7 @@ def collect_stat():
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
                                     total_cwnd_value = value
-                                    
+
                                 elif re.search(r'\bssthresh\b', metrics_parts[y]):
                                     s_index = metrics_parts[y].find(":")
                                     value = float(metrics_parts[y][s_index + 1:])
@@ -391,21 +292,6 @@ def collect_stat():
                         avg_rcv_space = rcv_space
                         avg_dsack_dups = dsack_dups
                         avg_reord_seen = reord_seen
-                        # print("Individual values")
-                        # print("1 ",avg_rto_value)
-                        # print("2, ",avg_rtt_value)
-                        # print("3, ",avg_mss_value)
-                        # print("4, ",avg_cwnd_value)
-                        # print("5, ",avg_ssthresh_value)
-                        # print("6, ",avg_byte_ack)
-                        # print("7, ",avg_seg_out)
-                        # print("8, ",avg_seg_in)
-                        # print("9, ",avg_send_value)
-                        # print("10, ",p_avg_value)
-                        # print("11, ",avg_unacked_value)
-                        # print("12, ",avg_retrans)
-                        # print("13, ",avg_rcv_space)
-                        # print("14 ", data_segs_out)
 
                         system_value_list = collect_system_metrics(pid, sender_process)
                         buffer_value_list = get_buffer_value()
