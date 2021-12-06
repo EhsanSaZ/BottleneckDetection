@@ -7,11 +7,14 @@ import sys, traceback
 from subprocess import check_output
 import re
 import psutil
+import copy
 
 from system_metric_collector import collect_system_metrics
 from buffer_value_collector import get_buffer_value
 from file_ost_path_info import collect_file_path_info
 from ost_stat_collector import process_ost_stat
+from mdt_stat_collector import get_mdt_stat
+
 src_ip = "127.0.0.1"
 dst_ip = "134.197.94.98"
 port_number = "50505"
@@ -83,6 +86,17 @@ def collect_stat():
 
     if isparallel_file_system:
         mdt_paths = []
+        mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
+                                   "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
+                                   "mds_connect": 0.0, "mds_statfs": 0.0, "mds_sync": 0.0,
+                                   "mds_quotactl": 0.0, "mds_getxattr": 0.0, "ldlm_cancel": 0.0,
+                                   "obd_ping": 0.0, "seq_query": 0.0,
+                                   "md_stats": {
+                                       "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0, "intent_lock": 0.0,
+                                       "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
+                                       "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0, "revalidate_lock": 0.0,
+                                   }}
+        all_mdt_stat_so_far_dict = {}
         proc = Popen(['ls', '-l', mdt_parent_path], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
         res_parts = res.split("\n")
@@ -91,6 +105,8 @@ def collect_stat():
                 if "total" not in line:
                     parts = line.split(" ")
                     # print(parts)
+                    mdt_paths.append(parts[-1])
+                    all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
         is_controller_port = True
         total_string = ""
         start = time.time()
@@ -293,7 +309,9 @@ def collect_stat():
                         ost_path = collect_file_path_info(pid, src_path)
 
                         ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_stats_so_far)
-                        # mdt_value_list = get_mdt_stat(mdt_paths)
+                        global mdt_parent_path
+                        mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
+                                                                                all_mdt_stat_so_far_dict)
                         output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(
                             avg_cwnd_value) + "," + str(avg_rto_value) + "," + \
                                         str(avg_byte_ack) + "," + str(avg_seg_out) + "," + str(retrans) + "," + \
@@ -309,7 +327,7 @@ def collect_stat():
                         for item in buffer_value_list:
                             output_string += "," + str(item)
                         for item in ost_value_list:
-                             output_string += "," + str(item)
+                            output_string += "," + str(item)
                         # for item in mdt_value_list:
                         #     output_string += "," + str(item)
 
