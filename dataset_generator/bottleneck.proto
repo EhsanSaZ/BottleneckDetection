@@ -168,6 +168,7 @@ message BottleneckLog {
 
     optional uint64 pending_read_pages = 110;
     optional uint64 read_RPCs_in_flight = 111;
+
     optional uint64 avg_waittime_md1 = 112;
     optional uint64 inflight_md1 = 113;
     optional uint64 unregistering_md1 = 114;
@@ -180,16 +181,16 @@ message BottleneckLog {
     optional uint64 mds_close_md1 = 120;
     optional uint64 mds_readpage_md1 = 121;
     optional uint64 mds_connect_md1 = 122;
-    optional uint64 mds_get_root_md1 = 123;
+    optional uint64 mds_get_root_md1 = 123; // not appeared in stempede2
     optional uint64 mds_statfs_md1 = 124;
     optional uint64 mds_sync_md1 = 125;
     optional uint64 mds_quotactl_md1 = 126;
     optional uint64 mds_getxattr_md1 = 127;
-    optional uint64 mds_hsm_state_set_md1 = 128;
+    optional uint64 mds_hsm_state_set_md1 = 128;// not appeared in stempede2
     optional uint64 ldlm_cancel_md1 = 129;
     optional uint64 obd_ping_md1 = 130;
     optional uint64 seq_query_md1 = 131;
-    optional uint64 fld_query_md1 = 132;
+    optional uint64 fld_query_md1 = 132;// not appeared in stempede2
     optional uint64 close_md1 = 133;
     optional uint64 create_md1 = 134;
     optional uint64 enqueue_md1 = 135;
@@ -203,7 +204,7 @@ message BottleneckLog {
     optional uint64 unlink_md1 = 143;
     optional uint64 setxattr_md1 = 144;
     optional uint64 getxattr_md1 = 145;
-    optional uint64 intent_getattr_async_md1 = 146;
+    optional uint64 intent_getattr_async_md1 = 146;// not appeared in stempede2
     optional uint64 revalidate_lock_md1 = 147;
 
     optional uint64 avg_waittime_md2 = 148;
