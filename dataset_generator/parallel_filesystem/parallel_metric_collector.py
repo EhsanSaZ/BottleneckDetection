@@ -160,7 +160,7 @@ def collect_stat():
             if sender_process is None:  # or pid == 0
                 continue
             try:
-                comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip + ":" + port_number]
+                comm_ss = ['/usr/sbin/ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip + ":" + port_number]
                 ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
                 line_in_ss = str(ss_proc.stdout.read())
                 if line_in_ss.count(dst_ip) >= 1:
