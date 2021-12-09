@@ -328,8 +328,8 @@ def collect_stat():
                             output_string += "," + str(item)
                         for item in ost_value_list:
                             output_string += "," + str(item)
-                        # for item in mdt_value_list:
-                        #     output_string += "," + str(item)
+                        for item in mdt_value_list:
+                            output_string += "," + str(item)
 
                         output_string += "," + str(avg_dsack_dups)
                         output_string += "," + str(avg_reord_seen)

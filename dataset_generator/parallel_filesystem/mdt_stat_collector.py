@@ -151,7 +151,9 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
 
 def get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict):
     value_list = []
+    value_list += len(mdt_paths)
     for path in mdt_paths:
+        value_list += path
         value_list += process_mds_rpc(mdt_parent_path + path)
         a_list, mdt_stat_latest_values = process_mdt_stat(mdt_parent_path + path, all_mdt_stat_so_far_dict.get(path) or None)
         all_mdt_stat_so_far_dict[path] = mdt_stat_latest_values
