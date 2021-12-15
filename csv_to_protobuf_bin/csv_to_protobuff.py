@@ -153,6 +153,9 @@ class CSV_to_Proto:
     def get_mbps(self, thpt):
         if self.is_number(thpt):
             return thpt
+        thpts = thpt.split("Gb")
+        if len(thpts) == 2:
+            return float(thpts[0])
         thpts = thpt.split("Mb")
         if len(thpts) == 2:
             return float(thpts[0])
@@ -419,7 +422,7 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/DTNS/"
+folder_dir = "./csv_logs/DTNS/dtn0Logs/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 serialize_file = folder_dir.split("/")[-2]
