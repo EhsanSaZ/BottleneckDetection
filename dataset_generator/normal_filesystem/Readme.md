@@ -21,3 +21,6 @@ file_<directory_number>_file_number<br /><br />
 
 10- create a python virtual environment and install the requirements.txt
 11- install stress, stress-ng, vmtouch(https://hoytech.com/vmtouch/) if they are not installed on the host that metric collector is run
+
+12- set src_path in read_test file in utilities
+13- set base_path in write_test.py in utilities
