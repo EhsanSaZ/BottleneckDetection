@@ -155,25 +155,25 @@ class CSV_to_Proto:
             return thpt
         thpts = thpt.split("Gb")
         if len(thpts) == 2:
-            return float(thpts[0])
+            return float(thpts[0]) * 1024
         thpts = thpt.split("Mb")
         if len(thpts) == 2:
             return float(thpts[0])
         thpts = thpt.split("Kb")
         if len(thpts) == 2:
-            return float(thpts[0]) / 1000.
+            return float(thpts[0]) / 1024.
         thpts = thpt.split("b")
         if len(thpts) == 2:
-            return float(thpts[0]) / (1000. * 1000.)
+            return float(thpts[0]) / (1024. * 1024.)
         thpts = thpt.split("MB")
         if len(thpts) == 2:
-            return float(thpts[0]) * (1.024 * 1.024 * 8)
+            return float(thpts[0]) * 8
         thpts = thpt.split("KB")
         if len(thpts) == 2:
-            return float(thpts[0]) * (1024 * 8) / (1000.)
+            return float(thpts[0]) * 8 / 1024.
         thpts = thpt.split("B")
         if len(thpts) == 2:
-            return float(thpts[0]) * (8) / (1000. * 1000.)
+            return float(thpts[0]) * 8 / 1024. * 1024.
         try:
             return float(thpt)
         except:
