@@ -33,6 +33,7 @@ pid = 0
 sender_process = None
 is_transfer_done = False
 
+global mdt_parent_path
 mdt_parent_path = '/proc/fs/lustre/mdc/'
 
 
@@ -309,7 +310,7 @@ def collect_stat():
                         ost_path = collect_file_path_info(pid, src_path)
 
                         ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_stats_so_far)
-                        global mdt_parent_path
+
                         mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                                                                                 all_mdt_stat_so_far_dict)
                         output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(
