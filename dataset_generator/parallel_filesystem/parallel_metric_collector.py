@@ -16,15 +16,15 @@ from ost_stat_collector import process_ost_stat
 from mdt_stat_collector import get_mdt_stat
 
 src_ip = "127.0.0.1"
-dst_ip = "134.197.94.98"
+dst_ip = "192.170.227.252"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to read file for transferring
-src_path = "/home/esaeedizade/Desktop/srcData/"
+src_path = "/home1/08440/tg877399/datadir/srcData/"
 # path to save received transferred data
-dst_path = "/home/esaeedizade/Desktop/dstData/"
+dst_path = "/home1/08440/tg877399/datadir/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -56,10 +56,11 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    #comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/' , 'SimpleSender1', dst_ip, port_number, src_path, str(label_value)]	
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
-    pid = check_output(['pidof', '-s', 'java', 'SimpleSender1.java'])
+    pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
     print(pid)
     sender_process = psutil.Process(int(pid))
     # global label_value
@@ -108,6 +109,7 @@ def collect_stat():
                     # print(parts)
                     mdt_paths.append(parts[-1])
                     all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
+
         is_controller_port = True
         total_string = ""
         start = time.time()
@@ -308,11 +310,10 @@ def collect_stat():
                         system_value_list = collect_system_metrics(pid, sender_process)
                         buffer_value_list = get_buffer_value()
                         ost_path = collect_file_path_info(pid, src_path)
-
+                        
                         ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_stats_so_far)
 
-                        mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
-                                                                                all_mdt_stat_so_far_dict)
+                        mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict)
                         output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(
                             avg_cwnd_value) + "," + str(avg_rto_value) + "," + \
                                         str(avg_byte_ack) + "," + str(avg_seg_out) + "," + str(retrans) + "," + \
