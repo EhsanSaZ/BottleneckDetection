@@ -328,6 +328,7 @@ def collect_stat():
                             output_string += "," + str(item)
                         for item in buffer_value_list:
                             output_string += "," + str(item)
+                        # ost_value_list are metrics with index 79-95 in csv
                         for item in ost_value_list:
                             output_string += "," + str(item)
                         for item in mdt_value_list:
