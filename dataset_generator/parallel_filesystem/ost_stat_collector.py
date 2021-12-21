@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 
-def process_ost_stat(ost_path, ost_stat_so_far):
+def process_ost_stat(ost_path, ost_stat_so_far=None):
     value_list = []
     if ost_stat_so_far is None:
         ost_stat_so_far = {}
