@@ -331,14 +331,18 @@ def collect_stat():
                         # ost_value_list are metrics with index 79-95 in csv
                         for item in ost_value_list:
                             output_string += "," + str(item)
-                        for item in mdt_value_list:
-                            output_string += "," + str(item)
-
+                        # values with index 96, 97, 98, 99
                         output_string += "," + str(avg_dsack_dups)
                         output_string += "," + str(avg_reord_seen)
 
                         output_string += "," + str(psutil.cpu_percent())
                         output_string += "," + str(psutil.virtual_memory().percent)
+
+                        # mdt_value_list : total_mdt_numbers at 100
+                        # repeat "total_mdt_numbers" of times in list
+                        # string of mdt name to use as key for map, followed by the next 32 metrics for each mdt
+                        for item in mdt_value_list:
+                            output_string += "," + str(item)
 
                         output_string += "," + str(label_value) + "\n"
                         if not is_first_time:
