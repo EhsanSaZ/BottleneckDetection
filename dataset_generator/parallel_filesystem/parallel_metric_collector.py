@@ -56,8 +56,9 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    #comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/' , 'SimpleSender1', dst_ip, port_number, src_path, str(label_value)]	
+    # comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
+               dst_ip, port_number, src_path, str(label_value)]
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
     pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
@@ -90,13 +91,15 @@ def collect_stat():
         mdt_paths = []
         mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
                                    "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
-                                   "mds_connect": 0.0, "mds_statfs": 0.0, "mds_sync": 0.0,
-                                   "mds_quotactl": 0.0, "mds_getxattr": 0.0, "ldlm_cancel": 0.0,
-                                   "obd_ping": 0.0, "seq_query": 0.0,
+                                   "mds_connect": 0.0, "mds_get_root": 0.0, "mds_statfs": 0.0,
+                                   "mds_sync": 0.0, "mds_quotactl": 0.0, "mds_getxattr": 0.0,
+                                   "mds_hsm_state_set": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0,
+                                   "seq_query": 0.0, "fld_query": 0.0,
                                    "md_stats": {
                                        "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0, "intent_lock": 0.0,
                                        "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
-                                       "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0, "revalidate_lock": 0.0,
+                                       "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
+                                       "intent_getattr_async": 0.0, "revalidate_lock": 0.0
                                    }}
         all_mdt_stat_so_far_dict = {}
         proc = Popen(['ls', '-l', mdt_parent_path], universal_newlines=True, stdout=PIPE)
@@ -310,10 +313,11 @@ def collect_stat():
                         system_value_list = collect_system_metrics(pid, sender_process)
                         buffer_value_list = get_buffer_value()
                         ost_path = collect_file_path_info(pid, src_path)
-                        
+
                         ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_stats_so_far)
 
-                        mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict)
+                        mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
+                                                                                all_mdt_stat_so_far_dict)
                         output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(
                             avg_cwnd_value) + "," + str(avg_rto_value) + "," + \
                                         str(avg_byte_ack) + "," + str(avg_seg_out) + "," + str(retrans) + "," + \
@@ -340,7 +344,7 @@ def collect_stat():
 
                         # mdt_value_list : total_mdt_numbers at 100
                         # repeat "total_mdt_numbers" of times in list
-                        # string of mdt name to use as key for map, followed by the next 32 metrics for each mdt
+                        # string of mdt name to use as key for map, foK36 metrics for each mdt
                         for item in mdt_value_list:
                             output_string += "," + str(item)
 

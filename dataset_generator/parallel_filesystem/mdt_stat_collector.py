@@ -38,28 +38,36 @@ def process_mds_rpc(mdt_path):
     #    last_checked: 513097842389
     res_parts = res.split("\n")
     value_list = []
+    value_dict = {}
     for metric_line in res_parts:
         if "avg_waittime:" in metric_line:
             s_index = metric_line.find(":")
             e_index = metric_line.find("usec")
             avg_waittime = float(metric_line[s_index + 1:e_index].strip())
-            value_list.append(avg_waittime)
+            value_dict["avg_waittime"] = avg_waittime
+            # value_list.append(avg_waittime)
 
         if "inflight:" in metric_line:
             s_index = metric_line.find(":")
             inflight = float(metric_line[s_index + 1:].strip())
-            value_list.append(inflight)
+            value_dict["inflight"] = inflight
+            # value_list.append(inflight)
 
         if "unregistering:" in metric_line:
             s_index = metric_line.find(":")
             unregistering = float(metric_line[s_index + 1:].strip())
-            value_list.append(unregistering)
+            value_dict["unregistering"] = unregistering
+            # value_list.append(unregistering)
 
         if "timeouts:" in metric_line:
             s_index = metric_line.find(":")
             timeouts = float(metric_line[s_index + 1:].strip())
-            value_list.append(timeouts)
-
+            value_dict["timeouts"] = timeouts
+            #value_list.append(timeouts)
+    value_list.append(value_dict.get('avg_waittime') or 0.0)
+    value_list.append(value_dict.get('inflight') or 0.0)
+    value_list.append(value_dict.get('unregistering') or 0.0)
+    value_list.append(value_dict.get('timeouts') or 0.0)
     return value_list
 
 
@@ -100,13 +108,16 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     value_list.append(float((mdt_stat_latest_values.get("mds_close") or 0) - (mdt_stat_so_far.get("mds_close") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_readpage") or 0) - (mdt_stat_so_far.get("mds_readpage") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_connect") or 0) - (mdt_stat_so_far.get("mds_connect") or 0)))
+    value_list.append(float((mdt_stat_latest_values.get("mds_get_root") or 0) - (mdt_stat_so_far.get("mds_get_root") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_statfs") or 0) - (mdt_stat_so_far.get("mds_statfs") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_sync") or 0) - (mdt_stat_so_far.get("mds_sync") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_quotactl") or 0) - (mdt_stat_so_far.get("mds_quotactl") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("mds_getxattr") or 0) - (mdt_stat_so_far.get("mds_getxattr") or 0)))
+    value_list.append(float((mdt_stat_latest_values.get("mds_hsm_state_set") or 0) - (mdt_stat_so_far.get("mds_hsm_state_set") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("ldlm_cancel") or 0) - (mdt_stat_so_far.get("ldlm_cancel") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("obd_ping") or 0) - (mdt_stat_so_far.get("obd_ping") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("seq_query") or 0) - (mdt_stat_so_far.get("seq_query") or 0)))
+    value_list.append(float((mdt_stat_latest_values.get("fld_query") or 0) - (mdt_stat_so_far.get("fld_query") or 0)))
 
     proc = Popen(['cat', mdt_path + "/md_stats"], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
@@ -144,16 +155,27 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     value_list.append(float((md_stats_latest_values.get("enqueue") or 0) - (md_stats_so_far_dict.get("enqueue") or 0)))
     value_list.append(float((md_stats_latest_values.get("getattr") or 0) - (md_stats_so_far_dict.get("getattr") or 0)))
     value_list.append(float((md_stats_latest_values.get("intent_lock") or 0) - (md_stats_so_far_dict.get("intent_lock") or 0)))
-    value_list.append(float((md_stats_latest_values.get("") or 0) - (md_stats_so_far_dict.get("") or 0)))
-    value_list.append(float((md_stats_latest_values.get("") or 0) - (md_stats_so_far_dict.get("") or 0)))
+    value_list.append(float((md_stats_latest_values.get("link") or 0) - (md_stats_so_far_dict.get("link") or 0)))
+    value_list.append(float((md_stats_latest_values.get("rename") or 0) - (md_stats_so_far_dict.get("rename") or 0)))
+    value_list.append(float((md_stats_latest_values.get("setattr") or 0) - (md_stats_so_far_dict.get("setattr") or 0)))
+    value_list.append(float((md_stats_latest_values.get("fsync") or 0) - (md_stats_so_far_dict.get("fsync") or 0)))
+    value_list.append(float((md_stats_latest_values.get("read_page") or 0) - (md_stats_so_far_dict.get("read_page") or 0)))
+    value_list.append(float((md_stats_latest_values.get("unlink") or 0) - (md_stats_so_far_dict.get("unlink") or 0)))
+    value_list.append(float((md_stats_latest_values.get("setxattr") or 0) - (md_stats_so_far_dict.get("setxattr") or 0)))
+    value_list.append(float((md_stats_latest_values.get("getxattr") or 0) - (md_stats_so_far_dict.get("getxattr") or 0)))
+    value_list.append(float((md_stats_latest_values.get("ntent_getattr_async") or 0) - (md_stats_so_far_dict.get("ntent_getattr_async") or 0)))
+    value_list.append(float((md_stats_latest_values.get("revalidate_lock") or 0) - (md_stats_so_far_dict.get("revalidate_lock") or 0)))
 
     return value_list, mdt_stat_latest_values
 
-def get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict):
+
+def get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict=None):
     value_list = []
-    value_list.append(len(mdt_paths))   
+    value_list.append(len(mdt_paths))
+    if not mdt_parent_path.endswith('/'):
+        mdt_parent_path = mdt_parent_path + "/"
     for path in mdt_paths:
-        value_list += path
+        value_list.append(path)
         value_list += process_mds_rpc(mdt_parent_path + path)
         a_list, mdt_stat_latest_values = process_mdt_stat(mdt_parent_path + path, all_mdt_stat_so_far_dict.get(path) or None)
         all_mdt_stat_so_far_dict[path] = mdt_stat_latest_values
