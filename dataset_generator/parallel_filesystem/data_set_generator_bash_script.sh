@@ -2,6 +2,7 @@
 
 wait_period=0
 ethernet_interface_name='bond0'
+user_name='tg877399'
 main_sleep_time=10
 while true
 do
@@ -26,8 +27,8 @@ do
     # run metric_collector with label value 0 for normal situation 0: "normal"
     python3 parallel_metric_collector.py 0 &
     sleep $main_sleep_time;
-    killall -9 python3;
-    killall -9 java;
+    killall -9  -u $user_name python3;
+    killall -9  -u $user_name java;
     wait_period=$(($wait_period+60));
     sleep 5;
 
@@ -39,8 +40,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 1 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -53,8 +54,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 2 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -67,8 +68,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 4 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -81,8 +82,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 8 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -95,8 +96,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 12 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -109,8 +110,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 16 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -122,8 +123,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 17 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -135,8 +136,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 18 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -148,8 +149,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 19 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -161,8 +162,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 20 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -174,8 +175,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 21 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -187,8 +188,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 22 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -200,8 +201,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 23 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -213,8 +214,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 24 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -226,8 +227,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 25 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -239,8 +240,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 26 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -252,8 +253,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 27 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -265,8 +266,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 28 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -278,8 +279,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 29 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -291,8 +292,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 30 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -304,8 +305,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 31 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
@@ -317,8 +318,8 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 32 &
         sleep $main_sleep_time;
-        killall -9 python3;
-        killall -9 java;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
