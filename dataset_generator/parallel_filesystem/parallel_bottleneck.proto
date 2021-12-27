@@ -130,8 +130,8 @@ message BottleneckLog {
     /*
         The fields 87 - 88 are generated using following command "ps -p [pid]  -o '%cpu,%mem';"
     */
-    float cpu_usage_percentage = 87; //Total CPU usuage percentage
-    float mem_usage_percentage = 88; //Total Memory usuage percentage
+    float cpu_usage_percentage = 87; //Total CPU usage percentage
+    float mem_usage_percentage = 88; //Total Memory usage percentage
     /*
         The fields 89 - 91 are generated using following command "cat /proc/sys/net/ipv4/tcp_rmem".
         You can find further documentation in https://man7.org/linux/man-pages/man7/tcp.7.html
@@ -270,43 +270,43 @@ message BottleneckLog {
 }
 
 message MDTStatLog {
-    optional uint64 avg_waittime_md1 = 1;
-    optional uint64 inflight_md1 = 2;
-    optional uint64 unregistering_md1 = 3;
-    optional uint64 timeouts_md1 = 4;
+    optional uint64 avg_waittime = 1;
+    optional uint64 inflight = 2;
+    optional uint64 unregistering = 3;
+    optional uint64 timeouts = 4;
 
-    optional uint64 req_waittime_md1 = 5;
-    optional uint64 req_active_md1 = 6;
-    optional uint64 mds_getattr_md1 = 7;
-    optional uint64 mds_getattr_lock_md1 = 8;
-    optional uint64 mds_close_md1 = 9;
-    optional uint64 mds_readpage_md1 = 10;
-    optional uint64 mds_connect_md1 = 11;
-    optional uint64 mds_get_root_md1 = 12; // not appeared in stempede2
-    optional uint64 mds_statfs_md1 = 13;
-    optional uint64 mds_sync_md1 = 14;
-    optional uint64 mds_quotactl_md1 = 15;
-    optional uint64 mds_getxattr_md1 = 16;
-    optional uint64 mds_hsm_state_set_md1 = 17;// not appeared in stempede2
-    optional uint64 ldlm_cancel_md1 = 18;
-    optional uint64 obd_ping_md1 = 19;
-    optional uint64 seq_query_md1 = 20;
-    optional uint64 fld_query_md1 = 21;// not appeared in stempede2
-    optional uint64 close_md1 = 22;
-    optional uint64 create_md1 = 23;
-    optional uint64 enqueue_md1 = 24;
-    optional uint64 getattr_md1 = 25;
-    optional uint64 intent_lock_md1 = 26;
-    optional uint64 link_md1 = 27;
-    optional uint64 rename_md1 = 28;
-    optional uint64 setattr_md1 = 29;
-    optional uint64 fsync_md1 = 30;
-    optional uint64 read_page_md1 = 31;
-    optional uint64 unlink_md1 = 32;
-    optional uint64 setxattr_md1 = 33;
-    optional uint64 getxattr_md1 = 34;
-    optional uint64 intent_getattr_async_md1 = 35;// not appeared in stempede2
-    optional uint64 revalidate_lock_md1 = 36;
+    optional uint64 req_waittime = 5;
+    optional uint64 req_active = 6;
+    optional uint64 mds_getattr = 7;
+    optional uint64 mds_getattr_lock = 8;
+    optional uint64 mds_close = 9;
+    optional uint64 mds_readpage = 10;
+    optional uint64 mds_connect = 11;
+    optional uint64 mds_get_root = 12; // not appeared in stempede2
+    optional uint64 mds_statfs = 13;
+    optional uint64 mds_sync = 14;
+    optional uint64 mds_quotactl = 15;
+    optional uint64 mds_getxattr = 16;
+    optional uint64 mds_hsm_state_set = 17;// not appeared in stempede2
+    optional uint64 ldlm_cancel = 18;
+    optional uint64 obd_ping = 19;
+    optional uint64 seq_query = 20;
+    optional uint64 fld_query = 21;// not appeared in stempede2
+    optional uint64 close = 22;
+    optional uint64 create = 23;
+    optional uint64 enqueue = 24;
+    optional uint64 getattr = 25;
+    optional uint64 intent_lock = 26;
+    optional uint64 link = 27;
+    optional uint64 rename = 28;
+    optional uint64 setattr = 29;
+    optional uint64 fsync = 30;
+    optional uint64 read_page = 31;
+    optional uint64 unlink = 32;
+    optional uint64 setxattr = 33;
+    optional uint64 getxattr = 34;
+    optional uint64 intent_getattr_async = 35;// not appeared in stempede2
+    optional uint64 revalidate_lock = 36;
 }
 
 message BottleneckFile {
