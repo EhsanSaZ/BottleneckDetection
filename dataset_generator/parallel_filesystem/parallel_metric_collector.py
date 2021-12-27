@@ -318,14 +318,11 @@ def collect_stat():
 
                         mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                                                                                 all_mdt_stat_so_far_dict)
-                        output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(
-                            avg_cwnd_value) + "," + str(avg_rto_value) + "," + \
-                                        str(avg_byte_ack) + "," + str(avg_seg_out) + "," + str(retrans) + "," + \
-                                        str(avg_mss_value) + "," + str(avg_ssthresh_value) + "," + str(
-                            avg_seg_in) + "," + \
-                                        str(avg_send_value) + "," + str(avg_unacked_value) + "," + str(
-                            avg_rcv_space) + "," + \
-                                        str(send_buffer_value)
+                        output_string = str(avg_rtt_value) + "," + str(p_avg_value) + "," + str(avg_cwnd_value) + "," +\
+                                        str(avg_rto_value) + "," + str(avg_byte_ack) + "," + str(avg_seg_out) + "," + \
+                                        str(retrans) + "," + str(avg_mss_value) + "," + str(avg_ssthresh_value) + "," + \
+                                        str(avg_seg_in) + "," + str(avg_send_value) + "," + str(avg_unacked_value) + \
+                                        "," + str(avg_rcv_space) + "," + str(send_buffer_value)
 
                         global label_value
                         for item in system_value_list:
