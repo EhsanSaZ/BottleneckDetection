@@ -1,5 +1,4 @@
-# from dataset_generator import bottleneck_pb2
-from dataset_generator.parallel_filesystem import parallel_bottleneck_pb2 as bottleneck_pb2
+from dataset_generator import bottleneck_pb2
 import csv
 import os
 import glob

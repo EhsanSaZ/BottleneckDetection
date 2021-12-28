@@ -102,7 +102,7 @@ message BottleneckLog {
     optional uint64 blocked = 66; //[Obsolete] The bitmap of blocked signals, displayed as a decimal number.  Obsolete, because it does not provide information on real-time signals; use /proc/[pid]/status instead.
     optional uint64 sigignore = 67; //[Obsolete] The bitmap of ignored signals, displayed as a decimal number.
     optional uint64 sigcatch = 68; //[Obsolete] The bitmap of caught signals, displayed as a decimal number.
-    optional uint64 wchan = 69; //This is the "channel" in which the process is waiting.  It is the address of a location in the kernel where the process is sleeping.
+    optional double wchan = 69; //This is the "channel" in which the process is waiting.  It is the address of a location in the kernel where the process is sleeping.
 
     uint64 nswap = 70; //Number of pages swapped (not maintained).
     uint64 cnswap = 71; //Cumulative nswap for child processes (not maintained).
@@ -130,8 +130,8 @@ message BottleneckLog {
     /*
         The fields 87 - 88 are generated using following command "ps -p [pid]  -o '%cpu,%mem';"
     */
-    float cpu_usage_percentage = 87; //Total CPU usuage percentage
-    float mem_usage_percentage = 88; //Total Memory usuage percentage
+    float cpu_usage_percentage = 87; //Total CPU usage percentage
+    float mem_usage_percentage = 88; //Total Memory usage percentage
     /*
         The fields 89 - 91 are generated using following command "cat /proc/sys/net/ipv4/tcp_rmem".
         You can find further documentation in https://man7.org/linux/man-pages/man7/tcp.7.html
@@ -256,14 +256,57 @@ message BottleneckLog {
 	      unacked:130 retrans:0/354 sacked:45 dsack_dups:354 reordering:135 reord_seen:7907
 	      rcv_space:14480 rcv_ssthresh:64088 notsent:781920 minrtt:0.089
     */
-    float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
-    float avg_reord_seen = 183;
+    optional float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
+    optional float avg_reord_seen = 183;
 
     float system_cpu_percent = 184;
     float system_memory_percent = 185; // 184-185 are new System Metrics
-    /* Field 184 is the label of the experiment used.*/
-    int32 label_value = 186; //The label of the experiment used.
+    // 186 is the total number of mdts 0 for normal filesystem
+    int64 total_mdt_numbers = 186;
+    map <string, MDTStatLog> mdt_stats_map = 187;
+    /* Field 188 is the label of the experiment used.*/
+    optional int32 label_value = 188; //The label of the experiment used.
 
+}
+
+message MDTStatLog {
+    optional uint64 avg_waittime = 1;
+    optional uint64 inflight = 2;
+    optional uint64 unregistering = 3;
+    optional uint64 timeouts = 4;
+
+    optional uint64 req_waittime = 5;
+    optional uint64 req_active = 6;
+    optional uint64 mds_getattr = 7;
+    optional uint64 mds_getattr_lock = 8;
+    optional uint64 mds_close = 9;
+    optional uint64 mds_readpage = 10;
+    optional uint64 mds_connect = 11;
+    optional uint64 mds_get_root = 12; // not appeared in stempede2
+    optional uint64 mds_statfs = 13;
+    optional uint64 mds_sync = 14;
+    optional uint64 mds_quotactl = 15;
+    optional uint64 mds_getxattr = 16;
+    optional uint64 mds_hsm_state_set = 17;// not appeared in stempede2
+    optional uint64 ldlm_cancel = 18;
+    optional uint64 obd_ping = 19;
+    optional uint64 seq_query = 20;
+    optional uint64 fld_query = 21;// not appeared in stempede2
+    optional uint64 close = 22;
+    optional uint64 create = 23;
+    optional uint64 enqueue = 24;
+    optional uint64 getattr = 25;
+    optional uint64 intent_lock = 26;
+    optional uint64 link = 27;
+    optional uint64 rename = 28;
+    optional uint64 setattr = 29;
+    optional uint64 fsync = 30;
+    optional uint64 read_page = 31;
+    optional uint64 unlink = 32;
+    optional uint64 setxattr = 33;
+    optional uint64 getxattr = 34;
+    optional uint64 intent_getattr_async = 35;// not appeared in stempede2
+    optional uint64 revalidate_lock = 36;
 }
 
 message BottleneckFile {
