@@ -102,7 +102,7 @@ message BottleneckLog {
     optional uint64 blocked = 66; //[Obsolete] The bitmap of blocked signals, displayed as a decimal number.  Obsolete, because it does not provide information on real-time signals; use /proc/[pid]/status instead.
     optional uint64 sigignore = 67; //[Obsolete] The bitmap of ignored signals, displayed as a decimal number.
     optional uint64 sigcatch = 68; //[Obsolete] The bitmap of caught signals, displayed as a decimal number.
-    optional uint64 wchan = 69; //This is the "channel" in which the process is waiting.  It is the address of a location in the kernel where the process is sleeping.
+    optional double wchan = 69; //This is the "channel" in which the process is waiting.  It is the address of a location in the kernel where the process is sleeping.
 
     uint64 nswap = 70; //Number of pages swapped (not maintained).
     uint64 cnswap = 71; //Cumulative nswap for child processes (not maintained).
@@ -256,8 +256,8 @@ message BottleneckLog {
 	      unacked:130 retrans:0/354 sacked:45 dsack_dups:354 reordering:135 reord_seen:7907
 	      rcv_space:14480 rcv_ssthresh:64088 notsent:781920 minrtt:0.089
     */
-    float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
-    float avg_reord_seen = 183;
+    optional float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
+    optional float avg_reord_seen = 183;
 
     float system_cpu_percent = 184;
     float system_memory_percent = 185; // 184-185 are new System Metrics
@@ -265,7 +265,7 @@ message BottleneckLog {
     int64 total_mdt_numbers = 186;
     map <string, MDTStatLog> mdt_stats_map = 187;
     /* Field 188 is the label of the experiment used.*/
-    int32 label_value = 188; //The label of the experiment used.
+    optional int32 label_value = 188; //The label of the experiment used.
 
 }
 

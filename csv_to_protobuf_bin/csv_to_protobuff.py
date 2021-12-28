@@ -1,4 +1,5 @@
-from dataset_generator import bottleneck_pb2
+# from dataset_generator import bottleneck_pb2
+from dataset_generator.parallel_filesystem import parallel_bottleneck_pb2 as bottleneck_pb2
 import csv
 import os
 import glob
@@ -7,6 +8,7 @@ import re
 
 from pathlib import Path
 
+
 class CSV_to_Proto:
     def __init__(self, folder_dir, serialize_file="0"):
         self.serialize_file = serialize_file
@@ -14,7 +16,8 @@ class CSV_to_Proto:
         self.binary_dir = "./binary_logs"
         Path(self.binary_dir).mkdir(parents=True, exist_ok=True)
         self.network_type = {"DTNS": 0, "AWS": 1, "CC": 2, "AWS_FXS": 3, "UNDEFINED": 4}
-        self.environment = "UNDEFINED" if self.folder_name.split("/")[2].upper() not in self.network_type else self.folder_name.split("/")[2]
+        self.environment = "UNDEFINED" if self.folder_name.split("/")[2].upper() not in self.network_type else \
+            self.folder_name.split("/")[2]
         self.file_system = "normal" if "FXS" not in self.environment else "lustre"
         self.bottleneck_logs = self.check_serialize_file(self.serialize_file)
         self.id_to_attr = {1: 'avg_rtt_value', 2: 'pacing_rate', 3: 'cwnd_rate', 4: 'avg_retransmission_timeout_value',
@@ -58,12 +61,26 @@ class CSV_to_Proto:
                            168: 'create_md2', 169: 'enqueue_md2', 170: 'getattr_md2', 171: 'intent_lock_md2',
                            172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
-                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2', 
+                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
                            182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
-                           184: 'system_cpu_percent', 185: 'system_memory_percent', 186: 'label_value'}
+                           184: 'system_cpu_percent', 185: 'system_memory_percent',
+                           186: 'total_mdt_numbers', 187: 'mdt_stats_map',
+                           188: 'label_value'}
+        self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
+                                    5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
+                                    9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
+                                    13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
+                                    17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
+                                    21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
+                                    25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
+                                    29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
+                                    33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
         self.attr_to_id = {}
         for i in self.id_to_attr:
             self.attr_to_id[self.id_to_attr[i]] = i
+        self.mdt_stat_attr_to_id = {}
+        for i in self.mdt_stat_id_to_attr:
+            self.mdt_stat_attr_to_id[self.mdt_stat_id_to_attr[i]] = i
         self.datatypes = {1: 'float', 2: 'string', 3: 'float', 4: 'float', 5: 'float', 6: 'float', 7: 'float',
                           8: 'float', 9: 'float', 10: 'float', 11: 'string', 12: 'float', 13: 'float', 14: 'float',
                           15: 'float', 16: 'float', 17: 'float', 18: 'float', 19: 'float', 20: 'float', 21: 'float',
@@ -73,7 +90,7 @@ class CSV_to_Proto:
                           45: 'int', 46: 'int', 47: 'int', 48: 'int', 49: 'int', 50: 'int', 51: 'int', 52: 'int',
                           53: 'int', 54: 'int', 55: 'int', 56: 'int', 57: 'int', 58: 'int',
                           59: 'intonly', 60: 'intonly', 61: 'intonly', 62: 'intonly', 63: 'int', 64: 'int', 65: 'int',
-                          66: 'int', 67: 'int', 68: 'int', 69: 'int', 70: 'int', 71: 'int', 72: 'int', 73: 'int',
+                          66: 'int', 67: 'int', 68: 'int', 69: 'float', 70: 'int', 71: 'int', 72: 'int', 73: 'int',
                           74: 'int', 75: 'int', 76: 'int', 77: 'int', 78: 'int', 79: 'int', 80: 'int', 81: 'int',
                           82: 'int', 83: 'int', 84: 'int', 85: 'int', 86: 'int', 87: 'float', 88: 'float', 89: 'int',
                           90: 'int', 91: 'int', 92: 'int', 93: 'int', 94: 'int', 95: 'int', 96: 'int', 97: 'int',
@@ -89,7 +106,13 @@ class CSV_to_Proto:
                           162: 'int', 163: 'int', 164: 'int', 165: 'int', 166: 'int', 167: 'int', 168: 'int',
                           169: 'int', 170: 'int', 171: 'int', 172: 'int', 173: 'int', 174: 'int', 175: 'int',
                           176: 'int', 177: 'int', 178: 'int', 179: 'int', 180: 'int', 181: 'int',
-                          182: 'float', 183: 'float', 184: 'float', 185: 'float', 186: 'int'}
+                          182: 'float', 183: 'float', 184: 'float', 185: 'float',
+                          186: 'int', 187: 'dict', 188: 'int'}
+        self.mdt_stat_datatypes = {1: 'int', 2: 'int', 3: 'int', 4: 'int', 5: 'int', 6: 'int', 7: 'int',
+                                   8: 'int', 9: 'int', 10: 'int', 11: 'int', 12: 'int', 13: 'int', 14: 'int', 15: 'int',
+                                   16: 'int', 17: 'int', 18: 'int', 19: 'int', 20: 'int', 21: 'int', 22: 'int',
+                                   23: 'int', 24: 'int', 25: 'int', 26: 'int', 27: 'int', 28: 'int', 29: 'int',
+                                   30: 'int', 31: 'int', 32: 'int', 33: 'int', 34: 'int', 35: 'int', 36: 'int'}
         self.filetype = {0: {}, 1: {'read_threads': 1}, 2: {'read_threads': 2}, 3: {'read_threads': 3},
                          4: {'read_threads': 4}, 5: {'read_threads': 5}, 6: {'read_threads': 6}, 7: {'read_threads': 7},
                          8: {'read_threads': 8}, 9: {'read_threads': 9}, 10: {'read_threads': 10},
@@ -114,17 +137,53 @@ class CSV_to_Proto:
                          52: {'link_delay': 1.0, 'link_reorder': 10}, 53: {'link_delay': 1.0, 'link_reorder': 15},
                          54: {'link_delay': 1.0, 'link_reorder': 20}, 55: {'link_delay': 1.0, 'link_reorder': 25},
                          56: {'cpu_stress': 30}, 57: {'cpu_stress': 70}, 58: {'cpu_stress': 100},
-                         59: {'max_buffer_size_ratio': 0.5},  60: {'max_buffer_size_ratio': 0.25},
+                         59: {'max_buffer_size_ratio': 0.5}, 60: {'max_buffer_size_ratio': 0.25},
                          61: {'max_buffer_size_ratio': 0.125}}
         self.protobuff_files = {}
         if self.file_system == "normal":
-            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]
+            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 188]
         else:
-            self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 187))
+            # 14 metrics for ss command + 65 metrics for process info, tcp buffer values, 17 metrics for ost stat
+            # 4 metrics for more network and system cpu and memory status
+            # 186 is total_mdt_numbers (len map)
+            # 187 is dict for mdt stats. each mdt contains 36 metrics
+            # total meaningful 100 + ($186) * (1 + 36) + 1
+            self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
+
+    def get_new_row_normal(self, row):
+        new_row = []
+        for i in range(len(row)):
+            type_ = self.datatypes[self.keys[i]]
+            new_row.append(self.get_data_type(row[i], type_))
+        return new_row
+
+    def get_new_row_lustre(self, row):
+        new_row = []
+        for i in range(101):
+            type_ = self.datatypes[self.keys[i]]
+            new_row.append(self.get_data_type(row[i], type_))
+        total_mdt_numbers = new_row[100]
+        # add mdt stat maps to list of metrics
+        mdt_stats_dict = {}
+        for i in range(total_mdt_numbers):
+            new_mdt_stat_start_index = 101 + i * 37
+            new_mdt_stat_list = []
+            for j in self.mdt_stat_id_to_attr.keys():
+                type_ = self.mdt_stat_datatypes[j]
+                new_mdt_stat_list.append(self.get_data_type(row[new_mdt_stat_start_index + j], type_))
+            mdt_stats_dict[row[new_mdt_stat_start_index]] = new_mdt_stat_list
+        new_row.append(mdt_stats_dict)
+        # add label value
+        type_ = self.datatypes[self.keys[-1]]
+        new_row.append(self.get_data_type(row[-1], type_))
+        return new_row
 
     def read_csv(self, filename):
         data = []
+        if self.file_system == "lustre":
+            get_new_row = self.get_new_row_lustre
+        else:
+            get_new_row = self.get_new_row_normal
         with open(filename) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             count = 0
@@ -133,10 +192,10 @@ class CSV_to_Proto:
                     count += 1
                     continue
                 new_row = []
-                for i in range(len(row)):
-                    type_ = self.datatypes[self.keys[i]]
-                    new_row.append(self.get_data_type(row[i], type_))
-                data.append(new_row)
+                # for i in range(len(row)):
+                #     type_ = self.datatypes[self.keys[i]]
+                #     new_row.append(self.get_data_type(row[i], type_))
+                data.append(get_new_row(row))
         return data
 
     def get_data_type(self, val, type_):
@@ -147,6 +206,8 @@ class CSV_to_Proto:
         elif type_ == "intonly":
             tmp_value = str(val).split(".")[0]
             return int(tmp_value)
+        elif type_ == "dict":
+            pass
         else:
             return int(float(val))
 
@@ -186,24 +247,34 @@ class CSV_to_Proto:
     def write_to_proto(self, filename):
         logs = self.read_csv(filename)
         this_file_logs = bottleneck_pb2.BottleneckFile()
-        if self.file_system == "normal":
-            id_ = self.get_file_id(filename)
-            if id_ not in self.protobuff_files:
-                self.protobuff_files[id_] = bottleneck_pb2.BottleneckFile()
-            this_file_logs = self.protobuff_files[id_]
-            attrs = self.filetype[id_]
-            for i in attrs:
-                this_file_logs.__setattr__(i, attrs[i])
+        # if self.file_system == "normal":
+        id_ = self.get_file_id(filename)
+        if id_ not in self.protobuff_files:
+            self.protobuff_files[id_] = bottleneck_pb2.BottleneckFile()
+        this_file_logs = self.protobuff_files[id_]
+        attrs = self.filetype[id_]
+        for i in attrs:
+            this_file_logs.__setattr__(i, attrs[i])
         this_file_logs.__setattr__("network_type", self.network_type[self.environment.upper()])
         this_file_logs.__setattr__("created_time_utc", os.path.getctime(filename))
 
         length_log = 0 if len(logs) == 0 else len(logs[0])
         for log in logs:
             new_log = bottleneck_pb2.BottleneckLog()
-            for i in range(len(self.keys)):
-                new_log.__setattr__(self.id_to_attr[self.keys[i]], log[i])
+            if self.file_system == "normal":
+                for i in range(len(self.keys)):
+                    new_log.__setattr__(self.id_to_attr[self.keys[i]], log[i])
+            else:
+                for i in range(101):
+                    new_log.__setattr__(self.id_to_attr[self.keys[i]], log[i])
+                for mdt_name in log[101].keys():
+                    value_list = log[101].get(mdt_name) or []
+                    for i, value in enumerate(value_list):
+                        new_log.mdt_stats_map[mdt_name].__setattr__(self.mdt_stat_id_to_attr[i+1], value)
+
+                new_log.__setattr__("label_value", log[-1])
             this_file_logs.rows.append(new_log)
-        print("[+] The length of the rows is %d" % len(this_file_logs.rows))
+        print("[+] The number of the rows is %d" % len(this_file_logs.rows))
         self.bottleneck_logs.logs.append(this_file_logs)
 
     def aws_write(self, main_list, headers):
@@ -398,12 +469,15 @@ class CSV_to_Proto:
                 if "dataset" in filename and "csv" in filename:
                     print("[+] Starting for %s" % (filename))
                     self.write_to_proto(folder + "/" + filename)
-        # TODO check saving cvs data to binary file for parallel file system works fine
         elif self.file_system == "lustre":
-            folder_list = glob.glob(folder + "*")
-            mainDict, headers = self.read_data_from_folder_file(folder_list)
-            main_list = self.combine_logs(mainDict, headers)
-            self.aws_write(main_list, headers)
+            for filename in files:
+                if "dataset" in filename and "csv" in filename:
+                    print("[+] Starting for %s" % (filename))
+                    self.write_to_proto(folder + "/" + filename)
+            # folder_list = glob.glob(folder + "*")
+            # mainDict, headers = self.read_data_from_folder_file(folder_list)
+            # main_list = self.combine_logs(mainDict, headers)
+            # self.aws_write(main_list, headers)
         else:
             for filename in files:
                 if "csv" in filename and "aws" in filename:
@@ -422,7 +496,7 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/DTNS/dtn0Logs/"
+folder_dir = "./csv_logs/AWS_FXS/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 serialize_file = folder_dir.split("/")[-2]
