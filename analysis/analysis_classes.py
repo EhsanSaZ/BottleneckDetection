@@ -104,7 +104,7 @@ class TransferAnalysis:
             self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
                         [54, 57, 58, 76] + \
                         [87, 88, 89, 90, 91, 92, 93, 94] + \
-                        [182, 183, 184, 185, 186]
+                        [182, 183, 184, 185, 188]
         else:
             self.keys = list(range(1, 95)) + [182, 183, 184, 185, 188]
         # TODO headers for lustre fs should be fixed
