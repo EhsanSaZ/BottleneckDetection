@@ -30,10 +30,10 @@ from sklearn import tree
 
 class TransferAnalysis:
     def __init__(self, filename):
+        self.df_16 = None
         self.bottleneck_logs = BottleneckFiles()
         self.log_type = "normal" if "FXS" not in filename else "luster"
-        # TODO CC IS NOT CORRECT
-        self.log_type = "cc"
+        # self.log_type = "cc"
         try:
             with open(filename, 'rb') as bfile:
                 self.bottleneck_logs.ParseFromString(bfile.read())
@@ -82,14 +82,23 @@ class TransferAnalysis:
                            176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
                            180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
                            182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
-                           184: 'system_cpu_percent', 185: 'system_memory_percent', 186: 'label_value'}
-
+                           184: 'system_cpu_percent', 185: 'system_memory_percent',
+                           186: 'total_mdt_numbers', 187: 'mdt_stats_map', 188: 'label_value'}
+        self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
+                                    5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
+                                    9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
+                                    13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
+                                    17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
+                                    21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
+                                    25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
+                                    29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
+                                    33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
         if self.log_type == "normal":
-            self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 95)) + [182, 183, 184, 185, 186]  # list(range(1, 95)) + [182]
+            self.keys = self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
+                                    [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [182, 183, 184, 185, 188]
         elif self.log_type == "luster":
-            self.keys = list(range(1, 15)) + [44, 45, 46, 47, 48, 49, 50, 51, 54, 55, 57, 58, 59, 70, 71, 74, 76, 77,
-                                              78] + list(range(87, 187))
+            self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
+            self.mdt_keys = list(range(1, 37))
         elif self.log_type == "cc":
             # list range 30, 88 are related to the process and are not available in general and shouldnt be used?
             self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
@@ -97,8 +106,10 @@ class TransferAnalysis:
                         [87, 88, 89, 90, 91, 92, 93, 94] + \
                         [182, 183, 184, 185, 186]
         else:
-            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 186]
-        self.headers = [self.id_to_attr[i] for i in self.keys]
+            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 188]
+        # TODO headers for lustre fs should be fixed
+        if self.log_type != "luster":
+            self.headers = [self.id_to_attr[i] for i in self.keys]
         self.get_dataframe_from_array()
         # self.remove_not_needed_cols() #To remove columns whose feature importance is close to 0
 
@@ -113,15 +124,29 @@ class TransferAnalysis:
                 log_list.append(new_log)
 
         self.df = pd.DataFrame(log_list)
-        self.df_16 = pd.DataFrame(log_list_16, columns=self.headers)
+        if self.log_type != "luster":
+            self.df_16 = pd.DataFrame(log_list_16, columns=self.headers)
 
     def get_bottleneck_log_to_dict(self, log):
         new_log = {}
         # print (len(self.keys))
-        for i in self.keys:
-            ##if new_log[self.id_to_attr[i]] == log.__getattribute__(self.id_to_attr[i]):
-            # pass
-            new_log[self.id_to_attr[i]] = log.__getattribute__(self.id_to_attr[i])
+        if self.log_type != "luster":
+            for key in self.keys:
+                ##if new_log[self.id_to_attr[i]] == log.__getattribute__(self.id_to_attr[i]):
+                # pass
+                new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
+        else:
+            for key in self.keys:
+                if self.id_to_attr[key] != "mdt_stats_map":
+                    new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
+                else:
+                    mdt_stats_map = log.__getattribute__(self.id_to_attr[key])
+                    mdt_list = mdt_stats_map.keys()
+                    for mdt in mdt_stats_map:
+                        mdt_stats = mdt_stats_map[mdt]
+                        for mdt_key in self.mdt_keys:
+                            new_log["{}_{}".format(mdt, self.mdt_stat_id_to_attr[mdt_key])] = mdt_stats.__getattribute__(
+                                self.mdt_stat_id_to_attr[mdt_key])
         return new_log
 
     def remove_not_needed_cols(self):
