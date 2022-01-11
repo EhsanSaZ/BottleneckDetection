@@ -8,6 +8,7 @@ from subprocess import check_output
 import re
 import psutil
 
+from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from system_metric_collector import collect_system_metrics
 from buffer_value_collector import get_buffer_value
 from disk_stat_collector import get_disk_stat
@@ -86,40 +87,13 @@ def collect_stat():
         total_string = ""
         start = time.time()
         initial_time = time.time()
-        total_rtt_value = 0
-        total_pacing_rate = 0
         is_first_time = True
-        avg_wait_time = 0
-        total_wait_time = 0
-        total_cwnd_value = 0
-        total_rto_value = 0
-        byte_ack = 0
-        byte_ack_so_far = 0
-        data_segs_out = 0
-        segs_out = 0
-        data_seg_out_so_far = 0
-        seg_out_so_far = 0
-        segs_in = 0
-        seg_in_so_far = 0
-        retrans = 0
-        retrans_so_far = 0
-        total_ssthresh_value = 0
-        total_ost_read = 0
-        send = 0
-        unacked = 0
-        rcv_space = 0
         time_diff = 0
         epoc_time = 0
         has_transfer_started = False
         sleep_time = 1
         epoc_count = 0
         main_output_string = ""
-        total_mss_value = 0
-        send_buffer_value = 0
-        dsack_dups = 0
-        dsack_dups_so_far = 0
-        reord_seen = 0
-        reord_seen_so_far = 0
 
         disk_io_so_far_dict = {
             "time_so_far": 0,
@@ -145,192 +119,52 @@ def collect_stat():
             if sender_process is None: # or pid == 0
                 continue
             try:
-                comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', dst_ip + ":" + port_number]
-                ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
-                line_in_ss = str(ss_proc.stdout.read())
-                if line_in_ss.count(dst_ip) >= 1:
-                    if (is_first_time):
-                        initial_time = time.time()
-                        # is_first_time = False
+                if (is_first_time):
+                    initial_time = time.time()
+                    # is_first_time = False
+                time_diff += 1
+                epoc_time += 1
 
-                    parts = line_in_ss.split("\\n")
+                network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
 
-                    # for part in parts:
-                    #     print(part)
+                if time_diff >= (.1 / sleep_time):
 
-                    time_diff += 1
-                    epoc_time += 1
+                    system_value_list = collect_system_metrics(pid, sender_process)
+                    buffer_value_list = get_buffer_value()
+                    read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util, disk_io_so_far_dict = get_disk_stat(drive_name, disk_io_so_far_dict)
+                    output_string = network_statistics_collector.get_log_str()+","+str(read_req)+","+str(write_req)+\
+                                    ","+str(rkB)+","+str(wkB)+","+str(rrqm)+","+str(wrqm)+","+str(rrqm_perc)+","+\
+                                    str(wrqm_perc)+","+str(r_await)+","+str(w_await)+","+str(areq_sz)+","+\
+                                    str(rareq_sz)+","+str(wareq_sz)+","+str(svctm)+","+str(util)
 
-                    for x in range(len(parts)):
-                        if dst_ip in parts[x] and port_number in parts[x]:
-                            first_parts = parts[x].split(" ")
-                            first_list = []
-                            for item in first_parts:
-                                if len(item.strip()) > 0:
-                                    first_list.append(item)
+                    global label_value
+                    for item in system_value_list:
+                        output_string += "," + str(item)
+                    for item in buffer_value_list:
+                        output_string += "," + str(item)
 
-                            # T ODO WHAT INDEX IS CORRECT?
-                            #  WHAT is the output of ss -t -i command?
-                            send_buffer_value = int(first_list[1].strip())
-                            # send_buffer_value = int(first_list[7].strip())
-                            # send_buffer_value = int(first_list[-3].strip())
-                            # print (first_list)
+                    output_string += "," + str(network_statistics_collector.dsack_dups)
+                    output_string += "," + str(network_statistics_collector.reord_seen)
 
-                            if (is_first_time):
-                                initial_time = time.time()
-                                # is_first_time = False
+                    output_string += "," + str(psutil.cpu_percent())
+                    output_string += "," + str(psutil.virtual_memory().percent)
 
-                            metrics_line = parts[x + 1].strip("\\t").strip()
-                            metrics_parts = metrics_line.split(" ")
-                            # print("metric parts ", metrics_parts)
+                    output_string += "," + str(label_value) + "\n"
+                    if not is_first_time:
+                        main_output_string += output_string
+                    else:
+                        print("skip first transfer")
+                        is_first_time = False
 
-                            for y in range(len(metrics_parts)):
-                                metrics_parts_y = metrics_parts[y]
-                                if re.search(r'\bdata_segs_out\b', metrics_parts[y]):
-                                    pass
-                                    # s_index = metrics_parts[y].find(":")
-                                    # value = float(metrics_parts[y][s_index+1:])
-                                    # data_segs_out=(value-data_seg_out_so_far)
-                                    # data_seg_out_so_far = value
-
-                                elif re.search(r'\brto\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    total_rto_value = value
-
-                                elif re.search(r'\brtt\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    e_index = metrics_parts[y].find("/")
-                                    value = float(metrics_parts[y][s_index + 1:e_index])
-                                    total_rtt_value = value
-
-                                elif re.search(r'\bmss\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    # print("value ",value)
-                                    total_mss_value = value
-
-                                elif re.search(r'\bcwnd\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    total_cwnd_value = value
-
-                                elif re.search(r'\bssthresh\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    total_ssthresh_value = value
-
-                                elif re.search(r'\bbytes_acked\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    byte_ack = (value - byte_ack_so_far)
-                                    byte_ack_so_far = value
-
-                                elif re.search(r'\bsegs_out\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    # print("value ", value)
-                                    # print("seg_out_so_far ", seg_out_so_far)
-                                    segs_out = (value - seg_out_so_far)
-                                    seg_out_so_far = value
-
-                                elif re.search(r'\bsegs_in\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    segs_in = (value - seg_in_so_far)
-                                    seg_in_so_far = value
-
-                                elif re.search(r'\bsend\b', metrics_parts[y]):
-                                    value = metrics_parts[y + 1].strip()
-                                    send = value
-
-                                elif re.search(r'\bpacing_rate\b', metrics_parts[y]):
-                                    value = metrics_parts[y + 1].strip()
-                                    total_pacing_rate = value
-
-                                elif re.search(r'\bunacked\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    unacked = value
-
-                                elif re.search(r'\bretrans\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find("/")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    retrans = value - retrans_so_far
-                                    retrans_so_far = value
-
-                                elif re.search(r'\brcv_space\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    rcv_space = value
-
-                                elif re.search(r'\bdsack_dups\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    dsack_dups = value - dsack_dups_so_far
-                                    dsack_dups_so_far = value
-
-                                elif re.search(r'\breord_seen\b', metrics_parts[y]):
-                                    s_index = metrics_parts[y].find(":")
-                                    value = float(metrics_parts[y][s_index + 1:])
-                                    reord_seen = value - reord_seen_so_far
-                                    reord_seen_so_far = value
-
-                    if time_diff >= (.1 / sleep_time):
-                        avg_rto_value = total_rto_value
-                        avg_rtt_value = total_rtt_value
-                        avg_mss_value = total_mss_value
-                        avg_cwnd_value = total_cwnd_value
-                        avg_ssthresh_value = total_ssthresh_value
-                        avg_byte_ack = byte_ack / (1024 * 1024)
-                        avg_seg_out = segs_out
-                        avg_seg_in = segs_in
-                        avg_send_value = send
-                        p_avg_value = total_pacing_rate
-                        avg_unacked_value = unacked
-                        avg_retrans = retrans
-                        avg_rcv_space = rcv_space
-                        avg_dsack_dups = dsack_dups
-                        avg_reord_seen = reord_seen
-
-                        system_value_list = collect_system_metrics(pid, sender_process)
-                        buffer_value_list = get_buffer_value()
-                        read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util, disk_io_so_far_dict = get_disk_stat(drive_name, disk_io_so_far_dict)
-                        output_string = str(avg_rtt_value)+","+str(p_avg_value) + ","+str(avg_cwnd_value)+","+str(avg_rto_value)+","+\
-                                    str(avg_byte_ack)+","+str(avg_seg_out) +","+str(retrans)+","+\
-                                    str(avg_mss_value)+","+str(avg_ssthresh_value) + ","+str(avg_seg_in)+","+\
-                                    str(avg_send_value)+","+str(avg_unacked_value) + ","+str(avg_rcv_space)+","+\
-                                    str(send_buffer_value)+","+str(read_req)+","+str(write_req)+","+str(rkB)+","+str(wkB)+","+str(rrqm)+","+str(wrqm)+","+\
-                                    str(rrqm_perc)+","+str(wrqm_perc)+","+str(r_await)+","+str(w_await)+","+str(areq_sz)+","+str(rareq_sz)+","+str(wareq_sz)+","+str(svctm)+","+str(util)
-
-                        global label_value
-                        for item in system_value_list:
-                            output_string += "," + str(item)
-                        for item in buffer_value_list:
-                            output_string += "," + str(item)
-
-                        output_string += "," + str(avg_dsack_dups)
-                        output_string += "," + str(avg_reord_seen)
-
-                        output_string += "," + str(psutil.cpu_percent())
-                        output_string += "," + str(psutil.virtual_memory().percent)
-
-                        output_string += "," + str(label_value) + "\n"
-                        if not is_first_time:
-                            main_output_string += output_string
-                        else:
-                            print("skip first transfer")
-                            is_first_time = False
-
-                        epoc_count += 1
-                        if epoc_count % 10 == 0:
+                    epoc_count += 1
+                    if epoc_count % 10 == 0:
+                        print("transferring file.... ", epoc_count, "label: ", label_value)
+                        if epoc_count % 100 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
-                            if epoc_count % 100 == 0:
-                                print("transferring file.... ", epoc_count, "label: ", label_value)
-                                epoc_count = 0
-                            write_thread = fileWriteThread(main_output_string, label_value)
-                            write_thread.start()
-                            main_output_string = ""
+                            epoc_count = 0
+                        write_thread = fileWriteThread(main_output_string, label_value)
+                        write_thread.start()
+                        main_output_string = ""
 
             except:
                 traceback.print_exc()
