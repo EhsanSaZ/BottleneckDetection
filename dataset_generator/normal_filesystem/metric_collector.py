@@ -9,6 +9,7 @@ import re
 import psutil
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
+from DiskStatistics.DiskStatisticsLogCollector import DiskStatisticsLogCollector
 from system_metric_collector import collect_system_metrics
 from buffer_value_collector import get_buffer_value
 from disk_stat_collector import get_disk_stat
@@ -77,7 +78,8 @@ def collect_stat():
     proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     parts = res.split("\n")
-
+    network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
+    disk_statistics_collector = DiskStatisticsLogCollector(drive_name=drive_name, sector_conversion_fctr=2)
     for x in parts:
         if "lustre" in x:
             isparallel_file_system = True
@@ -94,20 +96,6 @@ def collect_stat():
         sleep_time = 1
         epoc_count = 0
         main_output_string = ""
-
-        disk_io_so_far_dict = {
-            "time_so_far": 0,
-            "rd_ios_so_far": 0,
-            "rd_merges_so_far": 0,
-            "rd_sectors_so_far": 0,
-            "rd_ticks_so_far": 0,
-            "wr_ios_so_far": 0,
-            "wr_merges_so_far": 0,
-            "wr_sectors_so_far": 0,
-            "wr_ticks_so_far": 0,
-            "time_in_queue_so_far": 0,
-            "sector_conversion_fctr": 2
-        }
         while 1:
             ### NETWORK METRICS ###
             global is_transfer_done
@@ -125,18 +113,11 @@ def collect_stat():
                 time_diff += 1
                 epoc_time += 1
 
-                network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
-
                 if time_diff >= (.1 / sleep_time):
-
                     system_value_list = collect_system_metrics(pid, sender_process)
                     buffer_value_list = get_buffer_value()
-                    read_req, write_req, rkB, wkB, rrqm, wrqm, rrqm_perc, wrqm_perc, r_await, w_await, areq_sz, rareq_sz, wareq_sz, svctm, util, disk_io_so_far_dict = get_disk_stat(drive_name, disk_io_so_far_dict)
-                    output_string = network_statistics_collector.get_log_str()+","+str(read_req)+","+str(write_req)+\
-                                    ","+str(rkB)+","+str(wkB)+","+str(rrqm)+","+str(wrqm)+","+str(rrqm_perc)+","+\
-                                    str(wrqm_perc)+","+str(r_await)+","+str(w_await)+","+str(areq_sz)+","+\
-                                    str(rareq_sz)+","+str(wareq_sz)+","+str(svctm)+","+str(util)
-
+                    output_string = network_statistics_collector.get_log_str()
+                    output_string += "," + disk_statistics_collector.get_log_str()
                     global label_value
                     for item in system_value_list:
                         output_string += "," + str(item)
