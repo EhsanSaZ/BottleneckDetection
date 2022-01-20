@@ -41,8 +41,9 @@ def collect_file_mdt_path_info(pid, src_path):
                                 first_part = part[:first_dash_index]
                                 second_part = part[second_dash_index + 1:]
 
-                                mdt_path = '/sys/kernel/debug/lustre/mdc/' + first_part + mdt_str + "-" + second_part
-                                return mdt_path
+                                mdt_dir_name = first_part + mdt_str + "-" + second_part
+                                mdt_path = '/sys/kernel/debug/lustre/mdc/' + mdt_dir_name
+                                return mdt_path, mdt_dir_name
 
                 else:
                     return ""
