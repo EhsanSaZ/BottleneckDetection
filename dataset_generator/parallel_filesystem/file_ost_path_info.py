@@ -52,7 +52,7 @@ def collect_file_ost_path_info(pid, src_path):
                         # x_insex = hex_ost_number.rfind("x")
                         # hex_ost_number = hex_ost_number[x_insex + 1:]
                         hex_ost_number = '{0:0{1}X}'.format(int(ost_number), 4)
-                        proc = Popen(['ls', '-l', '/proc/fs/lustre/osc'], universal_newlines=True, stdout=PIPE)
+                        proc = Popen(['ls', '-l', '/sys/kernel/debug/lustre/osc'], universal_newlines=True, stdout=PIPE)
                         # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0045-osc-ffff92b94ed33000
                         # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b900cb0000
                         # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b94ed33000
