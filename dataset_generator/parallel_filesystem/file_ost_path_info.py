@@ -76,9 +76,9 @@ def collect_file_ost_path_info(pid, src_path):
                                     second_part = part[second_dash_index + 1:]
 
                                     # ost_str = "-OST" + hex_ost_number
-
-                                    ost_path = '/proc/fs/lustre/osc/' + first_part + ost_str + "-"  + second_part
+                                    ost_dir_name = first_part + ost_str + "-"  + second_part
+                                    ost_path = '/proc/fs/lustre/osc/' + ost_dir_name
 
                                     # print(ost_path)
-                                    return ost_path
+                                    return ost_path, ost_dir_name
                         break

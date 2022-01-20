@@ -1,12 +1,13 @@
 from subprocess import Popen, PIPE
 
 
-def process_ost_stat(ost_path, ost_stat_so_far=None):
+def process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None):
     value_list = []
     if ost_stat_so_far is None:
         ost_stat_so_far = {}
 
-    proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
+    # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
+    proc = Popen(['lctl', 'get_param', "osc." + ost_dir_name + ".stats"], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     #snapshot_time             1637627183.394337 secs.usecs
     #req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
@@ -50,7 +51,8 @@ def process_ost_stat(ost_path, ost_stat_so_far=None):
     value_list.append(float((ost_stat_latest_values.get("ldlm_cancel") or 0) - (ost_stat_so_far.get("ldlm_cancel") or 0)))
     value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
 
-    proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
+    # proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
+    proc = Popen(['lctl', 'get_param', "osc." + ost_dir_name + ".stats"], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     res_parts = res.split("\n")
     #snapshot_time:         1638393148.677361 (secs.usecs)
