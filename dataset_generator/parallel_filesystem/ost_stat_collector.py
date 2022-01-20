@@ -7,7 +7,8 @@ def process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None):
         ost_stat_so_far = {}
 
     # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
-    proc = Popen(['lctl', 'get_param', "osc." + ost_dir_name + ".stats"], universal_newlines=True, stdout=PIPE)
+    get_param_arg = "osc." + ost_dir_name + ".stats"
+    proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     #snapshot_time             1637627183.394337 secs.usecs
     #req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
@@ -28,7 +29,7 @@ def process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None):
     res_parts = res.split("\n")
     ost_stat_latest_values = {}
     for metric_line in res_parts:
-        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line:
+        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg not in metric_line:
             tokens = str(metric_line).split(" ")
             ost_stat_latest_values[tokens[0]] = float(tokens[len(tokens) - 2])
             # value_list.append(tokens[0])
@@ -52,7 +53,8 @@ def process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None):
     value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
 
     # proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
-    proc = Popen(['lctl', 'get_param', "osc." + ost_dir_name + ".stats"], universal_newlines=True, stdout=PIPE)
+    get_param_arg = "osc." + ost_dir_name + ".stats"
+    proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     res_parts = res.split("\n")
     #snapshot_time:         1638393148.677361 (secs.usecs)
