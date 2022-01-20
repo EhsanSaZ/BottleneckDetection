@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 
-def collect_file_path_info(pid, src_path):
+def collect_file_ost_path_info(pid, src_path):
     proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
     # total 0
     # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98

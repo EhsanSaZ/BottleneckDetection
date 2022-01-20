@@ -12,7 +12,8 @@ import copy
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from system_metric_collector import collect_system_metrics
 from buffer_value_collector import get_buffer_value
-from file_ost_path_info import collect_file_path_info
+from file_ost_path_info import collect_file_ost_path_info
+from file_mdt_path_info import collect_file_mdt_path_info
 from ost_stat_collector import process_ost_stat
 from mdt_stat_collector import get_mdt_stat
 
@@ -148,7 +149,8 @@ def collect_stat():
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = collect_system_metrics(pid, sender_process)
                     buffer_value_list = get_buffer_value()
-                    ost_path = collect_file_path_info(pid, src_path)
+                    ost_path = collect_file_ost_path_info(pid, src_path)
+                    mdt_path = collect_file_mdt_path_info(pid, src_path)
 
                     ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_stats_so_far)
 
