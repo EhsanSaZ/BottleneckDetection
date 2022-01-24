@@ -5,11 +5,10 @@ def process_remote_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_
     path = "obdfilter." + remote_ost_dir_name + ".stats"
     r = requests.post(ost_agent_address + "lctl_get_param", json={"path": remote_ost_dir_name})
     print(r.json()["content"])
-    http_response = r.json()["content"]
+    output = r.json()["out_put"] or ""
     value_list = []
     if remote_ost_stats_so_far is None:
         ost_stat_so_far = {}
-    output = http_response.get("out_put") or ""
     output_parts = output.plit("\n")
     remote_ost_stats_latest_value = {}
     for metric_line in output_parts:
