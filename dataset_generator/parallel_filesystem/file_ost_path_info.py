@@ -80,5 +80,5 @@ def collect_file_ost_path_info(pid, src_path):
                                     ost_path = '/proc/fs/lustre/osc/' + ost_dir_name
 
                                     # print(ost_path)
-                                    return ost_path, ost_dir_name
+                                    return ost_path, ost_dir_name, first_part + ost_str, ost_number
                         break

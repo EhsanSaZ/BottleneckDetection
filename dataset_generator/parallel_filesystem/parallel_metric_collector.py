@@ -10,6 +10,7 @@ import psutil
 import copy
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
+from remote_ost_stat_collector import process_remote_ost_stats
 from system_metric_collector import collect_system_metrics
 from buffer_value_collector import get_buffer_value
 from file_ost_path_info import collect_file_ost_path_info
@@ -20,6 +21,7 @@ from mdt_stat_collector import get_mdt_stat
 src_ip = "127.0.0.1"
 dst_ip = "192.170.227.252"
 port_number = "50505"
+remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2/"}
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
@@ -129,6 +131,8 @@ def collect_stat():
                             "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
                             "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
                             "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
+
+        all_remote_ost_stats_so_far = {}
         while 1:
             ### NETWORK METRICS ###
             global is_transfer_done
@@ -149,7 +153,7 @@ def collect_stat():
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = collect_system_metrics(pid, sender_process)
                     buffer_value_list = get_buffer_value()
-                    ost_kernel_path, ost_dir_name, remote_ost_dir_name = collect_file_ost_path_info(pid, src_path)
+                    ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
                     mdt_kernel_path, mdt_dir_name = collect_file_mdt_path_info(pid, src_path)
 
                     ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
@@ -158,6 +162,13 @@ def collect_stat():
                     #                                                         all_mdt_stat_so_far_dict)
                     mdt_value_list, mdt_stat_so_far_general = get_mdt_stat(mdt_parent_path, mdt_dir_name,
                                                                            mdt_stat_so_far_general)
+                    ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
+                    remote_ost_value_list = [0.0, 0.0]
+                    if ost_agent_address is not "":
+                        remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
+                        remote_ost_value_list, remote_ost_stats_so_far = process_remote_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
+
                     output_string = network_statistics_collector.get_log_str()
 
                     global label_value
@@ -168,18 +179,24 @@ def collect_stat():
                     # ost_value_list are metrics with index 79-95 in csv
                     for item in ost_value_list:
                         output_string += "," + str(item)
-                    # values with index 96, 97, 98, 99
+                    # values with index 112-147
+                    for item in mdt_value_list:
+                        output_string += "," + str(item)
+
                     output_string += "," + str(network_statistics_collector.dsack_dups)
                     output_string += "," + str(network_statistics_collector.reord_seen)
 
                     output_string += "," + str(psutil.cpu_percent())
                     output_string += "," + str(psutil.virtual_memory().percent)
 
+                    for item in remote_ost_value_list:
+                        output_string += "," + str(item)
+
                     # mdt_value_list : total_mdt_numbers at 100
                     # repeat "total_mdt_numbers" of times in list
                     # string of mdt name to use as key for map, foK36 metrics for each mdt
-                    for item in mdt_value_list:
-                        output_string += "," + str(item)
+                    # for item in mdt_value_list:
+                    #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
                     if not is_first_time:

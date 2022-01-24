@@ -261,11 +261,16 @@ message BottleneckLog {
 
     float system_cpu_percent = 184;
     float system_memory_percent = 185; // 184-185 are new System Metrics
-    // 186 is the total number of mdts 0 for normal filesystem
-    int64 total_mdt_numbers = 186;
-    map <string, MDTStatLog> mdt_stats_map = 187;
+
+    // 186-187 are remote ost read and write bytes
+    optional uint64 remote_ost_read_bytes= 186;
+    optional uint64 remote_ost_write_bytes = 187;
+
+    // 188 is the total number of mdts 0 for normal filesystem
+    int64 total_mdt_numbers = 188;
+    map <string, MDTStatLog> mdt_stats_map = 189;
     /* Field 188 is the label of the experiment used.*/
-    optional int32 label_value = 188; //The label of the experiment used.
+    optional int32 label_value = 190; //The label of the experiment used.
 
 }
 
