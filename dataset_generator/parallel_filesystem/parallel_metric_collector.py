@@ -149,13 +149,15 @@ def collect_stat():
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = collect_system_metrics(pid, sender_process)
                     buffer_value_list = get_buffer_value()
-                    ost_path, ost_dir_name = collect_file_ost_path_info(pid, src_path)
-                    mdt_path, mdt_dir_name = collect_file_mdt_path_info(pid, src_path)
+                    ost_kernel_path, ost_dir_name, remote_ost_dir_name = collect_file_ost_path_info(pid, src_path)
+                    mdt_kernel_path, mdt_dir_name = collect_file_mdt_path_info(pid, src_path)
 
-                    ost_value_list, ost_stats_so_far = process_ost_stat(ost_path, ost_dir_name, ost_stats_so_far)
+                    ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
 
-                    mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
-                                                                            all_mdt_stat_so_far_dict)
+                    # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
+                    #                                                         all_mdt_stat_so_far_dict)
+                    mdt_value_list, mdt_stat_so_far_general = get_mdt_stat(mdt_parent_path, mdt_dir_name,
+                                                                           mdt_stat_so_far_general)
                     output_string = network_statistics_collector.get_log_str()
 
                     global label_value

@@ -1,8 +1,9 @@
 from subprocess import Popen, PIPE
 
 
-def process_mds_rpc(mdt_path):
-    proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
+def process_mds_rpc(mdt_path, mdt_dir_name):
+    # proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
+    proc = Popen(['lctl', 'get_param', "mdc." + mdt_dir_name + ".import"], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     # import:
     # name: home-MDT0001-mdc-ffff9575076ae800
@@ -71,11 +72,13 @@ def process_mds_rpc(mdt_path):
     return value_list
 
 
-def process_mdt_stat(mdt_path, mdt_stat_so_far):
+def process_mdt_stat(mdt_path, mdt_dir_name, mdt_stat_so_far):
     value_list = []
     if mdt_stat_so_far is None:
         mdt_stat_so_far = {}
-    proc = Popen(['cat', mdt_path + "/stats"], universal_newlines=True, stdout=PIPE)
+    # proc = Popen(['cat', mdt_path + "/stats"], universal_newlines=True, stdout=PIPE)
+    get_param_arg = "mdc." + mdt_dir_name + ".stats"
+    proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     #snapshot_time             1638394164.84885 secs.usecs
     # req_waittime              1601539009 samples [usec] 26 580651352 586616437586 3987813690702099508
@@ -95,7 +98,7 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     res_parts = res.split("\n")
     mdt_stat_latest_values = {}
     for metric_line in res_parts:
-        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line:
+        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg not in metric_line:
             tokens = str(metric_line).split(" ")
             mdt_stat_latest_values[tokens[0]] = float(tokens[len(tokens) - 2])
             # value_list.append(tokens[0])
@@ -119,7 +122,9 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     value_list.append(float((mdt_stat_latest_values.get("seq_query") or 0) - (mdt_stat_so_far.get("seq_query") or 0)))
     value_list.append(float((mdt_stat_latest_values.get("fld_query") or 0) - (mdt_stat_so_far.get("fld_query") or 0)))
 
-    proc = Popen(['cat', mdt_path + "/md_stats"], universal_newlines=True, stdout=PIPE)
+    # proc = Popen(['cat', mdt_path + "/md_stats"], universal_newlines=True, stdout=PIPE)
+    get_param_arg = "mdc." + mdt_dir_name + ".md_stats"
+    proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     res_parts = res.split("\n")
     md_stats_so_far_dict = mdt_stat_so_far.get("md_stats") or None
@@ -142,7 +147,7 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     # getxattr                  19447312 samples [reqs]
     # revalidate_lock           425865270 samples [reqs]
     for metric_line in res_parts:
-        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line:
+        if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg not in metric_line:
             tokens = str(metric_line).split(" ")
             md_stats_latest_values[tokens[0]] = float(tokens[len(tokens) - 3])
             # value_list.append(tokens[0])
@@ -169,15 +174,10 @@ def process_mdt_stat(mdt_path, mdt_stat_so_far):
     return value_list, mdt_stat_latest_values
 
 
-def get_mdt_stat(mdt_parent_path, mdt_paths, all_mdt_stat_so_far_dict=None):
+def get_mdt_stat(mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict=None):
     value_list = []
-    value_list.append(len(mdt_paths))
-    if not mdt_parent_path.endswith('/'):
-        mdt_parent_path = mdt_parent_path + "/"
-    for path in mdt_paths:
-        value_list.append(path)
-        value_list += process_mds_rpc(mdt_parent_path + path)
-        a_list, mdt_stat_latest_values = process_mdt_stat(mdt_parent_path + path, all_mdt_stat_so_far_dict.get(path) or None)
-        all_mdt_stat_so_far_dict[path] = mdt_stat_latest_values
-        value_list += a_list
-    return value_list, all_mdt_stat_so_far_dict
+    mdt_full_path = mdt_parent_path + "/" + mdt_dir_name
+    value_list += process_mds_rpc(mdt_full_path, mdt_dir_name)
+    a_list, mdt_stat_latest_values = process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict)
+    value_list += a_list
+    return value_list, mdt_stat_latest_values
