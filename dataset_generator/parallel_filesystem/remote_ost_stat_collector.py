@@ -3,13 +3,13 @@ import requests
 
 def process_remote_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far=None):
     path = "obdfilter." + remote_ost_dir_name + ".stats"
-    r = requests.post(ost_agent_address + "lctl_get_param", json={"path": remote_ost_dir_name})
-    print(r.json()["content"])
+    r = requests.post(ost_agent_address + "lctl_get_param", json={"path": path})
+    #print(r.json()["out_put"])
     output = r.json()["out_put"] or ""
     value_list = []
     if remote_ost_stats_so_far is None:
         ost_stat_so_far = {}
-    output_parts = output.plit("\n")
+    output_parts = output.split("\n")
     remote_ost_stats_latest_value = {}
     for metric_line in output_parts:
         if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and not remote_ost_dir_name in metric_line:
