@@ -21,7 +21,7 @@ from mdt_stat_collector import get_mdt_stat
 src_ip = "127.0.0.1"
 dst_ip = "192.170.227.252"
 port_number = "50505"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1324/"}
+remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/"}
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
