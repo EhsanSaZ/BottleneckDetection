@@ -21,7 +21,7 @@ from mdt_stat_collector import get_mdt_stat
 src_ip = "127.0.0.1"
 dst_ip = "192.170.227.252"
 port_number = "50505"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2/"}
+remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1324/"}
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
@@ -60,9 +60,9 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    # comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
-               dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    # comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
+    #            dst_ip, port_number, src_path, str(label_value)]
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
     pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
@@ -153,22 +153,33 @@ def collect_stat():
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = collect_system_metrics(pid, sender_process)
                     buffer_value_list = get_buffer_value()
-                    ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
-                    mdt_kernel_path, mdt_dir_name = collect_file_mdt_path_info(pid, src_path)
-
+                    #ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
+                    file_ost_path_info = collect_file_ost_path_info(pid, src_path)
+                    if file_ost_path_info is None:
+                        continue
+                    else:
+                        ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
+                    #print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
+                    file_mdt_path_info = collect_file_mdt_path_info(pid, src_path)
+                    if file_mdt_path_info is None:
+                        continue
+                    else:
+                        mdt_kernel_path, mdt_dir_name = file_mdt_path_info
+                    #print(mdt_kernel_path, mdt_dir_name)
                     ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
-
+                    # print (ost_value_list, ost_stats_so_far)
                     # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     #                                                         all_mdt_stat_so_far_dict)
                     mdt_value_list, mdt_stat_so_far_general = get_mdt_stat(mdt_parent_path, mdt_dir_name,
                                                                            mdt_stat_so_far_general)
+                    #print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address is not "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
                         remote_ost_value_list, remote_ost_stats_so_far = process_remote_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
-
+                    #print (all_remote_ost_stats_so_far)
                     output_string = network_statistics_collector.get_log_str()
 
                     global label_value
