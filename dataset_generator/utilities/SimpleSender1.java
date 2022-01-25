@@ -103,7 +103,7 @@ public class SimpleSender1 {
 
         byte[] buffer = new byte[128 * 1024];
         int n;
-//        this.clearCache(path);
+       this.clearCache(path);
         while (true) {
             FiverFile currentFile = null;
             synchronized (files) {
@@ -151,7 +151,7 @@ public class SimpleSender1 {
                 for (FiverFile f : originalfiles) {
                     files.add(f);
                 }
-               // this.clearCache(path);
+               this.clearCache(path);
                 yy=0;
 			}
 
