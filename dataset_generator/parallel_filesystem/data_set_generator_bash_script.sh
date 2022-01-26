@@ -373,11 +373,39 @@ do
         sleep 5;
         python3 parallel_metric_collector.py 58 &
         sleep $main_sleep_time;
+        killall -9 stress-ng;
         killall -9  -u $user_name python3;
         killall -9  -u $user_name java;
-        killall -9 java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-
+    #generate a random variable if it is even do the if part 34: "io"
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        stress -i 10 &
+        sleep 5;
+        python3 parallel_metric_collector.py 34 &
+        sleep $main_sleep_time;
+        killall -9 stress;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 35: "mem"
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        # T ODO check if with or with out "" is true
+        stress-ng --vm-bytes "$(awk '/MemAvailable/{printf "%d\n", $2 * 0.98;}' < /proc/meminfo)"k --vm-keep -m 10  &
+        sleep 5;
+        python3 parallel_metric_collector.py 35 &
+        sleep $main_sleep_time;
+        killall -9 stress-ng;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
 done
