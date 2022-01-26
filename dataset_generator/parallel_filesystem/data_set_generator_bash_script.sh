@@ -408,4 +408,284 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
+    #generate a random variable if it is even do the if part 36: "network" loss 0.5%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem loss 0.5%;
+        sleep 5;
+        python3 parallel_metric_collector.py 36 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 37: "network" loss 0.1%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem loss 0.1%;
+        sleep 5;
+        python3 parallel_metric_collector.py 37 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 38: "network" loss 0.05%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem loss 0.05%;
+        sleep 5;
+        python3 parallel_metric_collector.py 38 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 39: "network" loss 1%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem loss 1%;
+        sleep 5;
+        python3 parallel_metric_collector.py 39 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 40: "network" delay 0.1ms 0.1
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1ms distribution normal;
+        sleep 5;
+        python3 parallel_metric_collector.py 40 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 41: "network" delay 0.1ms 0.5ms
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.5ms distribution normal;
+        sleep 5;
+        python3 parallel_metric_collector.py 41 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 42: "network" delay 0.1ms 1ms
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 1ms distribution normal;
+        sleep 5;
+        python3 parallel_metric_collector.py 42 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 43: "network" delay 0.1ms 2ms
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 2ms distribution normal;
+        sleep 5;
+        python3 parallel_metric_collector.py 43 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 44: "network" duplicate 10%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 10%;
+        sleep 5;
+        python3 parallel_metric_collector.py 44 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 45: "network" duplicate 15%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 15%;
+        sleep 5;
+        python3 parallel_metric_collector.py 45 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 46: "network" duplicate 20%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 20%;
+        sleep 5;
+        python3 parallel_metric_collector.py 46 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 47: "network" duplicate 25%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem duplicate 25%;
+        sleep 5;
+        python3 parallel_metric_collector.py 47 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 48: "network" corrupt 0.5%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem corrupt 0.5%;
+        sleep 5;
+        python3 parallel_metric_collector.py 48 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 49: "network" corrupt 0.1%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem corrupt 0.1%;
+        sleep 5;
+        python3 parallel_metric_collector.py 49 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 50: "network" corrupt 0.05%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem corrupt 0.05%;
+        sleep 5;
+        python3 parallel_metric_collector.py 50 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 51: "network" corrupt 1%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem corrupt 1%;
+        sleep 5;
+        python3 parallel_metric_collector.py 51 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 52: "network" reorder 10%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem reorder 10% delay 1ms;
+        sleep 5;
+        python3 parallel_metric_collector.py 52 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 53: "network" reorder 15%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem reorder 15% delay 1ms;
+        sleep 5;
+        python3 parallel_metric_collector.py 53 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 54: "network" reorder 20%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem reorder 20% delay 1ms;
+        sleep 5;
+        python3 parallel_metric_collector.py 54 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 55: "network" reorder 25%
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        tc qdisc add dev $ethernet_interface_name root netem reorder 25% delay 1ms;
+        sleep 5;
+        python3 parallel_metric_collector.py 55 &
+        sleep $main_sleep_time;
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        tc qdisc del dev $ethernet_interface_name root;
+        sleep 5;
+    fi
 done
