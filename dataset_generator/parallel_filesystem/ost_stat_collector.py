@@ -53,7 +53,7 @@ def process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None):
     value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
 
     # proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
-    get_param_arg = "osc." + ost_dir_name + ".stats"
+    get_param_arg = "osc." + ost_dir_name + ".rpc_stats"
     proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
     res = proc.communicate()[0]
     res_parts = res.split("\n")
