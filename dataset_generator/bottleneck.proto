@@ -149,7 +149,10 @@ message BottleneckLog {
     uint64 tcp_snd_buffer_min = 92; //minimum size of the send buffer used by each TCP socket.
     uint64 tcp_snd_buffer_default = 93; //the default size of the send buffer for a TCP socket.
     uint64 tcp_snd_buffer_max = 94; //the maximum size of the send buffer used by each TCP socket.
-
+    /*
+        The fields 95 - 109 are generated using following "lctl get_param osc.<ost-dir-name>.stats
+        it contains statistics for the osc that is connected to the <ost-dir-name> ost
+    */
     optional uint64 req_waittime = 95;
     optional uint64 req_active = 96;
     optional uint64 read_bytes = 97;
@@ -165,48 +168,61 @@ message BottleneckLog {
     optional uint64 ost_quotactl = 107;
     optional uint64 ldlm_cancel = 108;
     optional uint64 obd_ping = 109;
-
+    /*
+        The fields 110 - 11 are generated using following "lctl get_param osc.<ost-dir-name>.rpc_stats
+        it contains statistics for the osc that is connected to the <ost-dir-name> ost
+    */
     optional uint64 pending_read_pages = 110;
     optional uint64 read_RPCs_in_flight = 111;
-
-    optional uint64 avg_waittime_md1 = 112;
-    optional uint64 inflight_md1 = 113;
-    optional uint64 unregistering_md1 = 114;
-    optional uint64 timeouts_md1 = 115;
-
-    optional uint64 req_waittime_md1 = 116;
-    optional uint64 req_active_md1 = 117;
-    optional uint64 mds_getattr_md1 = 118;
-    optional uint64 mds_getattr_lock_md1 = 119;
-    optional uint64 mds_close_md1 = 120;
-    optional uint64 mds_readpage_md1 = 121;
-    optional uint64 mds_connect_md1 = 122;
-    optional uint64 mds_get_root_md1 = 123; // not appeared in stempede2
-    optional uint64 mds_statfs_md1 = 124;
-    optional uint64 mds_sync_md1 = 125;
-    optional uint64 mds_quotactl_md1 = 126;
-    optional uint64 mds_getxattr_md1 = 127;
-    optional uint64 mds_hsm_state_set_md1 = 128;// not appeared in stempede2
-    optional uint64 ldlm_cancel_md1 = 129;
-    optional uint64 obd_ping_md1 = 130;
-    optional uint64 seq_query_md1 = 131;
-    optional uint64 fld_query_md1 = 132;// not appeared in stempede2
-    optional uint64 close_md1 = 133;
-    optional uint64 create_md1 = 134;
-    optional uint64 enqueue_md1 = 135;
-    optional uint64 getattr_md1 = 136;
-    optional uint64 intent_lock_md1 = 137;
-    optional uint64 link_md1 = 138;
-    optional uint64 rename_md1 = 139;
-    optional uint64 setattr_md1 = 140;
-    optional uint64 fsync_md1 = 141;
-    optional uint64 read_page_md1 = 142;
-    optional uint64 unlink_md1 = 143;
-    optional uint64 setxattr_md1 = 144;
-    optional uint64 getxattr_md1 = 145;
-    optional uint64 intent_getattr_async_md1 = 146;// not appeared in stempede2
-    optional uint64 revalidate_lock_md1 = 147;
-
+    /*
+        The fields 112 - 115 are generated using following "lctl get_param mdc.<mdt-dir-name>.import
+        it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
+    */
+    optional uint64 avg_waittime_md = 112;
+    optional uint64 inflight_md = 113;
+    optional uint64 unregistering_md = 114;
+    optional uint64 timeouts_md = 115;
+    /*
+        The fields 116 - 132 are generated using following "lctl get_param mdc.<mdt-dir-name>.import
+        it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
+    */
+    optional uint64 req_waittime_md = 116;
+    optional uint64 req_active_md = 117;
+    optional uint64 mds_getattr_md = 118;
+    optional uint64 mds_getattr_lock_md = 119;
+    optional uint64 mds_close_md = 120;
+    optional uint64 mds_readpage_md = 121;
+    optional uint64 mds_connect_md = 122;
+    optional uint64 mds_get_root_md = 123; // not appeared in stempede2
+    optional uint64 mds_statfs_md = 124;
+    optional uint64 mds_sync_md = 125;
+    optional uint64 mds_quotactl_md = 126;
+    optional uint64 mds_getxattr_md = 127;
+    optional uint64 mds_hsm_state_set_md = 128;// not appeared in stempede2
+    optional uint64 ldlm_cancel_md = 129;
+    optional uint64 obd_ping_md = 130;
+    optional uint64 seq_query_md = 131;
+    optional uint64 fld_query_md = 132;// not appeared in stempede2
+    /*
+        The fields 133 - 147 are generated using following "lctl get_param mdc.<mdt-dir-name>.md_stats
+        it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
+    */
+    optional uint64 close_md = 133;
+    optional uint64 create_md = 134;
+    optional uint64 enqueue_md = 135;
+    optional uint64 getattr_md = 136;
+    optional uint64 intent_lock_md = 137;
+    optional uint64 link_md = 138;
+    optional uint64 rename_md = 139;
+    optional uint64 setattr_md = 140;
+    optional uint64 fsync_md = 141;
+    optional uint64 read_page_md = 142;
+    optional uint64 unlink_md = 143;
+    optional uint64 setxattr_md = 144;
+    optional uint64 getxattr_md = 145;
+    optional uint64 intent_getattr_async_md = 146;// not appeared in stempede2
+    optional uint64 revalidate_lock_md = 147;
+    /*
     optional uint64 avg_waittime_md2 = 148;
     optional uint64 inflight_md2 = 149;
     optional uint64 unregistering_md2 = 150;
@@ -243,7 +259,7 @@ message BottleneckLog {
     optional uint64 getxattr_md2 = 179;
     optional uint64 intent_getattr_async_md2 = 180;
     optional uint64 revalidate_lock_md2 = 181;
-
+    */
     /*
         182-183 are the new transfer metrics. t is generated by some computation using the
         values generated using "ss -t -i state ESTABLISHED dst [dst-ip];" command. They may appear in the output sometimes.
@@ -256,24 +272,24 @@ message BottleneckLog {
 	      unacked:130 retrans:0/354 sacked:45 dsack_dups:354 reordering:135 reord_seen:7907
 	      rcv_space:14480 rcv_ssthresh:64088 notsent:781920 minrtt:0.089
     */
-    optional float avg_dsack_dups_value = 182; //182 - 183 are new Transfer Metrics
-    optional float avg_reord_seen = 183;
+    optional float avg_dsack_dups_value = 148; //182 - 183 are new Transfer Metrics
+    optional float avg_reord_seen = 149;
 
-    float system_cpu_percent = 184;
-    float system_memory_percent = 185; // 184-185 are new System Metrics
+    float system_cpu_percent = 150;
+    float system_memory_percent = 151; // 184-185 are new System Metrics
 
     // 186-187 are remote ost read and write bytes
-    optional uint64 remote_ost_read_bytes= 186;
-    optional uint64 remote_ost_write_bytes = 187;
+    optional uint64 remote_ost_read_bytes= 152;
+    optional uint64 remote_ost_write_bytes = 153;
 
     // 188 is the total number of mdts 0 for normal filesystem
-    int64 total_mdt_numbers = 188;
-    map <string, MDTStatLog> mdt_stats_map = 189;
+    //int64 total_mdt_numbers = 188;
+    //map <string, MDTStatLog> mdt_stats_map = 189;
     /* Field 188 is the label of the experiment used.*/
-    optional int32 label_value = 190; //The label of the experiment used.
+    optional int32 label_value = 154; //The label of the experiment used.
 
 }
-
+/*
 message MDTStatLog {
     optional uint64 avg_waittime = 1;
     optional uint64 inflight = 2;
@@ -313,7 +329,7 @@ message MDTStatLog {
     optional uint64 intent_getattr_async = 35;// not appeared in stempede2
     optional uint64 revalidate_lock = 36;
 }
-
+*/
 message BottleneckFile {
     repeated BottleneckLog rows = 1;
     int32 read_threads = 2;

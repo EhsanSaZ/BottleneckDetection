@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x10\x62ottleneck.proto\"\xcf*\n\rBottleneckLog\x12\x15\n\ravg_rtt_value\x18\x01 \x01(\x02\x12\x13\n\x0bpacing_rate\x18\x02 \x01(\x02\x12\x11\n\tcwnd_rate\x18\x03 \x01(\x02\x12(\n avg_retransmission_timeout_value\x18\x04 \x01(\x02\x12\x10\n\x08\x62yte_ack\x18\x05 \x01(\x02\x12\x0f\n\x07seg_out\x18\x06 \x01(\x02\x12\x0f\n\x07retrans\x18\x07 \x01(\x02\x12\x11\n\tmss_value\x18\x08 \x01(\x02\x12\x16\n\x0essthresh_value\x18\t \x01(\x02\x12\x0f\n\x07segs_in\x18\n \x01(\x02\x12\x16\n\x0e\x61vg_send_value\x18\x0b \x01(\x02\x12\x15\n\runacked_value\x18\x0c \x01(\x02\x12\x11\n\trcv_space\x18\r \x01(\x02\x12\x19\n\x11send_buffer_value\x18\x0e \x01(\x02\x12\x15\n\x08read_req\x18\x0f \x01(\x02H\x00\x88\x01\x01\x12\x16\n\twrite_req\x18\x10 \x01(\x02H\x01\x88\x01\x01\x12\x10\n\x03rkB\x18\x11 \x01(\x02H\x02\x88\x01\x01\x12\x10\n\x03wkB\x18\x12 \x01(\x02H\x03\x88\x01\x01\x12\x11\n\x04rrqm\x18\x13 \x01(\x02H\x04\x88\x01\x01\x12\x11\n\x04wrqm\x18\x14 \x01(\x02H\x05\x88\x01\x01\x12\x16\n\trrqm_perc\x18\x15 \x01(\x02H\x06\x88\x01\x01\x12\x16\n\twrqm_perc\x18\x16 \x01(\x02H\x07\x88\x01\x01\x12\x14\n\x07r_await\x18\x17 \x01(\x02H\x08\x88\x01\x01\x12\x14\n\x07w_await\x18\x18 \x01(\x02H\t\x88\x01\x01\x12\x13\n\x06\x61qu_sz\x18\x19 \x01(\x02H\n\x88\x01\x01\x12\x15\n\x08rareq_sz\x18\x1a \x01(\x02H\x0b\x88\x01\x01\x12\x15\n\x08wareq_sz\x18\x1b \x01(\x02H\x0c\x88\x01\x01\x12\x12\n\x05svctm\x18\x1c \x01(\x02H\r\x88\x01\x01\x12\x11\n\x04util\x18\x1d \x01(\x02H\x0e\x88\x01\x01\x12\x12\n\x05rchar\x18\x1e \x01(\x04H\x0f\x88\x01\x01\x12\x12\n\x05wchar\x18\x1f \x01(\x04H\x10\x88\x01\x01\x12\x12\n\x05syscr\x18  \x01(\x04H\x11\x88\x01\x01\x12\x12\n\x05syscw\x18! \x01(\x04H\x12\x88\x01\x01\x12\x1a\n\rread_bytes_io\x18\" \x01(\x04H\x13\x88\x01\x01\x12\x1b\n\x0ewrite_bytes_io\x18# \x01(\x04H\x14\x88\x01\x01\x12\"\n\x15\x63\x61ncelled_write_bytes\x18$ \x01(\x04H\x15\x88\x01\x01\x12\x10\n\x03pid\x18% \x01(\x05H\x16\x88\x01\x01\x12\x11\n\x04ppid\x18& \x01(\x05H\x17\x88\x01\x01\x12\x11\n\x04pgrp\x18\' \x01(\x05H\x18\x88\x01\x01\x12\x14\n\x07session\x18( \x01(\x05H\x19\x88\x01\x01\x12\x13\n\x06tty_nr\x18) \x01(\x05H\x1a\x88\x01\x01\x12\x12\n\x05tpgid\x18* \x01(\x05H\x1b\x88\x01\x01\x12\x12\n\x05\x66lags\x18+ \x01(\rH\x1c\x88\x01\x01\x12\x0e\n\x06minflt\x18, \x01(\x04\x12\x0f\n\x07\x63minflt\x18- \x01(\x04\x12\x0e\n\x06majflt\x18. \x01(\x04\x12\x0f\n\x07\x63majflt\x18/ \x01(\x04\x12\r\n\x05utime\x18\x30 \x01(\x04\x12\r\n\x05stime\x18\x31 \x01(\x04\x12\x0e\n\x06\x63utime\x18\x32 \x01(\x03\x12\x0e\n\x06\x63stime\x18\x33 \x01(\x03\x12\x15\n\x08priority\x18\x34 \x01(\x03H\x1d\x88\x01\x01\x12\x11\n\x04nice\x18\x35 \x01(\x03H\x1e\x88\x01\x01\x12\x13\n\x0bnum_threads\x18\x36 \x01(\x03\x12\x13\n\x0bitrealvalue\x18\x37 \x01(\x03\x12\x16\n\tstarttime\x18\x38 \x01(\x04H\x1f\x88\x01\x01\x12\r\n\x05vsize\x18\x39 \x01(\x04\x12\x0b\n\x03rss\x18: \x01(\x03\x12\x0e\n\x06rsslim\x18; \x01(\x04\x12\x16\n\tstartcode\x18< \x01(\x04H \x88\x01\x01\x12\x14\n\x07\x65ndcode\x18= \x01(\x04H!\x88\x01\x01\x12\x17\n\nstartstack\x18> \x01(\x04H\"\x88\x01\x01\x12\x14\n\x07kstkesp\x18? \x01(\x04H#\x88\x01\x01\x12\x14\n\x07kstkeip\x18@ \x01(\x04H$\x88\x01\x01\x12\x13\n\x06signal\x18\x41 \x01(\x04H%\x88\x01\x01\x12\x14\n\x07\x62locked\x18\x42 \x01(\x04H&\x88\x01\x01\x12\x16\n\tsigignore\x18\x43 \x01(\x04H\'\x88\x01\x01\x12\x15\n\x08sigcatch\x18\x44 \x01(\x04H(\x88\x01\x01\x12\x12\n\x05wchan\x18\x45 \x01(\x01H)\x88\x01\x01\x12\r\n\x05nswap\x18\x46 \x01(\x04\x12\x0e\n\x06\x63nswap\x18G \x01(\x04\x12\x18\n\x0b\x65xit_signal\x18H \x01(\x05H*\x88\x01\x01\x12\x16\n\tprocessor\x18I \x01(\x05H+\x88\x01\x01\x12\x13\n\x0brt_priority\x18J \x01(\r\x12\x13\n\x06policy\x18K \x01(\rH,\x88\x01\x01\x12\x1d\n\x15\x64\x65layacct_blkio_ticks\x18L \x01(\x04\x12\x12\n\nguest_time\x18M \x01(\x04\x12\x13\n\x0b\x63guest_time\x18N \x01(\x03\x12\x17\n\nstart_data\x18O \x01(\x04H-\x88\x01\x01\x12\x15\n\x08\x65nd_data\x18P \x01(\x04H.\x88\x01\x01\x12\x16\n\tstart_brk\x18Q \x01(\x04H/\x88\x01\x01\x12\x16\n\targ_start\x18R \x01(\x04H0\x88\x01\x01\x12\x14\n\x07\x61rg_end\x18S \x01(\x04H1\x88\x01\x01\x12\x16\n\tenv_start\x18T \x01(\x04H2\x88\x01\x01\x12\x14\n\x07\x65nv_end\x18U \x01(\x04H3\x88\x01\x01\x12\x16\n\texit_code\x18V \x01(\x05H4\x88\x01\x01\x12\x1c\n\x14\x63pu_usage_percentage\x18W \x01(\x02\x12\x1c\n\x14mem_usage_percentage\x18X \x01(\x02\x12\x1a\n\x12tcp_rcv_buffer_min\x18Y \x01(\x04\x12\x1e\n\x16tcp_rcv_buffer_default\x18Z \x01(\x04\x12\x1a\n\x12tcp_rcv_buffer_max\x18[ \x01(\x04\x12\x1a\n\x12tcp_snd_buffer_min\x18\\ \x01(\x04\x12\x1e\n\x16tcp_snd_buffer_default\x18] \x01(\x04\x12\x1a\n\x12tcp_snd_buffer_max\x18^ \x01(\x04\x12\x19\n\x0creq_waittime\x18_ \x01(\x04H5\x88\x01\x01\x12\x17\n\nreq_active\x18` \x01(\x04H6\x88\x01\x01\x12\x17\n\nread_bytes\x18\x61 \x01(\x04H7\x88\x01\x01\x12\x18\n\x0bwrite_bytes\x18\x62 \x01(\x04H8\x88\x01\x01\x12\x18\n\x0bost_setattr\x18\x63 \x01(\x04H9\x88\x01\x01\x12\x15\n\x08ost_read\x18\x64 \x01(\x04H:\x88\x01\x01\x12\x16\n\tost_write\x18\x65 \x01(\x04H;\x88\x01\x01\x12\x19\n\x0cost_get_info\x18\x66 \x01(\x04H<\x88\x01\x01\x12\x18\n\x0bost_connect\x18g \x01(\x04H=\x88\x01\x01\x12\x16\n\tost_punch\x18h \x01(\x04H>\x88\x01\x01\x12\x17\n\nost_statfs\x18i \x01(\x04H?\x88\x01\x01\x12\x15\n\x08ost_sync\x18j \x01(\x04H@\x88\x01\x01\x12\x19\n\x0cost_quotactl\x18k \x01(\x04HA\x88\x01\x01\x12\x18\n\x0bldlm_cancel\x18l \x01(\x04HB\x88\x01\x01\x12\x15\n\x08obd_ping\x18m \x01(\x04HC\x88\x01\x01\x12\x1f\n\x12pending_read_pages\x18n \x01(\x04HD\x88\x01\x01\x12 \n\x13read_RPCs_in_flight\x18o \x01(\x04HE\x88\x01\x01\x12\x1c\n\x0f\x61vg_waittime_md\x18p \x01(\x04HF\x88\x01\x01\x12\x18\n\x0binflight_md\x18q \x01(\x04HG\x88\x01\x01\x12\x1d\n\x10unregistering_md\x18r \x01(\x04HH\x88\x01\x01\x12\x18\n\x0btimeouts_md\x18s \x01(\x04HI\x88\x01\x01\x12\x1c\n\x0freq_waittime_md\x18t \x01(\x04HJ\x88\x01\x01\x12\x1a\n\rreq_active_md\x18u \x01(\x04HK\x88\x01\x01\x12\x1b\n\x0emds_getattr_md\x18v \x01(\x04HL\x88\x01\x01\x12 \n\x13mds_getattr_lock_md\x18w \x01(\x04HM\x88\x01\x01\x12\x19\n\x0cmds_close_md\x18x \x01(\x04HN\x88\x01\x01\x12\x1c\n\x0fmds_readpage_md\x18y \x01(\x04HO\x88\x01\x01\x12\x1b\n\x0emds_connect_md\x18z \x01(\x04HP\x88\x01\x01\x12\x1c\n\x0fmds_get_root_md\x18{ \x01(\x04HQ\x88\x01\x01\x12\x1a\n\rmds_statfs_md\x18| \x01(\x04HR\x88\x01\x01\x12\x18\n\x0bmds_sync_md\x18} \x01(\x04HS\x88\x01\x01\x12\x1c\n\x0fmds_quotactl_md\x18~ \x01(\x04HT\x88\x01\x01\x12\x1c\n\x0fmds_getxattr_md\x18\x7f \x01(\x04HU\x88\x01\x01\x12\"\n\x14mds_hsm_state_set_md\x18\x80\x01 \x01(\x04HV\x88\x01\x01\x12\x1c\n\x0eldlm_cancel_md\x18\x81\x01 \x01(\x04HW\x88\x01\x01\x12\x19\n\x0bobd_ping_md\x18\x82\x01 \x01(\x04HX\x88\x01\x01\x12\x1a\n\x0cseq_query_md\x18\x83\x01 \x01(\x04HY\x88\x01\x01\x12\x1a\n\x0c\x66ld_query_md\x18\x84\x01 \x01(\x04HZ\x88\x01\x01\x12\x16\n\x08\x63lose_md\x18\x85\x01 \x01(\x04H[\x88\x01\x01\x12\x17\n\tcreate_md\x18\x86\x01 \x01(\x04H\\\x88\x01\x01\x12\x18\n\nenqueue_md\x18\x87\x01 \x01(\x04H]\x88\x01\x01\x12\x18\n\ngetattr_md\x18\x88\x01 \x01(\x04H^\x88\x01\x01\x12\x1c\n\x0eintent_lock_md\x18\x89\x01 \x01(\x04H_\x88\x01\x01\x12\x15\n\x07link_md\x18\x8a\x01 \x01(\x04H`\x88\x01\x01\x12\x17\n\trename_md\x18\x8b\x01 \x01(\x04Ha\x88\x01\x01\x12\x18\n\nsetattr_md\x18\x8c\x01 \x01(\x04Hb\x88\x01\x01\x12\x16\n\x08\x66sync_md\x18\x8d\x01 \x01(\x04Hc\x88\x01\x01\x12\x1a\n\x0cread_page_md\x18\x8e\x01 \x01(\x04Hd\x88\x01\x01\x12\x17\n\tunlink_md\x18\x8f\x01 \x01(\x04He\x88\x01\x01\x12\x19\n\x0bsetxattr_md\x18\x90\x01 \x01(\x04Hf\x88\x01\x01\x12\x19\n\x0bgetxattr_md\x18\x91\x01 \x01(\x04Hg\x88\x01\x01\x12%\n\x17intent_getattr_async_md\x18\x92\x01 \x01(\x04Hh\x88\x01\x01\x12 \n\x12revalidate_lock_md\x18\x93\x01 \x01(\x04Hi\x88\x01\x01\x12\"\n\x14\x61vg_dsack_dups_value\x18\x94\x01 \x01(\x02Hj\x88\x01\x01\x12\x1c\n\x0e\x61vg_reord_seen\x18\x95\x01 \x01(\x02Hk\x88\x01\x01\x12\x1b\n\x12system_cpu_percent\x18\x96\x01 \x01(\x02\x12\x1e\n\x15system_memory_percent\x18\x97\x01 \x01(\x02\x12#\n\x15remote_ost_read_bytes\x18\x98\x01 \x01(\x04Hl\x88\x01\x01\x12$\n\x16remote_ost_write_bytes\x18\x99\x01 \x01(\x04Hm\x88\x01\x01\x12\x19\n\x0blabel_value\x18\x9a\x01 \x01(\x05Hn\x88\x01\x01\x42\x0b\n\t_read_reqB\x0c\n\n_write_reqB\x06\n\x04_rkBB\x06\n\x04_wkBB\x07\n\x05_rrqmB\x07\n\x05_wrqmB\x0c\n\n_rrqm_percB\x0c\n\n_wrqm_percB\n\n\x08_r_awaitB\n\n\x08_w_awaitB\t\n\x07_aqu_szB\x0b\n\t_rareq_szB\x0b\n\t_wareq_szB\x08\n\x06_svctmB\x07\n\x05_utilB\x08\n\x06_rcharB\x08\n\x06_wcharB\x08\n\x06_syscrB\x08\n\x06_syscwB\x10\n\x0e_read_bytes_ioB\x11\n\x0f_write_bytes_ioB\x18\n\x16_cancelled_write_bytesB\x06\n\x04_pidB\x07\n\x05_ppidB\x07\n\x05_pgrpB\n\n\x08_sessionB\t\n\x07_tty_nrB\x08\n\x06_tpgidB\x08\n\x06_flagsB\x0b\n\t_priorityB\x07\n\x05_niceB\x0c\n\n_starttimeB\x0c\n\n_startcodeB\n\n\x08_endcodeB\r\n\x0b_startstackB\n\n\x08_kstkespB\n\n\x08_kstkeipB\t\n\x07_signalB\n\n\x08_blockedB\x0c\n\n_sigignoreB\x0b\n\t_sigcatchB\x08\n\x06_wchanB\x0e\n\x0c_exit_signalB\x0c\n\n_processorB\t\n\x07_policyB\r\n\x0b_start_dataB\x0b\n\t_end_dataB\x0c\n\n_start_brkB\x0c\n\n_arg_startB\n\n\x08_arg_endB\x0c\n\n_env_startB\n\n\x08_env_endB\x0c\n\n_exit_codeB\x0f\n\r_req_waittimeB\r\n\x0b_req_activeB\r\n\x0b_read_bytesB\x0e\n\x0c_write_bytesB\x0e\n\x0c_ost_setattrB\x0b\n\t_ost_readB\x0c\n\n_ost_writeB\x0f\n\r_ost_get_infoB\x0e\n\x0c_ost_connectB\x0c\n\n_ost_punchB\r\n\x0b_ost_statfsB\x0b\n\t_ost_syncB\x0f\n\r_ost_quotactlB\x0e\n\x0c_ldlm_cancelB\x0b\n\t_obd_pingB\x15\n\x13_pending_read_pagesB\x16\n\x14_read_RPCs_in_flightB\x12\n\x10_avg_waittime_mdB\x0e\n\x0c_inflight_mdB\x13\n\x11_unregistering_mdB\x0e\n\x0c_timeouts_mdB\x12\n\x10_req_waittime_mdB\x10\n\x0e_req_active_mdB\x11\n\x0f_mds_getattr_mdB\x16\n\x14_mds_getattr_lock_mdB\x0f\n\r_mds_close_mdB\x12\n\x10_mds_readpage_mdB\x11\n\x0f_mds_connect_mdB\x12\n\x10_mds_get_root_mdB\x10\n\x0e_mds_statfs_mdB\x0e\n\x0c_mds_sync_mdB\x12\n\x10_mds_quotactl_mdB\x12\n\x10_mds_getxattr_mdB\x17\n\x15_mds_hsm_state_set_mdB\x11\n\x0f_ldlm_cancel_mdB\x0e\n\x0c_obd_ping_mdB\x0f\n\r_seq_query_mdB\x0f\n\r_fld_query_mdB\x0b\n\t_close_mdB\x0c\n\n_create_mdB\r\n\x0b_enqueue_mdB\r\n\x0b_getattr_mdB\x11\n\x0f_intent_lock_mdB\n\n\x08_link_mdB\x0c\n\n_rename_mdB\r\n\x0b_setattr_mdB\x0b\n\t_fsync_mdB\x0f\n\r_read_page_mdB\x0c\n\n_unlink_mdB\x0e\n\x0c_setxattr_mdB\x0e\n\x0c_getxattr_mdB\x1a\n\x18_intent_getattr_async_mdB\x15\n\x13_revalidate_lock_mdB\x17\n\x15_avg_dsack_dups_valueB\x11\n\x0f_avg_reord_seenB\x18\n\x16_remote_ost_read_bytesB\x19\n\x17_remote_ost_write_bytesB\x0e\n\x0c_label_value\"\xa7\x05\n\x0e\x42ottleneckFile\x12\x1c\n\x04rows\x18\x01 \x03(\x0b\x32\x0e.BottleneckLog\x12\x14\n\x0cread_threads\x18\x02 \x01(\x05\x12\x15\n\rwrite_threads\x18\x03 \x01(\x05\x12\x17\n\x0fnetwork_threads\x18\x04 \x01(\x05\x12\x12\n\ncpu_stress\x18\x05 \x01(\x05\x12\x11\n\tio_stress\x18\x06 \x01(\x05\x12\x12\n\nmem_stress\x18\x07 \x01(\x02\x12\x11\n\tlink_loss\x18\x08 \x01(\x02\x12\x12\n\nlink_delay\x18\t \x01(\x02\x12\x43\n\x17link_delay_distribution\x18\n \x01(\x0e\x32\".BottleneckFile.DELAY_DISTRIBUTION\x12\x16\n\x0elink_variation\x18\x0b \x01(\x02\x12\x16\n\x0elink_duplicate\x18\x0c \x01(\x02\x12\x14\n\x0clink_corrupt\x18\r \x01(\x02\x12\x14\n\x0clink_reorder\x18\x0e \x01(\x02\x12\x14\n\x0clink_latency\x18\x0f \x01(\x02\x12\x32\n\x0cnetwork_type\x18\x10 \x01(\x0e\x32\x17.BottleneckFile.NetworkH\x00\x88\x01\x01\x12\x1d\n\x10\x63reated_time_utc\x18\x11 \x01(\x02H\x01\x88\x01\x01\x12\x1d\n\x15max_buffer_size_ratio\x18\x12 \x01(\x02\">\n\x12\x44\x45LAY_DISTRIBUTION\x12\n\n\x06NORMAL\x10\x00\x12\n\n\x06PARETO\x10\x01\x12\x10\n\x0cPARETONORMAL\x10\x02\"@\n\x07Network\x12\x08\n\x04\x44TNS\x10\x00\x12\x07\n\x03\x41WS\x10\x01\x12\x06\n\x02\x43\x43\x10\x02\x12\x0b\n\x07\x41WS_FXS\x10\x03\x12\r\n\tUNDEFINED\x10\x04\x42\x0f\n\r_network_typeB\x13\n\x11_created_time_utc\"0\n\x0f\x42ottleneckFiles\x12\x1d\n\x04logs\x18\x01 \x03(\x0b\x32\x0f.BottleneckFileb\x06proto3'
+  serialized_pb=b'\n\x10\x62ottleneck.proto\"\xa2\x38\n\rBottleneckLog\x12\x15\n\ravg_rtt_value\x18\x01 \x01(\x02\x12\x13\n\x0bpacing_rate\x18\x02 \x01(\x02\x12\x11\n\tcwnd_rate\x18\x03 \x01(\x02\x12(\n avg_retransmission_timeout_value\x18\x04 \x01(\x02\x12\x10\n\x08\x62yte_ack\x18\x05 \x01(\x02\x12\x0f\n\x07seg_out\x18\x06 \x01(\x02\x12\x0f\n\x07retrans\x18\x07 \x01(\x02\x12\x11\n\tmss_value\x18\x08 \x01(\x02\x12\x16\n\x0essthresh_value\x18\t \x01(\x02\x12\x0f\n\x07segs_in\x18\n \x01(\x02\x12\x16\n\x0e\x61vg_send_value\x18\x0b \x01(\x02\x12\x15\n\runacked_value\x18\x0c \x01(\x02\x12\x11\n\trcv_space\x18\r \x01(\x02\x12\x19\n\x11send_buffer_value\x18\x0e \x01(\x02\x12\x15\n\x08read_req\x18\x0f \x01(\x02H\x00\x88\x01\x01\x12\x16\n\twrite_req\x18\x10 \x01(\x02H\x01\x88\x01\x01\x12\x10\n\x03rkB\x18\x11 \x01(\x02H\x02\x88\x01\x01\x12\x10\n\x03wkB\x18\x12 \x01(\x02H\x03\x88\x01\x01\x12\x11\n\x04rrqm\x18\x13 \x01(\x02H\x04\x88\x01\x01\x12\x11\n\x04wrqm\x18\x14 \x01(\x02H\x05\x88\x01\x01\x12\x16\n\trrqm_perc\x18\x15 \x01(\x02H\x06\x88\x01\x01\x12\x16\n\twrqm_perc\x18\x16 \x01(\x02H\x07\x88\x01\x01\x12\x14\n\x07r_await\x18\x17 \x01(\x02H\x08\x88\x01\x01\x12\x14\n\x07w_await\x18\x18 \x01(\x02H\t\x88\x01\x01\x12\x13\n\x06\x61qu_sz\x18\x19 \x01(\x02H\n\x88\x01\x01\x12\x15\n\x08rareq_sz\x18\x1a \x01(\x02H\x0b\x88\x01\x01\x12\x15\n\x08wareq_sz\x18\x1b \x01(\x02H\x0c\x88\x01\x01\x12\x12\n\x05svctm\x18\x1c \x01(\x02H\r\x88\x01\x01\x12\x11\n\x04util\x18\x1d \x01(\x02H\x0e\x88\x01\x01\x12\x12\n\x05rchar\x18\x1e \x01(\x04H\x0f\x88\x01\x01\x12\x12\n\x05wchar\x18\x1f \x01(\x04H\x10\x88\x01\x01\x12\x12\n\x05syscr\x18  \x01(\x04H\x11\x88\x01\x01\x12\x12\n\x05syscw\x18! \x01(\x04H\x12\x88\x01\x01\x12\x1a\n\rread_bytes_io\x18\" \x01(\x04H\x13\x88\x01\x01\x12\x1b\n\x0ewrite_bytes_io\x18# \x01(\x04H\x14\x88\x01\x01\x12\"\n\x15\x63\x61ncelled_write_bytes\x18$ \x01(\x04H\x15\x88\x01\x01\x12\x10\n\x03pid\x18% \x01(\x05H\x16\x88\x01\x01\x12\x11\n\x04ppid\x18& \x01(\x05H\x17\x88\x01\x01\x12\x11\n\x04pgrp\x18\' \x01(\x05H\x18\x88\x01\x01\x12\x14\n\x07session\x18( \x01(\x05H\x19\x88\x01\x01\x12\x13\n\x06tty_nr\x18) \x01(\x05H\x1a\x88\x01\x01\x12\x12\n\x05tpgid\x18* \x01(\x05H\x1b\x88\x01\x01\x12\x12\n\x05\x66lags\x18+ \x01(\rH\x1c\x88\x01\x01\x12\x0e\n\x06minflt\x18, \x01(\x04\x12\x0f\n\x07\x63minflt\x18- \x01(\x04\x12\x0e\n\x06majflt\x18. \x01(\x04\x12\x0f\n\x07\x63majflt\x18/ \x01(\x04\x12\r\n\x05utime\x18\x30 \x01(\x04\x12\r\n\x05stime\x18\x31 \x01(\x04\x12\x0e\n\x06\x63utime\x18\x32 \x01(\x03\x12\x0e\n\x06\x63stime\x18\x33 \x01(\x03\x12\x15\n\x08priority\x18\x34 \x01(\x03H\x1d\x88\x01\x01\x12\x11\n\x04nice\x18\x35 \x01(\x03H\x1e\x88\x01\x01\x12\x13\n\x0bnum_threads\x18\x36 \x01(\x03\x12\x13\n\x0bitrealvalue\x18\x37 \x01(\x03\x12\x16\n\tstarttime\x18\x38 \x01(\x04H\x1f\x88\x01\x01\x12\r\n\x05vsize\x18\x39 \x01(\x04\x12\x0b\n\x03rss\x18: \x01(\x03\x12\x0e\n\x06rsslim\x18; \x01(\x04\x12\x16\n\tstartcode\x18< \x01(\x04H \x88\x01\x01\x12\x14\n\x07\x65ndcode\x18= \x01(\x04H!\x88\x01\x01\x12\x17\n\nstartstack\x18> \x01(\x04H\"\x88\x01\x01\x12\x14\n\x07kstkesp\x18? \x01(\x04H#\x88\x01\x01\x12\x14\n\x07kstkeip\x18@ \x01(\x04H$\x88\x01\x01\x12\x13\n\x06signal\x18\x41 \x01(\x04H%\x88\x01\x01\x12\x14\n\x07\x62locked\x18\x42 \x01(\x04H&\x88\x01\x01\x12\x16\n\tsigignore\x18\x43 \x01(\x04H\'\x88\x01\x01\x12\x15\n\x08sigcatch\x18\x44 \x01(\x04H(\x88\x01\x01\x12\x12\n\x05wchan\x18\x45 \x01(\x01H)\x88\x01\x01\x12\r\n\x05nswap\x18\x46 \x01(\x04\x12\x0e\n\x06\x63nswap\x18G \x01(\x04\x12\x18\n\x0b\x65xit_signal\x18H \x01(\x05H*\x88\x01\x01\x12\x16\n\tprocessor\x18I \x01(\x05H+\x88\x01\x01\x12\x13\n\x0brt_priority\x18J \x01(\r\x12\x13\n\x06policy\x18K \x01(\rH,\x88\x01\x01\x12\x1d\n\x15\x64\x65layacct_blkio_ticks\x18L \x01(\x04\x12\x12\n\nguest_time\x18M \x01(\x04\x12\x13\n\x0b\x63guest_time\x18N \x01(\x03\x12\x17\n\nstart_data\x18O \x01(\x04H-\x88\x01\x01\x12\x15\n\x08\x65nd_data\x18P \x01(\x04H.\x88\x01\x01\x12\x16\n\tstart_brk\x18Q \x01(\x04H/\x88\x01\x01\x12\x16\n\targ_start\x18R \x01(\x04H0\x88\x01\x01\x12\x14\n\x07\x61rg_end\x18S \x01(\x04H1\x88\x01\x01\x12\x16\n\tenv_start\x18T \x01(\x04H2\x88\x01\x01\x12\x14\n\x07\x65nv_end\x18U \x01(\x04H3\x88\x01\x01\x12\x16\n\texit_code\x18V \x01(\x05H4\x88\x01\x01\x12\x1c\n\x14\x63pu_usage_percentage\x18W \x01(\x02\x12\x1c\n\x14mem_usage_percentage\x18X \x01(\x02\x12\x1a\n\x12tcp_rcv_buffer_min\x18Y \x01(\x04\x12\x1e\n\x16tcp_rcv_buffer_default\x18Z \x01(\x04\x12\x1a\n\x12tcp_rcv_buffer_max\x18[ \x01(\x04\x12\x1a\n\x12tcp_snd_buffer_min\x18\\ \x01(\x04\x12\x1e\n\x16tcp_snd_buffer_default\x18] \x01(\x04\x12\x1a\n\x12tcp_snd_buffer_max\x18^ \x01(\x04\x12\x19\n\x0creq_waittime\x18_ \x01(\x04H5\x88\x01\x01\x12\x17\n\nreq_active\x18` \x01(\x04H6\x88\x01\x01\x12\x17\n\nread_bytes\x18\x61 \x01(\x04H7\x88\x01\x01\x12\x18\n\x0bwrite_bytes\x18\x62 \x01(\x04H8\x88\x01\x01\x12\x18\n\x0bost_setattr\x18\x63 \x01(\x04H9\x88\x01\x01\x12\x15\n\x08ost_read\x18\x64 \x01(\x04H:\x88\x01\x01\x12\x16\n\tost_write\x18\x65 \x01(\x04H;\x88\x01\x01\x12\x19\n\x0cost_get_info\x18\x66 \x01(\x04H<\x88\x01\x01\x12\x18\n\x0bost_connect\x18g \x01(\x04H=\x88\x01\x01\x12\x16\n\tost_punch\x18h \x01(\x04H>\x88\x01\x01\x12\x17\n\nost_statfs\x18i \x01(\x04H?\x88\x01\x01\x12\x15\n\x08ost_sync\x18j \x01(\x04H@\x88\x01\x01\x12\x19\n\x0cost_quotactl\x18k \x01(\x04HA\x88\x01\x01\x12\x18\n\x0bldlm_cancel\x18l \x01(\x04HB\x88\x01\x01\x12\x15\n\x08obd_ping\x18m \x01(\x04HC\x88\x01\x01\x12\x1f\n\x12pending_read_pages\x18n \x01(\x04HD\x88\x01\x01\x12 \n\x13read_RPCs_in_flight\x18o \x01(\x04HE\x88\x01\x01\x12\x1d\n\x10\x61vg_waittime_md1\x18p \x01(\x04HF\x88\x01\x01\x12\x19\n\x0cinflight_md1\x18q \x01(\x04HG\x88\x01\x01\x12\x1e\n\x11unregistering_md1\x18r \x01(\x04HH\x88\x01\x01\x12\x19\n\x0ctimeouts_md1\x18s \x01(\x04HI\x88\x01\x01\x12\x1d\n\x10req_waittime_md1\x18t \x01(\x04HJ\x88\x01\x01\x12\x1b\n\x0ereq_active_md1\x18u \x01(\x04HK\x88\x01\x01\x12\x1c\n\x0fmds_getattr_md1\x18v \x01(\x04HL\x88\x01\x01\x12!\n\x14mds_getattr_lock_md1\x18w \x01(\x04HM\x88\x01\x01\x12\x1a\n\rmds_close_md1\x18x \x01(\x04HN\x88\x01\x01\x12\x1d\n\x10mds_readpage_md1\x18y \x01(\x04HO\x88\x01\x01\x12\x1c\n\x0fmds_connect_md1\x18z \x01(\x04HP\x88\x01\x01\x12\x1d\n\x10mds_get_root_md1\x18{ \x01(\x04HQ\x88\x01\x01\x12\x1b\n\x0emds_statfs_md1\x18| \x01(\x04HR\x88\x01\x01\x12\x19\n\x0cmds_sync_md1\x18} \x01(\x04HS\x88\x01\x01\x12\x1d\n\x10mds_quotactl_md1\x18~ \x01(\x04HT\x88\x01\x01\x12\x1d\n\x10mds_getxattr_md1\x18\x7f \x01(\x04HU\x88\x01\x01\x12#\n\x15mds_hsm_state_set_md1\x18\x80\x01 \x01(\x04HV\x88\x01\x01\x12\x1d\n\x0fldlm_cancel_md1\x18\x81\x01 \x01(\x04HW\x88\x01\x01\x12\x1a\n\x0cobd_ping_md1\x18\x82\x01 \x01(\x04HX\x88\x01\x01\x12\x1b\n\rseq_query_md1\x18\x83\x01 \x01(\x04HY\x88\x01\x01\x12\x1b\n\rfld_query_md1\x18\x84\x01 \x01(\x04HZ\x88\x01\x01\x12\x17\n\tclose_md1\x18\x85\x01 \x01(\x04H[\x88\x01\x01\x12\x18\n\ncreate_md1\x18\x86\x01 \x01(\x04H\\\x88\x01\x01\x12\x19\n\x0b\x65nqueue_md1\x18\x87\x01 \x01(\x04H]\x88\x01\x01\x12\x19\n\x0bgetattr_md1\x18\x88\x01 \x01(\x04H^\x88\x01\x01\x12\x1d\n\x0fintent_lock_md1\x18\x89\x01 \x01(\x04H_\x88\x01\x01\x12\x16\n\x08link_md1\x18\x8a\x01 \x01(\x04H`\x88\x01\x01\x12\x18\n\nrename_md1\x18\x8b\x01 \x01(\x04Ha\x88\x01\x01\x12\x19\n\x0bsetattr_md1\x18\x8c\x01 \x01(\x04Hb\x88\x01\x01\x12\x17\n\tfsync_md1\x18\x8d\x01 \x01(\x04Hc\x88\x01\x01\x12\x1b\n\rread_page_md1\x18\x8e\x01 \x01(\x04Hd\x88\x01\x01\x12\x18\n\nunlink_md1\x18\x8f\x01 \x01(\x04He\x88\x01\x01\x12\x1a\n\x0csetxattr_md1\x18\x90\x01 \x01(\x04Hf\x88\x01\x01\x12\x1a\n\x0cgetxattr_md1\x18\x91\x01 \x01(\x04Hg\x88\x01\x01\x12&\n\x18intent_getattr_async_md1\x18\x92\x01 \x01(\x04Hh\x88\x01\x01\x12!\n\x13revalidate_lock_md1\x18\x93\x01 \x01(\x04Hi\x88\x01\x01\x12\x1e\n\x10\x61vg_waittime_md2\x18\x94\x01 \x01(\x04Hj\x88\x01\x01\x12\x1a\n\x0cinflight_md2\x18\x95\x01 \x01(\x04Hk\x88\x01\x01\x12\x1f\n\x11unregistering_md2\x18\x96\x01 \x01(\x04Hl\x88\x01\x01\x12\x1a\n\x0ctimeouts_md2\x18\x97\x01 \x01(\x04Hm\x88\x01\x01\x12\x1e\n\x10req_waittime_md2\x18\x98\x01 \x01(\x04Hn\x88\x01\x01\x12\x1c\n\x0ereq_active_md2\x18\x99\x01 \x01(\x04Ho\x88\x01\x01\x12\x1d\n\x0fmds_getattr_md2\x18\x9a\x01 \x01(\x04Hp\x88\x01\x01\x12\x1b\n\rmds_close_md2\x18\x9b\x01 \x01(\x04Hq\x88\x01\x01\x12\x1e\n\x10mds_readpage_md2\x18\x9c\x01 \x01(\x04Hr\x88\x01\x01\x12\x1d\n\x0fmds_connect_md2\x18\x9d\x01 \x01(\x04Hs\x88\x01\x01\x12\x1c\n\x0emds_statfs_md2\x18\x9e\x01 \x01(\x04Ht\x88\x01\x01\x12\x1a\n\x0cmds_sync_md2\x18\x9f\x01 \x01(\x04Hu\x88\x01\x01\x12\x1e\n\x10mds_quotactl_md2\x18\xa0\x01 \x01(\x04Hv\x88\x01\x01\x12\x1e\n\x10mds_getxattr_md2\x18\xa1\x01 \x01(\x04Hw\x88\x01\x01\x12#\n\x15mds_hsm_state_set_md2\x18\xa2\x01 \x01(\x04Hx\x88\x01\x01\x12\x1d\n\x0fldlm_cancel_md2\x18\xa3\x01 \x01(\x04Hy\x88\x01\x01\x12\x1a\n\x0cobd_ping_md2\x18\xa4\x01 \x01(\x04Hz\x88\x01\x01\x12\x1b\n\rseq_query_md2\x18\xa5\x01 \x01(\x04H{\x88\x01\x01\x12\x1b\n\rfld_query_md2\x18\xa6\x01 \x01(\x04H|\x88\x01\x01\x12\x17\n\tclose_md2\x18\xa7\x01 \x01(\x04H}\x88\x01\x01\x12\x18\n\ncreate_md2\x18\xa8\x01 \x01(\x04H~\x88\x01\x01\x12\x19\n\x0b\x65nqueue_md2\x18\xa9\x01 \x01(\x04H\x7f\x88\x01\x01\x12\x1a\n\x0bgetattr_md2\x18\xaa\x01 \x01(\x04H\x80\x01\x88\x01\x01\x12\x1e\n\x0fintent_lock_md2\x18\xab\x01 \x01(\x04H\x81\x01\x88\x01\x01\x12\x17\n\x08link_md2\x18\xac\x01 \x01(\x04H\x82\x01\x88\x01\x01\x12\x19\n\nrename_md2\x18\xad\x01 \x01(\x04H\x83\x01\x88\x01\x01\x12\x1a\n\x0bsetattr_md2\x18\xae\x01 \x01(\x04H\x84\x01\x88\x01\x01\x12\x18\n\tfsync_md2\x18\xaf\x01 \x01(\x04H\x85\x01\x88\x01\x01\x12\x1c\n\rread_page_md2\x18\xb0\x01 \x01(\x04H\x86\x01\x88\x01\x01\x12\x19\n\nunlink_md2\x18\xb1\x01 \x01(\x04H\x87\x01\x88\x01\x01\x12\x1b\n\x0csetxattr_md2\x18\xb2\x01 \x01(\x04H\x88\x01\x88\x01\x01\x12\x1b\n\x0cgetxattr_md2\x18\xb3\x01 \x01(\x04H\x89\x01\x88\x01\x01\x12\'\n\x18intent_getattr_async_md2\x18\xb4\x01 \x01(\x04H\x8a\x01\x88\x01\x01\x12\"\n\x13revalidate_lock_md2\x18\xb5\x01 \x01(\x04H\x8b\x01\x88\x01\x01\x12#\n\x14\x61vg_dsack_dups_value\x18\xb6\x01 \x01(\x02H\x8c\x01\x88\x01\x01\x12\x1d\n\x0e\x61vg_reord_seen\x18\xb7\x01 \x01(\x02H\x8d\x01\x88\x01\x01\x12\x1b\n\x12system_cpu_percent\x18\xb8\x01 \x01(\x02\x12\x1e\n\x15system_memory_percent\x18\xb9\x01 \x01(\x02\x12\x1a\n\x11total_mdt_numbers\x18\xba\x01 \x01(\x03\x12\x37\n\rmdt_stats_map\x18\xbb\x01 \x03(\x0b\x32\x1f.BottleneckLog.MdtStatsMapEntry\x12\x1a\n\x0blabel_value\x18\xbc\x01 \x01(\x05H\x8e\x01\x88\x01\x01\x1a?\n\x10MdtStatsMapEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1a\n\x05value\x18\x02 \x01(\x0b\x32\x0b.MDTStatLog:\x02\x38\x01\x42\x0b\n\t_read_reqB\x0c\n\n_write_reqB\x06\n\x04_rkBB\x06\n\x04_wkBB\x07\n\x05_rrqmB\x07\n\x05_wrqmB\x0c\n\n_rrqm_percB\x0c\n\n_wrqm_percB\n\n\x08_r_awaitB\n\n\x08_w_awaitB\t\n\x07_aqu_szB\x0b\n\t_rareq_szB\x0b\n\t_wareq_szB\x08\n\x06_svctmB\x07\n\x05_utilB\x08\n\x06_rcharB\x08\n\x06_wcharB\x08\n\x06_syscrB\x08\n\x06_syscwB\x10\n\x0e_read_bytes_ioB\x11\n\x0f_write_bytes_ioB\x18\n\x16_cancelled_write_bytesB\x06\n\x04_pidB\x07\n\x05_ppidB\x07\n\x05_pgrpB\n\n\x08_sessionB\t\n\x07_tty_nrB\x08\n\x06_tpgidB\x08\n\x06_flagsB\x0b\n\t_priorityB\x07\n\x05_niceB\x0c\n\n_starttimeB\x0c\n\n_startcodeB\n\n\x08_endcodeB\r\n\x0b_startstackB\n\n\x08_kstkespB\n\n\x08_kstkeipB\t\n\x07_signalB\n\n\x08_blockedB\x0c\n\n_sigignoreB\x0b\n\t_sigcatchB\x08\n\x06_wchanB\x0e\n\x0c_exit_signalB\x0c\n\n_processorB\t\n\x07_policyB\r\n\x0b_start_dataB\x0b\n\t_end_dataB\x0c\n\n_start_brkB\x0c\n\n_arg_startB\n\n\x08_arg_endB\x0c\n\n_env_startB\n\n\x08_env_endB\x0c\n\n_exit_codeB\x0f\n\r_req_waittimeB\r\n\x0b_req_activeB\r\n\x0b_read_bytesB\x0e\n\x0c_write_bytesB\x0e\n\x0c_ost_setattrB\x0b\n\t_ost_readB\x0c\n\n_ost_writeB\x0f\n\r_ost_get_infoB\x0e\n\x0c_ost_connectB\x0c\n\n_ost_punchB\r\n\x0b_ost_statfsB\x0b\n\t_ost_syncB\x0f\n\r_ost_quotactlB\x0e\n\x0c_ldlm_cancelB\x0b\n\t_obd_pingB\x15\n\x13_pending_read_pagesB\x16\n\x14_read_RPCs_in_flightB\x13\n\x11_avg_waittime_md1B\x0f\n\r_inflight_md1B\x14\n\x12_unregistering_md1B\x0f\n\r_timeouts_md1B\x13\n\x11_req_waittime_md1B\x11\n\x0f_req_active_md1B\x12\n\x10_mds_getattr_md1B\x17\n\x15_mds_getattr_lock_md1B\x10\n\x0e_mds_close_md1B\x13\n\x11_mds_readpage_md1B\x12\n\x10_mds_connect_md1B\x13\n\x11_mds_get_root_md1B\x11\n\x0f_mds_statfs_md1B\x0f\n\r_mds_sync_md1B\x13\n\x11_mds_quotactl_md1B\x13\n\x11_mds_getxattr_md1B\x18\n\x16_mds_hsm_state_set_md1B\x12\n\x10_ldlm_cancel_md1B\x0f\n\r_obd_ping_md1B\x10\n\x0e_seq_query_md1B\x10\n\x0e_fld_query_md1B\x0c\n\n_close_md1B\r\n\x0b_create_md1B\x0e\n\x0c_enqueue_md1B\x0e\n\x0c_getattr_md1B\x12\n\x10_intent_lock_md1B\x0b\n\t_link_md1B\r\n\x0b_rename_md1B\x0e\n\x0c_setattr_md1B\x0c\n\n_fsync_md1B\x10\n\x0e_read_page_md1B\r\n\x0b_unlink_md1B\x0f\n\r_setxattr_md1B\x0f\n\r_getxattr_md1B\x1b\n\x19_intent_getattr_async_md1B\x16\n\x14_revalidate_lock_md1B\x13\n\x11_avg_waittime_md2B\x0f\n\r_inflight_md2B\x14\n\x12_unregistering_md2B\x0f\n\r_timeouts_md2B\x13\n\x11_req_waittime_md2B\x11\n\x0f_req_active_md2B\x12\n\x10_mds_getattr_md2B\x10\n\x0e_mds_close_md2B\x13\n\x11_mds_readpage_md2B\x12\n\x10_mds_connect_md2B\x11\n\x0f_mds_statfs_md2B\x0f\n\r_mds_sync_md2B\x13\n\x11_mds_quotactl_md2B\x13\n\x11_mds_getxattr_md2B\x18\n\x16_mds_hsm_state_set_md2B\x12\n\x10_ldlm_cancel_md2B\x0f\n\r_obd_ping_md2B\x10\n\x0e_seq_query_md2B\x10\n\x0e_fld_query_md2B\x0c\n\n_close_md2B\r\n\x0b_create_md2B\x0e\n\x0c_enqueue_md2B\x0e\n\x0c_getattr_md2B\x12\n\x10_intent_lock_md2B\x0b\n\t_link_md2B\r\n\x0b_rename_md2B\x0e\n\x0c_setattr_md2B\x0c\n\n_fsync_md2B\x10\n\x0e_read_page_md2B\r\n\x0b_unlink_md2B\x0f\n\r_setxattr_md2B\x0f\n\r_getxattr_md2B\x1b\n\x19_intent_getattr_async_md2B\x16\n\x14_revalidate_lock_md2B\x17\n\x15_avg_dsack_dups_valueB\x11\n\x0f_avg_reord_seenB\x0e\n\x0c_label_value\"\xa0\x0b\n\nMDTStatLog\x12\x19\n\x0c\x61vg_waittime\x18\x01 \x01(\x04H\x00\x88\x01\x01\x12\x15\n\x08inflight\x18\x02 \x01(\x04H\x01\x88\x01\x01\x12\x1a\n\runregistering\x18\x03 \x01(\x04H\x02\x88\x01\x01\x12\x15\n\x08timeouts\x18\x04 \x01(\x04H\x03\x88\x01\x01\x12\x19\n\x0creq_waittime\x18\x05 \x01(\x04H\x04\x88\x01\x01\x12\x17\n\nreq_active\x18\x06 \x01(\x04H\x05\x88\x01\x01\x12\x18\n\x0bmds_getattr\x18\x07 \x01(\x04H\x06\x88\x01\x01\x12\x1d\n\x10mds_getattr_lock\x18\x08 \x01(\x04H\x07\x88\x01\x01\x12\x16\n\tmds_close\x18\t \x01(\x04H\x08\x88\x01\x01\x12\x19\n\x0cmds_readpage\x18\n \x01(\x04H\t\x88\x01\x01\x12\x18\n\x0bmds_connect\x18\x0b \x01(\x04H\n\x88\x01\x01\x12\x19\n\x0cmds_get_root\x18\x0c \x01(\x04H\x0b\x88\x01\x01\x12\x17\n\nmds_statfs\x18\r \x01(\x04H\x0c\x88\x01\x01\x12\x15\n\x08mds_sync\x18\x0e \x01(\x04H\r\x88\x01\x01\x12\x19\n\x0cmds_quotactl\x18\x0f \x01(\x04H\x0e\x88\x01\x01\x12\x19\n\x0cmds_getxattr\x18\x10 \x01(\x04H\x0f\x88\x01\x01\x12\x1e\n\x11mds_hsm_state_set\x18\x11 \x01(\x04H\x10\x88\x01\x01\x12\x18\n\x0bldlm_cancel\x18\x12 \x01(\x04H\x11\x88\x01\x01\x12\x15\n\x08obd_ping\x18\x13 \x01(\x04H\x12\x88\x01\x01\x12\x16\n\tseq_query\x18\x14 \x01(\x04H\x13\x88\x01\x01\x12\x16\n\tfld_query\x18\x15 \x01(\x04H\x14\x88\x01\x01\x12\x12\n\x05\x63lose\x18\x16 \x01(\x04H\x15\x88\x01\x01\x12\x13\n\x06\x63reate\x18\x17 \x01(\x04H\x16\x88\x01\x01\x12\x14\n\x07\x65nqueue\x18\x18 \x01(\x04H\x17\x88\x01\x01\x12\x14\n\x07getattr\x18\x19 \x01(\x04H\x18\x88\x01\x01\x12\x18\n\x0bintent_lock\x18\x1a \x01(\x04H\x19\x88\x01\x01\x12\x11\n\x04link\x18\x1b \x01(\x04H\x1a\x88\x01\x01\x12\x13\n\x06rename\x18\x1c \x01(\x04H\x1b\x88\x01\x01\x12\x14\n\x07setattr\x18\x1d \x01(\x04H\x1c\x88\x01\x01\x12\x12\n\x05\x66sync\x18\x1e \x01(\x04H\x1d\x88\x01\x01\x12\x16\n\tread_page\x18\x1f \x01(\x04H\x1e\x88\x01\x01\x12\x13\n\x06unlink\x18  \x01(\x04H\x1f\x88\x01\x01\x12\x15\n\x08setxattr\x18! \x01(\x04H \x88\x01\x01\x12\x15\n\x08getxattr\x18\" \x01(\x04H!\x88\x01\x01\x12!\n\x14intent_getattr_async\x18# \x01(\x04H\"\x88\x01\x01\x12\x1c\n\x0frevalidate_lock\x18$ \x01(\x04H#\x88\x01\x01\x42\x0f\n\r_avg_waittimeB\x0b\n\t_inflightB\x10\n\x0e_unregisteringB\x0b\n\t_timeoutsB\x0f\n\r_req_waittimeB\r\n\x0b_req_activeB\x0e\n\x0c_mds_getattrB\x13\n\x11_mds_getattr_lockB\x0c\n\n_mds_closeB\x0f\n\r_mds_readpageB\x0e\n\x0c_mds_connectB\x0f\n\r_mds_get_rootB\r\n\x0b_mds_statfsB\x0b\n\t_mds_syncB\x0f\n\r_mds_quotactlB\x0f\n\r_mds_getxattrB\x14\n\x12_mds_hsm_state_setB\x0e\n\x0c_ldlm_cancelB\x0b\n\t_obd_pingB\x0c\n\n_seq_queryB\x0c\n\n_fld_queryB\x08\n\x06_closeB\t\n\x07_createB\n\n\x08_enqueueB\n\n\x08_getattrB\x0e\n\x0c_intent_lockB\x07\n\x05_linkB\t\n\x07_renameB\n\n\x08_setattrB\x08\n\x06_fsyncB\x0c\n\n_read_pageB\t\n\x07_unlinkB\x0b\n\t_setxattrB\x0b\n\t_getxattrB\x17\n\x15_intent_getattr_asyncB\x12\n\x10_revalidate_lock\"\xa7\x05\n\x0e\x42ottleneckFile\x12\x1c\n\x04rows\x18\x01 \x03(\x0b\x32\x0e.BottleneckLog\x12\x14\n\x0cread_threads\x18\x02 \x01(\x05\x12\x15\n\rwrite_threads\x18\x03 \x01(\x05\x12\x17\n\x0fnetwork_threads\x18\x04 \x01(\x05\x12\x12\n\ncpu_stress\x18\x05 \x01(\x05\x12\x11\n\tio_stress\x18\x06 \x01(\x05\x12\x12\n\nmem_stress\x18\x07 \x01(\x02\x12\x11\n\tlink_loss\x18\x08 \x01(\x02\x12\x12\n\nlink_delay\x18\t \x01(\x02\x12\x43\n\x17link_delay_distribution\x18\n \x01(\x0e\x32\".BottleneckFile.DELAY_DISTRIBUTION\x12\x16\n\x0elink_variation\x18\x0b \x01(\x02\x12\x16\n\x0elink_duplicate\x18\x0c \x01(\x02\x12\x14\n\x0clink_corrupt\x18\r \x01(\x02\x12\x14\n\x0clink_reorder\x18\x0e \x01(\x02\x12\x14\n\x0clink_latency\x18\x0f \x01(\x02\x12\x32\n\x0cnetwork_type\x18\x10 \x01(\x0e\x32\x17.BottleneckFile.NetworkH\x00\x88\x01\x01\x12\x1d\n\x10\x63reated_time_utc\x18\x11 \x01(\x02H\x01\x88\x01\x01\x12\x1d\n\x15max_buffer_size_ratio\x18\x12 \x01(\x02\">\n\x12\x44\x45LAY_DISTRIBUTION\x12\n\n\x06NORMAL\x10\x00\x12\n\n\x06PARETO\x10\x01\x12\x10\n\x0cPARETONORMAL\x10\x02\"@\n\x07Network\x12\x08\n\x04\x44TNS\x10\x00\x12\x07\n\x03\x41WS\x10\x01\x12\x06\n\x02\x43\x43\x10\x02\x12\x0b\n\x07\x41WS_FXS\x10\x03\x12\r\n\tUNDEFINED\x10\x04\x42\x0f\n\r_network_typeB\x13\n\x11_created_time_utc\"0\n\x0f\x42ottleneckFiles\x12\x1d\n\x04logs\x18\x01 \x03(\x0b\x32\x0f.BottleneckFileb\x06proto3'
 )
 
 
@@ -49,8 +49,8 @@ _BOTTLENECKFILE_DELAY_DISTRIBUTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5992,
-  serialized_end=6054,
+  serialized_start=9182,
+  serialized_end=9244,
 )
 _sym_db.RegisterEnumDescriptor(_BOTTLENECKFILE_DELAY_DISTRIBUTION)
 
@@ -89,11 +89,49 @@ _BOTTLENECKFILE_NETWORK = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=6056,
-  serialized_end=6120,
+  serialized_start=9246,
+  serialized_end=9310,
 )
 _sym_db.RegisterEnumDescriptor(_BOTTLENECKFILE_NETWORK)
 
+
+_BOTTLENECKLOG_MDTSTATSMAPENTRY = _descriptor.Descriptor(
+  name='MdtStatsMapEntry',
+  full_name='BottleneckLog.MdtStatsMapEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='BottleneckLog.MdtStatsMapEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='BottleneckLog.MdtStatsMapEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4865,
+  serialized_end=4928,
+)
 
 _BOTTLENECKLOG = _descriptor.Descriptor(
   name='BottleneckLog',
@@ -881,302 +919,540 @@ _BOTTLENECKLOG = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='avg_waittime_md', full_name='BottleneckLog.avg_waittime_md', index=111,
+      name='avg_waittime_md1', full_name='BottleneckLog.avg_waittime_md1', index=111,
       number=112, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='inflight_md', full_name='BottleneckLog.inflight_md', index=112,
+      name='inflight_md1', full_name='BottleneckLog.inflight_md1', index=112,
       number=113, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='unregistering_md', full_name='BottleneckLog.unregistering_md', index=113,
+      name='unregistering_md1', full_name='BottleneckLog.unregistering_md1', index=113,
       number=114, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='timeouts_md', full_name='BottleneckLog.timeouts_md', index=114,
+      name='timeouts_md1', full_name='BottleneckLog.timeouts_md1', index=114,
       number=115, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='req_waittime_md', full_name='BottleneckLog.req_waittime_md', index=115,
+      name='req_waittime_md1', full_name='BottleneckLog.req_waittime_md1', index=115,
       number=116, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='req_active_md', full_name='BottleneckLog.req_active_md', index=116,
+      name='req_active_md1', full_name='BottleneckLog.req_active_md1', index=116,
       number=117, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_getattr_md', full_name='BottleneckLog.mds_getattr_md', index=117,
+      name='mds_getattr_md1', full_name='BottleneckLog.mds_getattr_md1', index=117,
       number=118, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_getattr_lock_md', full_name='BottleneckLog.mds_getattr_lock_md', index=118,
+      name='mds_getattr_lock_md1', full_name='BottleneckLog.mds_getattr_lock_md1', index=118,
       number=119, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_close_md', full_name='BottleneckLog.mds_close_md', index=119,
+      name='mds_close_md1', full_name='BottleneckLog.mds_close_md1', index=119,
       number=120, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_readpage_md', full_name='BottleneckLog.mds_readpage_md', index=120,
+      name='mds_readpage_md1', full_name='BottleneckLog.mds_readpage_md1', index=120,
       number=121, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_connect_md', full_name='BottleneckLog.mds_connect_md', index=121,
+      name='mds_connect_md1', full_name='BottleneckLog.mds_connect_md1', index=121,
       number=122, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_get_root_md', full_name='BottleneckLog.mds_get_root_md', index=122,
+      name='mds_get_root_md1', full_name='BottleneckLog.mds_get_root_md1', index=122,
       number=123, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_statfs_md', full_name='BottleneckLog.mds_statfs_md', index=123,
+      name='mds_statfs_md1', full_name='BottleneckLog.mds_statfs_md1', index=123,
       number=124, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_sync_md', full_name='BottleneckLog.mds_sync_md', index=124,
+      name='mds_sync_md1', full_name='BottleneckLog.mds_sync_md1', index=124,
       number=125, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_quotactl_md', full_name='BottleneckLog.mds_quotactl_md', index=125,
+      name='mds_quotactl_md1', full_name='BottleneckLog.mds_quotactl_md1', index=125,
       number=126, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_getxattr_md', full_name='BottleneckLog.mds_getxattr_md', index=126,
+      name='mds_getxattr_md1', full_name='BottleneckLog.mds_getxattr_md1', index=126,
       number=127, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='mds_hsm_state_set_md', full_name='BottleneckLog.mds_hsm_state_set_md', index=127,
+      name='mds_hsm_state_set_md1', full_name='BottleneckLog.mds_hsm_state_set_md1', index=127,
       number=128, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='ldlm_cancel_md', full_name='BottleneckLog.ldlm_cancel_md', index=128,
+      name='ldlm_cancel_md1', full_name='BottleneckLog.ldlm_cancel_md1', index=128,
       number=129, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='obd_ping_md', full_name='BottleneckLog.obd_ping_md', index=129,
+      name='obd_ping_md1', full_name='BottleneckLog.obd_ping_md1', index=129,
       number=130, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='seq_query_md', full_name='BottleneckLog.seq_query_md', index=130,
+      name='seq_query_md1', full_name='BottleneckLog.seq_query_md1', index=130,
       number=131, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='fld_query_md', full_name='BottleneckLog.fld_query_md', index=131,
+      name='fld_query_md1', full_name='BottleneckLog.fld_query_md1', index=131,
       number=132, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='close_md', full_name='BottleneckLog.close_md', index=132,
+      name='close_md1', full_name='BottleneckLog.close_md1', index=132,
       number=133, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='create_md', full_name='BottleneckLog.create_md', index=133,
+      name='create_md1', full_name='BottleneckLog.create_md1', index=133,
       number=134, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='enqueue_md', full_name='BottleneckLog.enqueue_md', index=134,
+      name='enqueue_md1', full_name='BottleneckLog.enqueue_md1', index=134,
       number=135, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='getattr_md', full_name='BottleneckLog.getattr_md', index=135,
+      name='getattr_md1', full_name='BottleneckLog.getattr_md1', index=135,
       number=136, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='intent_lock_md', full_name='BottleneckLog.intent_lock_md', index=136,
+      name='intent_lock_md1', full_name='BottleneckLog.intent_lock_md1', index=136,
       number=137, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='link_md', full_name='BottleneckLog.link_md', index=137,
+      name='link_md1', full_name='BottleneckLog.link_md1', index=137,
       number=138, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='rename_md', full_name='BottleneckLog.rename_md', index=138,
+      name='rename_md1', full_name='BottleneckLog.rename_md1', index=138,
       number=139, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='setattr_md', full_name='BottleneckLog.setattr_md', index=139,
+      name='setattr_md1', full_name='BottleneckLog.setattr_md1', index=139,
       number=140, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='fsync_md', full_name='BottleneckLog.fsync_md', index=140,
+      name='fsync_md1', full_name='BottleneckLog.fsync_md1', index=140,
       number=141, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='read_page_md', full_name='BottleneckLog.read_page_md', index=141,
+      name='read_page_md1', full_name='BottleneckLog.read_page_md1', index=141,
       number=142, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='unlink_md', full_name='BottleneckLog.unlink_md', index=142,
+      name='unlink_md1', full_name='BottleneckLog.unlink_md1', index=142,
       number=143, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='setxattr_md', full_name='BottleneckLog.setxattr_md', index=143,
+      name='setxattr_md1', full_name='BottleneckLog.setxattr_md1', index=143,
       number=144, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='getxattr_md', full_name='BottleneckLog.getxattr_md', index=144,
+      name='getxattr_md1', full_name='BottleneckLog.getxattr_md1', index=144,
       number=145, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='intent_getattr_async_md', full_name='BottleneckLog.intent_getattr_async_md', index=145,
+      name='intent_getattr_async_md1', full_name='BottleneckLog.intent_getattr_async_md1', index=145,
       number=146, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='revalidate_lock_md', full_name='BottleneckLog.revalidate_lock_md', index=146,
+      name='revalidate_lock_md1', full_name='BottleneckLog.revalidate_lock_md1', index=146,
       number=147, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='avg_dsack_dups_value', full_name='BottleneckLog.avg_dsack_dups_value', index=147,
-      number=148, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='avg_waittime_md2', full_name='BottleneckLog.avg_waittime_md2', index=147,
+      number=148, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='avg_reord_seen', full_name='BottleneckLog.avg_reord_seen', index=148,
-      number=149, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='inflight_md2', full_name='BottleneckLog.inflight_md2', index=148,
+      number=149, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='system_cpu_percent', full_name='BottleneckLog.system_cpu_percent', index=149,
-      number=150, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='unregistering_md2', full_name='BottleneckLog.unregistering_md2', index=149,
+      number=150, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='system_memory_percent', full_name='BottleneckLog.system_memory_percent', index=150,
-      number=151, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
+      name='timeouts_md2', full_name='BottleneckLog.timeouts_md2', index=150,
+      number=151, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='remote_ost_read_bytes', full_name='BottleneckLog.remote_ost_read_bytes', index=151,
+      name='req_waittime_md2', full_name='BottleneckLog.req_waittime_md2', index=151,
       number=152, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='remote_ost_write_bytes', full_name='BottleneckLog.remote_ost_write_bytes', index=152,
+      name='req_active_md2', full_name='BottleneckLog.req_active_md2', index=152,
       number=153, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='label_value', full_name='BottleneckLog.label_value', index=153,
-      number=154, type=5, cpp_type=1, label=1,
+      name='mds_getattr_md2', full_name='BottleneckLog.mds_getattr_md2', index=153,
+      number=154, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_close_md2', full_name='BottleneckLog.mds_close_md2', index=154,
+      number=155, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_readpage_md2', full_name='BottleneckLog.mds_readpage_md2', index=155,
+      number=156, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_connect_md2', full_name='BottleneckLog.mds_connect_md2', index=156,
+      number=157, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_statfs_md2', full_name='BottleneckLog.mds_statfs_md2', index=157,
+      number=158, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_sync_md2', full_name='BottleneckLog.mds_sync_md2', index=158,
+      number=159, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_quotactl_md2', full_name='BottleneckLog.mds_quotactl_md2', index=159,
+      number=160, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_getxattr_md2', full_name='BottleneckLog.mds_getxattr_md2', index=160,
+      number=161, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_hsm_state_set_md2', full_name='BottleneckLog.mds_hsm_state_set_md2', index=161,
+      number=162, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ldlm_cancel_md2', full_name='BottleneckLog.ldlm_cancel_md2', index=162,
+      number=163, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='obd_ping_md2', full_name='BottleneckLog.obd_ping_md2', index=163,
+      number=164, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='seq_query_md2', full_name='BottleneckLog.seq_query_md2', index=164,
+      number=165, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='fld_query_md2', full_name='BottleneckLog.fld_query_md2', index=165,
+      number=166, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='close_md2', full_name='BottleneckLog.close_md2', index=166,
+      number=167, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='create_md2', full_name='BottleneckLog.create_md2', index=167,
+      number=168, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='enqueue_md2', full_name='BottleneckLog.enqueue_md2', index=168,
+      number=169, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='getattr_md2', full_name='BottleneckLog.getattr_md2', index=169,
+      number=170, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='intent_lock_md2', full_name='BottleneckLog.intent_lock_md2', index=170,
+      number=171, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='link_md2', full_name='BottleneckLog.link_md2', index=171,
+      number=172, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='rename_md2', full_name='BottleneckLog.rename_md2', index=172,
+      number=173, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='setattr_md2', full_name='BottleneckLog.setattr_md2', index=173,
+      number=174, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='fsync_md2', full_name='BottleneckLog.fsync_md2', index=174,
+      number=175, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='read_page_md2', full_name='BottleneckLog.read_page_md2', index=175,
+      number=176, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='unlink_md2', full_name='BottleneckLog.unlink_md2', index=176,
+      number=177, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='setxattr_md2', full_name='BottleneckLog.setxattr_md2', index=177,
+      number=178, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='getxattr_md2', full_name='BottleneckLog.getxattr_md2', index=178,
+      number=179, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='intent_getattr_async_md2', full_name='BottleneckLog.intent_getattr_async_md2', index=179,
+      number=180, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='revalidate_lock_md2', full_name='BottleneckLog.revalidate_lock_md2', index=180,
+      number=181, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='avg_dsack_dups_value', full_name='BottleneckLog.avg_dsack_dups_value', index=181,
+      number=182, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='avg_reord_seen', full_name='BottleneckLog.avg_reord_seen', index=182,
+      number=183, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='system_cpu_percent', full_name='BottleneckLog.system_cpu_percent', index=183,
+      number=184, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='system_memory_percent', full_name='BottleneckLog.system_memory_percent', index=184,
+      number=185, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='total_mdt_numbers', full_name='BottleneckLog.total_mdt_numbers', index=185,
+      number=186, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mdt_stats_map', full_name='BottleneckLog.mdt_stats_map', index=186,
+      number=187, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='label_value', full_name='BottleneckLog.label_value', index=187,
+      number=188, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1184,7 +1460,7 @@ _BOTTLENECKLOG = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_BOTTLENECKLOG_MDTSTATSMAPENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -1543,213 +1819,830 @@ _BOTTLENECKLOG = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_avg_waittime_md', full_name='BottleneckLog._avg_waittime_md',
+      name='_avg_waittime_md1', full_name='BottleneckLog._avg_waittime_md1',
       index=70, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_inflight_md', full_name='BottleneckLog._inflight_md',
+      name='_inflight_md1', full_name='BottleneckLog._inflight_md1',
       index=71, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_unregistering_md', full_name='BottleneckLog._unregistering_md',
+      name='_unregistering_md1', full_name='BottleneckLog._unregistering_md1',
       index=72, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_timeouts_md', full_name='BottleneckLog._timeouts_md',
+      name='_timeouts_md1', full_name='BottleneckLog._timeouts_md1',
       index=73, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_req_waittime_md', full_name='BottleneckLog._req_waittime_md',
+      name='_req_waittime_md1', full_name='BottleneckLog._req_waittime_md1',
       index=74, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_req_active_md', full_name='BottleneckLog._req_active_md',
+      name='_req_active_md1', full_name='BottleneckLog._req_active_md1',
       index=75, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_getattr_md', full_name='BottleneckLog._mds_getattr_md',
+      name='_mds_getattr_md1', full_name='BottleneckLog._mds_getattr_md1',
       index=76, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_getattr_lock_md', full_name='BottleneckLog._mds_getattr_lock_md',
+      name='_mds_getattr_lock_md1', full_name='BottleneckLog._mds_getattr_lock_md1',
       index=77, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_close_md', full_name='BottleneckLog._mds_close_md',
+      name='_mds_close_md1', full_name='BottleneckLog._mds_close_md1',
       index=78, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_readpage_md', full_name='BottleneckLog._mds_readpage_md',
+      name='_mds_readpage_md1', full_name='BottleneckLog._mds_readpage_md1',
       index=79, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_connect_md', full_name='BottleneckLog._mds_connect_md',
+      name='_mds_connect_md1', full_name='BottleneckLog._mds_connect_md1',
       index=80, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_get_root_md', full_name='BottleneckLog._mds_get_root_md',
+      name='_mds_get_root_md1', full_name='BottleneckLog._mds_get_root_md1',
       index=81, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_statfs_md', full_name='BottleneckLog._mds_statfs_md',
+      name='_mds_statfs_md1', full_name='BottleneckLog._mds_statfs_md1',
       index=82, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_sync_md', full_name='BottleneckLog._mds_sync_md',
+      name='_mds_sync_md1', full_name='BottleneckLog._mds_sync_md1',
       index=83, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_quotactl_md', full_name='BottleneckLog._mds_quotactl_md',
+      name='_mds_quotactl_md1', full_name='BottleneckLog._mds_quotactl_md1',
       index=84, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_getxattr_md', full_name='BottleneckLog._mds_getxattr_md',
+      name='_mds_getxattr_md1', full_name='BottleneckLog._mds_getxattr_md1',
       index=85, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_mds_hsm_state_set_md', full_name='BottleneckLog._mds_hsm_state_set_md',
+      name='_mds_hsm_state_set_md1', full_name='BottleneckLog._mds_hsm_state_set_md1',
       index=86, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_ldlm_cancel_md', full_name='BottleneckLog._ldlm_cancel_md',
+      name='_ldlm_cancel_md1', full_name='BottleneckLog._ldlm_cancel_md1',
       index=87, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_obd_ping_md', full_name='BottleneckLog._obd_ping_md',
+      name='_obd_ping_md1', full_name='BottleneckLog._obd_ping_md1',
       index=88, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_seq_query_md', full_name='BottleneckLog._seq_query_md',
+      name='_seq_query_md1', full_name='BottleneckLog._seq_query_md1',
       index=89, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_fld_query_md', full_name='BottleneckLog._fld_query_md',
+      name='_fld_query_md1', full_name='BottleneckLog._fld_query_md1',
       index=90, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_close_md', full_name='BottleneckLog._close_md',
+      name='_close_md1', full_name='BottleneckLog._close_md1',
       index=91, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_create_md', full_name='BottleneckLog._create_md',
+      name='_create_md1', full_name='BottleneckLog._create_md1',
       index=92, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_enqueue_md', full_name='BottleneckLog._enqueue_md',
+      name='_enqueue_md1', full_name='BottleneckLog._enqueue_md1',
       index=93, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_getattr_md', full_name='BottleneckLog._getattr_md',
+      name='_getattr_md1', full_name='BottleneckLog._getattr_md1',
       index=94, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_intent_lock_md', full_name='BottleneckLog._intent_lock_md',
+      name='_intent_lock_md1', full_name='BottleneckLog._intent_lock_md1',
       index=95, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_link_md', full_name='BottleneckLog._link_md',
+      name='_link_md1', full_name='BottleneckLog._link_md1',
       index=96, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_rename_md', full_name='BottleneckLog._rename_md',
+      name='_rename_md1', full_name='BottleneckLog._rename_md1',
       index=97, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_setattr_md', full_name='BottleneckLog._setattr_md',
+      name='_setattr_md1', full_name='BottleneckLog._setattr_md1',
       index=98, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_fsync_md', full_name='BottleneckLog._fsync_md',
+      name='_fsync_md1', full_name='BottleneckLog._fsync_md1',
       index=99, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_read_page_md', full_name='BottleneckLog._read_page_md',
+      name='_read_page_md1', full_name='BottleneckLog._read_page_md1',
       index=100, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_unlink_md', full_name='BottleneckLog._unlink_md',
+      name='_unlink_md1', full_name='BottleneckLog._unlink_md1',
       index=101, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_setxattr_md', full_name='BottleneckLog._setxattr_md',
+      name='_setxattr_md1', full_name='BottleneckLog._setxattr_md1',
       index=102, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_getxattr_md', full_name='BottleneckLog._getxattr_md',
+      name='_getxattr_md1', full_name='BottleneckLog._getxattr_md1',
       index=103, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_intent_getattr_async_md', full_name='BottleneckLog._intent_getattr_async_md',
+      name='_intent_getattr_async_md1', full_name='BottleneckLog._intent_getattr_async_md1',
       index=104, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_revalidate_lock_md', full_name='BottleneckLog._revalidate_lock_md',
+      name='_revalidate_lock_md1', full_name='BottleneckLog._revalidate_lock_md1',
       index=105, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_avg_dsack_dups_value', full_name='BottleneckLog._avg_dsack_dups_value',
+      name='_avg_waittime_md2', full_name='BottleneckLog._avg_waittime_md2',
       index=106, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_avg_reord_seen', full_name='BottleneckLog._avg_reord_seen',
+      name='_inflight_md2', full_name='BottleneckLog._inflight_md2',
       index=107, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_remote_ost_read_bytes', full_name='BottleneckLog._remote_ost_read_bytes',
+      name='_unregistering_md2', full_name='BottleneckLog._unregistering_md2',
       index=108, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_remote_ost_write_bytes', full_name='BottleneckLog._remote_ost_write_bytes',
+      name='_timeouts_md2', full_name='BottleneckLog._timeouts_md2',
       index=109, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
     _descriptor.OneofDescriptor(
-      name='_label_value', full_name='BottleneckLog._label_value',
+      name='_req_waittime_md2', full_name='BottleneckLog._req_waittime_md2',
       index=110, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_req_active_md2', full_name='BottleneckLog._req_active_md2',
+      index=111, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_getattr_md2', full_name='BottleneckLog._mds_getattr_md2',
+      index=112, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_close_md2', full_name='BottleneckLog._mds_close_md2',
+      index=113, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_readpage_md2', full_name='BottleneckLog._mds_readpage_md2',
+      index=114, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_connect_md2', full_name='BottleneckLog._mds_connect_md2',
+      index=115, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_statfs_md2', full_name='BottleneckLog._mds_statfs_md2',
+      index=116, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_sync_md2', full_name='BottleneckLog._mds_sync_md2',
+      index=117, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_quotactl_md2', full_name='BottleneckLog._mds_quotactl_md2',
+      index=118, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_getxattr_md2', full_name='BottleneckLog._mds_getxattr_md2',
+      index=119, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_hsm_state_set_md2', full_name='BottleneckLog._mds_hsm_state_set_md2',
+      index=120, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_ldlm_cancel_md2', full_name='BottleneckLog._ldlm_cancel_md2',
+      index=121, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_obd_ping_md2', full_name='BottleneckLog._obd_ping_md2',
+      index=122, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_seq_query_md2', full_name='BottleneckLog._seq_query_md2',
+      index=123, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_fld_query_md2', full_name='BottleneckLog._fld_query_md2',
+      index=124, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_close_md2', full_name='BottleneckLog._close_md2',
+      index=125, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_create_md2', full_name='BottleneckLog._create_md2',
+      index=126, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_enqueue_md2', full_name='BottleneckLog._enqueue_md2',
+      index=127, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_getattr_md2', full_name='BottleneckLog._getattr_md2',
+      index=128, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_intent_lock_md2', full_name='BottleneckLog._intent_lock_md2',
+      index=129, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_link_md2', full_name='BottleneckLog._link_md2',
+      index=130, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_rename_md2', full_name='BottleneckLog._rename_md2',
+      index=131, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_setattr_md2', full_name='BottleneckLog._setattr_md2',
+      index=132, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_fsync_md2', full_name='BottleneckLog._fsync_md2',
+      index=133, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_read_page_md2', full_name='BottleneckLog._read_page_md2',
+      index=134, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_unlink_md2', full_name='BottleneckLog._unlink_md2',
+      index=135, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_setxattr_md2', full_name='BottleneckLog._setxattr_md2',
+      index=136, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_getxattr_md2', full_name='BottleneckLog._getxattr_md2',
+      index=137, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_intent_getattr_async_md2', full_name='BottleneckLog._intent_getattr_async_md2',
+      index=138, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_revalidate_lock_md2', full_name='BottleneckLog._revalidate_lock_md2',
+      index=139, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_avg_dsack_dups_value', full_name='BottleneckLog._avg_dsack_dups_value',
+      index=140, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_avg_reord_seen', full_name='BottleneckLog._avg_reord_seen',
+      index=141, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_label_value', full_name='BottleneckLog._label_value',
+      index=142, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
   serialized_start=21,
-  serialized_end=5476,
+  serialized_end=7223,
+)
+
+
+_MDTSTATLOG = _descriptor.Descriptor(
+  name='MDTStatLog',
+  full_name='MDTStatLog',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='avg_waittime', full_name='MDTStatLog.avg_waittime', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='inflight', full_name='MDTStatLog.inflight', index=1,
+      number=2, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='unregistering', full_name='MDTStatLog.unregistering', index=2,
+      number=3, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='timeouts', full_name='MDTStatLog.timeouts', index=3,
+      number=4, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='req_waittime', full_name='MDTStatLog.req_waittime', index=4,
+      number=5, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='req_active', full_name='MDTStatLog.req_active', index=5,
+      number=6, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_getattr', full_name='MDTStatLog.mds_getattr', index=6,
+      number=7, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_getattr_lock', full_name='MDTStatLog.mds_getattr_lock', index=7,
+      number=8, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_close', full_name='MDTStatLog.mds_close', index=8,
+      number=9, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_readpage', full_name='MDTStatLog.mds_readpage', index=9,
+      number=10, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_connect', full_name='MDTStatLog.mds_connect', index=10,
+      number=11, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_get_root', full_name='MDTStatLog.mds_get_root', index=11,
+      number=12, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_statfs', full_name='MDTStatLog.mds_statfs', index=12,
+      number=13, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_sync', full_name='MDTStatLog.mds_sync', index=13,
+      number=14, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_quotactl', full_name='MDTStatLog.mds_quotactl', index=14,
+      number=15, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_getxattr', full_name='MDTStatLog.mds_getxattr', index=15,
+      number=16, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='mds_hsm_state_set', full_name='MDTStatLog.mds_hsm_state_set', index=16,
+      number=17, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ldlm_cancel', full_name='MDTStatLog.ldlm_cancel', index=17,
+      number=18, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='obd_ping', full_name='MDTStatLog.obd_ping', index=18,
+      number=19, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='seq_query', full_name='MDTStatLog.seq_query', index=19,
+      number=20, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='fld_query', full_name='MDTStatLog.fld_query', index=20,
+      number=21, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='close', full_name='MDTStatLog.close', index=21,
+      number=22, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='create', full_name='MDTStatLog.create', index=22,
+      number=23, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='enqueue', full_name='MDTStatLog.enqueue', index=23,
+      number=24, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='getattr', full_name='MDTStatLog.getattr', index=24,
+      number=25, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='intent_lock', full_name='MDTStatLog.intent_lock', index=25,
+      number=26, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='link', full_name='MDTStatLog.link', index=26,
+      number=27, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='rename', full_name='MDTStatLog.rename', index=27,
+      number=28, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='setattr', full_name='MDTStatLog.setattr', index=28,
+      number=29, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='fsync', full_name='MDTStatLog.fsync', index=29,
+      number=30, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='read_page', full_name='MDTStatLog.read_page', index=30,
+      number=31, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='unlink', full_name='MDTStatLog.unlink', index=31,
+      number=32, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='setxattr', full_name='MDTStatLog.setxattr', index=32,
+      number=33, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='getxattr', full_name='MDTStatLog.getxattr', index=33,
+      number=34, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='intent_getattr_async', full_name='MDTStatLog.intent_getattr_async', index=34,
+      number=35, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='revalidate_lock', full_name='MDTStatLog.revalidate_lock', index=35,
+      number=36, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='_avg_waittime', full_name='MDTStatLog._avg_waittime',
+      index=0, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_inflight', full_name='MDTStatLog._inflight',
+      index=1, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_unregistering', full_name='MDTStatLog._unregistering',
+      index=2, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_timeouts', full_name='MDTStatLog._timeouts',
+      index=3, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_req_waittime', full_name='MDTStatLog._req_waittime',
+      index=4, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_req_active', full_name='MDTStatLog._req_active',
+      index=5, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_getattr', full_name='MDTStatLog._mds_getattr',
+      index=6, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_getattr_lock', full_name='MDTStatLog._mds_getattr_lock',
+      index=7, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_close', full_name='MDTStatLog._mds_close',
+      index=8, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_readpage', full_name='MDTStatLog._mds_readpage',
+      index=9, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_connect', full_name='MDTStatLog._mds_connect',
+      index=10, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_get_root', full_name='MDTStatLog._mds_get_root',
+      index=11, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_statfs', full_name='MDTStatLog._mds_statfs',
+      index=12, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_sync', full_name='MDTStatLog._mds_sync',
+      index=13, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_quotactl', full_name='MDTStatLog._mds_quotactl',
+      index=14, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_getxattr', full_name='MDTStatLog._mds_getxattr',
+      index=15, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_mds_hsm_state_set', full_name='MDTStatLog._mds_hsm_state_set',
+      index=16, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_ldlm_cancel', full_name='MDTStatLog._ldlm_cancel',
+      index=17, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_obd_ping', full_name='MDTStatLog._obd_ping',
+      index=18, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_seq_query', full_name='MDTStatLog._seq_query',
+      index=19, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_fld_query', full_name='MDTStatLog._fld_query',
+      index=20, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_close', full_name='MDTStatLog._close',
+      index=21, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_create', full_name='MDTStatLog._create',
+      index=22, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_enqueue', full_name='MDTStatLog._enqueue',
+      index=23, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_getattr', full_name='MDTStatLog._getattr',
+      index=24, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_intent_lock', full_name='MDTStatLog._intent_lock',
+      index=25, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_link', full_name='MDTStatLog._link',
+      index=26, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_rename', full_name='MDTStatLog._rename',
+      index=27, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_setattr', full_name='MDTStatLog._setattr',
+      index=28, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_fsync', full_name='MDTStatLog._fsync',
+      index=29, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_read_page', full_name='MDTStatLog._read_page',
+      index=30, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_unlink', full_name='MDTStatLog._unlink',
+      index=31, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_setxattr', full_name='MDTStatLog._setxattr',
+      index=32, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_getxattr', full_name='MDTStatLog._getxattr',
+      index=33, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_intent_getattr_async', full_name='MDTStatLog._intent_getattr_async',
+      index=34, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+    _descriptor.OneofDescriptor(
+      name='_revalidate_lock', full_name='MDTStatLog._revalidate_lock',
+      index=35, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+  ],
+  serialized_start=7226,
+  serialized_end=8666,
 )
 
 
@@ -1911,8 +2804,8 @@ _BOTTLENECKFILE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=5479,
-  serialized_end=6158,
+  serialized_start=8669,
+  serialized_end=9348,
 )
 
 
@@ -1943,10 +2836,13 @@ _BOTTLENECKFILES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6160,
-  serialized_end=6208,
+  serialized_start=9350,
+  serialized_end=9398,
 )
 
+_BOTTLENECKLOG_MDTSTATSMAPENTRY.fields_by_name['value'].message_type = _MDTSTATLOG
+_BOTTLENECKLOG_MDTSTATSMAPENTRY.containing_type = _BOTTLENECKLOG
+_BOTTLENECKLOG.fields_by_name['mdt_stats_map'].message_type = _BOTTLENECKLOG_MDTSTATSMAPENTRY
 _BOTTLENECKLOG.oneofs_by_name['_read_req'].fields.append(
   _BOTTLENECKLOG.fields_by_name['read_req'])
 _BOTTLENECKLOG.fields_by_name['read_req'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_read_req']
@@ -2157,129 +3053,333 @@ _BOTTLENECKLOG.fields_by_name['pending_read_pages'].containing_oneof = _BOTTLENE
 _BOTTLENECKLOG.oneofs_by_name['_read_RPCs_in_flight'].fields.append(
   _BOTTLENECKLOG.fields_by_name['read_RPCs_in_flight'])
 _BOTTLENECKLOG.fields_by_name['read_RPCs_in_flight'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_read_RPCs_in_flight']
-_BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['avg_waittime_md'])
-_BOTTLENECKLOG.fields_by_name['avg_waittime_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md']
-_BOTTLENECKLOG.oneofs_by_name['_inflight_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['inflight_md'])
-_BOTTLENECKLOG.fields_by_name['inflight_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_inflight_md']
-_BOTTLENECKLOG.oneofs_by_name['_unregistering_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['unregistering_md'])
-_BOTTLENECKLOG.fields_by_name['unregistering_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unregistering_md']
-_BOTTLENECKLOG.oneofs_by_name['_timeouts_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['timeouts_md'])
-_BOTTLENECKLOG.fields_by_name['timeouts_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_timeouts_md']
-_BOTTLENECKLOG.oneofs_by_name['_req_waittime_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['req_waittime_md'])
-_BOTTLENECKLOG.fields_by_name['req_waittime_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_waittime_md']
-_BOTTLENECKLOG.oneofs_by_name['_req_active_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['req_active_md'])
-_BOTTLENECKLOG.fields_by_name['req_active_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_active_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_getattr_md'])
-_BOTTLENECKLOG.fields_by_name['mds_getattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_getattr_lock_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_getattr_lock_md'])
-_BOTTLENECKLOG.fields_by_name['mds_getattr_lock_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getattr_lock_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_close_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_close_md'])
-_BOTTLENECKLOG.fields_by_name['mds_close_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_close_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_readpage_md'])
-_BOTTLENECKLOG.fields_by_name['mds_readpage_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_connect_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_connect_md'])
-_BOTTLENECKLOG.fields_by_name['mds_connect_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_connect_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_get_root_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_get_root_md'])
-_BOTTLENECKLOG.fields_by_name['mds_get_root_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_get_root_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_statfs_md'])
-_BOTTLENECKLOG.fields_by_name['mds_statfs_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_sync_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_sync_md'])
-_BOTTLENECKLOG.fields_by_name['mds_sync_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_sync_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_quotactl_md'])
-_BOTTLENECKLOG.fields_by_name['mds_quotactl_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_getxattr_md'])
-_BOTTLENECKLOG.fields_by_name['mds_getxattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md'])
-_BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md']
-_BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['ldlm_cancel_md'])
-_BOTTLENECKLOG.fields_by_name['ldlm_cancel_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md']
-_BOTTLENECKLOG.oneofs_by_name['_obd_ping_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['obd_ping_md'])
-_BOTTLENECKLOG.fields_by_name['obd_ping_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_obd_ping_md']
-_BOTTLENECKLOG.oneofs_by_name['_seq_query_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['seq_query_md'])
-_BOTTLENECKLOG.fields_by_name['seq_query_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_seq_query_md']
-_BOTTLENECKLOG.oneofs_by_name['_fld_query_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['fld_query_md'])
-_BOTTLENECKLOG.fields_by_name['fld_query_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fld_query_md']
-_BOTTLENECKLOG.oneofs_by_name['_close_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['close_md'])
-_BOTTLENECKLOG.fields_by_name['close_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_close_md']
-_BOTTLENECKLOG.oneofs_by_name['_create_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['create_md'])
-_BOTTLENECKLOG.fields_by_name['create_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_create_md']
-_BOTTLENECKLOG.oneofs_by_name['_enqueue_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['enqueue_md'])
-_BOTTLENECKLOG.fields_by_name['enqueue_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_enqueue_md']
-_BOTTLENECKLOG.oneofs_by_name['_getattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['getattr_md'])
-_BOTTLENECKLOG.fields_by_name['getattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_intent_lock_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['intent_lock_md'])
-_BOTTLENECKLOG.fields_by_name['intent_lock_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_lock_md']
-_BOTTLENECKLOG.oneofs_by_name['_link_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['link_md'])
-_BOTTLENECKLOG.fields_by_name['link_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_link_md']
-_BOTTLENECKLOG.oneofs_by_name['_rename_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['rename_md'])
-_BOTTLENECKLOG.fields_by_name['rename_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_rename_md']
-_BOTTLENECKLOG.oneofs_by_name['_setattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['setattr_md'])
-_BOTTLENECKLOG.fields_by_name['setattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_fsync_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['fsync_md'])
-_BOTTLENECKLOG.fields_by_name['fsync_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fsync_md']
-_BOTTLENECKLOG.oneofs_by_name['_read_page_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['read_page_md'])
-_BOTTLENECKLOG.fields_by_name['read_page_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_read_page_md']
-_BOTTLENECKLOG.oneofs_by_name['_unlink_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['unlink_md'])
-_BOTTLENECKLOG.fields_by_name['unlink_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unlink_md']
-_BOTTLENECKLOG.oneofs_by_name['_setxattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['setxattr_md'])
-_BOTTLENECKLOG.fields_by_name['setxattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setxattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_getxattr_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['getxattr_md'])
-_BOTTLENECKLOG.fields_by_name['getxattr_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getxattr_md']
-_BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['intent_getattr_async_md'])
-_BOTTLENECKLOG.fields_by_name['intent_getattr_async_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md']
-_BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['revalidate_lock_md'])
-_BOTTLENECKLOG.fields_by_name['revalidate_lock_md'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md']
+_BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['avg_waittime_md1'])
+_BOTTLENECKLOG.fields_by_name['avg_waittime_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md1']
+_BOTTLENECKLOG.oneofs_by_name['_inflight_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['inflight_md1'])
+_BOTTLENECKLOG.fields_by_name['inflight_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_inflight_md1']
+_BOTTLENECKLOG.oneofs_by_name['_unregistering_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['unregistering_md1'])
+_BOTTLENECKLOG.fields_by_name['unregistering_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unregistering_md1']
+_BOTTLENECKLOG.oneofs_by_name['_timeouts_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['timeouts_md1'])
+_BOTTLENECKLOG.fields_by_name['timeouts_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_timeouts_md1']
+_BOTTLENECKLOG.oneofs_by_name['_req_waittime_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['req_waittime_md1'])
+_BOTTLENECKLOG.fields_by_name['req_waittime_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_waittime_md1']
+_BOTTLENECKLOG.oneofs_by_name['_req_active_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['req_active_md1'])
+_BOTTLENECKLOG.fields_by_name['req_active_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_active_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_getattr_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_getattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_getattr_lock_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_getattr_lock_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_getattr_lock_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getattr_lock_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_close_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_close_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_close_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_close_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_readpage_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_readpage_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_connect_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_connect_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_connect_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_connect_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_get_root_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_get_root_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_get_root_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_get_root_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_statfs_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_statfs_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_sync_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_sync_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_sync_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_sync_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_quotactl_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_quotactl_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_getxattr_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_getxattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md1'])
+_BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md1']
+_BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['ldlm_cancel_md1'])
+_BOTTLENECKLOG.fields_by_name['ldlm_cancel_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md1']
+_BOTTLENECKLOG.oneofs_by_name['_obd_ping_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['obd_ping_md1'])
+_BOTTLENECKLOG.fields_by_name['obd_ping_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_obd_ping_md1']
+_BOTTLENECKLOG.oneofs_by_name['_seq_query_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['seq_query_md1'])
+_BOTTLENECKLOG.fields_by_name['seq_query_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_seq_query_md1']
+_BOTTLENECKLOG.oneofs_by_name['_fld_query_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['fld_query_md1'])
+_BOTTLENECKLOG.fields_by_name['fld_query_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fld_query_md1']
+_BOTTLENECKLOG.oneofs_by_name['_close_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['close_md1'])
+_BOTTLENECKLOG.fields_by_name['close_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_close_md1']
+_BOTTLENECKLOG.oneofs_by_name['_create_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['create_md1'])
+_BOTTLENECKLOG.fields_by_name['create_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_create_md1']
+_BOTTLENECKLOG.oneofs_by_name['_enqueue_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['enqueue_md1'])
+_BOTTLENECKLOG.fields_by_name['enqueue_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_enqueue_md1']
+_BOTTLENECKLOG.oneofs_by_name['_getattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['getattr_md1'])
+_BOTTLENECKLOG.fields_by_name['getattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_intent_lock_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['intent_lock_md1'])
+_BOTTLENECKLOG.fields_by_name['intent_lock_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_lock_md1']
+_BOTTLENECKLOG.oneofs_by_name['_link_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['link_md1'])
+_BOTTLENECKLOG.fields_by_name['link_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_link_md1']
+_BOTTLENECKLOG.oneofs_by_name['_rename_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['rename_md1'])
+_BOTTLENECKLOG.fields_by_name['rename_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_rename_md1']
+_BOTTLENECKLOG.oneofs_by_name['_setattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['setattr_md1'])
+_BOTTLENECKLOG.fields_by_name['setattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_fsync_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['fsync_md1'])
+_BOTTLENECKLOG.fields_by_name['fsync_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fsync_md1']
+_BOTTLENECKLOG.oneofs_by_name['_read_page_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['read_page_md1'])
+_BOTTLENECKLOG.fields_by_name['read_page_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_read_page_md1']
+_BOTTLENECKLOG.oneofs_by_name['_unlink_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['unlink_md1'])
+_BOTTLENECKLOG.fields_by_name['unlink_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unlink_md1']
+_BOTTLENECKLOG.oneofs_by_name['_setxattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['setxattr_md1'])
+_BOTTLENECKLOG.fields_by_name['setxattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setxattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_getxattr_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['getxattr_md1'])
+_BOTTLENECKLOG.fields_by_name['getxattr_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getxattr_md1']
+_BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['intent_getattr_async_md1'])
+_BOTTLENECKLOG.fields_by_name['intent_getattr_async_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md1']
+_BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md1'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['revalidate_lock_md1'])
+_BOTTLENECKLOG.fields_by_name['revalidate_lock_md1'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md1']
+_BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['avg_waittime_md2'])
+_BOTTLENECKLOG.fields_by_name['avg_waittime_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_avg_waittime_md2']
+_BOTTLENECKLOG.oneofs_by_name['_inflight_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['inflight_md2'])
+_BOTTLENECKLOG.fields_by_name['inflight_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_inflight_md2']
+_BOTTLENECKLOG.oneofs_by_name['_unregistering_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['unregistering_md2'])
+_BOTTLENECKLOG.fields_by_name['unregistering_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unregistering_md2']
+_BOTTLENECKLOG.oneofs_by_name['_timeouts_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['timeouts_md2'])
+_BOTTLENECKLOG.fields_by_name['timeouts_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_timeouts_md2']
+_BOTTLENECKLOG.oneofs_by_name['_req_waittime_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['req_waittime_md2'])
+_BOTTLENECKLOG.fields_by_name['req_waittime_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_waittime_md2']
+_BOTTLENECKLOG.oneofs_by_name['_req_active_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['req_active_md2'])
+_BOTTLENECKLOG.fields_by_name['req_active_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_req_active_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_getattr_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_getattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_close_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_close_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_close_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_close_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_readpage_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_readpage_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_readpage_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_connect_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_connect_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_connect_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_connect_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_statfs_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_statfs_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_statfs_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_sync_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_sync_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_sync_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_sync_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_quotactl_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_quotactl_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_quotactl_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_getxattr_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_getxattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_getxattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md2'])
+_BOTTLENECKLOG.fields_by_name['mds_hsm_state_set_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_mds_hsm_state_set_md2']
+_BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['ldlm_cancel_md2'])
+_BOTTLENECKLOG.fields_by_name['ldlm_cancel_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_ldlm_cancel_md2']
+_BOTTLENECKLOG.oneofs_by_name['_obd_ping_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['obd_ping_md2'])
+_BOTTLENECKLOG.fields_by_name['obd_ping_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_obd_ping_md2']
+_BOTTLENECKLOG.oneofs_by_name['_seq_query_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['seq_query_md2'])
+_BOTTLENECKLOG.fields_by_name['seq_query_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_seq_query_md2']
+_BOTTLENECKLOG.oneofs_by_name['_fld_query_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['fld_query_md2'])
+_BOTTLENECKLOG.fields_by_name['fld_query_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fld_query_md2']
+_BOTTLENECKLOG.oneofs_by_name['_close_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['close_md2'])
+_BOTTLENECKLOG.fields_by_name['close_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_close_md2']
+_BOTTLENECKLOG.oneofs_by_name['_create_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['create_md2'])
+_BOTTLENECKLOG.fields_by_name['create_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_create_md2']
+_BOTTLENECKLOG.oneofs_by_name['_enqueue_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['enqueue_md2'])
+_BOTTLENECKLOG.fields_by_name['enqueue_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_enqueue_md2']
+_BOTTLENECKLOG.oneofs_by_name['_getattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['getattr_md2'])
+_BOTTLENECKLOG.fields_by_name['getattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_intent_lock_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['intent_lock_md2'])
+_BOTTLENECKLOG.fields_by_name['intent_lock_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_lock_md2']
+_BOTTLENECKLOG.oneofs_by_name['_link_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['link_md2'])
+_BOTTLENECKLOG.fields_by_name['link_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_link_md2']
+_BOTTLENECKLOG.oneofs_by_name['_rename_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['rename_md2'])
+_BOTTLENECKLOG.fields_by_name['rename_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_rename_md2']
+_BOTTLENECKLOG.oneofs_by_name['_setattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['setattr_md2'])
+_BOTTLENECKLOG.fields_by_name['setattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_fsync_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['fsync_md2'])
+_BOTTLENECKLOG.fields_by_name['fsync_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_fsync_md2']
+_BOTTLENECKLOG.oneofs_by_name['_read_page_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['read_page_md2'])
+_BOTTLENECKLOG.fields_by_name['read_page_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_read_page_md2']
+_BOTTLENECKLOG.oneofs_by_name['_unlink_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['unlink_md2'])
+_BOTTLENECKLOG.fields_by_name['unlink_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_unlink_md2']
+_BOTTLENECKLOG.oneofs_by_name['_setxattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['setxattr_md2'])
+_BOTTLENECKLOG.fields_by_name['setxattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_setxattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_getxattr_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['getxattr_md2'])
+_BOTTLENECKLOG.fields_by_name['getxattr_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_getxattr_md2']
+_BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['intent_getattr_async_md2'])
+_BOTTLENECKLOG.fields_by_name['intent_getattr_async_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_intent_getattr_async_md2']
+_BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md2'].fields.append(
+  _BOTTLENECKLOG.fields_by_name['revalidate_lock_md2'])
+_BOTTLENECKLOG.fields_by_name['revalidate_lock_md2'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_revalidate_lock_md2']
 _BOTTLENECKLOG.oneofs_by_name['_avg_dsack_dups_value'].fields.append(
   _BOTTLENECKLOG.fields_by_name['avg_dsack_dups_value'])
 _BOTTLENECKLOG.fields_by_name['avg_dsack_dups_value'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_avg_dsack_dups_value']
 _BOTTLENECKLOG.oneofs_by_name['_avg_reord_seen'].fields.append(
   _BOTTLENECKLOG.fields_by_name['avg_reord_seen'])
 _BOTTLENECKLOG.fields_by_name['avg_reord_seen'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_avg_reord_seen']
-_BOTTLENECKLOG.oneofs_by_name['_remote_ost_read_bytes'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['remote_ost_read_bytes'])
-_BOTTLENECKLOG.fields_by_name['remote_ost_read_bytes'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_remote_ost_read_bytes']
-_BOTTLENECKLOG.oneofs_by_name['_remote_ost_write_bytes'].fields.append(
-  _BOTTLENECKLOG.fields_by_name['remote_ost_write_bytes'])
-_BOTTLENECKLOG.fields_by_name['remote_ost_write_bytes'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_remote_ost_write_bytes']
 _BOTTLENECKLOG.oneofs_by_name['_label_value'].fields.append(
   _BOTTLENECKLOG.fields_by_name['label_value'])
 _BOTTLENECKLOG.fields_by_name['label_value'].containing_oneof = _BOTTLENECKLOG.oneofs_by_name['_label_value']
+_MDTSTATLOG.oneofs_by_name['_avg_waittime'].fields.append(
+  _MDTSTATLOG.fields_by_name['avg_waittime'])
+_MDTSTATLOG.fields_by_name['avg_waittime'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_avg_waittime']
+_MDTSTATLOG.oneofs_by_name['_inflight'].fields.append(
+  _MDTSTATLOG.fields_by_name['inflight'])
+_MDTSTATLOG.fields_by_name['inflight'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_inflight']
+_MDTSTATLOG.oneofs_by_name['_unregistering'].fields.append(
+  _MDTSTATLOG.fields_by_name['unregistering'])
+_MDTSTATLOG.fields_by_name['unregistering'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_unregistering']
+_MDTSTATLOG.oneofs_by_name['_timeouts'].fields.append(
+  _MDTSTATLOG.fields_by_name['timeouts'])
+_MDTSTATLOG.fields_by_name['timeouts'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_timeouts']
+_MDTSTATLOG.oneofs_by_name['_req_waittime'].fields.append(
+  _MDTSTATLOG.fields_by_name['req_waittime'])
+_MDTSTATLOG.fields_by_name['req_waittime'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_req_waittime']
+_MDTSTATLOG.oneofs_by_name['_req_active'].fields.append(
+  _MDTSTATLOG.fields_by_name['req_active'])
+_MDTSTATLOG.fields_by_name['req_active'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_req_active']
+_MDTSTATLOG.oneofs_by_name['_mds_getattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_getattr'])
+_MDTSTATLOG.fields_by_name['mds_getattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_getattr']
+_MDTSTATLOG.oneofs_by_name['_mds_getattr_lock'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_getattr_lock'])
+_MDTSTATLOG.fields_by_name['mds_getattr_lock'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_getattr_lock']
+_MDTSTATLOG.oneofs_by_name['_mds_close'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_close'])
+_MDTSTATLOG.fields_by_name['mds_close'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_close']
+_MDTSTATLOG.oneofs_by_name['_mds_readpage'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_readpage'])
+_MDTSTATLOG.fields_by_name['mds_readpage'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_readpage']
+_MDTSTATLOG.oneofs_by_name['_mds_connect'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_connect'])
+_MDTSTATLOG.fields_by_name['mds_connect'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_connect']
+_MDTSTATLOG.oneofs_by_name['_mds_get_root'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_get_root'])
+_MDTSTATLOG.fields_by_name['mds_get_root'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_get_root']
+_MDTSTATLOG.oneofs_by_name['_mds_statfs'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_statfs'])
+_MDTSTATLOG.fields_by_name['mds_statfs'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_statfs']
+_MDTSTATLOG.oneofs_by_name['_mds_sync'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_sync'])
+_MDTSTATLOG.fields_by_name['mds_sync'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_sync']
+_MDTSTATLOG.oneofs_by_name['_mds_quotactl'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_quotactl'])
+_MDTSTATLOG.fields_by_name['mds_quotactl'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_quotactl']
+_MDTSTATLOG.oneofs_by_name['_mds_getxattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_getxattr'])
+_MDTSTATLOG.fields_by_name['mds_getxattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_getxattr']
+_MDTSTATLOG.oneofs_by_name['_mds_hsm_state_set'].fields.append(
+  _MDTSTATLOG.fields_by_name['mds_hsm_state_set'])
+_MDTSTATLOG.fields_by_name['mds_hsm_state_set'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_mds_hsm_state_set']
+_MDTSTATLOG.oneofs_by_name['_ldlm_cancel'].fields.append(
+  _MDTSTATLOG.fields_by_name['ldlm_cancel'])
+_MDTSTATLOG.fields_by_name['ldlm_cancel'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_ldlm_cancel']
+_MDTSTATLOG.oneofs_by_name['_obd_ping'].fields.append(
+  _MDTSTATLOG.fields_by_name['obd_ping'])
+_MDTSTATLOG.fields_by_name['obd_ping'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_obd_ping']
+_MDTSTATLOG.oneofs_by_name['_seq_query'].fields.append(
+  _MDTSTATLOG.fields_by_name['seq_query'])
+_MDTSTATLOG.fields_by_name['seq_query'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_seq_query']
+_MDTSTATLOG.oneofs_by_name['_fld_query'].fields.append(
+  _MDTSTATLOG.fields_by_name['fld_query'])
+_MDTSTATLOG.fields_by_name['fld_query'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_fld_query']
+_MDTSTATLOG.oneofs_by_name['_close'].fields.append(
+  _MDTSTATLOG.fields_by_name['close'])
+_MDTSTATLOG.fields_by_name['close'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_close']
+_MDTSTATLOG.oneofs_by_name['_create'].fields.append(
+  _MDTSTATLOG.fields_by_name['create'])
+_MDTSTATLOG.fields_by_name['create'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_create']
+_MDTSTATLOG.oneofs_by_name['_enqueue'].fields.append(
+  _MDTSTATLOG.fields_by_name['enqueue'])
+_MDTSTATLOG.fields_by_name['enqueue'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_enqueue']
+_MDTSTATLOG.oneofs_by_name['_getattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['getattr'])
+_MDTSTATLOG.fields_by_name['getattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_getattr']
+_MDTSTATLOG.oneofs_by_name['_intent_lock'].fields.append(
+  _MDTSTATLOG.fields_by_name['intent_lock'])
+_MDTSTATLOG.fields_by_name['intent_lock'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_intent_lock']
+_MDTSTATLOG.oneofs_by_name['_link'].fields.append(
+  _MDTSTATLOG.fields_by_name['link'])
+_MDTSTATLOG.fields_by_name['link'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_link']
+_MDTSTATLOG.oneofs_by_name['_rename'].fields.append(
+  _MDTSTATLOG.fields_by_name['rename'])
+_MDTSTATLOG.fields_by_name['rename'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_rename']
+_MDTSTATLOG.oneofs_by_name['_setattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['setattr'])
+_MDTSTATLOG.fields_by_name['setattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_setattr']
+_MDTSTATLOG.oneofs_by_name['_fsync'].fields.append(
+  _MDTSTATLOG.fields_by_name['fsync'])
+_MDTSTATLOG.fields_by_name['fsync'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_fsync']
+_MDTSTATLOG.oneofs_by_name['_read_page'].fields.append(
+  _MDTSTATLOG.fields_by_name['read_page'])
+_MDTSTATLOG.fields_by_name['read_page'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_read_page']
+_MDTSTATLOG.oneofs_by_name['_unlink'].fields.append(
+  _MDTSTATLOG.fields_by_name['unlink'])
+_MDTSTATLOG.fields_by_name['unlink'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_unlink']
+_MDTSTATLOG.oneofs_by_name['_setxattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['setxattr'])
+_MDTSTATLOG.fields_by_name['setxattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_setxattr']
+_MDTSTATLOG.oneofs_by_name['_getxattr'].fields.append(
+  _MDTSTATLOG.fields_by_name['getxattr'])
+_MDTSTATLOG.fields_by_name['getxattr'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_getxattr']
+_MDTSTATLOG.oneofs_by_name['_intent_getattr_async'].fields.append(
+  _MDTSTATLOG.fields_by_name['intent_getattr_async'])
+_MDTSTATLOG.fields_by_name['intent_getattr_async'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_intent_getattr_async']
+_MDTSTATLOG.oneofs_by_name['_revalidate_lock'].fields.append(
+  _MDTSTATLOG.fields_by_name['revalidate_lock'])
+_MDTSTATLOG.fields_by_name['revalidate_lock'].containing_oneof = _MDTSTATLOG.oneofs_by_name['_revalidate_lock']
 _BOTTLENECKFILE.fields_by_name['rows'].message_type = _BOTTLENECKLOG
 _BOTTLENECKFILE.fields_by_name['link_delay_distribution'].enum_type = _BOTTLENECKFILE_DELAY_DISTRIBUTION
 _BOTTLENECKFILE.fields_by_name['network_type'].enum_type = _BOTTLENECKFILE_NETWORK
@@ -2293,16 +3393,32 @@ _BOTTLENECKFILE.oneofs_by_name['_created_time_utc'].fields.append(
 _BOTTLENECKFILE.fields_by_name['created_time_utc'].containing_oneof = _BOTTLENECKFILE.oneofs_by_name['_created_time_utc']
 _BOTTLENECKFILES.fields_by_name['logs'].message_type = _BOTTLENECKFILE
 DESCRIPTOR.message_types_by_name['BottleneckLog'] = _BOTTLENECKLOG
+DESCRIPTOR.message_types_by_name['MDTStatLog'] = _MDTSTATLOG
 DESCRIPTOR.message_types_by_name['BottleneckFile'] = _BOTTLENECKFILE
 DESCRIPTOR.message_types_by_name['BottleneckFiles'] = _BOTTLENECKFILES
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BottleneckLog = _reflection.GeneratedProtocolMessageType('BottleneckLog', (_message.Message,), {
+
+  'MdtStatsMapEntry' : _reflection.GeneratedProtocolMessageType('MdtStatsMapEntry', (_message.Message,), {
+    'DESCRIPTOR' : _BOTTLENECKLOG_MDTSTATSMAPENTRY,
+    '__module__' : 'bottleneck_pb2'
+    # @@protoc_insertion_point(class_scope:BottleneckLog.MdtStatsMapEntry)
+    })
+  ,
   'DESCRIPTOR' : _BOTTLENECKLOG,
   '__module__' : 'bottleneck_pb2'
   # @@protoc_insertion_point(class_scope:BottleneckLog)
   })
 _sym_db.RegisterMessage(BottleneckLog)
+_sym_db.RegisterMessage(BottleneckLog.MdtStatsMapEntry)
+
+MDTStatLog = _reflection.GeneratedProtocolMessageType('MDTStatLog', (_message.Message,), {
+  'DESCRIPTOR' : _MDTSTATLOG,
+  '__module__' : 'bottleneck_pb2'
+  # @@protoc_insertion_point(class_scope:MDTStatLog)
+  })
+_sym_db.RegisterMessage(MDTStatLog)
 
 BottleneckFile = _reflection.GeneratedProtocolMessageType('BottleneckFile', (_message.Message,), {
   'DESCRIPTOR' : _BOTTLENECKFILE,
@@ -2319,4 +3435,5 @@ BottleneckFiles = _reflection.GeneratedProtocolMessageType('BottleneckFiles', (_
 _sym_db.RegisterMessage(BottleneckFiles)
 
 
+_BOTTLENECKLOG_MDTSTATSMAPENTRY._options = None
 # @@protoc_insertion_point(module_scope)
