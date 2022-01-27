@@ -58,55 +58,51 @@ class TransferAnalysis:
                            85: 'env_end', 86: 'exit_code', 87: 'cpu_usage_percentage', 88: 'mem_usage_percentage',
                            89: 'tcp_rcv_buffer_min', 90: 'tcp_rcv_buffer_default', 91: 'tcp_rcv_buffer_max',
                            92: 'tcp_snd_buffer_min', 93: 'tcp_snd_buffer_default', 94: 'tcp_snd_buffer_max',
+
                            95: 'req_waittime', 96: 'req_active', 97: 'read_bytes', 98: 'write_bytes', 99: 'ost_setattr',
                            100: 'ost_read', 101: 'ost_write', 102: 'ost_get_info', 103: 'ost_connect', 104: 'ost_punch',
                            105: 'ost_statfs', 106: 'ost_sync', 107: 'ost_quotactl', 108: 'ldlm_cancel', 109: 'obd_ping',
-                           110: 'pending_read_pages', 111: 'read_RPCs_in_flight', 112: 'avg_waittime_md1',
-                           113: 'inflight_md1', 114: 'unregistering_md1', 115: 'timeouts_md1', 116: 'req_waittime_md1',
-                           117: 'req_active_md1', 118: 'mds_getattr_md1', 119: 'mds_getattr_lock_md1',
-                           120: 'mds_close_md1', 121: 'mds_readpage_md1', 122: 'mds_connect_md1',
-                           123: 'mds_get_root_md1', 124: 'mds_statfs_md1', 125: 'mds_sync_md1', 126: 'mds_quotactl_md1',
-                           127: 'mds_getxattr_md1', 128: 'mds_hsm_state_set_md1', 129: 'ldlm_cancel_md1',
-                           130: 'obd_ping_md1', 131: 'seq_query_md1', 132: 'fld_query_md1', 133: 'close_md1',
-                           134: 'create_md1', 135: 'enqueue_md1', 136: 'getattr_md1', 137: 'intent_lock_md1',
-                           138: 'link_md1', 139: 'rename_md1', 140: 'setattr_md1', 141: 'fsync_md1',
-                           142: 'read_page_md1', 143: 'unlink_md1', 144: 'setxattr_md1', 145: 'getxattr_md1',
-                           146: 'intent_getattr_async_md1', 147: 'revalidate_lock_md1', 148: 'avg_waittime_md2',
-                           149: 'inflight_md2', 150: 'unregistering_md2', 151: 'timeouts_md2', 152: 'req_waittime_md2',
-                           153: 'req_active_md2', 154: 'mds_getattr_md2', 155: 'mds_close_md2', 156: 'mds_readpage_md2',
-                           157: 'mds_connect_md2', 158: 'mds_statfs_md2', 159: 'mds_sync_md2', 160: 'mds_quotactl_md2',
-                           161: 'mds_getxattr_md2', 162: 'mds_hsm_state_set_md2', 163: 'ldlm_cancel_md2',
-                           164: 'obd_ping_md2', 165: 'seq_query_md2', 166: 'fld_query_md2', 167: 'close_md2',
-                           168: 'create_md2', 169: 'enqueue_md2', 170: 'getattr_md2', 171: 'intent_lock_md2',
-                           172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
-                           176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
-                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
-                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
-                           184: 'system_cpu_percent', 185: 'system_memory_percent',
-                           186: 'total_mdt_numbers', 187: 'mdt_stats_map', 188: 'label_value'}
-        self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
-                                    5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
-                                    9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
-                                    13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
-                                    17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
-                                    21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
-                                    25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
-                                    29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
-                                    33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
+
+                           110: 'pending_read_pages', 111: 'read_RPCs_in_flight', 112: 'avg_waittime_md',
+                           113: 'inflight_md', 114: 'unregistering_md', 115: 'timeouts_md', 116: 'req_waittime_md',
+                           117: 'req_active_md', 118: 'mds_getattr_md', 119: 'mds_getattr_lock_md',
+                           120: 'mds_close_md', 121: 'mds_readpage_md', 122: 'mds_connect_md',
+                           123: 'mds_get_root_md', 124: 'mds_statfs_md', 125: 'mds_sync_md', 126: 'mds_quotactl_md',
+                           127: 'mds_getxattr_md', 128: 'mds_hsm_state_set_md', 129: 'ldlm_cancel_md',
+                           130: 'obd_ping_md', 131: 'seq_query_md', 132: 'fld_query_md', 133: 'close_md',
+                           134: 'create_md', 135: 'enqueue_md', 136: 'getattr_md', 137: 'intent_lock_md',
+                           138: 'link_md', 139: 'rename_md', 140: 'setattr_md', 141: 'fsync_md',
+                           142: 'read_page_md', 143: 'unlink_md', 144: 'setxattr_md', 145: 'getxattr_md',
+                           146: 'intent_getattr_async_md', 147: 'revalidate_lock_md',
+                           148: 'avg_dsack_dups_value', 149: 'avg_reord_seen',
+                           150: 'system_cpu_percent', 151: 'system_memory_percent',
+                           152: 'remote_ost_read_bytes', 153: 'remote_ost_write_bytes',
+                           154: 'label_value'}
+        # self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
+        #                             5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
+        #                             9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
+        #                             13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
+        #                             17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
+        #                             21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
+        #                             25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
+        #                             29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
+        #                             33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
         if self.log_type == "normal":
             self.keys = self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
-                                    [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [182, 183, 184, 185, 188]
+                                    [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [148, 149, 150, 151, 154]
         elif self.log_type == "luster":
-            self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
-            self.mdt_keys = list(range(1, 37))
+            # self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
+            # self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            # self.mdt_keys = list(range(1, 37))
         elif self.log_type == "cc":
             # list range 30, 88 are related to the process and are not available in general and shouldnt be used?
             self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
                         [54, 57, 58, 76] + \
                         [87, 88, 89, 90, 91, 92, 93, 94] + \
-                        [182, 183, 184, 185, 188]
+                        [148, 149, 150, 151, 154]
         else:
-            self.keys = list(range(1, 95)) + [182, 183, 184, 185, 188]
+            self.keys = list(range(1, 95)) + [148, 149, 150, 151, 154]
         # TODO headers for lustre fs should be fixed
         if self.log_type != "luster":
             self.headers = [self.id_to_attr[i] for i in self.keys]
@@ -137,16 +133,17 @@ class TransferAnalysis:
                 new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
         else:
             for key in self.keys:
-                if self.id_to_attr[key] != "mdt_stats_map":
-                    new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
-                else:
-                    mdt_stats_map = log.__getattribute__(self.id_to_attr[key])
-                    mdt_list = mdt_stats_map.keys()
-                    for mdt in mdt_stats_map:
-                        mdt_stats = mdt_stats_map[mdt]
-                        for mdt_key in self.mdt_keys:
-                            new_log["{}_{}".format(mdt, self.mdt_stat_id_to_attr[mdt_key])] = mdt_stats.__getattribute__(
-                                self.mdt_stat_id_to_attr[mdt_key])
+                new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
+                # if self.id_to_attr[key] != "mdt_stats_map":
+                #     new_log[self.id_to_attr[key]] = log.__getattribute__(self.id_to_attr[key])
+                # else:
+                #     mdt_stats_map = log.__getattribute__(self.id_to_attr[key])
+                #     mdt_list = mdt_stats_map.keys()
+                #     for mdt in mdt_stats_map:
+                #         mdt_stats = mdt_stats_map[mdt]
+                #         for mdt_key in self.mdt_keys:
+                #             new_log["{}_{}".format(mdt, self.mdt_stat_id_to_attr[mdt_key])] = mdt_stats.__getattribute__(
+                #                 self.mdt_stat_id_to_attr[mdt_key])
         return new_log
 
     def remove_not_needed_cols(self):
