@@ -3,6 +3,7 @@
 wait_period=0
 ethernet_interface_name='bond0'
 user_name='tg877399'
+remote_client_ip=10.10.1.16
 main_sleep_time=10
 while true
 do
@@ -22,7 +23,8 @@ do
     #                  40: "network", 41: "network", 42: "network", 43: "network", 44: "network",
     #                  45: "network", 46: "network", 47: "network", 48: "network", 49: "network",
     #                  50: "network", 51: "network", 52: "network", 53: "network", 54: "network", 55: "network",
-    #                  56: "cpu", 57: "cpu", 58: "cpu"}
+    #                  56: "cpu", 57: "cpu", 58: "cpu", 59:"send_buffer", 60:"send_buffer", 61:"send_buffer",
+    #                  62:"read", 63:"read", 64:"read"}
     #############################################################
     # run metric_collector with label value 0 for normal situation 0: "normal"
     python3 parallel_metric_collector.py 0 &
@@ -745,6 +747,62 @@ do
         echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
         rm tcp_wmem_original_val
         sysctl -p
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 62: read stress to ost from another client 2 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 2'&
+        sleep 5;
+        python3 parallel_metric_collector.py 62 &
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 63: read stress to ost from another client 4 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 4'&
+        sleep 5;
+        python3 parallel_metric_collector.py 63 &
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 64: read stress to ost from another client 8 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 8'&
+        sleep 5;
+        python3 parallel_metric_collector.py 64 &
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+        #generate a random variable if it is even do the if part 65: read stress to ost from another client 16 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 16'&
+        sleep 5;
+        python3 parallel_metric_collector.py 65 &
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
