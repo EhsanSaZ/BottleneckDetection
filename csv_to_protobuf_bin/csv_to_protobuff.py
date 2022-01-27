@@ -38,48 +38,43 @@ class CSV_to_Proto:
                            85: 'env_end', 86: 'exit_code', 87: 'cpu_usage_percentage', 88: 'mem_usage_percentage',
                            89: 'tcp_rcv_buffer_min', 90: 'tcp_rcv_buffer_default', 91: 'tcp_rcv_buffer_max',
                            92: 'tcp_snd_buffer_min', 93: 'tcp_snd_buffer_default', 94: 'tcp_snd_buffer_max',
+
                            95: 'req_waittime', 96: 'req_active', 97: 'read_bytes', 98: 'write_bytes', 99: 'ost_setattr',
                            100: 'ost_read', 101: 'ost_write', 102: 'ost_get_info', 103: 'ost_connect', 104: 'ost_punch',
                            105: 'ost_statfs', 106: 'ost_sync', 107: 'ost_quotactl', 108: 'ldlm_cancel', 109: 'obd_ping',
-                           110: 'pending_read_pages', 111: 'read_RPCs_in_flight', 112: 'avg_waittime_md1',
-                           113: 'inflight_md1', 114: 'unregistering_md1', 115: 'timeouts_md1', 116: 'req_waittime_md1',
-                           117: 'req_active_md1', 118: 'mds_getattr_md1', 119: 'mds_getattr_lock_md1',
-                           120: 'mds_close_md1', 121: 'mds_readpage_md1', 122: 'mds_connect_md1',
-                           123: 'mds_get_root_md1', 124: 'mds_statfs_md1', 125: 'mds_sync_md1', 126: 'mds_quotactl_md1',
-                           127: 'mds_getxattr_md1', 128: 'mds_hsm_state_set_md1', 129: 'ldlm_cancel_md1',
-                           130: 'obd_ping_md1', 131: 'seq_query_md1', 132: 'fld_query_md1', 133: 'close_md1',
-                           134: 'create_md1', 135: 'enqueue_md1', 136: 'getattr_md1', 137: 'intent_lock_md1',
-                           138: 'link_md1', 139: 'rename_md1', 140: 'setattr_md1', 141: 'fsync_md1',
-                           142: 'read_page_md1', 143: 'unlink_md1', 144: 'setxattr_md1', 145: 'getxattr_md1',
-                           146: 'intent_getattr_async_md1', 147: 'revalidate_lock_md1', 148: 'avg_waittime_md2',
-                           149: 'inflight_md2', 150: 'unregistering_md2', 151: 'timeouts_md2', 152: 'req_waittime_md2',
-                           153: 'req_active_md2', 154: 'mds_getattr_md2', 155: 'mds_close_md2', 156: 'mds_readpage_md2',
-                           157: 'mds_connect_md2', 158: 'mds_statfs_md2', 159: 'mds_sync_md2', 160: 'mds_quotactl_md2',
-                           161: 'mds_getxattr_md2', 162: 'mds_hsm_state_set_md2', 163: 'ldlm_cancel_md2',
-                           164: 'obd_ping_md2', 165: 'seq_query_md2', 166: 'fld_query_md2', 167: 'close_md2',
-                           168: 'create_md2', 169: 'enqueue_md2', 170: 'getattr_md2', 171: 'intent_lock_md2',
-                           172: 'link_md2', 173: 'rename_md2', 174: 'setattr_md2', 175: 'fsync_md2',
-                           176: 'read_page_md2', 177: 'unlink_md2', 178: 'setxattr_md2', 179: 'getxattr_md2',
-                           180: 'intent_getattr_async_md2', 181: 'revalidate_lock_md2',
-                           182: 'avg_dsack_dups_value', 183: 'avg_reord_seen',
-                           184: 'system_cpu_percent', 185: 'system_memory_percent',
-                           186: 'total_mdt_numbers', 187: 'mdt_stats_map',
+
+                           110: 'pending_read_pages', 111: 'read_RPCs_in_flight', 112: 'avg_waittime_md',
+                           113: 'inflight_md', 114: 'unregistering_md', 115: 'timeouts_md', 116: 'req_waittime_md',
+                           117: 'req_active_md', 118: 'mds_getattr_md', 119: 'mds_getattr_lock_md',
+                           120: 'mds_close_md', 121: 'mds_readpage_md', 122: 'mds_connect_md',
+                           123: 'mds_get_root_md', 124: 'mds_statfs_md', 125: 'mds_sync_md', 126: 'mds_quotactl_md',
+                           127: 'mds_getxattr_md', 128: 'mds_hsm_state_set_md', 129: 'ldlm_cancel_md',
+                           130: 'obd_ping_md', 131: 'seq_query_md', 132: 'fld_query_md', 133: 'close_md',
+                           134: 'create_md', 135: 'enqueue_md', 136: 'getattr_md', 137: 'intent_lock_md',
+                           138: 'link_md', 139: 'rename_md', 140: 'setattr_md', 141: 'fsync_md',
+                           142: 'read_page_md', 143: 'unlink_md', 144: 'setxattr_md', 145: 'getxattr_md',
+                           146: 'intent_getattr_async_md', 147: 'revalidate_lock_md',
+                           148: 'avg_dsack_dups_value', 149: 'avg_reord_seen',
+                           150: 'system_cpu_percent', 151: 'system_memory_percent',
+                           152: 'remote_ost_read_bytes', 153: 'remote_ost_write_bytes',
                            188: 'label_value'}
-        self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
-                                    5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
-                                    9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
-                                    13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
-                                    17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
-                                    21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
-                                    25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
-                                    29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
-                                    33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
+
+        # self.mdt_stat_id_to_attr = {1: 'avg_waittime', 2: 'inflight', 3: 'unregistering', 4: 'timeouts',
+        #                            5: 'req_waittime', 6: 'req_active', 7: 'mds_getattr', 8: 'mds_getattr_lock',
+        #                            9: 'mds_close', 10: 'mds_readpage', 11: 'mds_connect', 12: 'mds_get_root',
+        #                            13: 'mds_statfs', 14: 'mds_sync', 15: 'mds_quotactl', 16: 'mds_getxattr',
+        #                            17: 'mds_hsm_state_set', 18: 'ldlm_cancel', 19: 'obd_ping', 20: 'seq_query',
+        #                            21: 'fld_query', 22: 'close', 23: 'create', 24: 'enqueue',
+        #                            25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
+        #                            29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
+        #                            33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
+
         self.attr_to_id = {}
         for i in self.id_to_attr:
             self.attr_to_id[self.id_to_attr[i]] = i
         self.mdt_stat_attr_to_id = {}
-        for i in self.mdt_stat_id_to_attr:
-            self.mdt_stat_attr_to_id[self.mdt_stat_id_to_attr[i]] = i
+        # for i in self.mdt_stat_id_to_attr:
+        #     self.mdt_stat_attr_to_id[self.mdt_stat_id_to_attr[i]] = i
         self.datatypes = {1: 'float', 2: 'string', 3: 'float', 4: 'float', 5: 'float', 6: 'float', 7: 'float',
                           8: 'float', 9: 'float', 10: 'float', 11: 'string', 12: 'float', 13: 'float', 14: 'float',
                           15: 'float', 16: 'float', 17: 'float', 18: 'float', 19: 'float', 20: 'float', 21: 'float',
@@ -100,11 +95,6 @@ class CSV_to_Proto:
                           127: 'int', 128: 'int', 129: 'int', 130: 'int', 131: 'int', 132: 'int', 133: 'int',
                           134: 'int', 135: 'int', 136: 'int', 137: 'int', 138: 'int', 139: 'int', 140: 'int',
                           141: 'int', 142: 'int', 143: 'int', 144: 'int', 145: 'int', 146: 'int', 147: 'int',
-                          148: 'int', 149: 'int', 150: 'int', 151: 'int', 152: 'int', 153: 'int', 154: 'int',
-                          155: 'int', 156: 'int', 157: 'int', 158: 'int', 159: 'int', 160: 'int', 161: 'int',
-                          162: 'int', 163: 'int', 164: 'int', 165: 'int', 166: 'int', 167: 'int', 168: 'int',
-                          169: 'int', 170: 'int', 171: 'int', 172: 'int', 173: 'int', 174: 'int', 175: 'int',
-                          176: 'int', 177: 'int', 178: 'int', 179: 'int', 180: 'int', 181: 'int',
                           182: 'float', 183: 'float', 184: 'float', 185: 'float',
                           186: 'int', 187: 'dict', 188: 'int'}
         self.mdt_stat_datatypes = {1: 'int', 2: 'int', 3: 'int', 4: 'int', 5: 'int', 6: 'int', 7: 'int',
@@ -269,7 +259,7 @@ class CSV_to_Proto:
                 for mdt_name in log[101].keys():
                     value_list = log[101].get(mdt_name) or []
                     for i, value in enumerate(value_list):
-                        new_log.mdt_stats_map[mdt_name].__setattr__(self.mdt_stat_id_to_attr[i+1], value)
+                        new_log.mdt_stats_map[mdt_name].__setattr__(self.mdt_stat_id_to_attr[i + 1], value)
 
                 new_log.__setattr__("label_value", log[-1])
             this_file_logs.rows.append(new_log)
@@ -342,15 +332,15 @@ class CSV_to_Proto:
             else:
                 previous_key = ""
             id_ += 1
-        for i in ["pending_read_pages", "read_RPCs_in_flight", "avg_waittime_md1", "inflight_md1", "unregistering_md1",
-                  "timeouts_md1"]:
+        for i in ["pending_read_pages", "read_RPCs_in_flight", "avg_waittime_md", "inflight_md", "unregistering_md",
+                  "timeouts_md"]:
             list_[id_] = i
             id_ += 1
         previous_key = ""
         while True:
 
             if previous_key:
-                list_[id_] = previous_key + "_md1"
+                list_[id_] = previous_key + "_md"
             if row[id_] in second_list:
                 previous_key = row[id_]
             elif not previous_key:
