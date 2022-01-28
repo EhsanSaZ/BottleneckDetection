@@ -93,7 +93,10 @@ class TransferAnalysis:
         elif self.log_type == "luster":
             # self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
             # self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153, 154]
-            self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            # self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            self.keys = list(range(1, 15)) + list(range(30, 37)) + [54, 57, 58, 76] + \
+                        [87, 88, 89, 90, 91, 92, 93, 94] + list(range(95, 110)) + list(range(112, 148)) +\
+                        [148, 149, 150, 151, 152, 153, 154]
             # self.mdt_keys = list(range(1, 37))
         elif self.log_type == "cc":
             # list range 30, 88 are related to the process and are not available in general and shouldnt be used?
