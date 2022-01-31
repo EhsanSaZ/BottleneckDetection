@@ -10,7 +10,7 @@ This file is run by a bash script to put the disk under the stress of reading by
 The argument is the number of threads
 """
 BUFFER_SIZE = 1024 * 512
-max_thread_name = 18
+max_thread_name = 16
 src_path = "/home/esaeedizade/Desktop/diskReadStress/"
 
 if not src_path.endswith('/'):
@@ -47,8 +47,8 @@ class ReadThread(Thread):
 thread_number = int(sys.argv[1])
 start_time = time.time()
 threads = []
-for x in range(thread_number+1):
-    new_thread = ReadThread(str(x % max_thread_name))
+for x in range(thread_number):
+    new_thread = ReadThread(str((x+1) % max_thread_name))
     new_thread.start()
     threads.append(new_thread)
 
