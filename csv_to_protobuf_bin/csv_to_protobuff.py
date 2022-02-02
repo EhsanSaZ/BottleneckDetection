@@ -141,8 +141,8 @@ class CSV_to_Proto:
             # 36 metrics for mdc-mdt stats 112-147
             # 4 metrics for more network and system cpu and memory status 148-153
             # 1 metric label value
-            # self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153, 154]
-            self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153, 154]
+            # self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
 
     def get_new_row_normal(self, row):
         new_row = []
@@ -496,7 +496,7 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/AWS_FXS/series1/"
+folder_dir = "./csv_logs/AWS_FXS/series3/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 serialize_file = folder_dir.split("/")[-2]
