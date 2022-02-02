@@ -4,7 +4,8 @@ wait_period=0
 ethernet_interface_name='bond0'
 user_name='tg877399'
 remote_client_ip=10.10.1.16
-main_sleep_time=10
+remote_oss_server_ip=10.10.1.2
+main_sleep_time=180
 while true
 do
     echo "wait period ${wait_period}"
@@ -27,6 +28,11 @@ do
     #                  62:"read", 63:"read", 64:"read"}
     #############################################################
     # run metric_collector with label value 0 for normal situation 0: "normal"
+    echo "Clearing cache on remote oss";
+    ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+    echo "Clearing cache on client";
+    sync; echo 3 > /proc/sys/vm/drop_caches;
+    echo "Start collecting metrics";
     python3 parallel_metric_collector.py 0 &
     sleep $main_sleep_time;
     killall -9  -u $user_name python3;
@@ -38,6 +44,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 1 &
         sleep 5;
         python3 parallel_metric_collector.py 1 &
@@ -52,6 +63,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 2 &
         sleep 5;
         python3 parallel_metric_collector.py 2 &
@@ -66,6 +82,11 @@ do
     number=0
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 4 &
         sleep 5;
         python3 parallel_metric_collector.py 4 &
@@ -80,6 +101,11 @@ do
     number=0
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 8 &
         sleep 5;
         python3 parallel_metric_collector.py 8 &
@@ -94,6 +120,11 @@ do
     number=0
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 12 &
         sleep 5;
         python3 parallel_metric_collector.py 12 &
@@ -108,6 +139,11 @@ do
     number=0
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/read_test.py 16 &
         sleep 5;
         python3 parallel_metric_collector.py 16 &
@@ -121,6 +157,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 4 &
         sleep 5;
         python3 parallel_metric_collector.py 17 &
@@ -134,6 +175,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 8 &
         sleep 5;
         python3 parallel_metric_collector.py 18 &
@@ -147,6 +193,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 12 &
         sleep 5;
         python3 parallel_metric_collector.py 19 &
@@ -160,6 +211,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 16 &
         sleep 5;
         python3 parallel_metric_collector.py 20 &
@@ -173,6 +229,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 20 &
         sleep 5;
         python3 parallel_metric_collector.py 21 &
@@ -186,6 +247,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 24 &
         sleep 5;
         python3 parallel_metric_collector.py 22 &
@@ -199,6 +265,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 28 &
         sleep 5;
         python3 parallel_metric_collector.py 23 &
@@ -212,6 +283,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 32 &
         sleep 5;
         python3 parallel_metric_collector.py 24 &
@@ -225,6 +301,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 36 &
         sleep 5;
         python3 parallel_metric_collector.py 25 &
@@ -238,6 +319,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 40 &
         sleep 5;
         python3 parallel_metric_collector.py 26 &
@@ -251,6 +337,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 44 &
         sleep 5;
         python3 parallel_metric_collector.py 27 &
@@ -264,6 +355,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 48 &
         sleep 5;
         python3 parallel_metric_collector.py 28 &
@@ -277,6 +373,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 64 &
         sleep 5;
         python3 parallel_metric_collector.py 29 &
@@ -290,6 +391,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 72 &
         sleep 5;
         python3 parallel_metric_collector.py 30 &
@@ -303,6 +409,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 96 &
         sleep 5;
         python3 parallel_metric_collector.py 31 &
@@ -316,6 +427,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         python3 ../utilities/write_test.py 128 &
         sleep 5;
         python3 parallel_metric_collector.py 32 &
@@ -329,6 +445,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         stress-ng -c 0 -l 10 &
         sleep 5;
         python3 parallel_metric_collector.py 33 &
@@ -343,6 +464,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         stress-ng -c 0 -l 30 &
         sleep 5;
         python3 parallel_metric_collector.py 56 &
@@ -357,6 +483,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         stress-ng -c 0 -l 70 &
         sleep 5;
         python3 parallel_metric_collector.py 57 &
@@ -371,6 +502,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         stress-ng -c 0 -l 100 &
         sleep 5;
         python3 parallel_metric_collector.py 58 &
@@ -385,6 +521,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         stress -i 10 &
         sleep 5;
         python3 parallel_metric_collector.py 34 &
@@ -399,6 +540,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         # T ODO check if with or with out "" is true
         stress-ng --vm-bytes "$(awk '/MemAvailable/{printf "%d\n", $2 * 0.98;}' < /proc/meminfo)"k --vm-keep -m 10  &
         sleep 5;
@@ -414,6 +560,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem loss 0.5%;
         sleep 5;
         python3 parallel_metric_collector.py 36 &
@@ -428,6 +579,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem loss 0.1%;
         sleep 5;
         python3 parallel_metric_collector.py 37 &
@@ -442,6 +598,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem loss 0.05%;
         sleep 5;
         python3 parallel_metric_collector.py 38 &
@@ -456,6 +617,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem loss 1%;
         sleep 5;
         python3 parallel_metric_collector.py 39 &
@@ -470,6 +636,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.1ms distribution normal;
         sleep 5;
         python3 parallel_metric_collector.py 40 &
@@ -484,6 +655,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 0.5ms distribution normal;
         sleep 5;
         python3 parallel_metric_collector.py 41 &
@@ -498,6 +674,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 1ms distribution normal;
         sleep 5;
         python3 parallel_metric_collector.py 42 &
@@ -512,6 +693,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms 2ms distribution normal;
         sleep 5;
         python3 parallel_metric_collector.py 43 &
@@ -526,6 +712,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem duplicate 10%;
         sleep 5;
         python3 parallel_metric_collector.py 44 &
@@ -540,6 +731,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem duplicate 15%;
         sleep 5;
         python3 parallel_metric_collector.py 45 &
@@ -554,6 +750,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem duplicate 20%;
         sleep 5;
         python3 parallel_metric_collector.py 46 &
@@ -568,6 +769,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem duplicate 25%;
         sleep 5;
         python3 parallel_metric_collector.py 47 &
@@ -582,6 +788,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.5%;
         sleep 5;
         python3 parallel_metric_collector.py 48 &
@@ -596,6 +807,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.1%;
         sleep 5;
         python3 parallel_metric_collector.py 49 &
@@ -610,6 +826,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem corrupt 0.05%;
         sleep 5;
         python3 parallel_metric_collector.py 50 &
@@ -624,6 +845,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem corrupt 1%;
         sleep 5;
         python3 parallel_metric_collector.py 51 &
@@ -638,6 +864,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem reorder 10% delay 1ms;
         sleep 5;
         python3 parallel_metric_collector.py 52 &
@@ -652,6 +883,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem reorder 15% delay 1ms;
         sleep 5;
         python3 parallel_metric_collector.py 53 &
@@ -666,6 +902,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem reorder 20% delay 1ms;
         sleep 5;
         python3 parallel_metric_collector.py 54 &
@@ -680,6 +921,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         tc qdisc add dev $ethernet_interface_name root netem reorder 25% delay 1ms;
         sleep 5;
         python3 parallel_metric_collector.py 55 &
@@ -694,6 +940,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
         sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 4096 16384 8192' >> /etc/sysctl.conf
@@ -734,6 +985,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
         sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 4096 16384 2048' >> /etc/sysctl.conf
@@ -754,6 +1010,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 2'&
         sleep 5;
         python3 parallel_metric_collector.py 62 &
@@ -768,6 +1029,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 4'&
         sleep 5;
         python3 parallel_metric_collector.py 63 &
@@ -782,6 +1048,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 8'&
         sleep 5;
         python3 parallel_metric_collector.py 64 &
@@ -796,6 +1067,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         ssh root@$remote_client_ip 'python3 /users/Ehsan/read_test.py 16'&
         sleep 5;
         python3 parallel_metric_collector.py 65 &
