@@ -965,6 +965,11 @@ do
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
         cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
         sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
         echo 'net.ipv4.tcp_wmem= 4096 16384 4096' >> /etc/sysctl.conf
