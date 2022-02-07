@@ -1017,6 +1017,8 @@ do
     then
         echo "Clearing cache on remote oss";
         ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
         echo "Clearing cache on client";
         sync; echo 3 > /proc/sys/vm/drop_caches;
         echo "Start collecting metrics";
@@ -1036,6 +1038,8 @@ do
     then
         echo "Clearing cache on remote oss";
         ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
         echo "Clearing cache on client";
         sync; echo 3 > /proc/sys/vm/drop_caches;
         echo "Start collecting metrics";
@@ -1055,6 +1059,8 @@ do
     then
         echo "Clearing cache on remote oss";
         ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
         echo "Clearing cache on client";
         sync; echo 3 > /proc/sys/vm/drop_caches;
         echo "Start collecting metrics";
@@ -1074,6 +1080,8 @@ do
     then
         echo "Clearing cache on remote oss";
         ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
         echo "Clearing cache on client";
         sync; echo 3 > /proc/sys/vm/drop_caches;
         echo "Start collecting metrics";
