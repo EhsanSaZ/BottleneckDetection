@@ -1074,7 +1074,7 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
-        #generate a random variable if it is even do the if part 65: read stress to ost from another client 16 threads
+    #generate a random variable if it is even do the if part 65: read stress to ost from another client 16 threads
     # number=$RANDOM
     if [ $((number%2)) -eq 0 ]
     then
@@ -1095,4 +1095,173 @@ do
         wait_period=$(($wait_period+60));
         sleep 5;
     fi
+    #generate a random variable if it is even do the if part 66: write stress to ost from receiver-side 4 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 4'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 66 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 67: write stress to ost from receiver-side 8 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 8'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 67 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 68: write stress to ost from receiver-side 16 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 16'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 68 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 69: write stress to ost from receiver-side 32 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 32'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 69 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 70: write stress to ost from receiver-side 48 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 48'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 70 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 71: write stress to ost from receiver-side 64 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 64'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 71 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 72: write stress to ost from receiver-side 96 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 96'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 72 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+    #generate a random variable if it is even do the if part 73: write stress to ost from receiver-side 128 threads
+    # number=$RANDOM
+    if [ $((number%2)) -eq 0 ]
+    then
+        echo "Clearing cache on remote oss";
+        ssh root@$remote_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on remote client";
+        ssh root@$remote_client_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
+        echo "Clearing cache on client";
+        sync; echo 3 > /proc/sys/vm/drop_caches;
+        echo "Start collecting metrics";
+        ssh root@$remote_client_ip 'python3 /users/Ehsan/write_test.py 128'& #
+        sleep 5;
+        python3 parallel_metric_collector.py 73 & #
+        sleep $main_sleep_time;
+        ssh root@$remote_client_ip 'killall -9 -u root python3'
+        killall -9  -u $user_name python3;
+        killall -9  -u $user_name java;
+        wait_period=$(($wait_period+60));
+        sleep 5;
+    fi
+
 done
