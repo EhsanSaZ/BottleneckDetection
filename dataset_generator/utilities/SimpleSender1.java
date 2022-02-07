@@ -101,7 +101,7 @@ public class SimpleSender1 {
         long init2 = System.currentTimeMillis();
         dos.writeLong(INTEGRITY_VERIFICATION_BLOCK_SIZE);
 
-        byte[] buffer = new byte[128 * 1024];
+        byte[] buffer = new byte[1024 * 1024];
         int n;
        this.clearCache(path);
         while (true) {

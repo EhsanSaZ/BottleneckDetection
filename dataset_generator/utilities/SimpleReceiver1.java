@@ -89,7 +89,7 @@ public class SimpleReceiver1 extends Thread{
         // long init2 = System.currentTimeMillis();
 
         
-        byte[] buffer = new byte[128 * 1024];
+        byte[] buffer = new byte[1024 * 1024];
         while(true) {
             String fileName = dataInputStream.readUTF();
             long offset = dataInputStream.readLong();
