@@ -60,7 +60,7 @@ def run_server(i):
 
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
     # pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
-    pid = proc.pid
+    pid = str(proc.pid)
     print(pid)
     server_process = psutil.Process(int(pid))
     # global label_value
@@ -149,11 +149,11 @@ def collect_stat():
                     system_value_list = remote_statistics_collector.remote_collect_system_metrics(pid, server_process)
                     buffer_value_list = remote_statistics_collector.remote_get_buffer_value()
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
-                    # file_ost_path_info = collect_file_ost_path_info(pid, src_path)
-                    # if file_ost_path_info is None:
-                    #     continue
-                    # else:
-                    #     ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
+                    file_ost_path_info = remote_statistics_collector.remote_collect_file_ost_path_info(pid, server_saving_directory)
+                    if file_ost_path_info is None:
+                        continue
+                    else:
+                        ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
                     # file_mdt_path_info = collect_file_mdt_path_info(pid, src_path)
                     # if file_mdt_path_info is None:
