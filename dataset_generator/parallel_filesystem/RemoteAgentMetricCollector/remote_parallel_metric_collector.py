@@ -161,7 +161,7 @@ def collect_stat():
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    # ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
+                    ost_value_list, ost_stats_so_far = remote_statistics_collector.remote_process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
                     # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     #                                                         all_mdt_stat_so_far_dict)
