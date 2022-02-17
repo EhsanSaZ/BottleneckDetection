@@ -155,11 +155,11 @@ def collect_stat():
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    # file_mdt_path_info = collect_file_mdt_path_info(pid, src_path)
-                    # if file_mdt_path_info is None:
-                    #     continue
-                    # else:
-                    #     mdt_kernel_path, mdt_dir_name = file_mdt_path_info
+                    file_mdt_path_info = remote_statistics_collector.remote_collect_file_mdt_path_info(pid, server_saving_directory)
+                    if file_mdt_path_info is None:
+                        continue
+                    else:
+                        mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
                     # ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
