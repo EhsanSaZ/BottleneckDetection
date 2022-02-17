@@ -165,8 +165,8 @@ def collect_stat():
                     # print (ost_value_list, ost_stats_so_far)
                     # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     #                                                         all_mdt_stat_so_far_dict)
-                    # mdt_value_list, mdt_stat_so_far_general = get_mdt_stat(mdt_parent_path, mdt_dir_name,
-                    #                                                        mdt_stat_so_far_general)
+                    mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.remote_get_mdt_stat(mdt_parent_path, mdt_dir_name,
+                                                                           mdt_stat_so_far_general)
                     # print (mdt_value_list, mdt_stat_so_far_general)
                     # ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     # remote_ost_value_list = [0.0, 0.0]
