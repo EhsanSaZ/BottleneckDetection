@@ -13,7 +13,6 @@ from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import Remot
 from remote_statistics_log_collector import RemoteStatisticsLogCollector
 
 # from remote_ost_stat_collector import process_remote_ost_stats
-from remote_system_metric_collector import remote_collect_system_metrics
 # from buffer_value_collector import get_buffer_value
 # from file_ost_path_info import collect_file_ost_path_info
 # from file_mdt_path_info import collect_file_mdt_path_info
@@ -146,7 +145,7 @@ def collect_stat():
                 epoc_time += 1
 
                 if time_diff >= (.1 / sleep_time):
-                    system_value_list = remote_collect_system_metrics(pid, server_process)
+                    system_value_list = remote_statistics_collector.remote_collect_system_metrics(pid, server_process)
                     buffer_value_list = remote_statistics_collector.remote_get_buffer_value()
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
                     # file_ost_path_info = collect_file_ost_path_info(pid, src_path)
