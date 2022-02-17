@@ -10,6 +10,7 @@ import psutil
 import copy
 
 from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import RemoteNetworkStatisticsLogCollectorSS
+from remote_statistics_log_collector import RemoteStatisticsLogCollector
 
 # from remote_ost_stat_collector import process_remote_ost_stats
 from remote_system_metric_collector import remote_collect_system_metrics
@@ -28,7 +29,7 @@ time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to save received transferred data
-server_saving_directory = "/home/esaeedizade/dstData"
+server_saving_directory = "/home/esaeedizade/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -82,6 +83,7 @@ def collect_stat():
             is_parallel_file_system = True
 
     network_statistics_collector = RemoteNetworkStatisticsLogCollectorSS(server_ip, server_port_number, client_ip)
+    remote_statistics_collector = RemoteStatisticsLogCollector()
     # TODO REMOVE THIS LINE ITS JUST A TEST
     is_parallel_file_system = True
 
@@ -145,7 +147,7 @@ def collect_stat():
 
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = remote_collect_system_metrics(pid, server_process)
-                    # buffer_value_list = get_buffer_value()
+                    buffer_value_list = remote_statistics_collector.remote_get_buffer_value()
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
                     # file_ost_path_info = collect_file_ost_path_info(pid, src_path)
                     # if file_ost_path_info is None:
@@ -181,8 +183,8 @@ def collect_stat():
                     global label_value
                     for item in system_value_list:
                         output_string += "," + str(item)
-                    # for item in buffer_value_list:
-                    #     output_string += "," + str(item)
+                    for item in buffer_value_list:
+                        output_string += "," + str(item)
                     # ost_value_list are metrics with index 79-95 in csv
                     # for item in ost_value_list:
                     #     output_string += "," + str(item)
