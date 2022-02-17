@@ -59,7 +59,8 @@ def run_server(i):
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
 
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
-    pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
+    # pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
+    pid = proc.pid
     print(pid)
     server_process = psutil.Process(int(pid))
     # global label_value
