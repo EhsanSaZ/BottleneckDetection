@@ -2,8 +2,8 @@ from utilities.remote_buffer_value_stat_collector import RemoteBufferValueStatCo
 from utilities.remote_system_metric_collector import RemoteSystemMetricCollector
 from utilities.remote_file_osc_path_info import RemoteFileOscPathInfo
 from utilities.remote_file_mdc_path_info import RemoteFileMdcPathInfo
-from utilities.remote_ost_stat_collector import RemoteProcessOstStat
-from utilities.remote_mdt_stat_collector import RemoteGetMdtStat
+from utilities.remote_client_ost_stat_collector import RemoteClientProcessOstStat
+from utilities.remote_client_mdt_stat_collector import RemoteClientGetMdtStat
 
 class RemoteStatisticsLogCollector:
     def __init__(self):
@@ -11,8 +11,8 @@ class RemoteStatisticsLogCollector:
         self.remote_buffer_value_stat_collector_obj = RemoteBufferValueStatCollector()
         self.remote_file_osc_path_info_obj = RemoteFileOscPathInfo()
         self.remote_file_mdc_path_info_obj = RemoteFileMdcPathInfo()
-        self.remote_process_ost_stat_obj = RemoteProcessOstStat()
-        self.remote_get_mdt_stat_obj = RemoteGetMdtStat()
+        self.remote_process_ost_stat_obj = RemoteClientProcessOstStat()
+        self.remote_get_mdt_stat_obj = RemoteClientGetMdtStat()
 
     def remote_collect_system_metrics(self, pid_str, target_process):
         return self.remote_collect_system_metrics_obj.remote_collect_system_metrics(pid_str, target_process)

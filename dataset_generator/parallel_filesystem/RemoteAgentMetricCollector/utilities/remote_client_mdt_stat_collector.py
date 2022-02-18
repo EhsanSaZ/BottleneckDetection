@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 
-class RemoteGetMdtStat:
+class RemoteClientGetMdtStat:
     def process_mds_rpc(self, mdt_path, mdt_dir_name):
         # proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
         proc = Popen(['lctl', 'get_param', "mdc." + mdt_dir_name + ".import"], universal_newlines=True, stdout=PIPE)

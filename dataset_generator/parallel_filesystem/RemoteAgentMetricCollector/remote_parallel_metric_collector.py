@@ -22,7 +22,8 @@ from remote_statistics_log_collector import RemoteStatisticsLogCollector
 server_ip = "134.197.94.98"
 server_port_number = "50505"
 client_ip = "134.197.94.169"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/"}
+remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/",
+                                              1: "http://10.10.1.3:1234/"}
 
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
@@ -168,10 +169,10 @@ def collect_stat():
                     mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.remote_get_mdt_stat(mdt_parent_path, mdt_dir_name,
                                                                            mdt_stat_so_far_general)
                     # print (mdt_value_list, mdt_stat_so_far_general)
-                    # ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
-                    # remote_ost_value_list = [0.0, 0.0]
-                    # if ost_agent_address is not "":
-                    #     remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
+                    ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
+                    remote_ost_value_list = [0.0, 0.0]
+                    if ost_agent_address is not "":
+                        remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
                     #     remote_ost_value_list, remote_ost_stats_so_far = process_remote_ost_stats(ost_agent_address,
                     #                                                                               remote_ost_dir_name,
                     #                                                                               remote_ost_stats_so_far)
