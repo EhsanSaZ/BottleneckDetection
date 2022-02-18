@@ -173,10 +173,8 @@ def collect_stat():
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address is not "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                    #     remote_ost_value_list, remote_ost_stats_so_far = process_remote_ost_stats(ost_agent_address,
-                    #                                                                               remote_ost_dir_name,
-                    #                                                                               remote_ost_stats_so_far)
-                    #     all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
+                        remote_ost_value_list, remote_ost_stats_so_far = remote_statistics_collector.process_remote_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
                     # print (all_remote_ost_stats_so_far)
                     output_string = str(time.time()) + ","
                     output_string += network_statistics_collector.get_log_str()
