@@ -129,7 +129,9 @@ class CSV_to_Proto:
                          59: {'max_buffer_size_ratio': 0.5}, 60: {'max_buffer_size_ratio': 0.25},
                          61: {'max_buffer_size_ratio': 0.125},
                          62: {'read_threads': 2}, 63: {'read_threads': 4}, 64: {'read_threads': 8},
-                         65: {'read_threads': 16}}
+                         65: {'read_threads': 16}, 66: {'write_threads': 4}, 67: {'write_threads': 8},
+                         68: {'write_threads': 16}, 69: {'write_threads': 32}, 70: {'write_threads': 48},
+                         71: {'write_threads': 64}, 72: {'write_threads': 96}, 73: {'write_threads': 128},}
         self.protobuff_files = {}
         if self.file_system == "normal":
             self.keys = list(range(1, 95)) + [148, 149, 150, 151, 154]
@@ -496,7 +498,7 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/AWS_FXS/series3/"
+folder_dir = "./csv_logs/AWS_FXS/series10/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 serialize_file = folder_dir.split("/")[-2]

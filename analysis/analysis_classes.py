@@ -29,7 +29,7 @@ from sklearn import tree
 
 
 class TransferAnalysis:
-    def __init__(self, filename):
+    def __init__(self, filename, keys=None):
         self.df_16 = None
         self.bottleneck_logs = BottleneckFiles()
         self.log_type = "normal" if "FXS" not in filename else "luster"
@@ -87,7 +87,9 @@ class TransferAnalysis:
         #                             25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
         #                             29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
         #                             33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
-        if self.log_type == "normal":
+        if keys is not None:
+            self.keys = keys
+        elif self.log_type == "normal":
             self.keys = self.keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
                                     [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [148, 149, 150, 151, 154]
         elif self.log_type == "luster":
@@ -97,10 +99,23 @@ class TransferAnalysis:
             # self.keys = list(range(1, 15)) + list(range(30, 37)) + [54, 57, 58, 76] + \
             #             [87, 88, 89, 90, 91, 92, 93, 94] + list(range(95, 110)) + list(range(110, 148)) +\
             #             [148, 149, 150, 151, 152, 153, 154]
-            self.keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58, 76] + \
+
+            # self.keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58, 76] + \
+            #             [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
+            #             [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] +\
+            #             [148, 149, 150, 151, 152, 153, 154]
+
+            self.keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58] + \
                         [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
-                        [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] +\
+                        [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] + \
                         [148, 149, 150, 151, 152, 153, 154]
+
+            # self.keys = [1, 2, 3, 5, 6, 7, 9, 10, 11, 12, 14] + \
+            #             [30, 32, 35] + [57, 58] + \
+            #             [87, 88, 95, 96, 97, 100] + \
+            #             [112, 116, 120] + \
+            #             [150, 151, 152, 153, 154]
+
             # self.mdt_keys = list(range(1, 37))
         elif self.log_type == "cc":
             # list range 30, 88 are related to the process and are not available in general and shouldnt be used?
@@ -386,8 +401,9 @@ class Model_Run:
         return data
 
 
-class Grouped_Labels:
-    def __init__(self):
+class GroupedLabels:
+    def __init__(self, total_possible_labels):
+        self.total_possible_labels = total_possible_labels
         self.label_to_error = {0: "normal", 1: "read", 2: "read", 3: "read", 4: "read",
                                5: "read", 6: "read", 7: "read", 8: "read", 9: "read",
                                10: "read", 11: "read", 12: "read", 13: "read", 14: "read",
@@ -412,7 +428,10 @@ class Grouped_Labels:
                               40: 8, 41: 8, 42: 8, 43: 8, 44: 9,
                               45: 9, 46: 9, 47: 9, 48: 10, 49: 10,
                               50: 10, 51: 10, 52: 11, 53: 11, 54: 11, 55: 11,
-                              56: 4, 57:4, 58: 4}
+                              56: 4, 57: 4, 58: 4}
+        self.all_simple_labels = {}
+        for i in range(self.total_possible_labels + 1):
+            self.all_simple_labels[i] = i
 
     def grouped_label(self, df):
         error_to_label = {"normal": 0, "read": 1, "write": 2, "cpu": 3, "io": 4, "mem": 5, "network": 6}
@@ -434,6 +453,52 @@ class Grouped_Labels:
 
     def grouped_label_cate(self, df):
         y = [self.label_to_cate[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
+        df["label_value"] = y
+        return df
+
+    def grouped_write_cate(self, df):
+        # group two sets of write congestions together
+        aggregated_labels = self.all_simple_labels
+        aggregated_labels.update({66: 17, 67: 18, 68: 20, 69: 24, 70: 28, 71: 29, 72: 31, 73: 32})
+        y = [aggregated_labels[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
+        df["label_value"] = y
+        return df
+
+    def grouped_levels_cate(self, df):
+        aggregated_labels = self.all_simple_labels
+        # 0 is normal and is one group itself
+        # group read levels together
+        for i in range(1, 17):
+            aggregated_labels.update({i: 1})
+        # group write levels together
+        for i in range(17, 33):
+            aggregated_labels.update({i: 17})
+        # group cpu levels together
+        aggregated_labels.update({33: 33, 56: 33, 57: 33, 58: 33})
+        # group "network" loss levels together
+        for i in range(36, 40):
+            aggregated_labels.update({i: 36})
+        # group "network" delay levels together
+        for i in range(40, 44):
+            aggregated_labels.update({i: 40})
+        # group "network" duplicate levels together
+        for i in range(44, 48):
+            aggregated_labels.update({i: 44})
+        # group "network" corrupt levels together
+        for i in range(48, 52):
+            aggregated_labels.update({i: 48})
+        # group "network" reorder levels together
+        for i in range(52, 56):
+            aggregated_labels.update({i: 48})
+        # group send_buffer_max_value levels together
+        aggregated_labels.update({59: 59, 60: 59, 61: 59})
+        # group remote read levels together
+        for i in range(62, 66):
+            aggregated_labels.update({i: 62})
+        # group two sets of write congestions together
+        aggregated_labels.update({66: 17, 67: 17, 68: 17, 69: 17, 70: 17, 71: 17, 72: 17, 73: 17})
+
+        y = [aggregated_labels[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
         df["label_value"] = y
         return df
 
