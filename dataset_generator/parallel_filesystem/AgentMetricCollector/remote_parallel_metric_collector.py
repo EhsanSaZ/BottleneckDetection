@@ -10,7 +10,7 @@ import psutil
 import copy
 
 from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import RemoteNetworkStatisticsLogCollectorSS
-from remote_statistics_log_collector import RemoteStatisticsLogCollector
+from statistics_log_collector import StatisticsLogCollector
 
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from buffer_value_collector import get_buffer_value
@@ -56,7 +56,7 @@ class RunServerThread(threading.Thread):
 def run_server(i):
     global pid, label_value, server_process
 
-    comm_ss = ['java', './utilities/SimpleReceiver1.java', server_saving_directory]
+    comm_ss = ['java', './collectors/SimpleReceiver1.java', server_saving_directory]
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
 
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
@@ -84,9 +84,9 @@ def collect_stat():
             is_parallel_file_system = True
 
     network_statistics_collector = RemoteNetworkStatisticsLogCollectorSS(server_ip, server_port_number, client_ip)
-    remote_statistics_collector = RemoteStatisticsLogCollector()
-    # TODO REMOVE THIS LINE ITS JUST A TEST
-    is_parallel_file_system = True
+    remote_statistics_collector = StatisticsLogCollector()
+    # T ODO REMOVE THIS LINE ITS JUST A TEST
+    # is_parallel_file_system = True
 
     if is_parallel_file_system:
         mdt_paths = []
@@ -147,33 +147,33 @@ def collect_stat():
                 epoc_time += 1
 
                 if time_diff >= (.1 / sleep_time):
-                    system_value_list = remote_statistics_collector.remote_collect_system_metrics(pid, server_process)
-                    buffer_value_list = remote_statistics_collector.remote_get_buffer_value()
+                    system_value_list = remote_statistics_collector.collect_system_metrics(pid, server_process)
+                    buffer_value_list = remote_statistics_collector.get_buffer_value()
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
-                    file_ost_path_info = remote_statistics_collector.remote_collect_file_ost_path_info(pid, server_saving_directory)
+                    file_ost_path_info = remote_statistics_collector.collect_file_ost_path_info(pid, server_saving_directory)
                     if file_ost_path_info is None:
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    file_mdt_path_info = remote_statistics_collector.remote_collect_file_mdt_path_info(pid, server_saving_directory)
+                    file_mdt_path_info = remote_statistics_collector.collect_file_mdt_path_info(pid, server_saving_directory)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list, ost_stats_so_far = remote_statistics_collector.remote_process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
+                    ost_value_list, ost_stats_so_far = remote_statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
                     # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     #                                                         all_mdt_stat_so_far_dict)
-                    mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.remote_get_mdt_stat(mdt_parent_path, mdt_dir_name,
-                                                                           mdt_stat_so_far_general)
+                    mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.get_mdt_stat(mdt_parent_path, mdt_dir_name,
+                                                                                                       mdt_stat_so_far_general)
                     # print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address is not "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                        remote_ost_value_list, remote_ost_stats_so_far = remote_statistics_collector.process_remote_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        remote_ost_value_list, remote_ost_stats_so_far = remote_statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
                     # print (all_remote_ost_stats_so_far)
                     output_string = str(time.time()) + ","
@@ -185,11 +185,11 @@ def collect_stat():
                     for item in buffer_value_list:
                         output_string += "," + str(item)
                     # ost_value_list are metrics with index 79-95 in csv
-                    # for item in ost_value_list:
-                    #     output_string += "," + str(item)
+                    for item in ost_value_list:
+                        output_string += "," + str(item)
                     # values with index 112-147
-                    # for item in mdt_value_list:
-                    #     output_string += "," + str(item)
+                    for item in mdt_value_list:
+                        output_string += "," + str(item)
 
                     output_string += "," + str(network_statistics_collector.dsack_dups)
                     output_string += "," + str(network_statistics_collector.reord_seen)
@@ -197,8 +197,8 @@ def collect_stat():
                     output_string += "," + str(psutil.cpu_percent())
                     output_string += "," + str(psutil.virtual_memory().percent)
 
-                    # for item in remote_ost_value_list:
-                    #     output_string += "," + str(item)
+                    for item in remote_ost_value_list:
+                        output_string += "," + str(item)
 
                     # mdt_value_list : total_mdt_numbers at 100
                     # repeat "total_mdt_numbers" of times in list

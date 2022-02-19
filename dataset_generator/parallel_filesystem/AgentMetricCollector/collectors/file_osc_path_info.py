@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 
-class RemoteFileOscPathInfo:
+class FileOscPathInfo:
     def collect_file_ost_path_info(self, pid, src_path):
         proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
         # total 0

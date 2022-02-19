@@ -1,8 +1,8 @@
 from subprocess import Popen, PIPE
 
 
-class RemoteBufferValueStatCollector:
-    def remote_get_buffer_value(self):
+class BufferValueStatCollector:
+    def get_buffer_value(self):
         value_list = []
 
         proc = Popen(['cat', '/proc/sys/net/ipv4/tcp_rmem'], universal_newlines=True, stdout=PIPE)

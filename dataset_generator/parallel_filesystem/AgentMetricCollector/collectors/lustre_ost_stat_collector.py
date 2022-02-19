@@ -1,8 +1,8 @@
 import requests
 
 
-class RemoteLustreOstStatCollector:
-    def process_remote_lustre_ost_stats(self, ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far=None):
+class LustreOstStatCollector:
+    def process_lustre_ost_stats(self, ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far=None):
         path = "obdfilter." + remote_ost_dir_name + ".stats"
         r = requests.post(ost_agent_address + "lctl_get_param", json={"path": path})
         # print(r.json()["out_put"])

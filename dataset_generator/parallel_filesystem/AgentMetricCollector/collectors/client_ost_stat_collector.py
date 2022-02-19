@@ -1,8 +1,8 @@
 from subprocess import Popen, PIPE
 
 
-class RemoteClientProcessOstStat:
-    def remote_process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far=None):
+class ClientProcessOstStat:
+    def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far=None):
         value_list = []
         if ost_stat_so_far is None:
             ost_stat_so_far = {}

@@ -10,25 +10,27 @@ import psutil
 import copy
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
-from remote_ost_stat_collector import process_remote_ost_stats
-from system_metric_collector import collect_system_metrics
-from buffer_value_collector import get_buffer_value
-from file_ost_path_info import collect_file_ost_path_info
-from file_mdt_path_info import collect_file_mdt_path_info
-from ost_stat_collector import process_ost_stat
-from mdt_stat_collector import get_mdt_stat
+from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
+
+# from remote_ost_stat_collector import process_remote_ost_stats
+# from system_metric_collector import collect_system_metrics
+# from buffer_value_collector import get_buffer_value
+# from file_ost_path_info import collect_file_ost_path_info
+# from file_mdt_path_info import collect_file_mdt_path_info
+# from ost_stat_collector import process_ost_stat
+# from mdt_stat_collector import get_mdt_stat
 
 src_ip = "127.0.0.1"
-dst_ip = "192.170.227.252"
+dst_ip = "134.197.94.98"
 port_number = "50505"
 remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/"}
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to read file for transferring
-src_path = "/home1/08440/tg877399/datadir/srcData/"
+src_path = "/home/esaeedizade/Desktop/srcData/"
 # path to save received transferred data
-dst_path = "/home1/08440/tg877399/datadir/dstData/"
+dst_path = "/home/esaeedizade/Desktop/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -65,7 +67,8 @@ def transfer_file(i):
     #            dst_ip, port_number, src_path, str(label_value)]
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
-    pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
+    # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
+    pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleSender1.java'])
     print(pid)
     sender_process = psutil.Process(int(pid))
     # global label_value
@@ -87,9 +90,12 @@ def collect_stat():
     res = proc.communicate()[0]
     parts = res.split("\n")
     network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
+    statistics_collector = StatisticsLogCollector()
     for x in parts:
         if "lustre" in x:
             isparallel_file_system = True
+    # T ODO REMOVE THIS LINE ITS JUST A TEST
+    # isparallel_file_system = True
 
     if isparallel_file_system:
         mdt_paths = []
@@ -151,36 +157,39 @@ def collect_stat():
                 epoc_time += 1
 
                 if time_diff >= (.1 / sleep_time):
-                    system_value_list = collect_system_metrics(pid, sender_process)
-                    buffer_value_list = get_buffer_value()
-                    #ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
-                    file_ost_path_info = collect_file_ost_path_info(pid, src_path)
+                    # system_value_list = collect_system_metrics(pid, sender_process)
+                    system_value_list = statistics_collector.collect_system_metrics(pid, sender_process)
+                    buffer_value_list = statistics_collector.get_buffer_value()
+                    # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
+                    file_ost_path_info = statistics_collector.collect_file_ost_path_info(pid, src_path)
                     if file_ost_path_info is None:
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
-                    #print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    file_mdt_path_info = collect_file_mdt_path_info(pid, src_path)
+                    # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
+                    file_mdt_path_info = statistics_collector.collect_file_mdt_path_info(pid, src_path)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
-                    #print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list, ost_stats_so_far = process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
+                    # print(mdt_kernel_path, mdt_dir_name)
+                    ost_value_list, ost_stats_so_far = statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
-                    # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
-                    #                                                         all_mdt_stat_so_far_dict)
-                    mdt_value_list, mdt_stat_so_far_general = get_mdt_stat(mdt_parent_path, mdt_dir_name,
+                    # # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
+                    # #                                                         all_mdt_stat_so_far_dict)
+                    mdt_value_list, mdt_stat_so_far_general = statistics_collector.get_mdt_stat(mdt_parent_path, mdt_dir_name,
                                                                            mdt_stat_so_far_general)
                     #print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address is not "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                        remote_ost_value_list, remote_ost_stats_so_far = process_remote_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        remote_ost_value_list, remote_ost_stats_so_far = statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
                     #print (all_remote_ost_stats_so_far)
-                    output_string = network_statistics_collector.get_log_str()
+
+                    output_string = str(time.time()) + ","
+                    output_string += network_statistics_collector.get_log_str()
 
                     global label_value
                     for item in system_value_list:

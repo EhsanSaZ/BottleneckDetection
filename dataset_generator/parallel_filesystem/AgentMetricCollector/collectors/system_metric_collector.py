@@ -2,9 +2,9 @@ import traceback
 from subprocess import Popen, PIPE
 
 
-class RemoteSystemMetricCollector:
+class SystemMetricCollector:
 
-    def remote_collect_system_metrics(self, pid_str, target_process):
+    def collect_system_metrics(self, pid_str, target_process):
         pid = int(pid_str.strip())
 
         value_list = []
