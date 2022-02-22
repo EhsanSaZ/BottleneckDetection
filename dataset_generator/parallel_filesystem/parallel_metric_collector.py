@@ -182,7 +182,7 @@ def collect_stat():
                     #print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
-                    if ost_agent_address is not "":
+                    if ost_agent_address != "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
                         remote_ost_value_list, remote_ost_stats_so_far = statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
