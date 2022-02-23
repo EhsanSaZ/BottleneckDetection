@@ -39,10 +39,10 @@ class StatisticsLogCollector:
         return self.file_mdc_path_info_obj.collect_file_mdt_path_info(pid, src_path)
 
     def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far=None):
-        return self.process_ost_stat_obj.process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far=None)
+        return self.process_ost_stat_obj.process_ost_stat(ost_path, ost_dir_name, ost_stat_so_far)
     
     def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict=None):
         return self.get_mdt_stat_obj.get_mdt_stat(mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict)
 
     def process_lustre_ost_stats(self, st_agent_address, remote_ost_dir_name, remote_ost_stats_so_far=None):
-        self.lustre_ost_stat_collector_obj.process_lustre_ost_stats(st_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+        return self.lustre_ost_stat_collector_obj.process_lustre_ost_stats(st_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
