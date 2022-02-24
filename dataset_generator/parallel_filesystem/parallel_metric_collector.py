@@ -1,6 +1,7 @@
 import threading
 import time
 from pathlib import Path
+import socket
 from subprocess import PIPE, Popen
 import subprocess
 import sys, traceback
@@ -21,16 +22,16 @@ from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 # from mdt_stat_collector import get_mdt_stat
 
 src_ip = "127.0.0.1"
-dst_ip = "134.197.94.98"
+dst_ip = "128.105.146.4"
 port_number = "50505"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/"}
+remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/", 1: "http://10.10.1.3:1234/"}
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to read file for transferring
-src_path = "/home/esaeedizade/Desktop/srcData/"
+src_path = "/lustre/dataDir/srcData/"
 # path to save received transferred data
-dst_path = "/home/esaeedizade/Desktop/dstData/"
+dst_path = "/lustre/dataDir/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
