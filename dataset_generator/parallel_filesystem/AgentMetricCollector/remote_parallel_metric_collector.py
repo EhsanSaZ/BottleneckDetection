@@ -19,9 +19,9 @@ from statistics_log_collector import StatisticsLogCollector
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
 
-server_ip = "134.197.94.98"
+server_ip = "128.105.146.4"
 server_port_number = "50505"
-client_ip = "134.197.94.169"
+client_ip = "128.105.145.213"
 remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/",
                                               1: "http://10.10.1.3:1234/"}
 
@@ -29,7 +29,7 @@ time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to save received transferred data
-server_saving_directory = "/home/esaeedizade/dstData/"
+server_saving_directory = "/lustre/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -40,6 +40,9 @@ is_transfer_done = False
 
 global mdt_parent_path
 mdt_parent_path = '/proc/fs/lustre/mdc/'
+
+# must be from root dir /
+java_receiver_app_path = '/users/Ehsan/AgentMetricCollector/collectors/SimpleReceiver1.java'
 
 
 class RunServerThread(threading.Thread):
@@ -56,7 +59,7 @@ class RunServerThread(threading.Thread):
 def run_server(i):
     global pid, label_value, server_process
 
-    comm_ss = ['java', './collectors/SimpleReceiver1.java', server_saving_directory]
+    comm_ss = ['java', java_receiver_app_path, server_saving_directory]
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
 
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
@@ -234,7 +237,7 @@ class fileWriteThread(threading.Thread):
         self.label_value = label_value
 
     def run(self):
-        output_file = open("./logs/dataset_" + str(self.label_value) + ".csv", "a+")
+        output_file = open("./receiver/logs/dataset_" + str(self.label_value) + ".csv", "a+")
         output_file.write(str(self.metric_string))
         output_file.flush()
         output_file.close()
@@ -248,8 +251,8 @@ class statThread(threading.Thread):
         collect_stat()
 
 
-Path("./logs").mkdir(parents=True, exist_ok=True)
-Path("./SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
+Path("./receiver/logs").mkdir(parents=True, exist_ok=True)
+Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
 stat_thread.start()
