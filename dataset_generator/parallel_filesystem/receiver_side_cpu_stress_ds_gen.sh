@@ -47,7 +47,7 @@ do
       sleep 5;
       python3 parallel_metric_collector.py 82 &
       sleep $main_sleep_time;
-      sh root@$receiver_remote_client_ip 'killall -9 stress-ng';
+      ssh root@$receiver_remote_client_ip 'killall -9 stress-ng';
       kill_all_java_python3_processes
       sleep 5;
     fi
@@ -64,7 +64,7 @@ do
       sleep 5;
       python3 parallel_metric_collector.py 83 &
       sleep $main_sleep_time;
-      sh root@$receiver_remote_client_ip 'killall -9 stress-ng';
+      ssh root@$receiver_remote_client_ip 'killall -9 stress-ng';
       kill_all_java_python3_processes
       sleep 5;
     fi
@@ -81,7 +81,7 @@ do
       sleep 5;
       python3 parallel_metric_collector.py 84 &
       sleep $main_sleep_time;
-      sh root@$receiver_remote_client_ip 'killall -9 stress-ng';
+      ssh root@$receiver_remote_client_ip 'killall -9 stress-ng';
       kill_all_java_python3_processes
       sleep 5;
     fi
@@ -98,7 +98,7 @@ do
       sleep 5;
       python3 parallel_metric_collector.py 85 &
       sleep $main_sleep_time;
-      sh root@$receiver_remote_client_ip 'killall -9 stress-ng';
+      ssh root@$receiver_remote_client_ip 'killall -9 stress-ng';
       kill_all_java_python3_processes
       sleep 5;
     fi
