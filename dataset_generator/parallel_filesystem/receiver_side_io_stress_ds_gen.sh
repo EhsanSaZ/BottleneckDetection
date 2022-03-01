@@ -59,7 +59,7 @@ do
       echo "Start collecting metrics on sender side";
       ssh root@$receiver_remote_client_ip 'stress -i 10'&
       sleep 5;
-      python3 parallel_metric_collector.py 96 &
+      python3 parallel_metric_collector.py 86 &
       sleep $main_sleep_time;
       ssh root@$receiver_remote_client_ip 'killall -9 stress';
       kill_all_java_python3_processes
