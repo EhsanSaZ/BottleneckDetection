@@ -73,7 +73,7 @@ do
     fi
     #generate a random variable if it is even do the if part 60: tcp send_buffer_max_value 21845 // 0.25 of default
     # number=$RANDOM
-        if [ $((number%2)) -eq 0 ]
+    if [ $((number%2)) -eq 0 ]
     then
       clear_all_caches
       echo "Run the java server on receiver side and start metric collector agent";
@@ -96,7 +96,7 @@ do
     fi
     #generate a random variable if it is even do the if part 61: tcp send_buffer_max_value 10922 // 0.125 of default
     # number=$RANDOM
-        if [ $((number%2)) -eq 0 ]
+    if [ $((number%2)) -eq 0 ]
     then
       clear_all_caches
       echo "Run the java server on receiver side and start metric collector agent";
