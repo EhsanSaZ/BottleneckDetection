@@ -111,8 +111,11 @@ class TransferAnalysis:
                                  [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [148, 149, 150, 151]
         elif self.log_type == "luster":
             # self.keys = list(range(1, 15)) + list(range(30, 112)) + [182, 183, 184, 185, 186, 187, 188]
-            self.sender_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
-            self.receiver_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
+
+            # self.sender_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
+            # self.receiver_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
+
+
             # self.keys = list(range(1, 15)) + list(range(30, 110)) + list(range(112, 148)) + [148, 149, 150, 151, 152, 153, 154]
             # self.keys = list(range(1, 15)) + list(range(30, 37)) + [54, 57, 58, 76] + \
             #             [87, 88, 89, 90, 91, 92, 93, 94] + list(range(95, 110)) + list(range(110, 148)) +\
@@ -123,16 +126,16 @@ class TransferAnalysis:
             #             [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] +\
             #             [148, 149, 150, 151, 152, 153, 154]
 
-            # self.sender_keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58] + \
-            #                    [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
-            #                    [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] + \
-            #                    [148, 149, 150, 151, 152, 153]
-            # self.receiver_keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58] + \
-            #                      [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
-            #                      [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] + \
-            #                      [148, 149, 150, 151, 152, 153]
-            self.sender_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
-            self.receiver_keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
+            self.sender_keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58] + \
+                               [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
+                               [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] + \
+                               [148, 149, 150, 151, 152, 153]
+            self.receiver_keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) + [54, 57, 58] + \
+                                 [87, 88, 92, 94, 95, 96, 97, 98, 99, 100, 101, 104, 108] + \
+                                 [110, 111, 112, 113, 116, 117, 119, 120, 121, 129, 130, 133, 134, 137, 140, 142, 143] + \
+                                 [148, 149, 150, 151, 152, 153]
+
+
             # self.keys = [1, 2, 3, 5, 6, 7, 9, 10, 11, 12, 14] + \
             #             [30, 32, 35] + [57, 58] + \
             #             [87, 88, 95, 96, 97, 100] + \
@@ -543,8 +546,15 @@ class GroupedLabels:
         for i in range(62, 66):
             aggregated_labels.update({i: 62})
         # group two sets of write congestions together
-        aggregated_labels.update({66: 17, 67: 17, 68: 17, 69: 17, 70: 17, 71: 17, 72: 17, 73: 17})
-
+        # aggregated_labels.update({66: 17, 67: 17, 68: 17, 69: 17, 70: 17, 71: 17, 72: 17, 73: 17})
+        for i in range(66, 74):
+            aggregated_labels.update({i: 66})
+        for i in range(74, 82):
+            aggregated_labels.update({i: 74})
+        for i in range(82, 86):
+            aggregated_labels.update({i: 82})
+        for i in range(88, 91):
+            aggregated_labels.update({i: 88})
         y = [aggregated_labels[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
         df["label_value"] = y
         return df
