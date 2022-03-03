@@ -42,7 +42,7 @@ class MergeCSVFiles:
             sender_time_stamp = self.convert_time_stamp_to_seconds(log[0])
             r_log = receiver_logs[receiver_log_index]
             receiver_time_stamp = self.convert_time_stamp_to_seconds(r_log[0])
-            while sender_time_stamp > receiver_time_stamp and receiver_log_index < receiver_total_logs:
+            while sender_time_stamp > receiver_time_stamp and receiver_log_index < receiver_total_logs - 1:
                 receiver_log_index += 1
                 r_log = receiver_logs[receiver_log_index]
                 receiver_time_stamp = self.convert_time_stamp_to_seconds(r_log[0])
