@@ -49,7 +49,8 @@ class MergeCSVFiles:
             if sender_time_stamp == receiver_time_stamp:
                 # print("merging\n{}\n{}".format(log, r_log))
                 sender_part = log[:-1]
-                label_value = log[-2:-1]
+                label_value = log[-1:]
+                # print(log)
                 # omit time stamp and label value from first and last indices of r_log
                 receiver_part = r_log[1:-1]
                 merged_data.append(sender_part + receiver_part + label_value)
