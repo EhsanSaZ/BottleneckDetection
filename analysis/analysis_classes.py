@@ -29,7 +29,7 @@ from sklearn import tree
 
 
 class TransferAnalysis:
-    def __init__(self, filename, keys=None):
+    def __init__(self, filename, sender_keys=None, receiver_keys=None):
         self.df_16 = None
         self.bottleneck_logs = BottleneckFiles()
         self.log_type = "normal" if "FXS" not in filename else "luster"
@@ -101,9 +101,9 @@ class TransferAnalysis:
         #                             25: 'getattr', 26: 'intent_lock', 27: 'link', 28: 'rename',
         #                             29: 'setattr', 30: 'fsync', 31: 'read_page', 32: 'unlink',
         #                             33: 'setxattr', 34: 'getxattr', 35: 'intent_getattr_async', 36: 'revalidate_lock'}
-        if keys is not None:
-            self.sender_keys = keys
-            self.receiver_keys = keys
+        if sender_keys is not None and receiver_keys is not None:
+            self.sender_keys = sender_keys
+            self.receiver_keys = receiver_keys
         elif self.log_type == "normal":
             self.sender_keys = list(range(1, 15)) + list(range(15, 28)) + list(range(30, 37)) + \
                                [54, 57, 58, 76] + [87, 88, 89, 90, 91, 92, 93, 94] + [148, 149, 150, 151]
