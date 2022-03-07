@@ -15,7 +15,7 @@ public class SimpleReceiver1 extends Thread{
 
     private ServerSocket ss;
     static AtomicBoolean allTransfersCompleted = new AtomicBoolean(false);
-    static String baseDir = "/home/esaeedizade/dstData/";
+    static String baseDir = "/lustre/receiverDataDir/dstData/";
 
     static long totalTransferredBytes = 0L;
     static long totalChecksumBytes = 0L;
@@ -50,9 +50,10 @@ public class SimpleReceiver1 extends Thread{
     }
 
 
-    public SimpleReceiver1(int port) {
+    public SimpleReceiver1(int port, String baseDir) {
         try {
             ss = new ServerSocket(port);
+            baseDir = baseDir;
             System.out.println("Server Socket start listening on " + ss.getInetAddress() + " port: " + ss.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,7 +140,7 @@ public class SimpleReceiver1 extends Thread{
             baseDir = args[0];
         }
         int port = 50505;
-        SimpleReceiver1 fs = new SimpleReceiver1(port);
+        SimpleReceiver1 fs = new SimpleReceiver1(port, baseDir);
         fs.start();
     }
 

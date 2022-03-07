@@ -29,7 +29,7 @@ time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to save received transferred data
-server_saving_directory = "/lustre/dstData/"
+server_saving_directory = "/lustre/receiverDataDir/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
