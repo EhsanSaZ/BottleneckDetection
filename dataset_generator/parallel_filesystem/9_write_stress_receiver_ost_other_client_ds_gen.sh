@@ -30,7 +30,7 @@ while true
 do
     printf "\n"
     echo "round number ${round_counter}"
-    if [ $round_counter -gt 1 ];then
+    if [ $round_counter -gt 6 ];then
        break
     fi
     #############################################################
