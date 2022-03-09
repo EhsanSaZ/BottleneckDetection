@@ -42,7 +42,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 74'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 4'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 4'&
       python3 parallel_metric_collector.py 74 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -57,7 +57,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 75'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 8'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 8'&
       python3 parallel_metric_collector.py 75 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -72,7 +72,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 76'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 16'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 16'&
       python3 parallel_metric_collector.py 76 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -87,7 +87,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 77'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 24'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 24'&
       python3 parallel_metric_collector.py 77 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -102,7 +102,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 78'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 32'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 32'&
       python3 parallel_metric_collector.py 78 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -117,7 +117,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 79'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 64'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 64'&
       python3 parallel_metric_collector.py 79 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -132,7 +132,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 80'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 96'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 96'&
       python3 parallel_metric_collector.py 80 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
@@ -147,7 +147,7 @@ do
       ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py 81'&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/recieverDataDir/diskWriteStress/ 128'&
+      ssh root@$receiver_remote_client_ip 'python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/receiverDataDir/diskWriteStress/ 128'&
       python3 parallel_metric_collector.py 81 &
       sleep $main_sleep_time;
       kill_all_java_python3_processes
