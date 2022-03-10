@@ -19,16 +19,16 @@ from statistics_log_collector import StatisticsLogCollector
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
 
-server_ip = "128.105.146.4"
+server_ip = "134.197.95.46"
 server_port_number = "50505"
-client_ip = "128.105.145.213"
+client_ip = "134.197.94.169"
 
 
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to save received transferred data
-server_saving_directory = "/home/esaeedizade/receiverDataDir/dstData/"
+server_saving_directory = "/home/a/receiverDataDir/dstData/"
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -38,7 +38,7 @@ server_process = None
 is_transfer_done = False
 
 # must be from root dir /
-java_receiver_app_path = '/home/esaeedizade/AgentMetricCollector/collectors/SimpleReceiver1.java'
+java_receiver_app_path = '/home/a/AgentMetricCollector/collectors/SimpleReceiver1.java'
 
 
 class RunServerThread(threading.Thread):

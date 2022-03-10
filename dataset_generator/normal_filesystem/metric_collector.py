@@ -15,7 +15,7 @@ from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 # from buffer_value_collector import get_buffer_value
 
 src_ip = "127.0.0.1"
-dst_ip = "134.197.94.98"
+dst_ip = "134.197.95.46"
 port_number = "50505"
 time_length = 3600  # one hour data
 drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
