@@ -75,7 +75,20 @@ public class SimpleReceiver1 extends Thread{
         }
 
     }
-
+    public void clearCache(String path){
+        // clear the cache for this file
+            try {
+                Process process = Runtime.getRuntime().exec("vmtouch -ve " + path);
+                int exitVal = process.waitFor();
+                if (exitVal != 0) {
+                    System.out.println("Can't clear the cache");
+                }
+            } catch (IOException e) {
+		        e.printStackTrace();
+            } catch (InterruptedException e) {
+		            e.printStackTrace();
+	        }
+    }
     private void saveFile(Socket clientSock) throws IOException, InterruptedException {
 
 
@@ -119,12 +132,13 @@ public class SimpleReceiver1 extends Thread{
                 return;
             }
 //             System.out.println("FileCount: " + FileCount);
+			yy ++;
         	if (yy  % FileCount == 0){
 				// System.out.println("Checksum END File "  +  " time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
 				System.out.println("FileCount: " + FileCount + " round " + yy/FileCount);
 				// System.exit(0);
+				this.clearCache(baseDir);
 			}
-			yy ++;
 
 	   }
 
