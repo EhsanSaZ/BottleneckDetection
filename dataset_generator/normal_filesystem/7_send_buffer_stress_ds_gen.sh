@@ -52,7 +52,7 @@ do
       echo "Start collecting metrics on sender side";
       cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
       sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
-      echo 'net.ipv4.tcp_wmem= 4096 16384 8192' >> /etc/sysctl.conf
+      echo 'net.ipv4.tcp_wmem= 10240	87380	43690' >> /etc/sysctl.conf
       sysctl -p
       sleep 5;
       python3 metric_collector.py 59 &
@@ -75,7 +75,7 @@ do
       echo "Start collecting metrics on sender side";
       cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
       sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
-      echo 'net.ipv4.tcp_wmem= 4096 16384 4096' >> /etc/sysctl.conf
+      echo 'net.ipv4.tcp_wmem= 4096 16384 21845' >> /etc/sysctl.conf
       sysctl -p
       sleep 5;
       python3 metric_collector.py 60 &
@@ -98,7 +98,7 @@ do
       echo "Start collecting metrics on sender side";
       cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
       sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
-      echo 'net.ipv4.tcp_wmem= 2048 16384 2048' >> /etc/sysctl.conf
+      echo 'net.ipv4.tcp_wmem= 2048 16384 10922' >> /etc/sysctl.conf
       sysctl -p
       sleep 5;
       python3 metric_collector.py 61 &
