@@ -58,7 +58,8 @@ def transfer_file(i):
     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
-    pid = check_output(['pidof', '-s', 'java', 'SimpleSender1.java'])
+    # pid = check_output(['pidof', '-s', 'java', 'SimpleSender1.java'])
+    pid = str(proc.pid)
     print(pid)
     sender_process = psutil.Process(int(pid))
     # global label_value
@@ -106,7 +107,7 @@ def collect_stat():
                 break
             # If the pid is 0, then the transfer thread is not started yet or the global pid is not updated yet
             # So it is not possible to collect for system metrics, then just skip this iteration
-            if sender_process is None:  # or pid == 0
+            if sender_process is None or pid ==0:  # or pid == 0
                 continue
             try:
                 if (is_first_time):
@@ -142,7 +143,7 @@ def collect_stat():
                         is_first_time = False
 
                     epoc_count += 1
-                    if epoc_count % 10 == 0:
+                    if epoc_count % 5 == 0:
                         print("transferring file.... ", epoc_count, "label: ", label_value)
                         if epoc_count % 100 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
