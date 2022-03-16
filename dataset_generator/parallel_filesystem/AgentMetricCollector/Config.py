@@ -9,3 +9,5 @@ class Config:
     parallel_metric_collector_dst_path = "/home/esaeedizade/dataDir/dstData/"
     parallel_metric_remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/", 1: "http://10.10.1.3:1234/"}
     parallel_metric_mdt_parent_path = '/proc/fs/lustre/mdc/'
+
+    send_to_cloud_mode = False

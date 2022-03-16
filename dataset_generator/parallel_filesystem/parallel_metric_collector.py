@@ -14,6 +14,7 @@ import os
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 from AgentMetricCollector.Config import Config
+from AgentMetricCollector.data_converter import DataConverter
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from system_metric_collector import collect_system_metrics
 # from buffer_value_collector import get_buffer_value
@@ -97,6 +98,7 @@ def collect_stat():
     parts = res.split("\n")
     network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
     statistics_collector = StatisticsLogCollector()
+    data_converter = DataConverter(file_system="lustre", prefix="sender_")
     for x in parts:
         if "lustre" in x:
             isparallel_file_system = True
@@ -225,21 +227,25 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
-                    if not is_first_time:
-                        main_output_string += output_string
+                    if Config.send_to_cloud_mode:
+                        data = data_converter.data_str_to_json(output_string)
+                        print(data)
                     else:
-                        print("skip first transfer")
-                        is_first_time = False
+                        if not is_first_time:
+                            main_output_string += output_string
+                        else:
+                            print("skip first transfer")
+                            is_first_time = False
 
-                    epoc_count += 1
-                    if epoc_count % 10 == 0:
-                        print("transferring file.... ", epoc_count, "label: ", label_value)
-                        if epoc_count % 100 == 0:
+                        epoc_count += 1
+                        if epoc_count % 10 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
-                            epoc_count = 0
-                        write_thread = fileWriteThread(main_output_string, label_value)
-                        write_thread.start()
-                        main_output_string = ""
+                            if epoc_count % 100 == 0:
+                                print("transferring file.... ", epoc_count, "label: ", label_value)
+                                epoc_count = 0
+                            write_thread = fileWriteThread(main_output_string, label_value)
+                            write_thread.start()
+                            main_output_string = ""
             except:
                 traceback.print_exc()
             time.sleep(sleep_time)

@@ -1,6 +1,7 @@
-class data_converter:
-    def __init__(self, prefix=""):
+class DataConverter:
+    def __init__(self, file_system="normal", prefix=""):
         self.prefix = prefix
+        self.prefix = file_system
         self.log_data_types = {1: 'float', 4: 'int'}
         self.metrics_datatypes = {1: 'float', 2: 'string', 3: 'float', 4: 'float', 5: 'float', 6: 'float', 7: 'float',
                                   8: 'float', 9: 'float', 10: 'float', 11: 'string', 12: 'float', 13: 'float',
@@ -100,7 +101,7 @@ class data_converter:
             # 1 metric label value
             self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
 
-    def get_mbps(self, thpt):
+    def _get_mbps(self, thpt):
         if self.is_number(thpt):
             return thpt
         thpts = thpt.split("Gb")
@@ -129,9 +130,9 @@ class data_converter:
         except:
             return 0.0
 
-    def get_data_type(self, val, type_):
+    def _get_data_type(self, val, type_):
         if type_ == "string":
-            return float(self.get_mbps(val))
+            return float(self._get_mbps(val))
         elif type_ == "float":
             return float(val)
         elif type_ == "intonly":
@@ -147,16 +148,16 @@ class data_converter:
         new_row_json = {}
         # row[0]
         type_ = self.log_data_types[1]
-        new_row_json[self.log_id_to_attr[1]] = self.get_data_type(row[0], type_)
+        new_row_json[self.log_id_to_attr[1]] = self._get_data_type(row[0], type_)
         # row[1:139]
         total_keys_number = len(self.keys)
         for i in range(total_keys_number):
             type_ = self.metrics_datatypes[self.keys[i]]
-            new_row_json["{}{}".format(self.prefix, self.metrics_id_to_attr[self.keys[i]])] = self.get_data_type(row[i],
-                                                                                                                 type_)
+            new_row_json["{}{}".format(self.prefix, self.metrics_id_to_attr[self.keys[i]])] = self._get_data_type(row[i],
+                                                                                                                  type_)
 
         # row[-1]
         type_ = self.log_data_types[4]
-        new_row_json[self.log_id_to_attr[4]] = self.get_data_type(row[-1], type_)
+        new_row_json[self.log_id_to_attr[4]] = self._get_data_type(row[-1], type_)
         return new_row_json
 
