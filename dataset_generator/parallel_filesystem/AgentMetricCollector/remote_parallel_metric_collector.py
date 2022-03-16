@@ -11,7 +11,8 @@ import copy
 
 from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import RemoteNetworkStatisticsLogCollectorSS
 from statistics_log_collector import StatisticsLogCollector
-
+from Config import Config
+from data_converter import DataConverter
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from buffer_value_collector import get_buffer_value
 # from file_ost_path_info import collect_file_ost_path_info
@@ -19,17 +20,16 @@ from statistics_log_collector import StatisticsLogCollector
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
 
-server_ip = "128.105.146.4"
-server_port_number = "50505"
-client_ip = "128.105.145.213"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/",
-                                              1: "http://10.10.1.3:1234/"}
+server_ip = Config.remote_parallel_metric_collector_server_ip
+server_port_number = Config.remote_parallel_metric_collector_server_port_number
+client_ip = Config.remote_parallel_metric_collector_client_ip
+remote_ost_index_to_ost_agent_address_dict = Config.remote_parallel_metric_collector_remote_ost_index_to_ost_agent_address_dict
 
-time_length = 3600  # one hour data
-drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
+time_length = Config.remote_parallel_metric_collector_time_length  # one hour data
+drive_name = Config.remote_parallel_metric_collector_drive_name  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to save received transferred data
-server_saving_directory = "/lustre/receiverDataDir/dstData/"
+server_saving_directory = Config.remote_parallel_metric_collector_server_saving_directory
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -39,10 +39,10 @@ server_process = None
 is_transfer_done = False
 
 global mdt_parent_path
-mdt_parent_path = '/proc/fs/lustre/mdc/'
+mdt_parent_path = Config.remote_parallel_metric_collector_mdt_parent_path
 
 # must be from root dir /
-java_receiver_app_path = '/users/Ehsan/AgentMetricCollector/collectors/SimpleReceiver1.java'
+java_receiver_app_path = Config.remote_parallel_metric_collector_java_receiver_app_path
 
 
 class RunServerThread(threading.Thread):
@@ -88,6 +88,7 @@ def collect_stat():
 
     network_statistics_collector = RemoteNetworkStatisticsLogCollectorSS(server_ip, server_port_number, client_ip)
     remote_statistics_collector = StatisticsLogCollector()
+    data_converter = DataConverter(file_system="lustre", prefix="receiver_")
     # T ODO REMOVE THIS LINE ITS JUST A TEST
     # is_parallel_file_system = True
 
@@ -210,21 +211,25 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
-                    if not is_first_time:
-                        main_output_string += output_string
+                    if Config.send_to_cloud_mode:
+                        data = data_converter.data_str_to_json(output_string)
+                        print(data)
                     else:
-                        print("skip first transfer")
-                        is_first_time = False
+                        if not is_first_time:
+                            main_output_string += output_string
+                        else:
+                            print("skip first transfer")
+                            is_first_time = False
 
-                    epoc_count += 1
-                    if epoc_count % 10 == 0:
-                        print("transferring file.... ", epoc_count, "label: ", label_value)
-                        if epoc_count % 100 == 0:
+                        epoc_count += 1
+                        if epoc_count % 10 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
-                            epoc_count = 0
-                        write_thread = fileWriteThread(main_output_string, label_value)
-                        write_thread.start()
-                        main_output_string = ""
+                            if epoc_count % 100 == 0:
+                                print("transferring file.... ", epoc_count, "label: ", label_value)
+                                epoc_count = 0
+                            write_thread = fileWriteThread(main_output_string, label_value)
+                            write_thread.start()
+                            main_output_string = ""
             except:
                 traceback.print_exc()
             time.sleep(sleep_time)
