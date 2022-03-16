@@ -164,9 +164,25 @@ class CSV_to_Proto:
     # TODO must be changes according to the size of self.keys
     def get_new_row_normal(self, row):
         new_row = []
-        for i in range(len(row)):
+        # row[0]
+        type_ = self.log_data_types[1]
+        new_row.append(self.get_data_type(row[0], type_))
+        # row[1:99]
+        total_keys_number = len(self.keys)
+        for i in range(total_keys_number):
             type_ = self.metrics_datatypes[self.keys[i]]
-            new_row.append(self.get_data_type(row[i], type_))
+            new_row.append(self.get_data_type(row[i+1], type_))
+        # row[99:-1]
+        for i in range(total_keys_number):
+            type_ = self.metrics_datatypes[self.keys[i]]
+            new_row.append(self.get_data_type(row[i+1+total_keys_number], type_))
+        # row[-1]
+        type_ = self.log_data_types[4]
+        new_row.append(self.get_data_type(row[-1], type_))
+
+        # for i in range(len(row)):
+        #     type_ = self.metrics_datatypes[self.keys[i]]
+        #     new_row.append(self.get_data_type(row[i], type_))
         return new_row
 
     def get_new_row_lustre(self, row):
@@ -299,9 +315,18 @@ class CSV_to_Proto:
             new_sender_metrics = bottleneck_pb2.BottleneckMetrics()
             new_receiver_metrics = bottleneck_pb2.BottleneckMetrics()
             if self.file_system == "normal":
-                for i in range(len(self.keys)):
-                    # TODO must be changes according to the size of self.keys
-                    new_log.__setattr__(self.metrics_id_to_attr[self.keys[i]], log[i])
+                # log[0]
+                new_log.__setattr__(self.log_id_to_attr[1], log[0])
+                # sender_logs = log[1:99]
+                total_keys_number = len(self.keys)
+                for i in range(total_keys_number):
+                    new_log.sender_metrics.__setattr__(self.metrics_id_to_attr[self.keys[i]], log[i + 1])
+                # receiver_logs = log[99:-1]
+                for i in range(total_keys_number):
+                    new_log.receiver_metrics.__setattr__(self.metrics_id_to_attr[self.keys[i]], log[i + 1 + total_keys_number])
+                new_log.__setattr__(self.log_id_to_attr[4], log[-1])
+                # for i in range(len(self.keys)):
+                #     new_log.__setattr__(self.metrics_id_to_attr[self.keys[i]], log[i])
             else:
                 #log[0]
                 new_log.__setattr__(self.log_id_to_attr[1], log[0])
@@ -547,7 +572,7 @@ class CSV_to_Proto:
         return bottleneck_logs
 
 
-folder_dir = "./csv_logs/AWS_FXS/series11/"
+folder_dir = "./csv_logs/DTNS/series14/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 serialize_file = folder_dir.split("/")[-2]
