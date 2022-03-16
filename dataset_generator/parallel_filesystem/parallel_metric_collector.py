@@ -9,10 +9,11 @@ from subprocess import check_output
 import re
 import psutil
 import copy
+import os
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
-
+from AgentMetricCollector.Config import Config
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from system_metric_collector import collect_system_metrics
 # from buffer_value_collector import get_buffer_value
@@ -21,17 +22,17 @@ from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
 
-src_ip = "127.0.0.1"
-dst_ip = "128.105.146.4"
-port_number = "50505"
-remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/", 1: "http://10.10.1.3:1234/"}
-time_length = 3600  # one hour data
-drive_name = "sda"  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
+src_ip = Config.parallel_metric_collector_src_ip
+dst_ip = Config.parallel_metric_collector_dst_ip
+port_number = Config.parallel_metric_collector_port_number
+remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_address_dict
+time_length = Config.parallel_metric_collector_time_length  # one hour data
+drive_name = Config.parallel_metric_collector_drive_name  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 # path to read file for transferring
-src_path = "/lustre/dataDir/srcData/"
+src_path = Config.parallel_metric_collector_src_path
 # path to save received transferred data
-dst_path = "/lustre/dataDir/dstData/"
+dst_path = Config.parallel_metric_collector_dst_path
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
@@ -40,8 +41,11 @@ pid = 0
 sender_process = None
 is_transfer_done = False
 
+# sender_monitor_agent_pid = os.getpid()
+# sender_monitor_agent_process = psutil.Process(int(sender_monitor_agent_pid))
+
 global mdt_parent_path
-mdt_parent_path = '/proc/fs/lustre/mdc/'
+mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
 
 class FileTransferThread(threading.Thread):
@@ -69,7 +73,8 @@ def transfer_file(i):
     strings = ""
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleSender1.java'])
-    pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleSender1.java'])
+    # pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleSender1.java'])
+    pid = str(proc.pid)
     print(pid)
     sender_process = psutil.Process(int(pid))
     # global label_value
