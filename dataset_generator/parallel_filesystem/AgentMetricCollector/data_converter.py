@@ -1,7 +1,10 @@
+import csv
+
+
 class DataConverter:
     def __init__(self, file_system="normal", prefix=""):
         self.prefix = prefix
-        self.prefix = file_system
+        self.file_system = file_system
         self.log_data_types = {1: 'float', 4: 'int'}
         self.metrics_datatypes = {1: 'float', 2: 'string', 3: 'float', 4: 'float', 5: 'float', 6: 'float', 7: 'float',
                                   8: 'float', 9: 'float', 10: 'float', 11: 'string', 12: 'float', 13: 'float',
@@ -101,8 +104,15 @@ class DataConverter:
             # 1 metric label value
             self.keys = list(range(1, 15)) + list(range(30, 148)) + [148, 149, 150, 151, 152, 153]
 
+    def _is_number(self, string_):
+        try:
+            complex(string_)  # for int, long, float and complex
+        except ValueError:
+            return False
+        return True
+
     def _get_mbps(self, thpt):
-        if self.is_number(thpt):
+        if self._is_number(thpt):
             return thpt
         thpts = thpt.split("Gb")
         if len(thpts) == 2:
@@ -144,6 +154,7 @@ class DataConverter:
             return int(float(val))
 
     def data_str_to_json(self, data_str):
+        data_str = data_str.strip("\n")
         row = data_str.split(",")
         new_row_json = {}
         # row[0]
@@ -153,11 +164,9 @@ class DataConverter:
         total_keys_number = len(self.keys)
         for i in range(total_keys_number):
             type_ = self.metrics_datatypes[self.keys[i]]
-            new_row_json["{}{}".format(self.prefix, self.metrics_id_to_attr[self.keys[i]])] = self._get_data_type(row[i],
+            new_row_json["{}{}".format(self.prefix, self.metrics_id_to_attr[self.keys[i]])] = self._get_data_type(row[i+1],
                                                                                                                   type_)
-
         # row[-1]
         type_ = self.log_data_types[4]
         new_row_json[self.log_id_to_attr[4]] = self._get_data_type(row[-1], type_)
         return new_row_json
-
