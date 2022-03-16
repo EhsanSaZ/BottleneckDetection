@@ -48,6 +48,7 @@ is_transfer_done = False
 global mdt_parent_path
 mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
+java_sender_app_path = Config.parallel_metric_java_sender_app_path
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -68,7 +69,7 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', java_sender_app_path , dst_ip, port_number, src_path, str(label_value)]
     # comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
     #            dst_ip, port_number, src_path, str(label_value)]
     strings = ""
