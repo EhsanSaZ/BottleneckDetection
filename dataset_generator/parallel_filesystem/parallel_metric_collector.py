@@ -37,6 +37,13 @@ dst_path = Config.parallel_metric_collector_dst_path
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
+
+try:
+    transfer_id = sys.argv[2]
+except IndexError:
+    print("USING IPs as id")
+    transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
+
 should_run = True
 pid = 0
 sender_process = None
@@ -149,6 +156,7 @@ def collect_stat():
 
         all_remote_ost_stats_so_far = {}
         while 1:
+            processing_start_time = time.time()
             ### NETWORK METRICS ###
             global is_transfer_done
 
@@ -164,7 +172,6 @@ def collect_stat():
                     # is_first_time = False
                 time_diff += 1
                 epoc_time += 1
-
                 if time_diff >= (.1 / sleep_time):
                     # system_value_list = collect_system_metrics(pid, sender_process)
                     system_value_list = statistics_collector.collect_system_metrics(pid, sender_process)
@@ -228,17 +235,17 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
-                    if Config.send_to_cloud_mode:
-                        data = data_converter.data_str_to_json(output_string)
+                    data_transfer_over_head = 0
+                    if Config.send_to_cloud_mode and not is_first_time:
+                        data = {}
+                        metrics_data = data_converter.data_str_to_json(output_string)
+                        data["transfer_ID"] = transfer_id
+                        data["data"] = metrics_data
+                        data["sequence_number"] = epoc_time
+                        data["is_sender"] = 1
                         print(data)
-                    else:
-                        if not is_first_time:
-                            main_output_string += output_string
-                        else:
-                            print("skip first transfer")
-                            is_first_time = False
-
-                        epoc_count += 1
+                    elif not is_first_time:
+                        main_output_string += output_string
                         if epoc_count % 10 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
                             if epoc_count % 100 == 0:
@@ -247,8 +254,26 @@ def collect_stat():
                             write_thread = fileWriteThread(main_output_string, label_value)
                             write_thread.start()
                             main_output_string = ""
+                    else:
+                        print("skip first transfer")
+                        is_first_time = False
+                        # if not is_first_time:
+                        #     main_output_string += output_string
+                        # else:
+                        #     print("skip first transfer")
+                        #     is_first_time = False
+                        # epoc_count += 1
+                        # if epoc_count % 10 == 0:
+                        #     print("transferring file.... ", epoc_count, "label: ", label_value)
+                        #     if epoc_count % 100 == 0:
+                        #         print("transferring file.... ", epoc_count, "label: ", label_value)
+                        #         epoc_count = 0
+                        #     write_thread = fileWriteThread(main_output_string, label_value)
+                        #     write_thread.start()
+                        #     main_output_string = ""
             except:
                 traceback.print_exc()
+            processing_time = time.time() - processing_start_time
             time.sleep(sleep_time)
 
 

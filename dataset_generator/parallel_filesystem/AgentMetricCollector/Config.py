@@ -1,6 +1,6 @@
 class Config:
 
-    parallel_metric_collector_src_ip = "127.0.0.1"
+    parallel_metric_collector_src_ip = "10.10.2.1"
     parallel_metric_collector_dst_ip = "10.10.2.2"
     parallel_metric_collector_port_number = "50505"
     parallel_metric_collector_time_length = 3600

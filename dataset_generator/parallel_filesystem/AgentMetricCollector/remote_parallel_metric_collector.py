@@ -33,6 +33,12 @@ server_saving_directory = Config.remote_parallel_metric_collector_server_saving_
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
 label_value = int(sys.argv[1])
+try:
+    transfer_id = sys.argv[2]
+except IndexError:
+    print("USING IPs as id")
+    transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
+
 should_run = True
 pid = 0
 server_process = None
@@ -211,17 +217,16 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
-                    if Config.send_to_cloud_mode:
-                        data = data_converter.data_str_to_json(output_string)
+                    if Config.send_to_cloud_mode and not is_first_time:
+                        data = {}
+                        metrics_data = data_converter.data_str_to_json(output_string)
+                        data["transfer_ID"] = transfer_id
+                        data["data"] = metrics_data
+                        data["sequence_number"] = epoc_time
+                        data["is_sender"] = 0
                         print(data)
-                    else:
-                        if not is_first_time:
-                            main_output_string += output_string
-                        else:
-                            print("skip first transfer")
-                            is_first_time = False
-
-                        epoc_count += 1
+                    elif not is_first_time:
+                        main_output_string += output_string
                         if epoc_count % 10 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
                             if epoc_count % 100 == 0:
@@ -230,6 +235,24 @@ def collect_stat():
                             write_thread = fileWriteThread(main_output_string, label_value)
                             write_thread.start()
                             main_output_string = ""
+                    else:
+                        print("skip first transfer")
+                        is_first_time = False
+                        # if not is_first_time:
+                        #     main_output_string += output_string
+                        # else:
+                        #     print("skip first transfer")
+                        #     is_first_time = False
+                        #
+                        # epoc_count += 1
+                        # if epoc_count % 10 == 0:
+                        #     print("transferring file.... ", epoc_count, "label: ", label_value)
+                        #     if epoc_count % 100 == 0:
+                        #         print("transferring file.... ", epoc_count, "label: ", label_value)
+                        #         epoc_count = 0
+                        #     write_thread = fileWriteThread(main_output_string, label_value)
+                        #     write_thread.start()
+                        #     main_output_string = ""
             except:
                 traceback.print_exc()
             time.sleep(sleep_time)
