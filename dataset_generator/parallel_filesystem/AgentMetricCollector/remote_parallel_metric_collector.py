@@ -1,3 +1,4 @@
+import json
 import threading
 import time
 from pathlib import Path
@@ -136,7 +137,9 @@ def collect_stat():
                             "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
         #
         all_remote_ost_stats_so_far = {}
+        data_transfer_overhead = 0
         while 1:
+            processing_start_time = time.time()
             ### NETWORK METRICS ###
             global is_transfer_done
 
@@ -224,6 +227,8 @@ def collect_stat():
                         data["data"] = metrics_data
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = 0
+                        body = json.dumps(data)
+                        data_transfer_overhead = len(body.encode('utf-8'))
                         print(data)
                     elif not is_first_time:
                         main_output_string += output_string
@@ -255,6 +260,7 @@ def collect_stat():
                         #     main_output_string = ""
             except:
                 traceback.print_exc()
+            processing_time = time.time() - processing_start_time
             time.sleep(sleep_time)
 
 
