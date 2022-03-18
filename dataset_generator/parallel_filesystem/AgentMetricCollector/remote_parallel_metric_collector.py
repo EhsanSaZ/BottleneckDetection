@@ -1,4 +1,5 @@
 import json
+import os
 import threading
 import time
 from pathlib import Path
@@ -14,6 +15,7 @@ from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import Remot
 from statistics_log_collector import StatisticsLogCollector
 from Config import Config
 from data_converter import DataConverter
+
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from buffer_value_collector import get_buffer_value
 # from file_ost_path_info import collect_file_ost_path_info
@@ -44,6 +46,9 @@ should_run = True
 pid = 0
 server_process = None
 is_transfer_done = False
+
+receiver_monitor_agent_pid = os.getpid()
+receiver_monitor_agent_process = psutil.Process(int(receiver_monitor_agent_pid))
 
 global mdt_parent_path
 mdt_parent_path = Config.remote_parallel_metric_collector_mdt_parent_path
@@ -130,7 +135,9 @@ def collect_stat():
         epoc_time = 0
         sleep_time = 1
         epoc_count = 0
+        overhead_epoc_count = 0
         main_output_string = ""
+        overhead_main_output_string = ""
         ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
                             "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
                             "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
@@ -163,30 +170,36 @@ def collect_stat():
                     system_value_list = remote_statistics_collector.collect_system_metrics(pid, server_process)
                     buffer_value_list = remote_statistics_collector.get_buffer_value()
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(pid, src_path)
-                    file_ost_path_info = remote_statistics_collector.collect_file_ost_path_info(pid, server_saving_directory)
+                    file_ost_path_info = remote_statistics_collector.collect_file_ost_path_info(pid,
+                                                                                                server_saving_directory)
                     if file_ost_path_info is None:
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    file_mdt_path_info = remote_statistics_collector.collect_file_mdt_path_info(pid, server_saving_directory)
+                    file_mdt_path_info = remote_statistics_collector.collect_file_mdt_path_info(pid,
+                                                                                                server_saving_directory)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list, ost_stats_so_far = remote_statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
+                    ost_value_list, ost_stats_so_far = remote_statistics_collector.process_ost_stat(ost_kernel_path,
+                                                                                                    ost_dir_name,
+                                                                                                    ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
                     # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     #                                                         all_mdt_stat_so_far_dict)
-                    mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.get_mdt_stat(mdt_parent_path, mdt_dir_name,
+                    mdt_value_list, mdt_stat_so_far_general = remote_statistics_collector.get_mdt_stat(mdt_parent_path,
+                                                                                                       mdt_dir_name,
                                                                                                        mdt_stat_so_far_general)
                     # print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address != "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                        remote_ost_value_list, remote_ost_stats_so_far = remote_statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        remote_ost_value_list, remote_ost_stats_so_far = remote_statistics_collector.process_lustre_ost_stats(
+                            ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
                     # print (all_remote_ost_stats_so_far)
                     output_string = str(time.time()) + ","
@@ -229,7 +242,8 @@ def collect_stat():
                         data["is_sender"] = 0
                         body = json.dumps(data)
                         data_transfer_overhead = len(body.encode('utf-8'))
-                        print(data)
+                        send_thread = sendToCloud(body)
+                        send_thread.start()
                     elif not is_first_time:
                         main_output_string += output_string
                         if epoc_count % 10 == 0:
@@ -243,24 +257,26 @@ def collect_stat():
                     else:
                         print("skip first transfer")
                         is_first_time = False
-                        # if not is_first_time:
-                        #     main_output_string += output_string
-                        # else:
-                        #     print("skip first transfer")
-                        #     is_first_time = False
-                        #
-                        # epoc_count += 1
-                        # if epoc_count % 10 == 0:
-                        #     print("transferring file.... ", epoc_count, "label: ", label_value)
-                        #     if epoc_count % 100 == 0:
-                        #         print("transferring file.... ", epoc_count, "label: ", label_value)
-                        #         epoc_count = 0
-                        #     write_thread = fileWriteThread(main_output_string, label_value)
-                        #     write_thread.start()
-                        #     main_output_string = ""
             except:
                 traceback.print_exc()
-            processing_time = time.time() - processing_start_time
+            processing_finish_time = time.time()
+            processing_time = processing_finish_time - processing_start_time
+            # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
+            #                                                                           sender_monitor_agent_process)
+            overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
+                                                               processing_time,
+                                                               data_transfer_overhead,
+                                                               receiver_monitor_agent_process.cpu_percent(),
+                                                               receiver_monitor_agent_process.memory_percent())
+            overhead_epoc_count += 1
+            if not is_first_time:
+                overhead_main_output_string += overhead_output_string
+                if overhead_epoc_count % 10 == 0:
+                    overhead_epoc_count = 0
+                    overhead_write = overheadFileWriteThread(overhead_main_output_string)
+                    overhead_write.start()
+                    overhead_main_output_string = ""
+
             time.sleep(sleep_time)
 
 
@@ -275,6 +291,28 @@ class fileWriteThread(threading.Thread):
         output_file.write(str(self.metric_string))
         output_file.flush()
         output_file.close()
+
+
+class overheadFileWriteThread(threading.Thread):
+    def __init__(self, overhead_string):
+        threading.Thread.__init__(self)
+        self.overhead_string = overhead_string
+
+    def run(self):
+        output_file = open("./overhead_logs/overhead_footprints.csv", "a+")
+        output_file.write(str(self.overhead_string))
+        output_file.flush()
+        output_file.close()
+        
+
+class sendToCloud(threading.Thread):
+    def __init__(self, json):
+        threading.Thread.__init__(self)
+        self.json = json
+
+    def run(self):
+        # TODO send over the channel to cloud
+        print(self.json)
 
 
 class statThread(threading.Thread):
