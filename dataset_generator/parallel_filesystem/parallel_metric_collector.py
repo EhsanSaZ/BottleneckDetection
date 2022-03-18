@@ -23,6 +23,8 @@ from AgentMetricCollector.data_converter import DataConverter
 # from file_mdt_path_info import collect_file_mdt_path_info
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
+from dataset_generator.parallel_filesystem.AgentMetricCollector.ResourceUsageFootprint.get_resource_usage_foot_prints import \
+    ResourceUsageFootprints
 
 src_ip = Config.parallel_metric_collector_src_ip
 dst_ip = Config.parallel_metric_collector_dst_ip
@@ -50,13 +52,14 @@ pid = 0
 sender_process = None
 is_transfer_done = False
 
-# sender_monitor_agent_pid = os.getpid()
-# sender_monitor_agent_process = psutil.Process(int(sender_monitor_agent_pid))
+sender_monitor_agent_pid = os.getpid()
+sender_monitor_agent_process = psutil.Process(int(sender_monitor_agent_pid))
 
 global mdt_parent_path
 mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
 java_sender_app_path = Config.parallel_metric_java_sender_app_path
+
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -77,7 +80,7 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', java_sender_app_path , dst_ip, port_number, src_path, str(label_value)]
+    comm_ss = ['java', java_sender_app_path, dst_ip, port_number, src_path, str(label_value)]
     # comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
     #            dst_ip, port_number, src_path, str(label_value)]
     strings = ""
@@ -107,6 +110,7 @@ def collect_stat():
     parts = res.split("\n")
     network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
     statistics_collector = StatisticsLogCollector()
+    agent_resource_usage_collector = ResourceUsageFootprints()
     data_converter = DataConverter(file_system="lustre", prefix="sender_")
     for x in parts:
         if "lustre" in x:
@@ -150,6 +154,7 @@ def collect_stat():
         sleep_time = 1
         epoc_count = 0
         main_output_string = ""
+        overhead_main_output_string = ""
         ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
                             "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
                             "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
@@ -191,20 +196,24 @@ def collect_stat():
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list, ost_stats_so_far = statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name, ost_stats_so_far)
+                    ost_value_list, ost_stats_so_far = statistics_collector.process_ost_stat(ost_kernel_path,
+                                                                                             ost_dir_name,
+                                                                                             ost_stats_so_far)
                     # print (ost_value_list, ost_stats_so_far)
                     # # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(mdt_parent_path, mdt_paths,
                     # #                                                         all_mdt_stat_so_far_dict)
-                    mdt_value_list, mdt_stat_so_far_general = statistics_collector.get_mdt_stat(mdt_parent_path, mdt_dir_name,
-                                                                           mdt_stat_so_far_general)
-                    #print (mdt_value_list, mdt_stat_so_far_general)
+                    mdt_value_list, mdt_stat_so_far_general = statistics_collector.get_mdt_stat(mdt_parent_path,
+                                                                                                mdt_dir_name,
+                                                                                                mdt_stat_so_far_general)
+                    # print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     remote_ost_value_list = [0.0, 0.0]
                     if ost_agent_address != "":
                         remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                        remote_ost_value_list, remote_ost_stats_so_far = statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
+                        remote_ost_value_list, remote_ost_stats_so_far = statistics_collector.process_lustre_ost_stats(
+                            ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
                         all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
-                    #print (all_remote_ost_stats_so_far)
+                    # print (all_remote_ost_stats_so_far)
 
                     output_string = str(time.time()) + ","
                     output_string += network_statistics_collector.get_log_str()
@@ -246,7 +255,9 @@ def collect_stat():
                         data["is_sender"] = 1
                         body = json.dumps(data)
                         data_transfer_overhead = len(body.encode('utf-8'))
-                        print(data)
+                        # send data to server in a different thread
+                        send_thread = send_to_cloud(body)
+                        send_thread.start()
                     elif not is_first_time:
                         main_output_string += output_string
                         if epoc_count % 10 == 0:
@@ -277,6 +288,14 @@ def collect_stat():
             except:
                 traceback.print_exc()
             processing_time = time.time() - processing_start_time
+            # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
+            #                                                                           sender_monitor_agent_process)
+            # overhead_output_string = "{},{},{},{}\n".format(processing_time,
+            #                                                 data_transfer_overhead,
+            #                                                 sender_monitor_agent_process.cpu_percent(),
+            #                                                 sender_monitor_agent_process.memory_percent())
+            # overhead_main_output_string += overhead_output_string
+            #
             time.sleep(sleep_time)
 
 
@@ -291,6 +310,14 @@ class fileWriteThread(threading.Thread):
         output_file.write(str(self.metric_string))
         output_file.flush()
         output_file.close()
+
+
+class send_to_cloud(threading.Thread):
+    def __init__(self, json):
+        self.json = json
+
+    def run(self):
+        print(self.json)
 
 
 class statThread(threading.Thread):
