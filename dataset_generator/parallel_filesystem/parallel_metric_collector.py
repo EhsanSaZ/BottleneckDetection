@@ -67,9 +67,9 @@ class FileTransferThread(threading.Thread):
         self.name = name
 
     def run(self):
-        print("\nStarting " + self.name)
+        print("\nStarting Java application in a process" + self.name)
         transfer_file(self.name)
-        print("\nExiting " + self.name)
+        print("\nExiting thread" + self.name)
 
 
 def transfer_file(i):
@@ -95,12 +95,12 @@ def transfer_file(i):
     output_file.write("start time = " + time.ctime() + "\n")
     output_file.flush()
     output_file.close
-    while (True):
-        line = str(proc.stdout.readline()).replace("\r", "\n")
-        strings += line
+    # while (True):
+    #     line = str(proc.stdout.readline()).replace("\r", "\n")
+    #     strings += line
         # if not line.decode("utf-8"):
         #     break
-        strings.replace("\r", "\n")
+        # strings.replace("\r", "\n")
 
 
 def collect_stat():
@@ -256,7 +256,7 @@ def collect_stat():
                         body = json.dumps(data)
                         data_transfer_overhead = len(body.encode('utf-8'))
                         # send data to server in a different thread
-                        send_thread = send_to_cloud(body)
+                        send_thread = sendToCloud(body)
                         send_thread.start()
                     elif not is_first_time:
                         main_output_string += output_string
@@ -287,15 +287,19 @@ def collect_stat():
                         #     main_output_string = ""
             except:
                 traceback.print_exc()
-            processing_time = time.time() - processing_start_time
+            processing_finish_time = time.time()
+            processing_time = processing_finish_time - processing_start_time
             # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
             #                                                                           sender_monitor_agent_process)
-            # overhead_output_string = "{},{},{},{}\n".format(processing_time,
-            #                                                 data_transfer_overhead,
-            #                                                 sender_monitor_agent_process.cpu_percent(),
-            #                                                 sender_monitor_agent_process.memory_percent())
+            overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
+                                                               processing_time,
+                                                               data_transfer_overhead,
+                                                               sender_monitor_agent_process.cpu_percent(),
+                                                               sender_monitor_agent_process.memory_percent())
             # overhead_main_output_string += overhead_output_string
-            #
+            if not is_first_time:
+                pass
+                # WRITE TO FILE
             time.sleep(sleep_time)
 
 
@@ -312,11 +316,25 @@ class fileWriteThread(threading.Thread):
         output_file.close()
 
 
-class send_to_cloud(threading.Thread):
+class overheadFileWriteThread(threading.Thread):
+    def __init__(self, overhead_string):
+        threading.Thread.__init__(self)
+        self.overhead_string = overhead_string
+
+    def run(self):
+        output_file = open("./overhead_logs/overhead_footprints.csv", "a+")
+        output_file.write(str(self.overhead_string))
+        output_file.flush()
+        output_file.close()
+
+
+class sendToCloud(threading.Thread):
     def __init__(self, json):
+        threading.Thread.__init__(self)
         self.json = json
 
     def run(self):
+        # TODO send over the channel to cloud
         print(self.json)
 
 
@@ -329,10 +347,13 @@ class statThread(threading.Thread):
 
 
 Path("./logs").mkdir(parents=True, exist_ok=True)
+Path("./overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
 stat_thread.start()
+overhead_write_thread = overheadFileWriteThread("timestamp,processing_time,cpu_percent, memory_percent\n")
+overhead_write_thread.start()
 
 file_transfer_thread = FileTransferThread(str(0))
 file_transfer_thread.start()
