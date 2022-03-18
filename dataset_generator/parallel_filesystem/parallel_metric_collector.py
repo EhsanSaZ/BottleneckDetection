@@ -153,6 +153,7 @@ def collect_stat():
         epoc_time = 0
         sleep_time = 1
         epoc_count = 0
+        overhead_epoc_count = 0
         main_output_string = ""
         overhead_main_output_string = ""
         ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
@@ -271,20 +272,6 @@ def collect_stat():
                     else:
                         print("skip first transfer")
                         is_first_time = False
-                        # if not is_first_time:
-                        #     main_output_string += output_string
-                        # else:
-                        #     print("skip first transfer")
-                        #     is_first_time = False
-                        # epoc_count += 1
-                        # if epoc_count % 10 == 0:
-                        #     print("transferring file.... ", epoc_count, "label: ", label_value)
-                        #     if epoc_count % 100 == 0:
-                        #         print("transferring file.... ", epoc_count, "label: ", label_value)
-                        #         epoc_count = 0
-                        #     write_thread = fileWriteThread(main_output_string, label_value)
-                        #     write_thread.start()
-                        #     main_output_string = ""
             except:
                 traceback.print_exc()
             processing_finish_time = time.time()
@@ -296,10 +283,14 @@ def collect_stat():
                                                                data_transfer_overhead,
                                                                sender_monitor_agent_process.cpu_percent(),
                                                                sender_monitor_agent_process.memory_percent())
-            # overhead_main_output_string += overhead_output_string
+            overhead_epoc_count += 1
             if not is_first_time:
-                pass
-                # WRITE TO FILE
+                overhead_main_output_string += overhead_output_string
+                if overhead_epoc_count % 10 == 0:
+                    overhead_epoc_count = 0
+                    overhead_write = overheadFileWriteThread(overhead_main_output_string)
+                    overhead_write.start()
+                    overhead_main_output_string = ""
             time.sleep(sleep_time)
 
 
