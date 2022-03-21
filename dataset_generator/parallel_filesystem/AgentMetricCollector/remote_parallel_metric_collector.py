@@ -324,6 +324,7 @@ class statThread(threading.Thread):
 
 
 Path("./receiver/logs").mkdir(parents=True, exist_ok=True)
+Path("./overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
