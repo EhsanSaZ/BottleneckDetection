@@ -23,8 +23,8 @@ from AgentMetricCollector.data_converter import DataConverter
 # from file_mdt_path_info import collect_file_mdt_path_info
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
-from dataset_generator.parallel_filesystem.AgentMetricCollector.ResourceUsageFootprint.get_resource_usage_foot_prints import \
-    ResourceUsageFootprints
+#from dataset_generator.parallel_filesystem.AgentMetricCollector.ResourceUsageFootprint.get_resource_usage_foot_prints import \
+#    ResourceUsageFootprints
 
 src_ip = Config.parallel_metric_collector_src_ip
 dst_ip = Config.parallel_metric_collector_dst_ip
@@ -110,7 +110,7 @@ def collect_stat():
     parts = res.split("\n")
     network_statistics_collector = NetworkStatisticsLogCollectorSS(dst_ip, port_number)
     statistics_collector = StatisticsLogCollector()
-    agent_resource_usage_collector = ResourceUsageFootprints()
+    # agent_resource_usage_collector = ResourceUsageFootprints()
     data_converter = DataConverter(file_system="lustre", prefix="sender_")
     for x in parts:
         if "lustre" in x:
@@ -247,6 +247,7 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
+                    epoc_count += 1
                     if Config.send_to_cloud_mode and not is_first_time:
                         data = {}
                         metrics_data = data_converter.data_str_to_json(output_string)

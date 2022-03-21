@@ -233,6 +233,7 @@ def collect_stat():
                     #     output_string += "," + str(item)
 
                     output_string += "," + str(label_value) + "\n"
+                    epoc_count += 1
                     if Config.send_to_cloud_mode and not is_first_time:
                         data = {}
                         metrics_data = data_converter.data_str_to_json(output_string)
