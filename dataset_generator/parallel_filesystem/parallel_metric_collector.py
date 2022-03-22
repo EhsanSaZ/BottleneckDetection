@@ -11,6 +11,7 @@ import re
 import psutil
 import copy
 import os
+import zmq
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
@@ -60,6 +61,9 @@ mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
 java_sender_app_path = Config.parallel_metric_java_sender_app_path
 
+context = zmq.Context()
+sender_publisher = context.socket(zmq.PUB)
+sender_publisher.bind("tcp://{}:{}".format(Config.zmq_sender_publisher_bind_addr, Config.zmq_sender_publisher_port))
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -179,7 +183,7 @@ def collect_stat():
                     initial_time = time.time()
                     # is_first_time = False
                 time_diff += 1
-                epoc_time += 1
+                #epoc_time += 1
                 if time_diff >= (.1 / sleep_time):
                     # system_value_list = collect_system_metrics(pid, sender_process)
                     system_value_list = statistics_collector.collect_system_metrics(pid, sender_process)
@@ -249,6 +253,7 @@ def collect_stat():
                     output_string += "," + str(label_value) + "\n"
                     epoc_count += 1
                     if Config.send_to_cloud_mode and not is_first_time:
+                        epoc_time += 1
                         data = {}
                         metrics_data = data_converter.data_str_to_json(output_string)
                         data["transfer_ID"] = transfer_id
@@ -326,8 +331,9 @@ class sendToCloud(threading.Thread):
         self.json = json
 
     def run(self):
-        # TODO send over the channel to cloud
-        print(self.json)
+        # T ODO send over the channel to cloud
+        sender_publisher.send_json(self.json)
+        #print(self.json_str)
 
 
 class statThread(threading.Thread):

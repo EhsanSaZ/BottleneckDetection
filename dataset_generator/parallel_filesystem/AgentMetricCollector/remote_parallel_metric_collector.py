@@ -11,6 +11,8 @@ import re
 import psutil
 import copy
 
+import zmq
+
 from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import RemoteNetworkStatisticsLogCollectorSS
 from statistics_log_collector import StatisticsLogCollector
 from Config import Config
@@ -56,6 +58,9 @@ mdt_parent_path = Config.remote_parallel_metric_collector_mdt_parent_path
 # must be from root dir /
 java_receiver_app_path = Config.remote_parallel_metric_collector_java_receiver_app_path
 
+context = zmq.Context()
+receiver_publisher = context.socket(zmq.PUB)
+receiver_publisher.bind("tcp://{}:{}".format(Config.zmq_receiver_publisher_bind_addr, Config.zmq_receiver_publisher_port))
 
 class RunServerThread(threading.Thread):
     def __init__(self, name):
@@ -164,7 +169,7 @@ def collect_stat():
                 if is_first_time:
                     initial_time = time.time()
                 time_diff += 1
-                epoc_time += 1
+                #epoc_time += 1
 
                 if time_diff >= (.1 / sleep_time):
                     system_value_list = remote_statistics_collector.collect_system_metrics(pid, server_process)
@@ -235,6 +240,7 @@ def collect_stat():
                     output_string += "," + str(label_value) + "\n"
                     epoc_count += 1
                     if Config.send_to_cloud_mode and not is_first_time:
+                        epoc_time += 1
                         data = {}
                         metrics_data = data_converter.data_str_to_json(output_string)
                         data["transfer_ID"] = transfer_id
@@ -312,8 +318,8 @@ class sendToCloud(threading.Thread):
         self.json = json
 
     def run(self):
-        # TODO send over the channel to cloud
-        print(self.json)
+        # T ODO send over the channel to cloud
+        receiver_publisher.send_json(self.json)
 
 
 class statThread(threading.Thread):
