@@ -163,6 +163,7 @@ def collect_stat():
             if server_process is None or \
                     pid == 0 or \
                     not network_statistics_collector.check_established_connection_exist():  # or pid == 0
+                epoc_time = 0
                 continue
             try:
                 print("COLLECT")
