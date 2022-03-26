@@ -22,7 +22,7 @@ while True:
         "transfer_id": transfer_id,
         "epoch": num,
         "data": {
-            "key1": "world"
+            "key1": "Hello"
         }
     }
     
@@ -31,7 +31,7 @@ while True:
         "transfer_id": transfer_id,
         "epoch": num,
         "data": {
-            "key2": "world"
+            "key2": "World"
         }
     }
     
