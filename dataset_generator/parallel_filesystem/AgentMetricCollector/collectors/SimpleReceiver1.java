@@ -87,9 +87,14 @@ public class SimpleReceiver1 extends Thread{
         totalTransferredBytes = 0L;
         totalChecksumBytes = 0L;
 
+        long lastTransferredBytes = 0;
+        long roundTransferStartTime = System.currentTimeMillis();
         // long init2 = System.currentTimeMillis();
 
-        
+        File o_dir = new File(baseDir);
+        if (!o_dir.exists()){
+            o_dir.mkdirs();
+        }
         byte[] buffer = new byte[1024 * 1024];
         while(true) {
             String fileName = dataInputStream.readUTF();
@@ -97,7 +102,6 @@ public class SimpleReceiver1 extends Thread{
             long fileSize = dataInputStream.readLong();
 		    FileCount = dataInputStream.readInt();
             RandomAccessFile randomAccessFile = new RandomAccessFile(baseDir + fileName, "rw");
-
             if (offset > 0) {
                 randomAccessFile.getChannel().position(offset);
             }
@@ -115,14 +119,34 @@ public class SimpleReceiver1 extends Thread{
             }
             randomAccessFile.close();
 			yy ++;
+            System.out.println("FileCount: " + FileCount + " round " + (yy/ (FileCount+1)) + " file " + yy);
             if (read == -1) {
                 System.out.println("Read -1, closing the connection...");
+                long roundTransferFinishTime = System.currentTimeMillis();
+                long transferTime_sec = (roundTransferFinishTime - roundTransferStartTime);
+                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
+                System.out.println("Time: " + transferTime_sec);
+                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec));
+                // TODO BUG
+                roundTransferStartTime = System.currentTimeMillis();
+                totalTransferredBytes = 0;
+                yy = 0;
                 return;
             }
 //             System.out.println("FileCount: " + FileCount);
         	if (yy  % FileCount == 0){
-				// System.out.println("Checksum END File "  +  " time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
-				System.out.println("FileCount: " + FileCount + " round " + yy/FileCount);
+                // System.out.println("Checksum END File "  +  " time: " + (System.currentTimeMillis() - startTime) / 1000.0 + " seconds");
+                System.out.println("FileCount: " + FileCount + " round " + ((yy/FileCount) - 1) + " finished");
+
+                long roundTransferFinishTime = System.currentTimeMillis();
+                long transferTime_sec = (roundTransferFinishTime - roundTransferStartTime);
+
+                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
+                System.out.println("Time: " + transferTime_sec);
+                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024 * transferTime_sec));
+
+                roundTransferStartTime = System.currentTimeMillis();
+                totalTransferredBytes = 0;
 				// System.exit(0);
 			}
 
@@ -140,6 +164,9 @@ public class SimpleReceiver1 extends Thread{
             baseDir = args[0];
         }
         int port = 50505;
+        if (args.length > 1) {
+            port = Integer.valueOf(args[1]);
+        }
         SimpleReceiver1 fs = new SimpleReceiver1(port, baseDir);
         fs.start();
     }
