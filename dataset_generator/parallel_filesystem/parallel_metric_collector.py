@@ -350,8 +350,8 @@ Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
 stat_thread.start()
-overhead_write_thread = overheadFileWriteThread("timestamp,processing_time,cpu_percent, memory_percent\n")
-overhead_write_thread.start()
+# overhead_write_thread = overheadFileWriteThread("timestamp,processing_time, payload_size, cpu_percent, memory_percent\n")
+# overhead_write_thread.start()
 
 file_transfer_thread = FileTransferThread(str(0))
 file_transfer_thread.start()

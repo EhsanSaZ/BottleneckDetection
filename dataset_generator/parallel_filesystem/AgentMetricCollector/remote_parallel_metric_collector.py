@@ -337,6 +337,8 @@ Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
 stat_thread.start()
+# overhead_write_thread = overheadFileWriteThread("timestamp,processing_time, payload_size, cpu_percent, memory_percent\n")
+# overhead_write_thread.start()
 
 server_thread = RunServerThread(str(0))
 server_thread.start()
