@@ -180,6 +180,7 @@ class TransferAnalysis:
         new_log = {}
         # print (len(self.keys))
         if self.log_type != "luster":
+            new_log[self.log_id_to_attr[1]] = log.__getattribute__(self.log_id_to_attr[1])
             sender_metrics = log.__getattribute__(self.log_id_to_attr[2])
             for key in self.sender_keys:
                 ##if new_log[self.id_to_attr[i]] == log.__getattribute__(self.id_to_attr[i]):
@@ -193,6 +194,7 @@ class TransferAnalysis:
             new_log[self.log_id_to_attr[4]] = log.__getattribute__(self.log_id_to_attr[4])
 
         else:
+            new_log[self.log_id_to_attr[1]] = log.__getattribute__(self.log_id_to_attr[1])
             sender_metrics = log.__getattribute__(self.log_id_to_attr[2])
             for key in self.sender_keys:
                 ##if new_log[self.id_to_attr[i]] == log.__getattribute__(self.id_to_attr[i]):
