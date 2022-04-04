@@ -23,7 +23,7 @@ public class SimpleReceiver1 extends Thread{
 
     boolean debug = false;
     long startTime;
-   	int yy  = 1;
+   	int yy  = 0;
 	int FileCount;
 
     static LinkedBlockingQueue<Item> items = new LinkedBlockingQueue<>(10000);
@@ -114,6 +114,7 @@ public class SimpleReceiver1 extends Thread{
                 randomAccessFile.write(buffer, 0, read);
             }
             randomAccessFile.close();
+			yy ++;
             if (read == -1) {
                 System.out.println("Read -1, closing the connection...");
                 return;
@@ -124,7 +125,6 @@ public class SimpleReceiver1 extends Thread{
 				System.out.println("FileCount: " + FileCount + " round " + yy/FileCount);
 				// System.exit(0);
 			}
-			yy ++;
 
 	   }
 
