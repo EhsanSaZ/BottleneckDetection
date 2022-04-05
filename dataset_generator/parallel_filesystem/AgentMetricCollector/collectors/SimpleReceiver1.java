@@ -10,12 +10,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SimpleReceiver1 extends Thread{
 
     private ServerSocket ss;
     static AtomicBoolean allTransfersCompleted = new AtomicBoolean(false);
     static String baseDir = "/lustre/receiverDataDir/dstData/";
+    static String thrSavingDir = "./SimpleReceiver1/receiverThroughputLog/";
 
     static long totalTransferredBytes = 0L;
     static long totalChecksumBytes = 0L;
@@ -25,6 +28,7 @@ public class SimpleReceiver1 extends Thread{
     long startTime;
    	int yy  = 0;
 	int FileCount;
+    int label = 0;
 
     static LinkedBlockingQueue<Item> items = new LinkedBlockingQueue<>(10000);
 
@@ -50,10 +54,15 @@ public class SimpleReceiver1 extends Thread{
     }
 
 
-    public SimpleReceiver1(int port, String baseDir) {
+    public SimpleReceiver1(int port, String baseDir, int label) {
         try {
             ss = new ServerSocket(port);
             baseDir = baseDir;
+            label = label;
+            File o_dir = new File(thrSavingDir);
+            if (!o_dir.exists()){
+                o_dir.mkdirs();
+            }
             System.out.println("Server Socket start listening on " + ss.getInetAddress() + " port: " + ss.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,7 +75,7 @@ public class SimpleReceiver1 extends Thread{
                 Socket clientSock = ss.accept();
                 // clientSock.setSoTimeout(10000);
                 System.out.println("Connection established from  " + clientSock.getInetAddress());
-                saveFile(clientSock);
+                saveFile(clientSock, label);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -76,7 +85,7 @@ public class SimpleReceiver1 extends Thread{
 
     }
 
-    private void saveFile(Socket clientSock) throws IOException, InterruptedException {
+    private void saveFile(Socket clientSock, int label) throws IOException, InterruptedException {
 
 
         // startTime = System.currentTimeMillis();
@@ -124,13 +133,20 @@ public class SimpleReceiver1 extends Thread{
                 long roundTransferFinishTime = System.currentTimeMillis();
                 long transferTime_sec = (roundTransferFinishTime - roundTransferStartTime);
 //                roundTransferStartTime = System.currentTimeMillis();
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+                new WriteThread(
+                        String.format("%s,%d,%f\n", formattedDate, this.label, (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec)),
+                        thrSavingDir,
+                        label).start();
+//                System.out.println("Read -1, closing the connection...");
+//                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
+//                System.out.println("Time: " + transferTime_sec);
+//                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec));
+                // TODO BUG
                 totalTransferredBytes = 0;
                 yy = 0;
-                System.out.println("Read -1, closing the connection...");
-                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
-                System.out.println("Time: " + transferTime_sec);
-                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec));
-                // TODO BUG
                 return;
             }
 //             System.out.println("FileCount: " + FileCount);
@@ -141,9 +157,16 @@ public class SimpleReceiver1 extends Thread{
                 long roundTransferFinishTime = System.currentTimeMillis();
                 long transferTime_sec = (roundTransferFinishTime - roundTransferStartTime);
 
-                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
-                System.out.println("Time: " + transferTime_sec);
-                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024 * transferTime_sec));
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+                new WriteThread(
+                        String.format("%s,%d,%f\n", formattedDate, this.label, (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec)),
+                        thrSavingDir,
+                        label).start();
+//                System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
+//                System.out.println("Time: " + transferTime_sec);
+//                System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024 * transferTime_sec));
 
                 roundTransferStartTime = System.currentTimeMillis();
                 totalTransferredBytes = 0;
@@ -164,11 +187,38 @@ public class SimpleReceiver1 extends Thread{
             baseDir = args[0];
         }
         int port = 50505;
+        int label = 0;
         if (args.length > 1) {
             port = Integer.valueOf(args[1]);
         }
-        SimpleReceiver1 fs = new SimpleReceiver1(port, baseDir);
+        if (args.length > 2) {
+            label = Integer.valueOf(args[2]);
+        }
+        SimpleReceiver1 fs = new SimpleReceiver1(port, baseDir, label);
         fs.start();
+    }
+
+    public class WriteThread extends Thread {
+        String output;
+        String savingDir;
+        int label;
+        WriteThread(String output, String savingDir, int label){
+            this.output = output;
+            this.savingDir = savingDir;
+            this.label = label;
+        }
+
+        @Override
+        public void run() {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(String.format("%slabel_%s_throughout.csv", savingDir, label), true));
+                out.write(this.output);
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 }
