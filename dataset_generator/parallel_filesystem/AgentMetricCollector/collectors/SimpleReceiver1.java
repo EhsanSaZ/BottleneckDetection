@@ -121,16 +121,16 @@ public class SimpleReceiver1 extends Thread{
 			yy ++;
             System.out.println("FileCount: " + FileCount + " round " + (yy/ (FileCount+1)) + " file " + yy);
             if (read == -1) {
-                System.out.println("Read -1, closing the connection...");
                 long roundTransferFinishTime = System.currentTimeMillis();
                 long transferTime_sec = (roundTransferFinishTime - roundTransferStartTime);
+//                roundTransferStartTime = System.currentTimeMillis();
+                totalTransferredBytes = 0;
+                yy = 0;
+                System.out.println("Read -1, closing the connection...");
                 System.out.println("Size: " + (totalTransferredBytes * 8)/ (1024 * 1024 * 1024));
                 System.out.println("Time: " + transferTime_sec);
                 System.out.println("Throughput is: " + (totalTransferredBytes * 8 * 1000.0)/ (1024 * 1024 * 1024* transferTime_sec));
                 // TODO BUG
-                roundTransferStartTime = System.currentTimeMillis();
-                totalTransferredBytes = 0;
-                yy = 0;
                 return;
             }
 //             System.out.println("FileCount: " + FileCount);
