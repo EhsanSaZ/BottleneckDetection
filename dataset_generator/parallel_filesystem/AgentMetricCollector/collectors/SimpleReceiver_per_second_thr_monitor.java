@@ -30,7 +30,7 @@ public class SimpleReceiver2 extends Thread{
     long startTime;
    	int yy  = 0;
 	int FileCount;
-    int label = 0;
+    static String label = "default_label";
 
     static LinkedBlockingQueue<Item> items = new LinkedBlockingQueue<>(10000);
 
@@ -56,7 +56,7 @@ public class SimpleReceiver2 extends Thread{
     }
 
 
-    public SimpleReceiver2(int port, String baseDir, int label) {
+    public SimpleReceiver2(int port, String baseDir, String label) {
         try {
             ss = new ServerSocket(port);
             baseDir = baseDir;
@@ -88,7 +88,7 @@ public class SimpleReceiver2 extends Thread{
 
     }
 
-    private void saveFile(Socket clientSock, int label) throws IOException, InterruptedException {
+    private void saveFile(Socket clientSock, String label) throws IOException, InterruptedException {
         new MonitorThread(label).start();
 
         // startTime = System.currentTimeMillis();
@@ -154,12 +154,12 @@ public class SimpleReceiver2 extends Thread{
             baseDir = args[0];
         }
         int port = 50505;
-        int label = 0;
+//        String label = "default_label";
         if (args.length > 1) {
             port = Integer.valueOf(args[1]);
         }
         if (args.length > 2) {
-            label = Integer.valueOf(args[2]);
+            label = args[2];
         }
         SimpleReceiver2 fs = new SimpleReceiver2(port, baseDir, label);
         fs.start();
@@ -167,10 +167,10 @@ public class SimpleReceiver2 extends Thread{
 
     public class MonitorThread extends Thread {
         long lastTransferredBytes = 0;
-        int label;
+        String label;
         String outputString ="";
         int count = 0;
-        MonitorThread(int label){
+        MonitorThread(String label){
             this.label = label;
         }
         @Override
@@ -183,12 +183,12 @@ public class SimpleReceiver2 extends Thread{
 //                    System.out.println(totalTransferredBytes-lastTransferredBytes);
                     double transferThrInGbps = ((totalTransferredBytes-lastTransferredBytes)*8.0)/(1024*1024*1024);
 //                    System.out.println(this.label+ " Network thr:" + transferThrInGbps + "Gbps/s");
-                    outputString += String.format("%s,%d,%f\n", formattedDate, this.label, transferThrInGbps);
+                    outputString += String.format("%s,%s,%f\n", formattedDate, this.label, transferThrInGbps);
 //                     outputString+=formattedDate + " "+this.label+ " Network thr:" + transferThrInMbps + "Mb/s\n";
                      lastTransferredBytes = totalTransferredBytes;
                      count+=1;
                      if(count%10==0){
-                         System.out.println(outputString);
+//                         System.out.println(outputString);
                          new WriteThread(outputString, thrSavingDir, label).start();
                          outputString ="";
                          count=0;
@@ -205,8 +205,8 @@ public class SimpleReceiver2 extends Thread{
     public class WriteThread extends Thread {
         String output;
         String savingDir;
-        int label;
-        WriteThread(String output, String savingDir, int label){
+        String label;
+        WriteThread(String output, String savingDir, String label){
             this.output = output;
             this.savingDir = savingDir;
             this.label = label;
