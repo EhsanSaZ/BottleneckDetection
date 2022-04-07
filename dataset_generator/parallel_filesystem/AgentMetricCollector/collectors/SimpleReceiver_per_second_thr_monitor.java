@@ -131,7 +131,9 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
 //                 randomAccessFile.write(buffer, 0, read);
                 file_out.write(buffer, 0, read);
             }
-            randomAccessFile.close();
+//             randomAccessFile.close();
+            file_out.flush();
+            file_out.close();
 			yy ++;
             if (read == -1) {
                 connectionEstablished = false;
