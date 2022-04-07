@@ -107,13 +107,14 @@ public class SimpleReceiver1 extends Thread{
         byte[] buffer = new byte[1024 * 1024];
         while(true) {
             String fileName = dataInputStream.readUTF();
-            long offset = dataInputStream.readLong();
+//             long offset = dataInputStream.readLong();
             long fileSize = dataInputStream.readLong();
-		    FileCount = dataInputStream.readInt();
-            RandomAccessFile randomAccessFile = new RandomAccessFile(baseDir + fileName, "rw");
-            if (offset > 0) {
-                randomAccessFile.getChannel().position(offset);
-            }
+// 		    FileCount = dataInputStream.readInt();
+            BufferedOutputStream file_out = new BufferedOutputStream(new FileOutputStream(baseDir + fileName));
+//             RandomAccessFile randomAccessFile = new RandomAccessFile(baseDir + fileName, "rw");
+//             if (offset > 0) {
+//                 randomAccessFile.getChannel().position(offset);
+//             }
             long remaining = fileSize;
             int read = 0;
             // long transferStartTime = System.currentTimeMillis();
@@ -124,9 +125,12 @@ public class SimpleReceiver1 extends Thread{
                 totalTransferredBytes += read;
                 remaining -= read;
 //                 System.out.println("Writing file " + fileName + " into dir " + baseDir);
-                randomAccessFile.write(buffer, 0, read);
+//                 randomAccessFile.write(buffer, 0, read);
+                file_out.write(buffer, 0, read);
             }
-            randomAccessFile.close();
+//             randomAccessFile.close();
+            file_out.flush();
+            file_out.close();
 			yy ++;
             System.out.println("FileCount: " + FileCount + " round " + (yy/ (FileCount+1)) + " file " + yy);
             if (read == -1) {
