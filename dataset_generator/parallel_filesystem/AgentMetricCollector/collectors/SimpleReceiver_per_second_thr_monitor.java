@@ -186,12 +186,12 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
                      String formattedDate = myDateObj.format(myFormatObj);
 //                    System.out.println(totalTransferredBytes-lastTransferredBytes);
                     double transferThrInGbps = ((totalTransferredBytes-lastTransferredBytes)*8.0)/(1024*1024*1024);
-                   System.out.println(this.label+ " Network thr:" + transferThrInGbps + " Gbps/s");
-                    outputString += String.format("%s,%s,%f\n", formattedDate, this.label, transferThrInGbps);
+//                    System.out.println(this.label+ " Network thr:" + transferThrInGbps + " Gbps/s");
+                    outputString += String.format("%s,%s,%s\n", formattedDate, this.label, transferThrInGbps);
 //                     outputString+=formattedDate + " "+this.label+ " Network thr:" + transferThrInMbps + "Mb/s\n";
                      lastTransferredBytes = totalTransferredBytes;
                      count+=1;
-                     if(count%10==0){
+                     if(count%5==0){
 //                         System.out.println(outputString);
                          new WriteThread(outputString, thrSavingDir, label).start();
                          outputString ="";
@@ -219,7 +219,7 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
         @Override
         public void run() {
             try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(String.format("%slabel_%s_throughout.csv", savingDir, label), true));
+                BufferedWriter out = new BufferedWriter(new FileWriter(String.format("%sthroughout_label_%s.csv", savingDir, label), true));
                 out.write(this.output);
                 out.close();
             } catch (Exception e) {
