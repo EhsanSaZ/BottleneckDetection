@@ -78,7 +78,7 @@ public class SimpleSender1 {
     }
     public void sendFile(String path, int label) throws IOException {
 
-        new MonitorThread(label).start();
+//         new MonitorThread(label).start();
         startTime = System.currentTimeMillis();
         DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
@@ -99,39 +99,41 @@ public class SimpleSender1 {
         System.out.println("Will transfer " + files.size()+ " files");
 	    FileCount = files.size();
         long init2 = System.currentTimeMillis();
-        dos.writeLong(INTEGRITY_VERIFICATION_BLOCK_SIZE);
-
-        byte[] buffer = new byte[1024 * 1024];
+        //dos.writeLong(INTEGRITY_VERIFICATION_BLOCK_SIZE);
+        dos.writeInt(FileCount);
+        byte[] buffer = new byte[1024 * 128];
         int n;
        this.clearCache(path);
         while (true) {
             FiverFile currentFile = null;
-            synchronized (files) {
-                if (!files.isEmpty()) {
-                    currentFile = files.remove(0);
-                }
+//             synchronized (files) {
+//                 if (!files.isEmpty()) {
+//                     currentFile = files.remove(0);
+//                 }
+//             }
+            if (!files.isEmpty()) {
+                currentFile = files.remove(0);
             }
-            if (currentFile == null) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                continue;
-            }
-
+//             if (currentFile == null) {
+//                 try {
+//                     Thread.sleep(100);
+//                 } catch (InterruptedException e) {
+//                     e.printStackTrace();
+//                 }
+//                 continue;
+//             }
             //send file metadata
             dos.writeUTF(currentFile.file.getName());
-            dos.writeLong(currentFile.offset);
+//             dos.writeLong(currentFile.offset);
             dos.writeLong(currentFile.length);
-	        dos.writeInt(FileCount);
+// 	        dos.writeInt(FileCount);
 
             long fileTransferStartTime = System.currentTimeMillis();
 
             FileInputStream fis = new FileInputStream(currentFile.file);
-            if (currentFile.offset > 0) {
-                fis.getChannel().position(currentFile.offset);
-            }
+//             if (currentFile.offset > 0) {
+//                 fis.getChannel().position(currentFile.offset);
+//             }
             Long remaining = currentFile.length;
                 while ((n = fis.read(buffer, 0, (int) Math.min((long)buffer.length, remaining))) > 0) {
                     remaining -= n;
@@ -147,7 +149,7 @@ public class SimpleSender1 {
                 // allFileTransfersCompleted = true;
                 // // break;
                 // System.exit(0);
-                
+
                 for (FiverFile f : originalfiles) {
                     files.add(f);
                 }

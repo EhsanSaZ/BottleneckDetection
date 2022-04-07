@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class SimpleReceiver2 extends Thread{
+public class SimpleReceiver_per_second_thr_monitor extends Thread{
 
     private ServerSocket ss;
     static AtomicBoolean allTransfersCompleted = new AtomicBoolean(false);
@@ -56,7 +56,7 @@ public class SimpleReceiver2 extends Thread{
     }
 
 
-    public SimpleReceiver2(int port, String baseDir, String label) {
+    public SimpleReceiver_per_second_thr_monitor(int port, String baseDir, String label) {
         try {
             ss = new ServerSocket(port);
             baseDir = baseDir;
@@ -93,8 +93,8 @@ public class SimpleReceiver2 extends Thread{
 
         // startTime = System.currentTimeMillis();
         DataInputStream dataInputStream  = new DataInputStream(clientSock.getInputStream());
-        INTEGRITY_VERIFICATION_BLOCK_SIZE = dataInputStream.readLong();
-
+        //INTEGRITY_VERIFICATION_BLOCK_SIZE = dataInputStream.readLong();
+        FileCount = dataInputStream.readInt();
         allTransfersCompleted.set(false);
         totalTransferredBytes = 0L;
         totalChecksumBytes = 0L;
@@ -106,17 +106,18 @@ public class SimpleReceiver2 extends Thread{
         if (!o_dir.exists()){
             o_dir.mkdirs();
         }
-        byte[] buffer = new byte[1024 * 1024];
+        byte[] buffer = new byte[1024 * 128];
         while(true) {
             String fileName = dataInputStream.readUTF();
-            long offset = dataInputStream.readLong();
+//             long offset = dataInputStream.readLong();
             long fileSize = dataInputStream.readLong();
-		    FileCount = dataInputStream.readInt();
-            RandomAccessFile randomAccessFile = new RandomAccessFile(baseDir + fileName, "rw");
+// 		    FileCount = dataInputStream.readInt();
+            BufferedOutputStream file_out = new BufferedOutputStream(new FileOutputStream(baseDir + fileName));
+//             RandomAccessFile randomAccessFile = new RandomAccessFile(baseDir + fileName, "rw");
 
-            if (offset > 0) {
-                randomAccessFile.getChannel().position(offset);
-            }
+//             if (offset > 0) {
+//                 randomAccessFile.getChannel().position(offset);
+//             }
             long remaining = fileSize;
             int read = 0;
             // long transferStartTime = System.currentTimeMillis();
@@ -127,7 +128,8 @@ public class SimpleReceiver2 extends Thread{
                 totalTransferredBytes += read;
                 remaining -= read;
 //                 System.out.println("Writing file " + fileName + " into dir " + baseDir);
-                randomAccessFile.write(buffer, 0, read);
+//                 randomAccessFile.write(buffer, 0, read);
+                file_out.write(buffer, 0, read);
             }
             randomAccessFile.close();
 			yy ++;
@@ -161,7 +163,7 @@ public class SimpleReceiver2 extends Thread{
         if (args.length > 2) {
             label = args[2];
         }
-        SimpleReceiver2 fs = new SimpleReceiver2(port, baseDir, label);
+        SimpleReceiver_per_second_thr_monitor fs = new SimpleReceiver_per_second_thr_monitor(port, baseDir, label);
         fs.start();
     }
 
@@ -182,7 +184,7 @@ public class SimpleReceiver2 extends Thread{
                      String formattedDate = myDateObj.format(myFormatObj);
 //                    System.out.println(totalTransferredBytes-lastTransferredBytes);
                     double transferThrInGbps = ((totalTransferredBytes-lastTransferredBytes)*8.0)/(1024*1024*1024);
-//                    System.out.println(this.label+ " Network thr:" + transferThrInGbps + "Gbps/s");
+                   System.out.println(this.label+ " Network thr:" + transferThrInGbps + " Gbps/s");
                     outputString += String.format("%s,%s,%f\n", formattedDate, this.label, transferThrInGbps);
 //                     outputString+=formattedDate + " "+this.label+ " Network thr:" + transferThrInMbps + "Mb/s\n";
                      lastTransferredBytes = totalTransferredBytes;
