@@ -44,8 +44,7 @@ congestions=([1]="write_congestion_by_clients_on_sender_ost_1" [2]="write_conges
 [4]="write_congestion_by_clients_on_sender_ost_4" [6]="write_congestion_by_clients_on_sender_ost_6"
 [8]="write_congestion_by_clients_on_sender_ost_8" [10]="write_congestion_by_clients_on_sender_ost_10"
 [12]="write_congestion_by_clients_on_sender_ost_12" [14]="write_congestion_by_clients_on_sender_ost_14"
-[16]="write_congestion_by_clients_on_sender_ost_16" [32]="write_congestion_by_clients_on_sender_ost_32"
-[64]="write_congestion_by_clients_on_sender_ost_64" [128]="write_congestion_by_clients_on_sender_ost_128")
+[16]="write_congestion_by_clients_on_sender_ost_16")
 
 for i in "${!congestions[@]}"; do
 #  printf "%s\t%s\n" "$i" "${congestions[$i]}"
