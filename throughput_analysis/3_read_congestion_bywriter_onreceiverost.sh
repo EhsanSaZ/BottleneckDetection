@@ -31,7 +31,7 @@ kill_all_java_processes(){
 }
 
 clear_all_caches
-label='read_congestion_by_writer_on_writer_ost_0'
+label='read_congestion_by_receiver_on_receiver_ost_0'
 ssh root@$receiver_remote_client_ip "java /users/Ehsan/AgentMetricCollector/collectors/SimpleReceiver_per_second_thr_monitor.java /lustre/dstDataDir/dstData/ 50505 ${label}"&
 sleep 5;
 java /users/Ehsan/BottleneckDetection/dataset_generator/utilities/SimpleSender1.java $receiver_remote_client_ip 50505 /lustre/dataDir/srcData/ 0 &
@@ -40,11 +40,11 @@ kill_all_java_processes
 killall -9  -u $user_name python3;
 sleep 1;
 
-congestions=([1]="read_congestion_by_writer_on_writer_ost_1" [2]="read_congestion_by_writer_on_writer_ost_2"
-[4]="read_congestion_by_writer_on_writer_ost_4" [6]="read_congestion_by_writer_on_writer_ost_6"
-[8]="read_congestion_by_writer_on_writer_ost_8" [10]="read_congestion_by_writer_on_writer_ost_10"
-[12]="read_congestion_by_writer_on_writer_ost_12" [14]="read_congestion_by_writer_on_writer_ost_14"
-[16]="read_congestion_by_writer_on_writer_ost_16")
+congestions=([1]="read_congestion_by_receiver_on_receiver_ost_1" [2]="read_congestion_by_receiver_on_receiver_ost_2"
+[4]="read_congestion_by_receiver_on_receiver_ost_4" [6]="read_congestion_by_receiver_on_receiver_ost_6"
+[8]="read_congestion_by_receiver_on_receiver_ost_8" [10]="read_congestion_by_receiver_on_receiver_ost_10"
+[12]="read_congestion_by_receiver_on_receiver_ost_12" [14]="read_congestion_by_receiver_on_receiver_ost_14"
+[16]="read_congestion_by_receiver_on_receiver_ost_16")
 
 for i in "${!congestions[@]}"; do
 #  printf "%s\t%s\n" "$i" "${congestions[$i]}"
