@@ -103,7 +103,7 @@ public class SimpleSender1 {
         dos.writeInt(FileCount);
         byte[] buffer = new byte[1024 * 128];
         int n;
-       this.clearCache(path);
+//        this.clearCache(path);
         while (true) {
             FiverFile currentFile = null;
 //             synchronized (files) {
@@ -122,6 +122,7 @@ public class SimpleSender1 {
 //                 }
 //                 continue;
 //             }
+            this.clearCache(path + currentFile.file.getName());
             //send file metadata
             dos.writeUTF(currentFile.file.getName());
 //             dos.writeLong(currentFile.offset);
@@ -153,7 +154,7 @@ public class SimpleSender1 {
                 for (FiverFile f : originalfiles) {
                     files.add(f);
                 }
-               this.clearCache(path);
+//                this.clearCache(path);
                 yy=0;
 			}
 
