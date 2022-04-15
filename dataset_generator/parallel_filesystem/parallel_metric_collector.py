@@ -108,8 +108,8 @@ def transfer_file(i):
     output_file.write("start time = " + time.ctime() + "\n")
     output_file.flush()
     output_file.close
-    #while (True):
-     #   pass
+    while (True):
+       pass
     #     line = str(proc.stdout.readline()).replace("\r", "\n")
     #     strings += line
         # if not line.decode("utf-8"):
@@ -365,6 +365,6 @@ stat_thread.start()
 
 file_transfer_thread = FileTransferThread(str(0))
 file_transfer_thread.start()
-stat_thread.join()
+file_transfer_thread.join()
 
 is_transfer_done = True
