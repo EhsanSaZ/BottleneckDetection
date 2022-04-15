@@ -1,3 +1,4 @@
+import argparse
 import json
 import threading
 import time
@@ -40,12 +41,20 @@ src_path = Config.parallel_metric_collector_src_path
 dst_path = Config.parallel_metric_collector_dst_path
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
-label_value = int(sys.argv[1])
 
-try:
-    transfer_id = sys.argv[2]
-except IndexError:
-    print("USING IPs as id")
+parser = argparse.ArgumentParser()
+parser.add_argument('-l', '--label_value', help="label for the dataset", required=True)
+parser.add_argument('-i', '--transfer_id', help="transfer id for sending to cloud")
+parser.add_argument('-jsp', '--java_server_port', help="starting port for java sender process", default=port_number)
+
+args = parser.parse_args()
+
+label_value = args.label_value
+port_number = args.java_server_port
+
+if not args.transfer_id:
+    transfer_id = args.transfer_id
+else:
     transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
 
 should_run = True
