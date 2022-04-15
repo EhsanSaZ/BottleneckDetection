@@ -316,7 +316,7 @@ class fileWriteThread(threading.Thread):
         self.label_value = label_value
 
     def run(self):
-        output_file = open("./logs/dataset_" + str(self.label_value) + ".csv", "a+")
+        output_file = open("./sender/logs/dataset_" + str(self.label_value) + ".csv", "a+")
         output_file.write(str(self.metric_string))
         output_file.flush()
         output_file.close()
@@ -328,7 +328,7 @@ class overheadFileWriteThread(threading.Thread):
         self.overhead_string = overhead_string
 
     def run(self):
-        output_file = open("./overhead_logs/overhead_footprints.csv", "a+")
+        output_file = open("./sender/overhead_logs/overhead_footprints.csv", "a+")
         output_file.write(str(self.overhead_string))
         output_file.flush()
         output_file.close()
@@ -353,8 +353,8 @@ class statThread(threading.Thread):
         collect_stat()
 
 
-Path("./logs").mkdir(parents=True, exist_ok=True)
-Path("./overhead_logs").mkdir(parents=True, exist_ok=True)
+Path("./sender/logs").mkdir(parents=True, exist_ok=True)
+Path("./sender/overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
