@@ -177,7 +177,7 @@ def collect_stat():
                 epoc_time = 0
                 continue
             try:
-                print("COLLECT")
+                #print("COLLECT")
                 if is_first_time:
                     initial_time = time.time()
                 time_diff += 1
