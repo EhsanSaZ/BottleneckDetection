@@ -318,7 +318,7 @@ class overheadFileWriteThread(threading.Thread):
         self.overhead_string = overhead_string
 
     def run(self):
-        output_file = open("./overhead_logs/overhead_footprints.csv", "a+")
+        output_file = open("./receiver/overhead_logs/overhead_footprints.csv", "a+")
         output_file.write(str(self.overhead_string))
         output_file.flush()
         output_file.close()
@@ -343,7 +343,7 @@ class statThread(threading.Thread):
 
 
 Path("./receiver/logs").mkdir(parents=True, exist_ok=True)
-Path("./overhead_logs").mkdir(parents=True, exist_ok=True)
+Path("./receiver/overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
 stat_thread = statThread()
