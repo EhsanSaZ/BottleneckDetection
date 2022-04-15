@@ -21,7 +21,7 @@ class Config:
     remote_parallel_metric_collector_drive_name = "sda"
     remote_parallel_metric_collector_server_saving_directory = "/lustre/receiverDataDir/dstData/"
     remote_parallel_metric_collector_mdt_parent_path = '/proc/fs/lustre/mdc/'
-    remote_parallel_metric_collector_java_receiver_app_path = '/users/Ehsan/AgentMetricCollector/collectors/SimpleReceiver1.java'
+    remote_parallel_metric_collector_java_receiver_app_path = '/users/Ehsan/AgentMetricCollector/collectors/SimpleReceiver_per_second_thr_monitor.java'
     zmq_receiver_publisher_bind_addr = "*"
     zmq_receiver_publisher_port = "5557"
 
