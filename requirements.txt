@@ -7,17 +7,20 @@ bleach==4.1.0
 certifi==2021.5.30
 cffi==1.14.6
 charset-normalizer==2.0.4
+click==8.0.3
 cycler==0.10.0
 debugpy==1.4.1
 decorator==5.0.9
 defusedxml==0.7.1
 entrypoints==0.3
+Flask==2.0.2
 idna==3.2
 imbalanced-learn==0.8.0
 imblearn==0.0
 ipykernel==6.3.0
 ipython==7.27.0
 ipython-genutils==0.2.0
+itsdangerous==2.0.1
 jedi==0.18.0
 Jinja2==3.0.1
 joblib==1.0.1
@@ -62,7 +65,7 @@ pytz==2021.1
 pyzmq==22.2.1
 requests==2.26.0
 requests-unixsocket==0.2.0
-scikit-learn==0.24.2
+scikit-learn==1.0.2
 scipy==1.7.1
 seaborn==0.11.2
 Send2Trash==1.8.0
@@ -78,3 +81,4 @@ urllib3==1.26.6
 wcwidth==0.2.5
 webencodings==0.5.1
 websocket-client==1.2.1
+Werkzeug==2.0.2
