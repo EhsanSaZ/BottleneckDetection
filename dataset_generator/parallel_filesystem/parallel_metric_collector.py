@@ -87,7 +87,7 @@ class FileTransferThread(threading.Thread):
 
 def transfer_file(i):
     global pid, label_value, sender_process
-    output_file = open("./logs/file_transfer_stat.txt", "a+")
+    output_file = open("./sender/logs/file_transfer_stat.txt", "a+")
     # T ODO check why use SimpleSender2 for label 29
     # if label_value == 29:
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
