@@ -20,7 +20,7 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
     static AtomicBoolean allTransfersCompleted = new AtomicBoolean(false);
     static boolean connectionEstablished = false;
     static String baseDir = "/lustre/receiverDataDir/dstData/";
-    static String thrSavingDir = "./SimpleReceiverPerSecondMonitor/";
+    static String thrSavingDir = "./receiver/SimpleReceiverPerSecondMonitor/";
 
     static long totalTransferredBytes = 0L;
     static long totalChecksumBytes = 0L;
