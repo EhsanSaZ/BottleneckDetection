@@ -46,7 +46,7 @@ killall -9  -u $user_name python3;
 sleep 1;
 
 label_general="network_anomaly_network_duplicate_"
-levels=([1]=10 [2]=15 [3]=20 [4]=25)
+levels=([1]=10 [2]=15 [3]=20 [4]=25 [5]=30 [6]=35 [7]=40 [8]=45 [9]=50 [10]=55 [11]=60 [12]=65)
 
 for i in "${!levels[@]}"; do
 #  printf "%s\t%s\n" "$i" "${levels[$i]}"
