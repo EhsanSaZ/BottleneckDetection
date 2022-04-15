@@ -10,7 +10,7 @@ from subprocess import check_output
 import re
 import psutil
 import copy
-
+import argparse
 import zmq
 
 from RemoteNetworkStatistics.RemoteNetworkStatisticsLogCollector_ss import RemoteNetworkStatisticsLogCollectorSS
@@ -37,11 +37,22 @@ drive_name = Config.remote_parallel_metric_collector_drive_name  # drive_name = 
 server_saving_directory = Config.remote_parallel_metric_collector_server_saving_directory
 start_time_global = time.time()
 # label_value normal = 0, more labeled can be checked from command bash file
-label_value = int(sys.argv[1])
-try:
-    transfer_id = sys.argv[2]
-except IndexError:
-    print("USING IPs as id")
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-l', '--label_value', help="label for the dataset", required=True)
+parser.add_argument('-i', '--transfer_id', help="transfer id for sending to cloud")
+parser.add_argument('-jsp', '--java_server_port', help="starting port for java server process", default=server_port_number)
+parser.add_argument('-jtl', '--java_server_throughput_label', help="starting port for java server process", required=True)
+
+args = parser.parse_args()
+
+label_value = args.label_value
+server_port_number = args.java_server_port
+java_server_throughput_label = args.java_server_throughput_label
+
+if not args.transfer_id:
+    transfer_id = args.transfer_id
+else:
     transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
 
 should_run = True
