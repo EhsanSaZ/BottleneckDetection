@@ -87,7 +87,7 @@ class RunServerThread(threading.Thread):
 def run_server(i):
     global pid, label_value, server_process
 
-    comm_ss = ['java', java_receiver_app_path, server_saving_directory]
+    comm_ss = ['java', java_receiver_app_path, server_saving_directory, server_port_number, java_server_throughput_label]
     proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
 
     # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
