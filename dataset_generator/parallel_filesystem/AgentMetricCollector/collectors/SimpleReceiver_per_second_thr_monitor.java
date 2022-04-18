@@ -221,7 +221,7 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
         @Override
         public void run() {
             try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(String.format("%sthroughout_label_%s.csv", savingDir, label), true));
+                BufferedWriter out = new BufferedWriter(new FileWriter(String.format("%s%s.csv", savingDir, label), true));
                 out.write(this.output);
                 out.close();
             } catch (Exception e) {
