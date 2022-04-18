@@ -68,10 +68,12 @@ mdt_parent_path = Config.remote_parallel_metric_collector_mdt_parent_path
 
 # must be from root dir /
 java_receiver_app_path = Config.remote_parallel_metric_collector_java_receiver_app_path
-
-context = zmq.Context()
-receiver_publisher = context.socket(zmq.PUB)
-receiver_publisher.bind("tcp://{}:{}".format(Config.zmq_receiver_publisher_bind_addr, Config.zmq_receiver_publisher_port))
+if Config.send_to_cloud_mode:
+    context = zmq.Context()
+    receiver_publisher = context.socket(zmq.PUB)
+    receiver_publisher.bind("tcp://{}:{}".format(Config.zmq_receiver_publisher_bind_addr, Config.zmq_receiver_publisher_port))
+else:
+    receiver_publisher = None
 
 class RunServerThread(threading.Thread):
     def __init__(self, name):
@@ -331,7 +333,10 @@ class sendToCloud(threading.Thread):
 
     def run(self):
         # T ODO send over the channel to cloud
-        receiver_publisher.send_json(self.json)
+        if receiver_publisher:
+            receiver_publisher.send_json(self.json)
+        else:
+            print("receiver_publisher is None")
 
 
 class statThread(threading.Thread):

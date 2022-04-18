@@ -69,10 +69,12 @@ global mdt_parent_path
 mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
 java_sender_app_path = Config.parallel_metric_java_sender_app_path
-
-context = zmq.Context()
-sender_publisher = context.socket(zmq.PUB)
-sender_publisher.bind("tcp://{}:{}".format(Config.zmq_sender_publisher_bind_addr, Config.zmq_sender_publisher_port))
+if Config.send_to_cloud_mode:
+    context = zmq.Context()
+    sender_publisher = context.socket(zmq.PUB)
+    sender_publisher.bind("tcp://{}:{}".format(Config.zmq_sender_publisher_bind_addr, Config.zmq_sender_publisher_port))
+else:
+    sender_publisher = None
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -342,7 +344,10 @@ class sendToCloud(threading.Thread):
 
     def run(self):
         # T ODO send over the channel to cloud
-        sender_publisher.send_json(self.json)
+        if sender_publisher:
+            sender_publisher.send_json(self.json)
+        else:
+            print("sender_publisher is None")
         #print(self.json_str)
 
 
