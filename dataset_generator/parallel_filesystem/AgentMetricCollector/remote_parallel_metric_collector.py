@@ -267,7 +267,7 @@ def collect_stat():
                         send_thread.start()
                     elif not is_first_time:
                         main_output_string += output_string
-                        if epoc_count % 10 == 0:
+                        if epoc_count % 5 == 0:
                             print("transferring file.... ", epoc_count, "label: ", label_value)
                             if epoc_count % 100 == 0:
                                 print("transferring file.... ", epoc_count, "label: ", label_value)
