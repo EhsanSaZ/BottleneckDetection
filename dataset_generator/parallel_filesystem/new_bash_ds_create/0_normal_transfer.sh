@@ -48,7 +48,7 @@ do
     sleep 5;
 
     echo "Start collecting metrics on sender side";
-    python3 parallel_metric_collector.py -l 0 -jsp 50505&
+    python3 ../parallel_metric_collector.py -l 0 -jsp 50505&
     sleep $main_sleep_time;
 
     kill_all_java_python3_processes
