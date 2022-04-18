@@ -181,13 +181,15 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
         public void run() {
             try {
                  while (connectionEstablished) {
-                     LocalDateTime myDateObj = LocalDateTime.now();
-                     DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                     String formattedDate = myDateObj.format(myFormatObj);
+                     //LocalDateTime myDateObj = LocalDateTime.now();
+                     //DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                     //String formattedDate = myDateObj.format(myFormatObj);
+                     double formattedDate = System.currentTimeMillis()/1000.0;
+
 //                    System.out.println(totalTransferredBytes-lastTransferredBytes);
                     double transferThrInGbps = ((totalTransferredBytes-lastTransferredBytes)*8.0)/(1024*1024*1024);
 //                    System.out.println(this.label+ " Network thr:" + transferThrInGbps + " Gbps/s");
-                    outputString += String.format("%s,%s,%s\n", formattedDate, this.label, transferThrInGbps);
+                    outputString += String.format("%f,%s,%s\n", formattedDate, this.label, transferThrInGbps);
 //                     outputString+=formattedDate + " "+this.label+ " Network thr:" + transferThrInMbps + "Mb/s\n";
                      lastTransferredBytes = totalTransferredBytes;
                      count+=1;
