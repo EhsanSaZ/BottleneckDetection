@@ -1,7 +1,7 @@
 #!/bin/bash
 
 round_counter=1
-max_round_number=3
+max_round_number=2
 main_sleep_time=60
 
 user_name='root'
