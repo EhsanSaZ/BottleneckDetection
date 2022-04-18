@@ -1,0 +1,24 @@
+#Labels : congestion or anomaly type
+0 normal
+1 read_congestion_by_sender_sender_ost 1 
+2 read_congestion_by_sender_sender_ost 2 
+3 read_congestion_by_sender_sender_ost 4 
+4 read_congestion_by_sender_sender_ost 6 
+5 read_congestion_by_sender_sender_ost 8
+6 read_congestion_by_sender_sender_ost 10 
+7 read_congestion_by_sender_sender_ost 12
+8 read_congestion_by_sender_sender_ost 14
+9 read_congestion_by_sender_sender_ost 16
+
+10 read_congestion_by_clients_on_sender_ost 1
+11 read_congestion_by_clients_on_sender_ost 2
+12 read_congestion_by_clients_on_sender_ost 4
+13 read_congestion_by_clients_on_sender_ost 6
+14 read_congestion_by_clients_on_sender_ost 8
+15 read_congestion_by_clients_on_sender_ost 10
+16 read_congestion_by_clients_on_sender_ost 12
+17 read_congestion_by_clients_on_sender_ost 14
+18 read_congestion_by_clients_on_sender_ost 16
+
+
+
