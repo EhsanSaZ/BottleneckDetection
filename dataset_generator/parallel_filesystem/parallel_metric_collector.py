@@ -89,7 +89,7 @@ class FileTransferThread(threading.Thread):
 
 def transfer_file(i):
     global pid, label_value, sender_process
-    output_file = open("./sender/logs/file_transfer_stat.txt", "a+")
+    # output_file = open("./sender/logs/file_transfer_stat.txt", "a+")
     # T ODO check why use SimpleSender2 for label 29
     # if label_value == 29:
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
@@ -106,10 +106,10 @@ def transfer_file(i):
     print(pid)
     sender_process = psutil.Process(int(pid))
     # global label_value
-    output_file.write("label = " + str(label_value) + "\n")
-    output_file.write("start time = " + time.ctime() + "\n")
-    output_file.flush()
-    output_file.close
+    # output_file.write("label = " + str(label_value) + "\n")
+    # output_file.write("start time = " + time.ctime() + "\n")
+    # output_file.flush()
+    # output_file.close
     while (True):
        pass
     #     line = str(proc.stdout.readline()).replace("\r", "\n")
