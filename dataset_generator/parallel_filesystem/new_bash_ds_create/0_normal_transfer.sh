@@ -41,7 +41,7 @@ do
        break
     fi
     clear_all_caches
-    label='normal_transfer'
+    label='0'
 
     echo "Run the java server on receiver side and start metric collector agent";
     ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l 0 -jsp 50505 -jtl ${label}"&
