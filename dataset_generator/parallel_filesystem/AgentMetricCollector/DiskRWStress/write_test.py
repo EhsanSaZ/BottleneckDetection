@@ -23,15 +23,15 @@ class WriteThread(Thread):
         Thread.__init__(self)
         self.filename = filename
         self.base_path = base_path
-        # 1024 bytes data - 1KB
+        # 131072 bytes data - 128KB
         self.chars = rnd = os.urandom(131072)
     def run(self):
         while True:
             # strategy 1:
-            proc = Popen(['touch', self.base_path + self.filename + ".txt"])
-            proc.communicate()
+            # proc = Popen(['touch', self.base_path + self.filename + ".txt"])
+            # proc.communicate()
             with open(self.base_path + self.filename + ".txt", 'wb', buffering=0) as f:
-                for i in range(3145728):
+                for i in range(24576):
                     f.write(self.chars)
                     # f.flush()
             # strategy 2:
@@ -41,8 +41,9 @@ class WriteThread(Thread):
             # for i in range(1024):
             #     os.write(fd, m)
             # os.close(fd)
-            proc2 = Popen(['rm', self.base_path + self.filename + ".txt"])
-            proc2.communicate()
+            os.system("rm {base_path}{filename}.txt".format(base_path=self.base_path, filename=self.filename))
+            # proc2 = Popen(['rm', self.base_path + self.filename + ".txt"])
+            # proc2.communicate()
 
 
 base_path = str(sys.argv[1])
