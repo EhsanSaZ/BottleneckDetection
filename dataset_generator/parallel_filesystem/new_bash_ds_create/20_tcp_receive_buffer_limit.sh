@@ -35,8 +35,8 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root python3'
     ssh root@$receiver_remote_client_ip 'killall -9  -u root java'
 }
-# sys_config_tcp_send=_buffer_  0.5max 0.25max 0.125max 0.5default 0.25default 0.125default
-levels=([1]=3145728 [2]=1572864 [3]=786432 [4]=8192 [5]=4096 [6]=2048)
+# sys_config_tcp_receive_buffer=_buffer_  0.5max 0.25max 0.125max 0.5default 0.25default 0.125default
+levels=(["151"]=3145728 ["150"]=1572864 ["153"]=786432 ["154"]=8192 ["155"]=4096 ["156"]=2048)
 
 while true
 do
@@ -52,7 +52,6 @@ do
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
       ssh root@$receiver_remote_client_ip 'cat /proc/sys/net/ipv4/tcp_rmem > ./receiver/tcp_rmem_original_val && sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf';
       ssh root@$receiver_remote_client_ip "echo 'net.ipv4.tcp_rmem= 2048 87380 '${levels[$i]} >> /etc/sysctl.conf && sysctl -p";
-      sysctl -p
       sleep 5;
       echo "Start collecting metrics on sender side";
       python3 ../parallel_metric_collector.py -l ${label}  -jsp 50505&
