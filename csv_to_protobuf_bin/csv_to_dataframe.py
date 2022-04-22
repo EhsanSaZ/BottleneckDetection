@@ -183,14 +183,6 @@ class CSV_to_Proto:
             csv_reader = csv.reader(csv_file, delimiter=',')
             count = 0
             for row in csv_reader:
-                # skip first row
-                # if count == 0:
-                #     count += 1
-                #     continue
-                new_row = []
-                # for i in range(len(row)):
-                #     type_ = self.datatypes[self.keys[i]]
-                #     new_row.append(self.get_data_type(row[i], type_))
                 data.append(get_new_row(row))
         return data
 
@@ -320,26 +312,10 @@ class CSV_to_Proto:
                 if "dataset" in filename and "csv" in filename:
                     print("[+] Starting for %s" % (filename))
                     self.write_to_dataframe(folder + "/" + filename)
-            # folder_list = glob.glob(folder + "*")
-            # mainDict, headers = self.read_data_from_folder_file(folder_list)
-            # main_list = self.combine_logs(mainDict, headers)
-            # self.aws_write(main_list, headers)
         else:
             for filename in files:
                 if "csv" in filename and "aws" in filename:
                     self.write_to_dataframe(folder + "/" + filename)
-
-    # def check_serialize_file(self, serialize_file):
-    #     full_path = self.dataframe_dir + "/" + self.environment + "/" + serialize_file
-    #     bottleneck_logs = bottleneck_pb2.BottleneckFiles()
-    #     if os.path.isfile(full_path):
-    #         try:
-    #             f = open(full_path, "rb")
-    #             bottleneck_logs.ParseFromString(f.read())
-    #             f.close()
-    #         except IOError:
-    #             print(full_path + ": Could not open file.  Creating a new one.")
-    #     return bottleneck_logs
 
 
 folder_dir = "./csv_logs/AWS_FXS/series15/"

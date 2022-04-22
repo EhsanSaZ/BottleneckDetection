@@ -561,6 +561,13 @@ class GroupedLabels:
         df["label_value"] = y
         return df
 
+    def grouped_levels_cate_v2(self, df, total_possible_labels):
+        aggregated_labels = {}
+        for i in range(total_possible_labels + 1):
+            aggregated_labels[i] = i
+        # 0 is normal and is one group itself
+
+
     def run_model(self, df, group_type="normal", model_name="RF"):
         new_df = df
         if group_type == "grouped":
