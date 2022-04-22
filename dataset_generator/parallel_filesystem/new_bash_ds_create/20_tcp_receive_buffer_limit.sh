@@ -36,7 +36,7 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root java'
 }
 # sys_config_tcp_receive_buffer=_buffer_  0.5max 0.25max 0.125max 0.5default 0.25default 0.125default
-levels=(["151"]=3145728 ["150"]=1572864 ["153"]=786432 ["154"]=8192 ["155"]=4096 ["156"]=2048)
+levels=(["151"]=3145728 ["152"]=1572864 ["153"]=786432 ["154"]=8192 ["155"]=4096 ["156"]=2048)
 
 while true
 do
