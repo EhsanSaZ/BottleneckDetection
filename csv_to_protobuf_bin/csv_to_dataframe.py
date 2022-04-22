@@ -321,7 +321,7 @@ class CSV_to_Proto:
 folder_dir = "./csv_logs/AWS_FXS/series15/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
-serialize_file = folder_dir.split("/")[-2]
+serialize_file = "emulab_d460_10Gbps_hdd_unmerged"
 
 csv_to_python = CSV_to_Proto(folder_dir, serialize_file)
 csv_to_python.add_all_dataset_files(csv_to_python.folder_name)
