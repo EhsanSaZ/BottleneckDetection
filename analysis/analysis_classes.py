@@ -605,15 +605,9 @@ class GroupedLabels:
         # group network_anomaly_network_loss read levels together
         for i in range(109, 113):
             aggregated_labels.update({i: 109})
-        # group network_anomaly_network_loss read levels together
-        for i in range(109, 113):
-            aggregated_labels.update({i: 109})
-        # group network_anomaly_network_loss read levels together
-        for i in range(109, 113):
-            aggregated_labels.update({i: 109})
-        # group network_anomaly_network_loss read levels together
-        for i in range(109, 113):
-            aggregated_labels.update({i: 109})
+
+
+
         # group network_anomaly_network_delay read levels together
         for i in range(113, 117):
             aggregated_labels.update({i: 113})
@@ -622,7 +616,7 @@ class GroupedLabels:
             aggregated_labels.update({i: 117})
         # group network_anomaly_network_corrupt read levels together
         for i in range(129, 133):
-            aggregated_labels.update({i: 117})
+            aggregated_labels.update({i: 129})
         # group network_anomaly_network_reorder read levels together
         for i in range(133, 145):
             aggregated_labels.update({i: 133})
