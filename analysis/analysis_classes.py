@@ -566,7 +566,75 @@ class GroupedLabels:
         for i in range(total_possible_labels + 1):
             aggregated_labels[i] = i
         # 0 is normal and is one group itself
-
+        # group read_congestion_by_sender_sender_ost read levels together
+        for i in range(1, 10):
+            aggregated_labels.update({i: 1})
+        # group read_congestion_by_clients_on_sender_ost read levels together
+        for i in range(10, 19):
+            aggregated_labels.update({i: 10})
+        # group read_congestion_by_receiver_on_receiver_ost read levels together
+        for i in range(19, 28):
+            aggregated_labels.update({i: 19})
+        # group read_congestion_by_clients_on_receiver_ost read levels together
+        for i in range(28, 37):
+            aggregated_labels.update({i: 28})
+        # group read_congestion_by_sender_on_other_ost read levels together
+        for i in range(37, 46):
+            aggregated_labels.update({i: 37})
+        # group read_congestion_by_writer_on_other_ost read levels together
+        for i in range(46, 55):
+            aggregated_labels.update({i: 46})
+        # group write_congestion_by_sender_on_sender_ost read levels together
+        for i in range(55, 64):
+            aggregated_labels.update({i: 55})
+        # group write_congestion_by_clients_on_sender_ost read levels together
+        for i in range(64, 73):
+            aggregated_labels.update({i: 64})
+        # group write_congestion_by_receiver_on_receiver read levels together
+        for i in range(73, 82):
+            aggregated_labels.update({i: 73})
+        # group write_congestion_by_clients_on_receiver read levels together
+        for i in range(82, 91):
+            aggregated_labels.update({i: 82})
+        # group write_congestion_by_sender_on_other_ost read levels together
+        for i in range(91, 100):
+            aggregated_labels.update({i: 91})
+        # group write_congestion_by_receiver_on_other_ost read levels together
+        for i in range(100, 109):
+            aggregated_labels.update({i: 100})
+        # group network_anomaly_network_loss read levels together
+        for i in range(109, 113):
+            aggregated_labels.update({i: 109})
+        # group network_anomaly_network_loss read levels together
+        for i in range(109, 113):
+            aggregated_labels.update({i: 109})
+        # group network_anomaly_network_loss read levels together
+        for i in range(109, 113):
+            aggregated_labels.update({i: 109})
+        # group network_anomaly_network_loss read levels together
+        for i in range(109, 113):
+            aggregated_labels.update({i: 109})
+        # group network_anomaly_network_delay read levels together
+        for i in range(113, 117):
+            aggregated_labels.update({i: 113})
+        # group network_anomaly_network_duplicate read levels together
+        for i in range(117, 129):
+            aggregated_labels.update({i: 117})
+        # group network_anomaly_network_corrupt read levels together
+        for i in range(129, 133):
+            aggregated_labels.update({i: 117})
+        # group network_anomaly_network_reorder read levels together
+        for i in range(133, 145):
+            aggregated_labels.update({i: 133})
+        # group sys_config_tcp_send read levels together
+        for i in range(145, 151):
+            aggregated_labels.update({i: 145})
+        # group sys_config_tcp_receive_buffer read levels together
+        for i in range(151, 157):
+            aggregated_labels.update({i: 151})
+        y = [aggregated_labels[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
+        df["label_value"] = y
+        return df
 
     def run_model(self, df, group_type="normal", model_name="RF"):
         new_df = df
