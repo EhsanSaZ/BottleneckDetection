@@ -67,7 +67,7 @@ receiver_keys = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14] + list(range(30, 37)) +
 
 from collections import Counter
 
-unmerged_all_cols = pd.read_csv("../prototype/emulab_d460_10Gbps_hdd_unmerged_all_cols_V2.csv")
+unmerged_all_cols = pd.read_csv("../prototype/emulab_d430_10Gbps_hdd_unmerged_all_cols_V2.csv")
 print(unmerged_all_cols.shape)
 print(len(dict(Counter(unmerged_all_cols[unmerged_all_cols.columns[len(unmerged_all_cols.columns) - 1]]))), "labels")
 
@@ -82,7 +82,7 @@ unmerged_removed_cols = unmerged_all_cols.copy(deep=True)
 unmerged_removed_cols = unmerged_removed_cols[selected_cols_names]
 print(unmerged_removed_cols.shape)
 print(len(dict(Counter(unmerged_removed_cols[unmerged_removed_cols.columns[len(unmerged_removed_cols.columns) - 1]]))), "labels")
-unmerged_removed_cols.to_csv("../prototype/emulab_d460_10Gbps_hdd_unmerged_V2.csv")
+unmerged_removed_cols.to_csv("../prototype/emulab_d430_10Gbps_hdd_unmerged_V2.csv")
 
 
 merged_removed_cols = unmerged_removed_cols.copy(deep=True)
@@ -90,4 +90,4 @@ g_label = GroupedLabels(total_possible_labels=0)
 merged_removed_cols = g_label.grouped_levels_cate_v2(merged_removed_cols, 157)
 print(merged_removed_cols.shape)
 print(len(dict(Counter(merged_removed_cols[merged_removed_cols.columns[len(merged_removed_cols.columns) - 1]]))))
-merged_removed_cols.to_csv("../prototype/emulab_d460_10Gbps_hdd_merged_V2.csv")
+merged_removed_cols.to_csv("../prototype/emulab_d430_10Gbps_hdd_merged_V2.csv")
