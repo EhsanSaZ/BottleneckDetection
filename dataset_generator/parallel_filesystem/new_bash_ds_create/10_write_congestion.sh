@@ -12,6 +12,9 @@ remote_client_ip=10.10.2.3
 sender_oss_server_ip=10.10.1.2
 receiver_oss_server_ip=10.10.1.3
 
+ethernet_interface_name='p1p2'
+network_bw=1024mbit
+limited_bw=false
 clear_all_caches() {
     echo "Clearing cache on sender oss server";
     ssh root@$sender_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
@@ -52,6 +55,10 @@ do
       label=${congestions[$i]}
       echo "Run the java server on receiver side and start metric collector agent";
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
+      if $limited_bw
+      then
+        sudo tc qdisc add dev $ethernet_interface_name root netem rate ${network_bw};
+      fi
       sleep 5;
       echo "Start collecting metrics on sender side";
       ssh root@$remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/dstDataDir/diskWriteStress/ ${i}"&
@@ -59,6 +66,10 @@ do
       sleep $main_sleep_time;
       kill_all_java_python3_processes
       ssh root@$remote_client_ip 'killall -9  -u root python3'
+      if $limited_bw
+      then
+        tc qdisc del dev $ethernet_interface_name root;
+      fi
       sleep 1;
     done
     round_counter=$(($round_counter+1));

@@ -13,7 +13,8 @@ sender_oss_server_ip=10.10.1.2
 receiver_oss_server_ip=10.10.1.3
 
 ethernet_interface_name='p1p1'
-
+network_bw=1024mbit
+limited_bw=false
 clear_all_caches() {
     echo "Clearing cache on sender oss server";
     ssh root@$sender_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
@@ -51,7 +52,12 @@ do
       label=$i
       echo "Run the java server on receiver side and start metric collector agent";
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
-      sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms ${levels[$i]}ms distribution normal;
+      if $limited_bw
+      then
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms ${levels[$i]}ms distribution normal rate ${network_bw};
+      else
+        sudo tc qdisc add dev $ethernet_interface_name root netem delay 0.1ms ${levels[$i]}ms distribution normal;
+      fi
       sleep 5;
       echo "Start collecting metrics on sender side";
       python3 ../parallel_metric_collector.py -l ${label}  -jsp 50505&

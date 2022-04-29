@@ -12,8 +12,9 @@ remote_client_ip=10.10.2.3
 sender_oss_server_ip=10.10.1.2
 receiver_oss_server_ip=10.10.1.3
 
-ethernet_interface_name='p1p1'
-
+ethernet_interface_name='p1p2'
+network_bw=1024mbit
+limited_bw=false
 clear_all_caches() {
     echo "Clearing cache on sender oss server";
     ssh root@$sender_oss_server_ip 'sync; echo 3 > /proc/sys/vm/drop_caches';
@@ -52,11 +53,19 @@ do
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
       ssh root@$receiver_remote_client_ip 'cat /proc/sys/net/ipv4/tcp_rmem > ./receiver/tcp_rmem_original_val && sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf';
       ssh root@$receiver_remote_client_ip "echo 'net.ipv4.tcp_rmem= 2048 87380 '${levels[$i]} >> /etc/sysctl.conf && sysctl -p";
+      if $limited_bw
+      then
+        sudo tc qdisc add dev $ethernet_interface_name root netem rate ${network_bw};
+      fi
       sleep 5;
       echo "Start collecting metrics on sender side";
       python3 ../parallel_metric_collector.py -l ${label}  -jsp 50505&
       sleep $main_sleep_time;
       kill_all_java_python3_processes
+      if $limited_bw
+      then
+        tc qdisc del dev $ethernet_interface_name root;
+      fi
       ssh root@$receiver_remote_client_ip 'sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf && echo "net.ipv4.tcp_rmem= " $(cat ./receiver/tcp_rmem_original_val) >> /etc/sysctl.conf && rm ./receiver/tcp_rmem_original_val && sysctl -p';
       sleep 1;
     done
