@@ -9,7 +9,7 @@ class Config:
     parallel_metric_collector_dst_path = "/lustre/dstDataDir/dstData/"
     parallel_metric_remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/", 1: "http://10.10.1.3:1234/"}
     parallel_metric_mdt_parent_path = '/proc/fs/lustre/mdc/'
-    parallel_metric_java_sender_app_path = '../../utilities/SimpleSender1.java'  # used by the java client app
+    parallel_metric_java_sender_app_path = '/users/Ehsan/BottleneckDetection/dataset_generator/utilities/SimpleSender1.java'  # used by the java client app
     zmq_sender_publisher_bind_addr = "*"
     zmq_sender_publisher_port = "5556"
 
