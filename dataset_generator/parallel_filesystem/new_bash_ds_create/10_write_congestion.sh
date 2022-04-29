@@ -54,7 +54,7 @@ do
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
       sleep 5;
       echo "Start collecting metrics on sender side";
-      sh root@$remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/dstDataDir/diskWriteStress/ ${i}"&
+      ssh root@$remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/DiskRWStress/write_test.py /lustre/dstDataDir/diskWriteStress/ ${i}"&
       python3 ../parallel_metric_collector.py -l ${label}  -jsp 50505&
       sleep $main_sleep_time;
       kill_all_java_python3_processes
