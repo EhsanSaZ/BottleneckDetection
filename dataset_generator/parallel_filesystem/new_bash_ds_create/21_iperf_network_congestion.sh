@@ -36,7 +36,7 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root iperf3'
 }
 
-levels=(["157"]=5210 ["158"]=5215 ["159"]=5220)
+levels=(["157"]=5205 ["158"]=5210 ["159"]=5215 ["160"]=5220)
 
 while true
 do
