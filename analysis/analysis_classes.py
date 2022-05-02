@@ -626,6 +626,8 @@ class GroupedLabels:
         # group sys_config_tcp_receive_buffer read levels together
         for i in range(151, 157):
             aggregated_labels.update({i: 151})
+        for i in range(157, 161):
+            aggregated_labels.update({i: 157})
         y = [aggregated_labels[int(i)] for i in df[df.columns[len(df.columns) - 1]].values]
         df["label_value"] = y
         return df
