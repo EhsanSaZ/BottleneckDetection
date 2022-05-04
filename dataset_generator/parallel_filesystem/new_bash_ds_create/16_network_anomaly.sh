@@ -12,7 +12,7 @@ remote_client_ip=10.10.2.3
 sender_oss_server_ip=10.10.1.2
 receiver_oss_server_ip=10.10.1.3
 
-ethernet_interface_name='p1p1'
+ethernet_interface_name='p1p2'
 network_bw=1024mbit
 limited_bw=false
 

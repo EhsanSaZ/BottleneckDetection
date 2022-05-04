@@ -12,7 +12,7 @@ remote_client_ip=10.10.2.3
 sender_oss_server_ip=10.10.1.2
 receiver_oss_server_ip=10.10.1.3
 
-ethernet_interface_name='p1p1'
+ethernet_interface_name='p1p2'
 network_bw=1024mbit
 limited_bw=false
 clear_all_caches() {
@@ -38,7 +38,7 @@ kill_all_java_python3_processes(){
 }
 # network_anomaly_network_reorder
 #levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50 ["142"]=55 ["143"]=60 ["144"]=65)
-levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50 ["142"]=55 )
+levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50)
 while true
 do
     printf "\n"
