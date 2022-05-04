@@ -37,8 +37,7 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root java'
 }
 # network_anomaly_network_reorder
-#levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50 ["142"]=55 ["143"]=60 ["144"]=65)
-levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50)
+levels=(["133"]=10 ["134"]=15 ["135"]=20 ["136"]=25 ["137"]=30 ["138"]=35 ["139"]=40 ["140"]=45 ["141"]=50 ["142"]=55 ["143"]=60 ["144"]=65)
 while true
 do
     printf "\n"
@@ -54,7 +53,7 @@ do
 
       if $limited_bw
       then
-        tc qdisc add dev $ethernet_interface_name root netem corrupt ${levels[$i]}% rate ${network_bw};
+        tc qdisc add dev $ethernet_interface_name root netem reorder ${levels[$i]}% delay 1ms rate ${network_bw};
       else
         tc qdisc add dev $ethernet_interface_name root netem reorder ${levels[$i]}% delay 1ms;
       fi
