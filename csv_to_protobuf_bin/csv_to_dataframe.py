@@ -1,3 +1,5 @@
+from collections import Counter
+
 from pandas import DataFrame
 
 from dataset_generator import bottleneck_pb2
@@ -284,6 +286,8 @@ class CSV_to_Proto:
             file_path = "{}/{}/{}.csv".format(self.dataframe_dir, self.environment, serialize_file)
             Path(self.dataframe_dir + "/" + self.environment).mkdir(parents=True, exist_ok=True)
             dataframe = pd.DataFrame(self.log_list)
+            print(len(dict(Counter(dataframe[dataframe.columns[len(dataframe.columns) - 1]]))),"labels")
+
             dataframe.to_csv(file_path, index=False)
             # f = open(file_path, "wb")
             # f.write(self.bottleneck_logs.SerializeToString())
@@ -318,10 +322,14 @@ class CSV_to_Proto:
                     self.write_to_dataframe(folder + "/" + filename)
 
 
-folder_dir = "./csv_logs/AWS_FXS/series15/"
+folder_dir = "./csv_logs/AWS_FXS/series20/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
-serialize_file = "emulab_d460_10Gbps_hdd_unmerged"
+# serialize_file = "emulab_d460_10Gbps_hdd_unmerged_all_cols_V2"
+# serialize_file = "utah_c6525-25g_25Gbps_ssd_unmerged_all_cols_V2"
+# serialize_file = "wisconsin_c220g1-10Gbps_ssd_unmerged_all_cols_V2"
+serialize_file = "utah_c6525-25g_1Gbps_ssd_unmerged_all_cols_V2"
+# serialize_file = "wisconsin_c220g1-10Gbps_hdd_ssd_unmerged_all_cols_V2"
 
 csv_to_python = CSV_to_Proto(folder_dir, serialize_file)
 csv_to_python.add_all_dataset_files(csv_to_python.folder_name)
