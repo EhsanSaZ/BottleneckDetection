@@ -177,6 +177,7 @@ def collect_stat():
                     pid == 0 or \
                     not network_statistics_collector.check_established_connection_exist():  # or pid == 0
                 epoc_time = 0
+                time.sleep(0.1)
                 continue
             try:
                 #print("COLLECT")
@@ -192,6 +193,7 @@ def collect_stat():
                     file_ost_path_info = remote_statistics_collector.collect_file_ost_path_info(pid,
                                                                                                 server_saving_directory)
                     if file_ost_path_info is None:
+                        time.sleep(0.1)
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
@@ -280,23 +282,23 @@ def collect_stat():
                         is_first_time = False
             except:
                 traceback.print_exc()
-            processing_finish_time = time.time()
-            processing_time = processing_finish_time - processing_start_time
-            # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
-            #                                                                           sender_monitor_agent_process)
-            overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
-                                                               processing_time,
-                                                               data_transfer_overhead,
-                                                               receiver_monitor_agent_process.cpu_percent(),
-                                                               receiver_monitor_agent_process.memory_percent())
-            overhead_epoc_count += 1
-            if not is_first_time:
-                overhead_main_output_string += overhead_output_string
-                if overhead_epoc_count % 10 == 0:
-                    overhead_epoc_count = 0
-                    overhead_write = overheadFileWriteThread(overhead_main_output_string)
-                    overhead_write.start()
-                    overhead_main_output_string = ""
+            # processing_finish_time = time.time()
+            # processing_time = processing_finish_time - processing_start_time
+            # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
+            # #                                                                           sender_monitor_agent_process)
+            # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
+            #                                                    processing_time,
+            #                                                    data_transfer_overhead,
+            #                                                    receiver_monitor_agent_process.cpu_percent(),
+            #                                                    receiver_monitor_agent_process.memory_percent())
+            #overhead_epoc_count += 1
+            #if not is_first_time:
+            #    overhead_main_output_string += overhead_output_string
+            #    if overhead_epoc_count % 10 == 0:
+            #        overhead_epoc_count = 0
+            #        overhead_write = overheadFileWriteThread(overhead_main_output_string)
+            #        overhead_write.start()
+            #       overhead_main_output_string = ""
 
             time.sleep(sleep_time)
 
