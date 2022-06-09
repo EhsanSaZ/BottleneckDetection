@@ -37,7 +37,9 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root java'
 }
 # sys_config_tcp_receive_buffer=_buffer_  0.5max 0.25max 0.125max 0.5default 0.25default 0.125default
-levels=(["151"]=3145728 ["152"]=1572864 ["153"]=786432 ["154"]=8192 ["155"]=4096 ["156"]=2048)
+#levels=(["151"]=3145728 ["152"]=1572864 ["153"]=786432 ["154"]=8192 ["155"]=4096 ["156"]=2048)
+#levels=(["151"]=33554432 ["152"]=16777216 ["153"]=8388608 ["154"]=43690 ["155"]=21845 ["156"]=10922)
+levels=(["151"]=33554432 ["152"]=16777216 ["153"]=8388608 ["154"]=4194304 ["155"]=2097152 ["156"]=1048576)
 
 while true
 do
@@ -52,7 +54,9 @@ do
       echo "Run the java server on receiver side and start metric collector agent";
       ssh root@$receiver_remote_client_ip "python3 /users/Ehsan/AgentMetricCollector/remote_parallel_metric_collector.py -l ${label} -jsp 50505 -jtl ${label}"&
       ssh root@$receiver_remote_client_ip 'cat /proc/sys/net/ipv4/tcp_rmem > ./receiver/tcp_rmem_original_val && sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf';
-      ssh root@$receiver_remote_client_ip "echo 'net.ipv4.tcp_rmem= 2048 87380 '${levels[$i]} >> /etc/sysctl.conf && sysctl -p";
+      ssh root@$receiver_remote_client_ip 'cat /proc/sys/net/core/rmem_max > ./receiver/core_rmem_original_val && sed -r "/^net.core.rmem_max=.*$/d" -i /etc/sysctl.conf';
+      ssh root@$receiver_remote_client_ip "echo 'net.ipv4.tcp_rmem= 10240 87380 '${levels[$i]} >> /etc/sysctl.conf";
+      ssh root@$receiver_remote_client_ip "echo 'net.core.rmem_max= '${levels[$i]} >> /etc/sysctl.conf && sysctl -p";
       if $limited_bw
       then
         sudo tc qdisc add dev $ethernet_interface_name root netem rate ${network_bw};
@@ -66,7 +70,7 @@ do
       then
         tc qdisc del dev $ethernet_interface_name root;
       fi
-      ssh root@$receiver_remote_client_ip 'sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf && echo "net.ipv4.tcp_rmem= " $(cat ./receiver/tcp_rmem_original_val) >> /etc/sysctl.conf && rm ./receiver/tcp_rmem_original_val && sysctl -p';
+      ssh root@$receiver_remote_client_ip 'sed -r "/^net.ipv4.tcp_rmem=.*$/d" -i /etc/sysctl.conf && sed -r "/^net.core.rmem_max=.*$/d" -i /etc/sysctl.conf && echo "net.ipv4.tcp_rmem= " $(cat ./receiver/tcp_rmem_original_val) >> /etc/sysctl.conf && echo "net.core.rmem_max= " $(cat ./receiver/core_rmem_original_val) >> /etc/sysctl.conf && rm ./receiver/tcp_rmem_original_val  && rm ./receiver/core_rmem_original_val  && sysctl -p';
       sleep 1;
     done
     round_counter=$(($round_counter+1));

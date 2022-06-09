@@ -37,7 +37,8 @@ kill_all_java_python3_processes(){
     ssh root@$receiver_remote_client_ip 'killall -9  -u root java'
 }
 # sys_config_tcp_send=_buffer_  0.5max 0.25max 0.125max 0.5default 0.25default 0.125default
-levels=(["145"]=3145728 ["146"]=1572864 ["147"]=786432 ["148"]=8192 ["149"]=4096 ["150"]=2048)
+#levels=(["145"]=33554432 ["146"]=16777216 ["147"]=8388608 ["148"]=43690 ["149"]=21845 ["150"]=10922)
+levels=(["145"]=33554432 ["146"]=16777216 ["147"]=8388608 ["148"]=4194304 ["149"]=2097152 ["150"]=1048576)
 
 while true
 do
@@ -56,8 +57,11 @@ do
         sudo tc qdisc add dev $ethernet_interface_name root netem rate ${network_bw};
       fi
       cat /proc/sys/net/ipv4/tcp_wmem > tcp_wmem_original_val
+      cat /proc/sys/net/core/wmem_max > core_wmem_original_val
+      sed -r "/^net.core.wmem_max=.*$/d" -i /etc/sysctl.conf
       sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
-      echo 'net.ipv4.tcp_wmem= 2048 16384 '${levels[$i]} >> /etc/sysctl.conf
+      echo 'net.core.wmem_max= '${levels[$i]} >> /etc/sysctl.conf
+      echo 'net.ipv4.tcp_wmem= 10240 87380 '${levels[$i]} >> /etc/sysctl.conf
       sysctl -p
       sleep 5;
       echo "Start collecting metrics on sender side";
@@ -68,9 +72,12 @@ do
       then
         tc qdisc del dev $ethernet_interface_name root;
       fi
+      sed -r "/^net.core.wmem_max=.*$/d" -i /etc/sysctl.conf
       sed -r "/^net.ipv4.tcp_wmem=.*$/d" -i /etc/sysctl.conf
+      echo "net.core.wmem_max= " $(cat core_wmem_original_val) >> /etc/sysctl.conf
       echo "net.ipv4.tcp_wmem= " $(cat tcp_wmem_original_val) >> /etc/sysctl.conf
       rm tcp_wmem_original_val
+      rm core_wmem_original_val
       sysctl -p
       sleep 1;
     done
