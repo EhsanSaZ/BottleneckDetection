@@ -244,12 +244,39 @@ try:
            "sequence_number": 1,
            "is_sender": 1
            }
+
+    # log["time_stamp_in_sec"] = int(log["data"]["time_stamp"])
     logs = client["testdb"].senders_logs
     insert_id = logs.insert_one(log).inserted_id
-    l = logs.find_one({"data.time_stamp": 1655240678.9673095})
-    print(l)
-#     posts = client.testdb.posts
-#     post_id = posts.insert_one(post).inserted_id
+    # s = "function(time_stamp) { return Math.trunc(time_stamp) =="+ str(int(1655240678.9673095))+" ; }"
+    # l = logs.find_one({"data.time_stamp": 1655240678.9673095})
+    # l = logs.find_one( {"$expr": { "$function": {
+    #   "body": s,
+    #   "args": [ "$data.time_stamp"],
+    #   "lang": "js" } } } )
+
+    # pipeline = [
+    #     {
+    #         "$addFields": {
+    #             "time_in_sec": {
+    #                 "$toInt": "$data.time_stamp"
+    #             }
+    #         }
+    #     },
+    #     {
+    #         "$match": {
+    #             "time_in_sec": {
+    #                 "$eq": int(1655240678.9673095)
+    #             }
+    #         }
+    #     }
+    #
+    # ]
+    # results = logs.aggregate(pipeline)
+    # print(results)
+    # for doc in results:
+    #     print(doc)
+
 #     p = posts.find_one({"author": "Mike"})
 #     print(p)
 except Exception as e:
