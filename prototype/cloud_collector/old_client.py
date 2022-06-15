@@ -9,7 +9,7 @@ from tinydb import TinyDB, Query
 from tinydb.storages import MemoryStorage
 from BetterJSONStorage import BetterJSONStorage
 from concurrent.futures.thread import ThreadPoolExecutor
-from cloud_client_cnfg import Config
+from old_cloud_client_cnfg import Config
 host = "127.0.0.1"
 port = "5001"
 path = Path("db.json")
