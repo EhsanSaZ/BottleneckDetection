@@ -3,6 +3,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from event_process import process_event
+from event_process_v2 import process_event_v2
 import zmq, time, sys, os
 from multiprocessing import Process
 from pymongo import MongoClient
@@ -46,7 +47,6 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
     poller.register(sub_socket, zmq.POLLIN)
 
     # time.sleep(1)
-
     with ThreadPoolExecutor(max_workers=worker) as executor:
         while True:
             # string = rep_socket.recv()
@@ -72,7 +72,7 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                         sender_port = data["sender"]["port"]
                         receiver_ip = data["receiver"]["ip"]
                         receiver_port = data["receiver"]["port"]
-                        print("subscribing")
+                        # print("subscribing sender {} {}, receiver{} {}".format(sender_ip, sender_port, receiver_ip, receiver_port))
                         sub_socket.connect("tcp://{}:{}".format(sender_ip, sender_port))
                         sub_socket.connect("tcp://{}:{}".format(receiver_ip, receiver_port))
                         success_response = {"response_code": "200", "data": "subscribed", "request": req_json}
