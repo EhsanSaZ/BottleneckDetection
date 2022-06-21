@@ -4,31 +4,31 @@ import traceback
 def process_event_v2(data, db_connection, db_name):
     try:
         # print(data)
-        # time_stamp_sec = int(data["data"]["time_stamp"])
-        # data["time_stamp_sec"] = time_stamp_sec
-        # logs_collection = db_connection[db_name].logs
-        # insert_id = logs_collection.insert_one(data).inserted_id
-
-
         time_stamp_sec = int(data["data"]["time_stamp"])
         data["time_stamp_sec"] = time_stamp_sec
-        transfer_collection = db_connection[db_name].logs
-        if data["is_sender"] == 1:
-            query = {"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec}
-            update = {"$set": {"is_sender": -1,
-                               "sequence_number": data["sequence_number"],
-                               "sender_data": data["data"],
-                               "time_stamp_sec": time_stamp_sec,
-                               "transfer_ID": data["transfer_ID"]}}
-            transfer_collection.update_one(query, update, upsert=True)
-        else:
-            query = {"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec}
-            update = {"$set": {"is_sender": -1,
-                               "sequence_number": data["sequence_number"],
-                               "receiver_data": data["data"],
-                               "time_stamp_sec": time_stamp_sec,
-                               "transfer_ID": data["transfer_ID"]}}
-            transfer_collection.update_one(query, update, upsert=True)
+        logs_collection = db_connection[db_name].logs
+        insert_id = logs_collection.insert_one(data).inserted_id
+
+
+        # time_stamp_sec = int(data["data"]["time_stamp"])
+        # data["time_stamp_sec"] = time_stamp_sec
+        # transfer_collection = db_connection[db_name].logs
+        # if data["is_sender"] == 1:
+        #     query = {"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec}
+        #     update = {"$set": {"is_sender": -1,
+        #                        "sequence_number": data["sequence_number"],
+        #                        "sender_data": data["data"],
+        #                        "time_stamp_sec": time_stamp_sec,
+        #                        "transfer_ID": data["transfer_ID"]}}
+        #     transfer_collection.update_one(query, update, upsert=True)
+        # else:
+        #     query = {"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec}
+        #     update = {"$set": {"is_sender": -1,
+        #                        "sequence_number": data["sequence_number"],
+        #                        "receiver_data": data["data"],
+        #                        "time_stamp_sec": time_stamp_sec,
+        #                        "transfer_ID": data["transfer_ID"]}}
+        #     transfer_collection.update_one(query, update, upsert=True)
 
 
         # log = logs_collection.find_one({"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec})
