@@ -381,6 +381,7 @@ class SendToCloud(threading.Thread):
 
     def run(self):
         try:
+            global ready_to_publish
             rq_socket = context.socket(zmq.REQ)
             xpub_frontend_socket = None
             xsub_backend_socket = None
