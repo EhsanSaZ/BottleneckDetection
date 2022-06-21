@@ -19,9 +19,9 @@ def process_event_v3(data, db_connection, db_name):
             doc = transfer_collection.find_one_and_update(query, update, upsert=True,
                                                           return_document=ReturnDocument.AFTER)
             # print(doc)
-            if doc.get("sender_data") and doc.get("receiver_data"):
-                print(doc)
-                print("OK, Run the machine learning prediction")
+            # if doc.get("sender_data") and doc.get("receiver_data"):
+            #     print(doc)
+            #     print("OK, Run the machine learning prediction")
         else:
             query = {"transfer_ID": data["transfer_ID"], "time_stamp_sec": time_stamp_sec}
             update = {"$set": {"is_sender": -1,
@@ -33,9 +33,9 @@ def process_event_v3(data, db_connection, db_name):
             doc = transfer_collection.find_one_and_update(query, update, upsert=True,
                                                           return_document=ReturnDocument.AFTER)
             # print(doc)
-            if doc.get("sender_data") and doc.get("receiver_data"):
-                print(doc)
-                print("OK, Run the machine learning prediction")
+            # if doc.get("sender_data") and doc.get("receiver_data"):
+            #     print(doc)
+            #     print("OK, Run the machine learning prediction")
 
     except Exception as e:
         print(e)
