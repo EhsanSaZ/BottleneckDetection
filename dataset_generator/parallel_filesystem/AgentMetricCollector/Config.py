@@ -26,3 +26,14 @@ class Config:
     zmq_receiver_publisher_port = "5557"
 
     send_to_cloud_mode = False
+
+    cloud_server_address = "127.0.0.1"
+    cloud_server_port = "6000"
+
+    xpub_frontend_socket_ip_sender = "127.0.0.1"
+    xpub_frontend_socket_port_sender = "1500"
+
+    xpub_frontend_socket_ip_receiver = "127.0.0.2"
+    xpub_frontend_socket_port_receiver = "1500"
+    # xsub_backend_socket_port = "3500"
+    xsub_backend_socket_name = "xsub_backend"

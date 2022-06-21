@@ -18,6 +18,7 @@ from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatistics
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 from AgentMetricCollector.Config import Config
 from AgentMetricCollector.data_converter import DataConverter
+
 # from remote_ost_stat_collector import process_remote_ost_stats
 # from system_metric_collector import collect_system_metrics
 # from buffer_value_collector import get_buffer_value
@@ -25,7 +26,7 @@ from AgentMetricCollector.data_converter import DataConverter
 # from file_mdt_path_info import collect_file_mdt_path_info
 # from ost_stat_collector import process_ost_stat
 # from mdt_stat_collector import get_mdt_stat
-#from dataset_generator.parallel_filesystem.AgentMetricCollector.ResourceUsageFootprint.get_resource_usage_foot_prints import \
+# from dataset_generator.parallel_filesystem.AgentMetricCollector.ResourceUsageFootprint.get_resource_usage_foot_prints import \
 #    ResourceUsageFootprints
 
 src_ip = Config.parallel_metric_collector_src_ip
@@ -65,16 +66,37 @@ is_transfer_done = False
 sender_monitor_agent_pid = os.getpid()
 sender_monitor_agent_process = psutil.Process(int(sender_monitor_agent_pid))
 
-global mdt_parent_path
+global mdt_parent_path, ready_to_publish
 mdt_parent_path = Config.parallel_metric_mdt_parent_path
 
 java_sender_app_path = Config.parallel_metric_java_sender_app_path
+
+context = None
+ready_to_publish = False
+cloud_server_host = None
+cloud_server_port = None
+
+xpub_frontend_socket_ip_sender = None
+xpub_frontend_socket_port_sender = None
+
+xpub_frontend_socket_ip_receiver = None
+xpub_frontend_socket_port_receiver = None
+
+xsub_backend_socket_name = None
+
 if Config.send_to_cloud_mode:
     context = zmq.Context()
-    sender_publisher = context.socket(zmq.PUB)
-    sender_publisher.bind("tcp://{}:{}".format(Config.zmq_sender_publisher_bind_addr, Config.zmq_sender_publisher_port))
-else:
-    sender_publisher = None
+    cloud_server_host = Config.cloud_server_address
+    cloud_server_port = Config.cloud_server_port
+
+    xpub_frontend_socket_ip_sender = Config.xpub_frontend_socket_ip_sender
+    xpub_frontend_socket_port_sender = Config.xpub_frontend_socket_port_sender
+
+    xpub_frontend_socket_ip_receiver = Config.xpub_frontend_socket_ip_receiver
+    xpub_frontend_socket_port_receiver = Config.xpub_frontend_socket_port_receiver
+
+    xsub_backend_socket_name = Config.xsub_backend_socket_name
+
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -114,9 +136,9 @@ def transfer_file(i):
     #    pass
     #     line = str(proc.stdout.readline()).replace("\r", "\n")
     #     strings += line
-        # if not line.decode("utf-8"):
-        #     break
-        # strings.replace("\r", "\n")
+    # if not line.decode("utf-8"):
+    #     break
+    # strings.replace("\r", "\n")
 
 
 def collect_stat():
@@ -179,6 +201,10 @@ def collect_stat():
 
         all_remote_ost_stats_so_far = {}
         data_transfer_overhead = 0
+        metric_publisher_socket = None
+        if Config.send_to_cloud_mode:
+            metric_publisher_socket = context.socket(zmq.PUB)
+            metric_publisher_socket.connect("inproc://{}".format(xsub_backend_socket_name))
         while 1:
             processing_start_time = time.time()
             ### NETWORK METRICS ###
@@ -196,7 +222,7 @@ def collect_stat():
                     initial_time = time.time()
                     # is_first_time = False
                 time_diff += 1
-                #epoc_time += 1
+                # epoc_time += 1
                 if time_diff >= (.1 / sleep_time):
                     # system_value_list = collect_system_metrics(pid, sender_process)
                     system_value_list = statistics_collector.collect_system_metrics(pid, sender_process)
@@ -275,10 +301,8 @@ def collect_stat():
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = 1
                         body = json.dumps(data)
-                        data_transfer_overhead = len(body.encode('utf-8'))
-                        # send data to server in a different thread
-                        send_thread = sendToCloud(body)
-                        send_thread.start()
+                        metric_publisher_socket.send_json(body)
+                        # data_transfer_overhead = len(body.encode('utf-8'))
                     elif not is_first_time:
                         main_output_string += output_string
                         if epoc_count % 5 == 0:
@@ -339,18 +363,68 @@ class overheadFileWriteThread(threading.Thread):
         output_file.close()
 
 
-class sendToCloud(threading.Thread):
-    def __init__(self, json):
-        threading.Thread.__init__(self)
-        self.json = json
+class SendToCloud(threading.Thread):
+    def __init__(self, server_host, server_port,
+                 frontend_socket_ip_sender, frontend_socket_port_sender,
+                 frontend_socket_ip_receiver, frontend_socket_port_receiver,
+                 backend_socket_name):
+        super().__init__()
+        self.server_host = server_host
+        self.server_port = server_port
+        self.xpub_frontend_socket_ip_sender = frontend_socket_ip_sender
+        self.xpub_frontend_socket_port_sender = frontend_socket_port_sender
+
+        self.xpub_frontend_socket_ip_receiver = frontend_socket_ip_receiver
+        self.xpub_frontend_socket_port_receiver = frontend_socket_port_receiver
+
+        self.xsub_backend_socket_name = backend_socket_name
 
     def run(self):
-        # T ODO send over the channel to cloud
-        if sender_publisher:
-            sender_publisher.send_json(self.json)
-        else:
-            print("sender_publisher is None")
-        #print(self.json_str)
+        try:
+            rq_socket = context.socket(zmq.REQ)
+            xpub_frontend_socket = None
+            xsub_backend_socket = None
+            rq_socket.connect("tcp://{}:{}".format(self.server_host, self.server_port))
+            # TODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
+            #  and notify receiver agents to when to start publishing
+            #  and agree on transfer id
+            rq = {"request_type": "new_publisher_info",
+                  "data": {
+                      "sender": {
+                          "ip": self.xpub_frontend_socket_ip_sender,
+                          "port": self.xpub_frontend_socket_port_sender
+                      },
+                      "receiver": {
+                          "ip": self.xpub_frontend_socket_ip_receiver,
+                          "port": self.xpub_frontend_socket_port_receiver
+                      }
+                  }}
+            rq_socket.send_json(rq)
+            # message = rq_socket.recv_json()
+            message = {"response_code": "200"}
+            if message["response_code"] == "200":
+                print(f"Monitoring agent is registered successfully. Received reply [ {message} ]")
+                ready_to_publish = True
+
+                xpub_frontend_socket = context.socket(zmq.XPUB)
+                xpub_frontend_socket.bind("tcp://*:{}".format(self.xpub_frontend_socket_port_sender))
+
+                xsub_backend_socket = context.socket(zmq.XSUB)
+                # xsub_backend_socket.bind("tcp://*:{}".format(xsub_backend_socket_port))
+                xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
+
+                zmq.proxy(xpub_frontend_socket, xsub_backend_socket)
+            else:
+                print(f"Error in registering monitoring agent publisher socket. Received reply [ {message} ]")
+
+            # We never get here if everything is ok…
+            if xpub_frontend_socket:
+                xpub_frontend_socket.close()
+            if xsub_backend_socket:
+                xsub_backend_socket.close()
+            # context.term()
+        except Exception as e:
+            traceback.print_exc()
 
 
 class statThread(threading.Thread):
@@ -365,6 +439,13 @@ Path("./sender/logs").mkdir(parents=True, exist_ok=True)
 Path("./sender/overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
+if Config.send_to_cloud_mode:
+    publisher_thread = SendToCloud(cloud_server_host, cloud_server_port,
+                                   xpub_frontend_socket_ip_sender, xpub_frontend_socket_port_sender,
+                                   xpub_frontend_socket_ip_receiver, xpub_frontend_socket_ip_receiver,
+                                   xsub_backend_socket_name)
+    publisher_thread.start()
+
 stat_thread = statThread()
 stat_thread.start()
 # overhead_write_thread = overheadFileWriteThread("timestamp,processing_time, payload_size, cpu_percent, memory_percent\n")
@@ -374,5 +455,6 @@ file_transfer_thread = FileTransferThread(str(0))
 file_transfer_thread.start()
 # file_transfer_thread.join()
 stat_thread.join()
+publisher_thread.join()
 
 is_transfer_done = True
