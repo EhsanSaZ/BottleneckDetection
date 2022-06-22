@@ -37,3 +37,5 @@ class Config:
     xpub_frontend_socket_port_receiver = "1500"
     # xsub_backend_socket_port = "3500"
     xsub_backend_socket_name = "xsub_backend"
+
+    receiver_signaling_port = "1234"
