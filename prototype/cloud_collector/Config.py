@@ -7,3 +7,5 @@ class Config:
     db_pass = 'mongoadmin'
     process_worker_number = 3
     thread_per_worker_process = 5
+    server_host_ip = "*"
+    server_port = "60000"

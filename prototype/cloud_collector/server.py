@@ -16,8 +16,8 @@ from Config import Config
 # import random
 
 
-host = "*"
-port = "60000"
+host = Config.server_host_ip
+port = Config.server_port
 ipc_path_name = "/tmp/zmqtest"
 total_worker_processes = Config.process_worker_number
 
