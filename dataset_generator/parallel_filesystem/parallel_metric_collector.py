@@ -17,6 +17,7 @@ import zmq
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 from AgentMetricCollector.Config import Config
+from AgentMetricCollector.ZMQMessages import Messages
 from AgentMetricCollector.data_converter import DataConverter
 
 # from remote_ost_stat_collector import process_remote_ost_stats
@@ -84,6 +85,7 @@ xpub_frontend_socket_port_receiver = None
 
 xsub_backend_socket_name = None
 
+receiver_signaling_port = None
 if Config.send_to_cloud_mode:
     context = zmq.Context()
     cloud_server_host = Config.cloud_server_address
@@ -97,6 +99,7 @@ if Config.send_to_cloud_mode:
 
     xsub_backend_socket_name = Config.xsub_backend_socket_name
 
+    receiver_signaling_port = Config.receiver_signaling_port
 
 class FileTransferThread(threading.Thread):
     def __init__(self, name):
@@ -401,18 +404,23 @@ class SendToCloud(threading.Thread):
                       }
                   }}
             rq_socket.send_json(rq)
-            # message = rq_socket.recv_json()
-            message = {"response_code": "200"}
+            message = rq_socket.recv_json()
+            # message = {"response_code": "200"}
             if message["response_code"] == "200":
                 print(f"Monitoring agent is registered successfully. Received reply [ {message} ]")
-                ready_to_publish = True
-
+                signaling_socket = context.socket(zmq.REQ)
+                signaling_socket.connect("tcp://{}:{}".format(xpub_frontend_socket_ip_receiver, receiver_signaling_port))
+                signaling_socket.send(Messages.start_publishing)
+                signal_message = signaling_socket.recv()
+                if signal_message == Messages.received_publishing_signal:
+                    print("Receiver received publish signal")
                 xpub_frontend_socket = context.socket(zmq.XPUB)
                 xpub_frontend_socket.bind("tcp://*:{}".format(self.xpub_frontend_socket_port_sender))
 
                 xsub_backend_socket = context.socket(zmq.XSUB)
                 # xsub_backend_socket.bind("tcp://*:{}".format(xsub_backend_socket_port))
                 xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
+                ready_to_publish = True
 
                 zmq.proxy(xpub_frontend_socket, xsub_backend_socket)
             else:
