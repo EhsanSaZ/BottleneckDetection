@@ -1,9 +1,11 @@
+import json
 import traceback
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from event_process import process_event
 from event_process_v2 import process_event_v2
+from event_process_v3 import process_event_v3
 import zmq, time, sys, os
 from multiprocessing import Process
 from pymongo import MongoClient
@@ -15,7 +17,7 @@ from Config import Config
 
 
 host = "*"
-port = "6000"
+port = "60000"
 ipc_path_name = "/tmp/zmqtest"
 total_worker_processes = Config.process_worker_number
 
@@ -99,7 +101,7 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                 # print("sub_socket")
                 data = sub_socket.recv_json()
                 # process the event
-                executor.submit(process_event, data, db_client, db_name)
+                executor.submit(process_event_v2, json.loads(data), db_client, db_name)
 
 
 def main():
