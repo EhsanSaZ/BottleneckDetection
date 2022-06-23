@@ -54,7 +54,7 @@ args = parser.parse_args()
 label_value = args.label_value
 port_number = args.java_server_port
 
-if not args.transfer_id:
+if args.transfer_id:
     transfer_id = args.transfer_id
 else:
     transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
@@ -304,6 +304,7 @@ def collect_stat():
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = 1
                         body = json.dumps(data)
+                        # print(body)
                         metric_publisher_socket.send_json(body)
                         # data_transfer_overhead = len(body.encode('utf-8'))
                     elif not is_first_time:
@@ -389,9 +390,9 @@ class SendToCloud(threading.Thread):
             xpub_frontend_socket = None
             xsub_backend_socket = None
             rq_socket.connect("tcp://{}:{}".format(self.server_host, self.server_port))
-            # TODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
+            #  we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
             #  and notify receiver agents to when to start publishing
-            #  and agree on transfer id
+            #  TODO and agree on transfer id
             rq = {"request_type": "new_publisher_info",
                   "data": {
                       "sender": {
@@ -410,8 +411,8 @@ class SendToCloud(threading.Thread):
                 print(f"Monitoring agent is registered successfully. Received reply [ {message} ]")
                 signaling_socket = context.socket(zmq.REQ)
                 signaling_socket.connect("tcp://{}:{}".format(xpub_frontend_socket_ip_receiver, receiver_signaling_port))
-                signaling_socket.send(Messages.start_publishing)
-                signal_message = signaling_socket.recv()
+                signaling_socket.send_string(Messages.start_publishing)
+                signal_message = signaling_socket.recv_string()
                 if signal_message == Messages.received_publishing_signal:
                     print("Receiver received publish signal")
                 xpub_frontend_socket = context.socket(zmq.XPUB)
@@ -448,10 +449,11 @@ Path("./sender/logs").mkdir(parents=True, exist_ok=True)
 Path("./sender/overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./SimpleSenderLog").mkdir(parents=True, exist_ok=True)
 
+publisher_thread = None
 if Config.send_to_cloud_mode:
     publisher_thread = SendToCloud(cloud_server_host, cloud_server_port,
                                    xpub_frontend_socket_ip_sender, xpub_frontend_socket_port_sender,
-                                   xpub_frontend_socket_ip_receiver, xpub_frontend_socket_ip_receiver,
+                                   xpub_frontend_socket_ip_receiver, xpub_frontend_socket_port_receiver,
                                    xsub_backend_socket_name)
     publisher_thread.start()
 
