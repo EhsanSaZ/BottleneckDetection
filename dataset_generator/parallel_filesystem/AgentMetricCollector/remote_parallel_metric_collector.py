@@ -51,7 +51,7 @@ label_value = args.label_value
 server_port_number = args.java_server_port
 java_server_throughput_label = args.java_server_throughput_label
 
-if not args.transfer_id:
+if args.transfer_id:
     transfer_id = args.transfer_id
 else:
     transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
@@ -295,6 +295,7 @@ def collect_stat():
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = 0
                         body = json.dumps(data)
+                        # print(body)
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
                     elif not is_first_time:
@@ -381,10 +382,10 @@ class SendToCloud(threading.Thread):
             # # TODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
             # #  and notify receiver agents to when to start publishing // use signaling
             # #  and agree on transfer id
+            print("Binding signaling socket")
             signal_socket.bind("tcp://*:{}".format(receiver_signaling_port))
-            message = signal_socket.recv()
+            message = signal_socket.recv_string()
             if message == Messages.start_publishing:
-                signal_socket.send(Messages.received_publishing_signal)
 
                 # print(f"Monitoring agent is registered successfully. Received reply [ {message} ]")
 
@@ -396,6 +397,7 @@ class SendToCloud(threading.Thread):
                 xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
                 ready_to_publish = True
 
+                signal_socket.send_string(Messages.received_publishing_signal)
                 zmq.proxy(xpub_frontend_socket, xsub_backend_socket)
             else:
                 signal_socket.send(Messages.default_message)
@@ -425,8 +427,9 @@ Path("./receiver/logs").mkdir(parents=True, exist_ok=True)
 Path("./receiver/overhead_logs").mkdir(parents=True, exist_ok=True)
 Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
+publisher_thread = None
 if Config.send_to_cloud_mode:
-    publisher_thread = SendToCloud(xpub_frontend_socket_ip_receiver, xpub_frontend_socket_ip_receiver,
+    publisher_thread = SendToCloud(xpub_frontend_socket_ip_receiver, xpub_frontend_socket_port_receiver,
                                    xsub_backend_socket_name)
     publisher_thread.start()
 
@@ -440,6 +443,7 @@ server_thread = RunServerThread(str(0))
 server_thread.start()
 # server_thread.join()
 stat_thread.join()
-publisher_thread.join()
+if publisher_thread:
+    publisher_thread.join()
 
 is_transfer_done = True
