@@ -79,6 +79,7 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                         sub_socket.connect("tcp://{}:{}".format(receiver_ip, receiver_port))
                         success_response = {"response_code": "200", "data": "subscribed", "request": req_json}
                         rep_socket.send_json(success_response)
+                        # TODO THIS is not a correct place for unsubscribing
                     elif req_json["request_type"] == "unsubscribe_publisher_info":
                         data = req_json["data"]
                         sender_ip = data["sender"]["ip"]
