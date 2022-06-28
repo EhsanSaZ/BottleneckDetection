@@ -107,13 +107,14 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                 json_data = json.loads(message)
                 if json_data.get("request_type") == "unsubscribe_publisher_info":
                     data = json_data["data"]
-                    sender_ip = data["sender"]["ip"]
-                    sender_port = data["sender"]["port"]
-                    receiver_ip = data["receiver"]["ip"]
-                    receiver_port = data["receiver"]["port"]
-                    sub_socket.disconnect("tcp://{}:{}".format(sender_ip, sender_port))
-                    sub_socket.disconnect("tcp://{}:{}".format(receiver_ip, receiver_port))
-                    success_response = {"response_code": "200", "data": "unsubscribed", "request": json_data}
+                    if data.get("sender"):
+                        sender_ip = data["sender"]["ip"]
+                        sender_port = data["sender"]["port"]
+                        sub_socket.disconnect("tcp://{}:{}".format(sender_ip, sender_port))
+                    if data.get("receiver"):
+                        receiver_ip = data["receiver"]["ip"]
+                        receiver_port = data["receiver"]["port"]
+                        sub_socket.disconnect("tcp://{}:{}".format(receiver_ip, receiver_port))
                 else:
                 # process the event
                     executor.submit(process_event_v2, json_data, db_client, db_name)
