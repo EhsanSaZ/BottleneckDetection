@@ -374,9 +374,9 @@ class SendToCloud(threading.Thread):
         self.xsub_backend_socket_name = backend_socket_name
 
     def run(self):
+        xpub_frontend_socket = None
+        xsub_backend_socket = None
         try:
-            xpub_frontend_socket = None
-            xsub_backend_socket = None
             signal_socket = context.socket(zmq.REP)
             global ready_to_publish
             # # TODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
@@ -402,18 +402,24 @@ class SendToCloud(threading.Thread):
             else:
                 signal_socket.send(Messages.default_message)
                 print(f"Received message [ {message} ]")
-
-            # We never get here if everything is ok…
-            if xpub_frontend_socket:
-                xpub_frontend_socket.close()
-            if xsub_backend_socket:
-                xsub_backend_socket.close()
-            if signal_socket:
-                signal_socket.close()
-            # context.term()
         except Exception as e:
             traceback.print_exc()
-
+            # We never get here if everything is ok…
+        if xpub_frontend_socket:
+            un_sub_rq = {"request_type": "unsubscribe_publisher_info",
+                         "data": {
+                             "receiver": {
+                                 "ip": self.xpub_frontend_socket_ip_receiver,
+                                 "port": self.xpub_frontend_socket_port_receiver
+                             }
+                         }}
+            xpub_frontend_socket.send_json(json.dumps(un_sub_rq))
+            xpub_frontend_socket.close()
+        if xsub_backend_socket:
+            xsub_backend_socket.close()
+        if signal_socket:
+            signal_socket.close()
+        # context.term()
 
 class statThread(threading.Thread):
     def __init__(self):

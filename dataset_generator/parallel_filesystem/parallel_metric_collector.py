@@ -384,11 +384,11 @@ class SendToCloud(threading.Thread):
         self.xsub_backend_socket_name = backend_socket_name
 
     def run(self):
+        xpub_frontend_socket = None
+        xsub_backend_socket = None
         try:
             global ready_to_publish
             rq_socket = context.socket(zmq.REQ)
-            xpub_frontend_socket = None
-            xsub_backend_socket = None
             rq_socket.connect("tcp://{}:{}".format(self.server_host, self.server_port))
             #  we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
             #  and notify receiver agents to when to start publishing
@@ -426,15 +426,22 @@ class SendToCloud(threading.Thread):
                 zmq.proxy(xpub_frontend_socket, xsub_backend_socket)
             else:
                 print(f"Error in registering monitoring agent publisher socket. Received reply [ {message} ]")
-
-            # We never get here if everything is ok…
-            if xpub_frontend_socket:
-                xpub_frontend_socket.close()
-            if xsub_backend_socket:
-                xsub_backend_socket.close()
             # context.term()
         except Exception as e:
             traceback.print_exc()
+        # We never get here if everything is ok…
+        if xpub_frontend_socket:
+            un_sub_rq = {"request_type": "unsubscribe_publisher_info",
+                  "data": {
+                      "sender": {
+                          "ip": self.xpub_frontend_socket_ip_sender,
+                          "port": self.xpub_frontend_socket_port_sender
+                      }
+                  }}
+            xpub_frontend_socket.send_json(json.dumps(un_sub_rq))
+            xpub_frontend_socket.close()
+        if xsub_backend_socket:
+            xsub_backend_socket.close()
 
 
 class statThread(threading.Thread):
