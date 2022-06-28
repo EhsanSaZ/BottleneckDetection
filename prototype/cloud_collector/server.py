@@ -3,6 +3,9 @@ import traceback
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+
+import psutil
+
 from event_process import process_event
 from event_process_v2 import process_event_v2
 from event_process_v3 import process_event_v3
@@ -79,17 +82,16 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                         sub_socket.connect("tcp://{}:{}".format(receiver_ip, receiver_port))
                         success_response = {"response_code": "200", "data": "subscribed", "request": req_json}
                         rep_socket.send_json(success_response)
-                        # TODO THIS is not a correct place for unsubscribing
-                    elif req_json["request_type"] == "unsubscribe_publisher_info":
-                        data = req_json["data"]
-                        sender_ip = data["sender"]["ip"]
-                        sender_port = data["sender"]["port"]
-                        receiver_ip = data["receiver"]["ip"]
-                        receiver_port = data["receiver"]["port"]
-                        sub_socket.disconnect("tcp://{}:{}".format(sender_ip, sender_port))
-                        sub_socket.disconnect("tcp://{}:{}".format(receiver_ip, receiver_port))
-                        success_response = {"response_code": "200", "data": "unsubscribed", "request": req_json}
-                        rep_socket.send_json(success_response)
+                    # elif req_json["request_type"] == "unsubscribe_publisher_info":
+                    #     data = req_json["data"]
+                    #     sender_ip = data["sender"]["ip"]
+                    #     sender_port = data["sender"]["port"]
+                    #     receiver_ip = data["receiver"]["ip"]
+                    #     receiver_port = data["receiver"]["port"]
+                    #     sub_socket.disconnect("tcp://{}:{}".format(sender_ip, sender_port))
+                    #     sub_socket.disconnect("tcp://{}:{}".format(receiver_ip, receiver_port))
+                    #     success_response = {"response_code": "200", "data": "unsubscribed", "request": req_json}
+                    #     rep_socket.send_json(success_response)
                 except KeyError as ke:
                     # error_format = {"response_code": "400", "data":str(repr(ke))}
                     error_response = {"response_code": "400", "data": str(repr(ke))}
@@ -100,9 +102,21 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                     rep_socket.send_json(error_response)
             if socks.get(sub_socket) == zmq.POLLIN:
                 # print("sub_socket")
-                data = sub_socket.recv_json()
+                message = sub_socket.recv_json()
+                print(f"{os.getpid()}: Received request: [ {message} ]")
+                json_data = json.loads(message)
+                if json_data.get("request_type") == "unsubscribe_publisher_info":
+                    data = json_data["data"]
+                    sender_ip = data["sender"]["ip"]
+                    sender_port = data["sender"]["port"]
+                    receiver_ip = data["receiver"]["ip"]
+                    receiver_port = data["receiver"]["port"]
+                    sub_socket.disconnect("tcp://{}:{}".format(sender_ip, sender_port))
+                    sub_socket.disconnect("tcp://{}:{}".format(receiver_ip, receiver_port))
+                    success_response = {"response_code": "200", "data": "unsubscribed", "request": json_data}
+                else:
                 # process the event
-                executor.submit(process_event_v2, json.loads(data), db_client, db_name)
+                    executor.submit(process_event_v2, json_data, db_client, db_name)
 
 
 def main():
