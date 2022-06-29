@@ -37,7 +37,7 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                 if req_json["request_type"] == "new_transfer":
                     data = req_json["data"]
                     transfer_id = data["transfer_id"]
-                    # TODO submit the new stream function and let it run...
+                    # T ODO submit the new stream function and let it run...
                     executor.submit(db_change_stream_process, db_client, db_name, transfer_id)
                     rep_socket.send_json({"response_code": "200", "request": req_json})
             except Exception as e:
