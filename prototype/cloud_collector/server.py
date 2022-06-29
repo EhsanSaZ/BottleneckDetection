@@ -103,7 +103,7 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
             if socks.get(sub_socket) == zmq.POLLIN:
                 # print("sub_socket")
                 message = sub_socket.recv_json()
-                print(f"{os.getpid()}: Received request: [ {message} ]")
+                # print(f"{os.getpid()}: Received request: [ {message} ]")
                 json_data = json.loads(message)
                 if json_data.get("request_type") == "unsubscribe_publisher_info":
                     data = json_data["data"]
