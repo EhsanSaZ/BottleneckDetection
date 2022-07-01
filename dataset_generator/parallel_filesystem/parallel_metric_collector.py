@@ -331,6 +331,10 @@ def collect_stat():
                     else:
                         print("skip first transfer")
                         is_first_time = False
+            except psutil.NoSuchProcess as e:
+                print(e.msg)
+                print("EXITNG COLLECT STAT THREAD")
+                is_transfer_done = True
             except:
                 traceback.print_exc()
             # processing_finish_time = time.time()
