@@ -2,6 +2,7 @@ import argparse
 import json
 import threading
 import time
+from datetime import datetime
 from pathlib import Path
 import socket
 from subprocess import PIPE, Popen
@@ -13,6 +14,7 @@ import psutil
 import copy
 import os
 import zmq
+import hashlib
 
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
@@ -222,7 +224,16 @@ def collect_stat():
                 continue
             try:
                 if (is_first_time):
+                    # Create tid here...
+                    discovery_time = datetime.now().strftime('%Y-%m-%d_%H:%M')
+                    sender_ip = ""
+                    sender_port = ""
+                    receiver_ip = ""
+                    receiver_port = ""
+                    id_str = "{}_{}_{}_{}_{}".format(discovery_time, sender_ip, sender_port, receiver_ip, receiver_port)
+                    transfer_id = hashlib.md5(id_str.encode('utf-8')).hexdigest()
                     initial_time = time.time()
+                    # Send a request to the realtime detection service to add this new transfer
                     # is_first_time = False
                 time_diff += 1
                 # epoc_time += 1

@@ -1,7 +1,9 @@
+import hashlib
 import json
 import os
 import threading
 import time
+from datetime import datetime
 from pathlib import Path
 from subprocess import PIPE, Popen
 import subprocess
@@ -213,7 +215,15 @@ def collect_stat():
             try:
                 #print("COLLECT")
                 if is_first_time:
+                    discovery_time = datetime.now().strftime('%Y-%m-%d_%H:%M')
+                    sender_ip = ""
+                    sender_port = ""
+                    receiver_ip = ""
+                    receiver_port = ""
+                    id_str = "{}_{}_{}_{}_{}".format(discovery_time, sender_ip, sender_port, receiver_ip, receiver_port)
+                    transfer_id = hashlib.md5(id_str.encode('utf-8')).hexdigest()
                     initial_time = time.time()
+                    # Send a request to the realtime detection service to add this new transfer
                 time_diff += 1
                 #epoc_time += 1
 
