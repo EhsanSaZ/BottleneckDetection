@@ -140,6 +140,7 @@ public class SimpleReceiver_per_second_thr_monitor extends Thread{
                 totalTransferredBytes = 0;
                 yy = 0;
                 System.out.println("Read -1, closing the connection...");
+                clientSock.close();
                 return;
             }
 //             System.out.println("FileCount: " + FileCount);
