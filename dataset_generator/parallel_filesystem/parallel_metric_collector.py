@@ -35,6 +35,8 @@ from AgentMetricCollector.data_converter import DataConverter
 src_ip = Config.parallel_metric_collector_src_ip
 dst_ip = Config.parallel_metric_collector_dst_ip
 port_number = Config.parallel_metric_collector_port_number
+local_port_number = None
+
 remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_address_dict
 time_length = Config.parallel_metric_collector_time_length  # one hour data
 drive_name = Config.parallel_metric_collector_drive_name  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
@@ -49,7 +51,8 @@ start_time_global = time.time()
 parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--label_value', help="label for the dataset", required=True)
 parser.add_argument('-i', '--transfer_id', help="transfer id for sending to cloud")
-parser.add_argument('-jsp', '--java_server_port', help="starting port for java sender process", default=port_number)
+parser.add_argument('-jsp', '--java_server_port', help="server listening port", default=port_number)
+parser.add_argument('-jlp', '--java_local_port', help="client connection port")
 
 args = parser.parse_args()
 
@@ -60,6 +63,9 @@ if args.transfer_id:
     transfer_id = args.transfer_id
 else:
     transfer_id = "{}_{}".format(Config.parallel_metric_collector_src_ip, Config.parallel_metric_collector_dst_ip)
+
+if args.java_local_port:
+    local_port_number = args.java_local_port
 
 should_run = True
 pid = 0
@@ -122,7 +128,10 @@ def transfer_file(i):
     #     comm_ss = ['java', '../utilities/SimpleSender2.java', dst_ip, port_number, src_path, str(label_value)]
     # else:
     #     comm_ss = ['java', '../utilities/SimpleSender1.java', dst_ip, port_number, src_path, str(label_value)]
-    comm_ss = ['java', java_sender_app_path, dst_ip, port_number, src_path, str(label_value)]
+    if local_port_number:
+        comm_ss = ['java', java_sender_app_path, dst_ip, port_number, src_path, str(label_value), src_ip, local_port_number]
+    else:
+        comm_ss = ['java', java_sender_app_path, dst_ip, port_number, src_path, str(label_value)]
     # comm_ss = ['java', '-cp', '/home1/08440/tg877399/BottleneckDetection/dataset_generator/utilities/', 'SimpleSender1',
     #            dst_ip, port_number, src_path, str(label_value)]
     strings = ""

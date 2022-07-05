@@ -6,6 +6,7 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.net.*;
 import java.util.concurrent.*;
 import java.time.LocalDateTime; // Import the LocalDateTime class
 import java.time.format.DateTimeFormatter; // Import the DateTimeFormatter class
@@ -54,10 +55,17 @@ public class SimpleSender1 {
         }
     }
 
-    public SimpleSender1(String host, int port) {
+    public SimpleSender1(String host, int port, String localIP, int localPort) {
         try {
-            s = new Socket(host, port);
-            s.setSoTimeout(10000);
+            if (localIP != ""){
+                InetAddress localAddress = InetAddress.getByName(localIP);
+                s = new Socket(host, port, localAddress, localPort);
+                s.setSoTimeout(10000);
+            }else{
+                s = new Socket(host, port);
+                s.setSoTimeout(10000);
+            }
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -169,7 +177,15 @@ public class SimpleSender1 {
         int port = Integer.valueOf(args[1]);
         String path = args[2];
         int label = Integer.valueOf(args[3]);
-        SimpleSender1 fc = new SimpleSender1(destIp, port);
+        String sourceIP = "";
+        int sourcePort = -1;
+        try{
+            sourceIP = args[4];
+            sourcePort = Integer.valueOf(args[5]);
+        } catch(Exception e){
+            System.out.println("Using default local port and random local port");
+        }
+        SimpleSender1 fc = new SimpleSender1(destIp, port, sourceIP, sourcePort);
         try {
             fc.sendFile(path,label);
         } catch (IOException e) {
