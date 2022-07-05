@@ -1,7 +1,9 @@
 class Config:
 
     parallel_metric_collector_src_ip = "10.10.2.1"
+    parallel_metric_collector_src_port_range = [5000, 5500]
     parallel_metric_collector_dst_ip = "10.10.2.2"  # used by the java client app
+    parallel_metric_collector_dst_port_range = [50505, 50599]  # used by the java client app
     parallel_metric_collector_port_number = "50505"  # used by the java client app
     parallel_metric_collector_time_length = 3600
     parallel_metric_collector_drive_name = "sda"
@@ -13,8 +15,10 @@ class Config:
 
 
     remote_parallel_metric_collector_server_ip = "10.10.2.2"
+    remote_parallel_metric_collector_server_port_range = [50505, 50599]
     remote_parallel_metric_collector_server_port_number = "50505" # used by the java client app
     remote_parallel_metric_collector_client_ip = "10.10.2.1"
+    remote_parallel_metric_collector_client_port_range = [5000, 5500]
     remote_parallel_metric_collector_remote_ost_index_to_ost_agent_address_dict = {0: "http://10.10.1.2:1234/", 1: "http://10.10.1.3:1234/"}
     remote_parallel_metric_collector_time_length = 3600
     remote_parallel_metric_collector_drive_name = "sda"
