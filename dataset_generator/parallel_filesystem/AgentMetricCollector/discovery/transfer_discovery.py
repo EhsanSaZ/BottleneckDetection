@@ -6,7 +6,8 @@ import time
 
 
 class TransferDiscovery(threading.Thread):
-    def __init__(self, sender_ip_addr, sender_port_range, receiver_ip_addr, receiver_port_range, discovery_cycle=1):
+    def __init__(self, sender_ip_addr, sender_port_range, receiver_ip_addr, receiver_port_range,
+                 transfer_validator, discovery_cycle=1):
         threading.Thread.__init__(self)
         self.sender_ip_addr = sender_ip_addr
         self.sender_port_range = sender_port_range
@@ -14,6 +15,7 @@ class TransferDiscovery(threading.Thread):
         self.receiver_port_range = receiver_port_range
         self.running_transfers = {}
         self.monitored_transfers = {}
+        self.transfer_validator = transfer_validator
         self.discovery_cycle = discovery_cycle
 
     def is_transfer_valid(self, local_address_ip, local_address_port, peer_address_ip, peer_address_port):
@@ -26,7 +28,8 @@ class TransferDiscovery(threading.Thread):
         else:
             return False
 
-    def extract_ip_port(self, text):
+    @staticmethod
+    def extract_ip_port(text):
         ip_port_match_re = r"(?P<ip_part>.*):(?P<port_part>\d*)"
         ipv4_re = r"(?P<ipv4>\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b)"
         ip_port_match = re.search(ip_port_match_re, text)
@@ -35,9 +38,9 @@ class TransferDiscovery(threading.Thread):
             ipv4_match = re.search(ipv4_re, ip_part)
             ip = ipv4_match.groupdict().get("ipv4") or ""
             port = ip_port_match.groupdict().get("port_part") or "-1"
-            return (ip, port)
+            return ip, port
         else:
-            return (None, None)
+            return None, None
 
     def start_discovery(self):
         try:
@@ -62,9 +65,13 @@ class TransferDiscovery(threading.Thread):
                         sender_ip, sender_port = self.extract_ip_port(first_list[2])
                         receiver_ip, receiver_port = self.extract_ip_port(first_list[3])
 
-                        if self.is_transfer_valid(sender_ip, sender_port, receiver_ip, receiver_port) and len(first_list) == 5:
+                        if self.transfer_validator.is_transfer_valid(sender_ip, sender_port,
+                                                                     receiver_ip, receiver_port,
+                                                                     self.sender_ip_addr, self.sender_port_range,
+                                                                     self.receiver_ip_addr,
+                                                                     self.receiver_port_range) and len(first_list) == 5:
                             # print(self.is_transfer_valid(sender_ip, sender_port, receiver_ip, receiver_port), first_list)
-                            match = re.search("pid=(\d*),", first_list[4])
+                            match = re.search(r"pid=(\d*),", first_list[4])
                             if match:
                                 pid = int(match[1])
                                 # print("Find transfer", pid, sender_ip, sender_port, receiver_ip, receiver_port)
