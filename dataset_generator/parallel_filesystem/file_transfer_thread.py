@@ -25,7 +25,7 @@ class FileTransferThread(threading.Thread):
 
     def transfer_file(self, i):
         # global pid, label_value, sender_process
-        print(global_vars.pid, global_vars.label_value, global_vars.sender_process)
+        # print(global_vars.pid, global_vars.label_value, global_vars.sender_process)
         if self.local_port_number:
             comm_ss = ['java', self.java_sender_app_path, self.dst_ip, self.port_number, self.src_path,
                        self.label_value, self.src_ip, self.local_port_number]
