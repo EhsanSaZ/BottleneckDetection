@@ -3,8 +3,12 @@ import time
 
 import psutil
 
-from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
-import global_vars
+try :
+    from statistics_log_collector import StatisticsLogCollector
+    import system_monitoring_global_vars
+except ModuleNotFoundError:
+    from .statistics_log_collector import StatisticsLogCollector
+    from . import system_monitoring_global_vars
 
 
 class globalMetricsMonitor(threading.Thread):
@@ -14,11 +18,11 @@ class globalMetricsMonitor(threading.Thread):
         self.statics_collector = StatisticsLogCollector()
 
     def run(self):
-        # global global_vars.system_buffer_value, global_vars.system_cpu_usage, global_vars.system_memory_usage
+        # global system_monitoring_global_vars.system_buffer_value, system_monitoring_global_vars.system_cpu_usage, system_monitoring_global_vars.system_memory_usage
         while True:
-            global_vars.system_cpu_usage = psutil.cpu_percent()
-            global_vars.system_memory_usage = psutil.virtual_memory().percent
-            global_vars.system_buffer_value = self.statics_collector.get_buffer_value()
+            system_monitoring_global_vars.system_cpu_usage = psutil.cpu_percent()
+            system_monitoring_global_vars.system_memory_usage = psutil.virtual_memory().percent
+            system_monitoring_global_vars.system_buffer_value = self.statics_collector.get_buffer_value()
             time.sleep(self.sleep_time)
 
 
