@@ -36,12 +36,13 @@ class fileWriteThread(threading.Thread):
 
 
 class overheadFileWriteThread(threading.Thread):
-    def __init__(self, overhead_string):
+    def __init__(self, overhead_string, file_path):
         threading.Thread.__init__(self)
         self.overhead_string = overhead_string
+        self.file_path = file_path
 
     def run(self):
-        output_file = open("./sender/overhead_logs/overhead_footprints.csv", "a+")
+        output_file = open(self.file_path, "a+")
         output_file.write(str(self.overhead_string))
         output_file.flush()
         output_file.close()
