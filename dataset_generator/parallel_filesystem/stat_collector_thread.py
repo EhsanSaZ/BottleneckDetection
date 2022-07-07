@@ -94,10 +94,6 @@ class statThread(threading.Thread):
                         mdt_paths.append(parts[-1])
                         all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
 
-            is_controller_port = True
-            total_string = ""
-            start = time.time()
-            initial_time = time.time()
             is_first_time = True
             time_diff = 0
             epoc_time = 0
@@ -128,7 +124,6 @@ class statThread(threading.Thread):
             while 1:
                 processing_start_time = time.time()
                 # print("COLLECTING", transfer_id, processing_start_time)
-                ### NETWORK METRICS ##
 
                 if self.is_transfer_done or self.stopped():
                     break
@@ -141,17 +136,12 @@ class statThread(threading.Thread):
                     if (is_first_time):
                         # Create tid here...
                         discovery_time = datetime.now().strftime('%Y-%m-%d_%H:%M')
-                        sender_ip = ""
-                        sender_port = ""
-                        receiver_ip = ""
-                        receiver_port = ""
                         id_str = "{}_{}_{}_{}_{}".format(discovery_time, self.src_ip, self.src_port, self.dst_ip,
                                                          self.dst_port)
                         transfer_id = hashlib.md5(id_str.encode('utf-8')).hexdigest()
                         # print(id_str)
-                        initial_time = time.time()
+                        # TODO
                         # Send a request to the realtime detection service to add this new transfer
-                        # is_first_time = False
                     time_diff += 1
                     # epoc_time += 1
                     if time_diff >= (.1 / sleep_time):
