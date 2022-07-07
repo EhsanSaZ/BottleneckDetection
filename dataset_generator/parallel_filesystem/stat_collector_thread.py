@@ -12,9 +12,9 @@ from subprocess import Popen, PIPE
 from NetworkStatistics.NetworkStatisticsLogCollector_ss import NetworkStatisticsLogCollectorSS
 from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
 from AgentMetricCollector.data_converter import DataConverter
-from helper_threads import fileWriteThread, overheadFileWriteThread
+from AgentMetricCollector.helper_threads import fileWriteThread, overheadFileWriteThread
 from AgentMetricCollector.Config import Config
-
+from AgentMetricCollector import system_monitoring_global_vars
 
 
 class statThread(threading.Thread):
@@ -23,6 +23,7 @@ class statThread(threading.Thread):
                  remote_ost_index_to_ost_agent_address_dict, pid_str, src_path,
                  mdt_parent_path, label_value):
         threading.Thread.__init__(self)
+        self._stop = threading.Event()
         self.src_ip = src_ip
         self.src_port = src_port
         self.dst_ip = dst_ip
@@ -39,12 +40,24 @@ class statThread(threading.Thread):
     def run(self):
         self.collect_stat()
 
+    def stop(self):
+        self._stop.set()
+
+    def stopped(self):
+        return self._stop.isSet()
+
     def collect_stat(self):
+        # while 1:
+        #     if self.stopped():
+        #         return
+        #     print("collecting status")
+        #     time.sleep(1)
         is_parallel_file_system = False
         proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
         parts = res.split("\n")
-        network_statistics_collector = NetworkStatisticsLogCollectorSS(self.src_ip, self.src_port, self.dst_ip, self.dst_port)
+        network_statistics_collector = NetworkStatisticsLogCollectorSS(self.src_ip, self.src_port, self.dst_ip,
+                                                                       self.dst_port)
         statistics_collector = StatisticsLogCollector()
         # agent_resource_usage_collector = ResourceUsageFootprints()
         data_converter = DataConverter(file_system="lustre", prefix="sender_")
@@ -115,13 +128,13 @@ class statThread(threading.Thread):
                 processing_start_time = time.time()
                 ### NETWORK METRICS ##
 
-                if self.is_transfer_done:
+                if self.is_transfer_done or self.stopped():
                     break
                 # If the pid is 0, then the transfer thread is not started yet or the global pid is not updated yet
                 # So it is not possible to collect for system metrics, then just skip this iteration
-                if sender_process is None:  # or self.pid == 0
-                    time.sleep(0.1)
-                    continue
+                # if sender_process is None:  # or self.pid == 0
+                #     time.sleep(0.1)
+                #     continue
                 try:
                     if (is_first_time):
                         # Create tid here...
@@ -186,7 +199,7 @@ class statThread(threading.Thread):
                         # global label_value
                         for item in system_value_list:
                             output_string += "," + str(item)
-                        for item in global_vars.system_buffer_value:
+                        for item in system_monitoring_global_vars.system_buffer_value:
                             output_string += "," + str(item)
                         # ost_value_list are metrics with index 79-95 in csv
                         for item in ost_value_list:
@@ -198,8 +211,8 @@ class statThread(threading.Thread):
                         output_string += "," + str(network_statistics_collector.dsack_dups)
                         output_string += "," + str(network_statistics_collector.reord_seen)
 
-                        output_string += "," + str(global_vars.system_cpu_usage)
-                        output_string += "," + str(global_vars.system_cpu_usage)
+                        output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
+                        output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
 
                         for item in remote_ost_value_list:
                             output_string += "," + str(item)
@@ -231,7 +244,7 @@ class statThread(threading.Thread):
                                 if epoc_count % 100 == 0:
                                     print("transferring file.... ", epoc_count, "label: ", self.label_value)
                                     epoc_count = 0
-                                write_thread = fileWriteThread(main_output_string, self.label_value)
+                                write_thread = fileWriteThread(main_output_string, "./sender/logs/dataset_", self.label_value)
                                 write_thread.start()
                                 main_output_string = ""
                         else:
@@ -257,7 +270,7 @@ class statThread(threading.Thread):
                 #     overhead_main_output_string += overhead_output_string
                 #     if overhead_epoc_count % 10 == 0:
                 #         overhead_epoc_count = 0
-                #         overhead_write = overheadFileWriteThread(overhead_main_output_string)
+                #         overhead_write = overheadFileWriteThread("./sender/overhead_logs/overhead_footprints.csv", overhead_main_output_string)
                 #         overhead_write.start()
                 #         overhead_main_output_string = ""
                 time.sleep(sleep_time)
