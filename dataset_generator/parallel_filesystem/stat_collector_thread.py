@@ -18,13 +18,15 @@ from AgentMetricCollector.Config import Config
 
 
 class statThread(threading.Thread):
-    def __init__(self, dst_ip, port_number, zmq_context,
+    def __init__(self, src_ip, src_port, dst_ip, dst_port, zmq_context,
                  xsub_backend_socket_name,
                  remote_ost_index_to_ost_agent_address_dict, pid_str, src_path,
                  mdt_parent_path, label_value):
         threading.Thread.__init__(self)
+        self.src_ip = src_ip
+        self.src_port = src_port
         self.dst_ip = dst_ip
-        self.port_number = port_number
+        self.dst_port = dst_port
         self.context = zmq_context
         self.xsub_backend_socket_name = xsub_backend_socket_name
         self.remote_ost_index_to_ost_agent_address_dict = remote_ost_index_to_ost_agent_address_dict
@@ -42,7 +44,7 @@ class statThread(threading.Thread):
         proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
         parts = res.split("\n")
-        network_statistics_collector = NetworkStatisticsLogCollectorSS(self.dst_ip, self.port_number)
+        network_statistics_collector = NetworkStatisticsLogCollectorSS(self.src_ip, self.src_port, self.dst_ip, self.dst_port)
         statistics_collector = StatisticsLogCollector()
         # agent_resource_usage_collector = ResourceUsageFootprints()
         data_converter = DataConverter(file_system="lustre", prefix="sender_")
