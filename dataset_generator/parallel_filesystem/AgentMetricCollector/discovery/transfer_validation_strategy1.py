@@ -1,4 +1,4 @@
-class TransferValidation_strategy_1:
+class transferValidation_strategy_1:
     def __init__(self):
         pass
 
