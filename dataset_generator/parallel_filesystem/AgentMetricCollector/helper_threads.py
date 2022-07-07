@@ -27,13 +27,14 @@ class globalMetricsMonitor(threading.Thread):
 
 
 class fileWriteThread(threading.Thread):
-    def __init__(self, metric_string, label_value, file_path_prefix):
+    def __init__(self, metric_string, file_path_prefix, label_value):
         threading.Thread.__init__(self)
         self.metric_string = metric_string
         self.label_value = label_value
         self.file_path_prefix = file_path_prefix
+
     def run(self):
-        output_file = open(self.file_path_prefix + str(self.label_value) + ".csv", "a+")
+        output_file = open("{}{}.csv".format(self.file_path_prefix, str(self.label_value)), "a+")
         output_file.write(str(self.metric_string))
         output_file.flush()
         output_file.close()
