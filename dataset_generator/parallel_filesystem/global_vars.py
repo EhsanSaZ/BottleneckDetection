@@ -1,9 +1,6 @@
 pid = None
 label_value = None
 sender_process = None
-system_memory_usage = -1
-system_cpu_usage = -1
-system_buffer_value = [0, 0, 0, 0, 0, 0]
 ready_to_publish = False
 mdt_parent_path = ""
 should_run = True
