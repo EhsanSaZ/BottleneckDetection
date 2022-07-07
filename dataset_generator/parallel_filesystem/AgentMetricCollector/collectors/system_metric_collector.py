@@ -1,6 +1,8 @@
 import traceback
 from subprocess import Popen, PIPE
 
+import psutil
+
 
 class SystemMetricCollector:
 
@@ -54,6 +56,8 @@ class SystemMetricCollector:
             #             for x in parts:
             #                 if len(x.strip()) > 0:
             #                     value_list.append(float(x))
+        except psutil.NoSuchProcess as e:
+            raise e
         except:
             traceback.print_exc()
             print("cpu mem is not possible")
