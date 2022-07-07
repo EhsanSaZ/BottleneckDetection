@@ -7,7 +7,7 @@ import time
 
 class TransferDiscovery(threading.Thread):
     def __init__(self, sender_ip_addr, sender_port_range, receiver_ip_addr, receiver_port_range,
-                 transfer_validator, discovery_cycle=1):
+                 transfer_validator, transfer_manager, discovery_cycle=1):
         threading.Thread.__init__(self)
         self.sender_ip_addr = sender_ip_addr
         self.sender_port_range = sender_port_range
@@ -17,6 +17,7 @@ class TransferDiscovery(threading.Thread):
         self.monitored_transfers = {}
         self.transfer_validator = transfer_validator
         self.discovery_cycle = discovery_cycle
+        self.transfer_manager = transfer_manager
 
     def is_transfer_valid(self, local_address_ip, local_address_port, peer_address_ip, peer_address_port):
         if local_address_ip == self.sender_ip_addr and self.sender_port_range[0] <= int(local_address_port) <= \
@@ -83,9 +84,11 @@ class TransferDiscovery(threading.Thread):
                 ended_transfers = set(self.monitored_transfers.keys()) - set(self.running_transfers.keys())
                 for tr in new_transfers:
                     print("Adding new transfer", self.running_transfers[tr])
+                    self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr])
                     self.monitored_transfers[tr] = self.running_transfers[tr]
                 for tr in ended_transfers:
                     print("Removing ended transfer", self.monitored_transfers[tr])
+                    self.transfer_manager.stop_monitoring_thread(self.monitored_transfers[tr])
                     del self.monitored_transfers[tr]
                 time.sleep(self.discovery_cycle)
         except Exception as e:
