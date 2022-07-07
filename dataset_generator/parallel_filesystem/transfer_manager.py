@@ -13,7 +13,7 @@ class transferManager:
         self.label_value = label_value
 
     def add_new_monitoring_thread(self, transfer_info):
-        print(transfer_info)
+        # print(transfer_info)
         pid = transfer_info["pid"]
         source_ip = transfer_info["sender_ip"]
         source_port = transfer_info["sender_port"]
@@ -27,7 +27,7 @@ class transferManager:
         thread.start()
         
     def stop_monitoring_thread(self, transfer_info):
-        print(transfer_info)
+        # print(transfer_info)
         pid = transfer_info["pid"]
         thread = self.transfer_monitoring_threads_dict.get(pid)
         if thread:
