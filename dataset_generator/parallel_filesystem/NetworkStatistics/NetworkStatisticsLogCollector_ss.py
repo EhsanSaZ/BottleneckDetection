@@ -3,7 +3,7 @@ import subprocess
 
 
 class NetworkStatisticsLogCollectorSS:
-    def __init__(self, destination_ip, destination_port):
+    def __init__(self, source_ip, source_port, destination_ip, destination_port):
         self.send_buffer_value = 0
         self.data_segs_out = 0
         self.data_seg_out_so_far = 0
@@ -30,11 +30,15 @@ class NetworkStatisticsLogCollectorSS:
         self.reord_seen_so_far = 0
 
         self.line_in_ss = ""
+        self.source_ip = source_ip
+        self.source_port = source_port
         self.destination_ip = destination_ip
         self.destination_port = destination_port
 
     def execute_command(self):
-        comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'dst', self.destination_ip + ":" + self.destination_port]
+        comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
+                   'src', "{}:{}".format(self.source_ip, self.source_port),
+                   'dst', "{}:{}".format(self.destination_ip, self.destination_port)]
         ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
         self.line_in_ss = str(ss_proc.stdout.read())
 
@@ -143,4 +147,3 @@ class NetworkStatisticsLogCollectorSS:
                str(self.total_mss_value) + "," + str(self.total_ssthresh_value) + "," + str(self.segs_in) + "," + \
                str(self.send) + "," + str(self.unacked) + "," + str(self.rcv_space) + "," + \
                str(self.send_buffer_value)
-
