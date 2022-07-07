@@ -124,8 +124,10 @@ class statThread(threading.Thread):
                 print(e.msg)
                 print("Exiting Collect Stat Thread. Process not found")
                 self.is_transfer_done = True
+            transfer_id = None
             while 1:
                 processing_start_time = time.time()
+                # print("COLLECTING", transfer_id, processing_start_time)
                 ### NETWORK METRICS ##
 
                 if self.is_transfer_done or self.stopped():
@@ -143,9 +145,10 @@ class statThread(threading.Thread):
                         sender_port = ""
                         receiver_ip = ""
                         receiver_port = ""
-                        id_str = "{}_{}_{}_{}_{}".format(discovery_time, sender_ip, sender_port, receiver_ip,
-                                                         receiver_port)
+                        id_str = "{}_{}_{}_{}_{}".format(discovery_time, self.src_ip, self.src_port, self.dst_ip,
+                                                         self.dst_port)
                         transfer_id = hashlib.md5(id_str.encode('utf-8')).hexdigest()
+                        # print(id_str)
                         initial_time = time.time()
                         # Send a request to the realtime detection service to add this new transfer
                         # is_first_time = False
@@ -252,7 +255,7 @@ class statThread(threading.Thread):
                             is_first_time = False
                 except psutil.NoSuchProcess as e:
                     print(e.msg)
-                    print("EXITNG COLLECT STAT THREAD")
+                    print("EXITNG COLLECT STAT THREAD for {}".format(transfer_id))
                     self.is_transfer_done = True
                 except:
                     traceback.print_exc()
