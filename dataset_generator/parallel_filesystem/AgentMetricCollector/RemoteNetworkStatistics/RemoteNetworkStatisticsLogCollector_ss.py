@@ -3,7 +3,7 @@ import subprocess
 
 
 class RemoteNetworkStatisticsLogCollectorSS:
-    def __init__(self, server_ip, server_port_number, client_ip):
+    def __init__(self, server_ip, server_port_number, client_ip, client_port):
         self.send_buffer_value = 0
         self.data_segs_out = 0
         self.data_seg_out_so_far = 0
@@ -33,11 +33,12 @@ class RemoteNetworkStatisticsLogCollectorSS:
         self.server_ip = server_ip
         self.server_port_number = server_port_number
         self.client_ip = client_ip
+        self.client_port = client_port
 
     def execute_command(self):
-        comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED', 'src', "{}:{}".format(self.server_ip,
-                                                                                   self.server_port_number),
-                   'dst', self.client_ip]
+        comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
+                   'src', "{}:{}".format(self.server_ip, self.server_port_number),
+                   'dst', "{}:{}".format(self.client_ip, self.client_port)]
         ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
         self.line_in_ss = str(ss_proc.stdout.read())
 
