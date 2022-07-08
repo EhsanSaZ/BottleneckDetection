@@ -1,7 +1,7 @@
 from stat_collector_thread import statThread
 
 
-class transferManager:
+class TransferManager:
     def __init__(self, zmq_context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                  src_path, mdt_parent_path, label_value):
         self.transfer_monitoring_threads_dict = {}

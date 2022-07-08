@@ -9,7 +9,7 @@ from AgentMetricCollector.Config import Config
 from AgentMetricCollector.discovery.transfer_discovery import TransferDiscovery
 from AgentMetricCollector.discovery.transfer_validation_strategy1 import transferValidation_strategy_1
 from AgentMetricCollector import system_monitoring_global_vars
-from transfer_manager import transferManager
+from transfer_manager import TransferManager
 from file_transfer_thread import FileTransferThread
 from dataset_generator.parallel_filesystem.AgentMetricCollector.helper_threads import globalMetricsMonitor
 from sender_publisher import sendToCloud
@@ -111,7 +111,7 @@ global_metrics_collector = globalMetricsMonitor(sleep_time=1)
 global_metrics_collector.start()
 
 transfer_validator = transferValidation_strategy_1()
-transfer_manager = transferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
+transfer_manager = TransferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                                    src_path, global_vars.mdt_parent_path, global_vars.label_value)
 discovery_thread = TransferDiscovery(src_ip, src_port_range, dst_ip, dst_port_range, transfer_validator,
                                      transfer_manager, discovery_cycle=1)
