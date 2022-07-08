@@ -6,13 +6,13 @@ import time
 
 
 class TransferDiscovery(threading.Thread):
-    def __init__(self, sender_ip_addr, sender_port_range, receiver_ip_addr, receiver_port_range,
+    def __init__(self, local_ip_addr, local_port_range, peer_ip_addr, peer_port_range,
                  transfer_validator, transfer_manager, discovery_cycle=1):
         threading.Thread.__init__(self)
-        self.sender_ip_addr = sender_ip_addr
-        self.sender_port_range = sender_port_range
-        self.receiver_ip_addr = receiver_ip_addr
-        self.receiver_port_range = receiver_port_range
+        self.local_ip_addr = local_ip_addr
+        self.local_port_range = local_port_range
+        self.peer_ip_addr = peer_ip_addr
+        self.peer_port_range = peer_port_range
         self.running_transfers = {}
         self.monitored_transfers = {}
         self.transfer_validator = transfer_validator
@@ -20,11 +20,11 @@ class TransferDiscovery(threading.Thread):
         self.transfer_manager = transfer_manager
 
     def is_transfer_valid(self, local_address_ip, local_address_port, peer_address_ip, peer_address_port):
-        if local_address_ip == self.sender_ip_addr and self.sender_port_range[0] <= int(local_address_port) <= \
-                self.sender_port_range[1] \
-                and peer_address_ip == self.receiver_ip_addr and self.receiver_port_range[0] <= int(
+        if local_address_ip == self.local_ip_addr and self.local_port_range[0] <= int(local_address_port) <= \
+                self.local_port_range[1] \
+                and peer_address_ip == self.peer_ip_addr and self.peer_port_range[0] <= int(
             peer_address_port) <= \
-                self.receiver_port_range[1]:
+                self.peer_port_range[1]:
             return True
         else:
             return False
@@ -54,7 +54,7 @@ class TransferDiscovery(threading.Thread):
                 # print(lines[0])
                 lines = lines[1:]
                 for i in range(len(lines)):
-                    if self.sender_ip_addr in lines[i] and self.receiver_ip_addr in lines[i]:
+                    if self.local_ip_addr in lines[i] and self.peer_ip_addr in lines[i]:
                         # if True:
                         first_parts = lines[i].split(" ")
                         first_list = []
@@ -68,9 +68,9 @@ class TransferDiscovery(threading.Thread):
 
                         if self.transfer_validator.is_transfer_valid(sender_ip, sender_port,
                                                                      receiver_ip, receiver_port,
-                                                                     self.sender_ip_addr, self.sender_port_range,
-                                                                     self.receiver_ip_addr,
-                                                                     self.receiver_port_range) and len(first_list) == 5:
+                                                                     self.local_ip_addr, self.local_port_range,
+                                                                     self.peer_ip_addr,
+                                                                     self.peer_port_range) and len(first_list) == 5:
                             # print(self.is_transfer_valid(sender_ip, sender_port, receiver_ip, receiver_port), first_list)
                             match = re.search(r"pid=(\d*),", first_list[4])
                             if match:
