@@ -24,7 +24,7 @@ class RunServerThread(threading.Thread):
     def run_server(self, i):
         # global pid, label_value, server_process
 
-        comm_ss = ['java', self.java_receiver_app_path, self.server_saving_directory, server_port_number,
+        comm_ss = ['java', self.java_receiver_app_path, self.server_saving_directory, self.server_port_number,
                    self.java_server_throughput_label]
         proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
 
