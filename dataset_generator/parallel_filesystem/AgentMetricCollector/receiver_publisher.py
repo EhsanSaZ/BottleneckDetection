@@ -28,7 +28,7 @@ class SendToCloud(threading.Thread):
         try:
             signal_socket = self.context.socket(zmq.REP)
             global ready_to_publish
-            # # TODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
+            # # T ODO we should have a mechanism to agree on sender and receiver ip port for publishing // reading from config file..
             # #  and notify receiver agents to when to start publishing // use signaling
             # #  and agree on transfer id
             print("Binding signaling socket")
