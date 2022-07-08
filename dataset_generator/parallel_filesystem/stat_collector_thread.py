@@ -205,7 +205,7 @@ class statThread(threading.Thread):
                         output_string += "," + str(network_statistics_collector.reord_seen)
 
                         output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
-                        output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
+                        output_string += "," + str(system_monitoring_global_vars.system_memory_usage)
 
                         for item in remote_ost_value_list:
                             output_string += "," + str(item)
