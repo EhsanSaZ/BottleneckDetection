@@ -1,5 +1,8 @@
 import argparse
+import os
 from pathlib import Path
+
+import psutil
 import zmq
 
 from AgentMetricCollector.Config import Config
@@ -80,6 +83,9 @@ if args.java_local_port:
 global_vars.should_run = True
 global_vars.pid = 0
 global_vars.sender_process = None
+global_vars.sender_monitor_agent_pid = os.getpid()
+global_vars.sender_monitor_agent_process = psutil.Process(int(global_vars.sender_monitor_agent_pid))
+
 system_monitoring_global_vars.system_cpu_usage = -1
 system_monitoring_global_vars.system_memory_usage = -1
 system_monitoring_global_vars.system_buffer_value = []

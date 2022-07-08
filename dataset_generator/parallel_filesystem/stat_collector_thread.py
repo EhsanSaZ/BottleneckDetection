@@ -251,13 +251,13 @@ class statThread(threading.Thread):
                     traceback.print_exc()
                 # processing_finish_time = time.time()
                 # processing_time = processing_finish_time - processing_start_time
-                # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(sender_monitor_agent_pid,
-                # #                                                                           sender_monitor_agent_process)
+                # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(global_vars.sender_monitor_agent_pid,
+                # #                                                                           global_vars.sender_monitor_agent_process)
                 # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
                 #                                                    processing_time,
                 #                                                    data_transfer_overhead,
-                #                                                    sender_monitor_agent_process.cpu_percent(),
-                #                                                    sender_monitor_agent_process.memory_percent())
+                #                                                    global_vars.sender_monitor_agent_process.cpu_percent(),
+                #                                                    global_vars.sender_monitor_agent_process.memory_percent())
                 # overhead_epoc_count += 1
                 # if not is_first_time:
                 #     overhead_main_output_string += overhead_output_string
