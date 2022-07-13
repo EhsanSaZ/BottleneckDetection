@@ -3,12 +3,8 @@ import time
 
 import psutil
 
-try :
-    from statistics_log_collector import StatisticsLogCollector
-    import system_monitoring_global_vars
-except ModuleNotFoundError:
-    from .statistics_log_collector import StatisticsLogCollector
-    from . import system_monitoring_global_vars
+from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
+from AgentMetricCollector import system_monitoring_global_vars
 
 
 class globalMetricsMonitor(threading.Thread):
