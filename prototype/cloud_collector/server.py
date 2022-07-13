@@ -73,13 +73,13 @@ def worker_routine(worker_url: str, context: zmq.Context = None):
                     if req_json["request_type"] == "new_publisher_info":
                         data = req_json["data"]
                         # subscribe to new sender and receiver publisher
-                        sender_ip = data["sender"]["ip"]
-                        sender_port = data["sender"]["port"]
-                        receiver_ip = data["receiver"]["ip"]
-                        receiver_port = data["receiver"]["port"]
+                        sender_ip = data["publisher"]["ip"]
+                        sender_port = data["publisher"]["port"]
+                        # receiver_ip = data["receiver"]["ip"]
+                        # receiver_port = data["receiver"]["port"]
                         # print("subscribing sender {} {}, receiver{} {}".format(sender_ip, sender_port, receiver_ip, receiver_port))
                         sub_socket.connect("tcp://{}:{}".format(sender_ip, sender_port))
-                        sub_socket.connect("tcp://{}:{}".format(receiver_ip, receiver_port))
+                        # sub_socket.connect("tcp://{}:{}".format(receiver_ip, receiver_port))
                         success_response = {"response_code": "200", "data": "subscribed", "request": req_json}
                         rep_socket.send_json(success_response)
                     # elif req_json["request_type"] == "unsubscribe_publisher_info":
