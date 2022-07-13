@@ -69,7 +69,7 @@ class StatThread(threading.Thread):
         statistics_collector = StatisticsLogCollector()
         data_converter = DataConverter(file_system="lustre", prefix=self.prefix)
         # T ODO REMOVE THIS LINE ITS JUST A TEST
-        # is_parallel_file_system = True
+        is_parallel_file_system = True
 
         if is_parallel_file_system:
             mdt_paths = []
@@ -208,8 +208,8 @@ class StatThread(threading.Thread):
                     output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
                     output_string += "," + str(system_monitoring_global_vars.system_memory_usage)
 
-                    # for item in remote_ost_value_list:
-                    #     output_string += "," + str(item)
+                    for item in remote_ost_value_list:
+                        output_string += "," + str(item)
 
                     # mdt_value_list : total_mdt_numbers at 100
                     # repeat "total_mdt_numbers" of times in list
@@ -219,7 +219,7 @@ class StatThread(threading.Thread):
 
                     output_string += "," + str(self.label_value) + "\n"
                     epoc_count += 1
-                    print(output_string)
+                    # print(output_string)
                     if Config.send_to_cloud_mode and not is_first_time:
                         epoc_time += 1
                         data = {}
