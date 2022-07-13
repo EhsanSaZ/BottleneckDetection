@@ -41,7 +41,7 @@ class TransferManager:
                                     self.write_path, self.mdt_parent_path, self.label_value,
                             0, "./receiver/logs/dataset_", "./receiver/overhead_logs/overhead_footprints.csv")
         self.transfer_monitoring_threads_dict[pid] = thread
-        # thread.start()
+        thread.start()
 
     def stop_monitoring_thread(self, transfer_info):
         # print(transfer_info)
