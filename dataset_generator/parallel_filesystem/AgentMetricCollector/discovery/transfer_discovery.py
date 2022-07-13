@@ -6,28 +6,19 @@ import time
 
 
 class TransferDiscovery(threading.Thread):
-    def __init__(self, local_ip_addr, local_port_range, peer_ip_addr, peer_port_range,
+    def __init__(self, local_ip_addr_list, peer_ip_addr_list,
+                 send_port_range, receive_port_range,
                  transfer_validator, transfer_manager, discovery_cycle=1):
         threading.Thread.__init__(self)
-        self.local_ip_addr = local_ip_addr
-        self.local_port_range = local_port_range
-        self.peer_ip_addr = peer_ip_addr
-        self.peer_port_range = peer_port_range
+        self.local_ip_addr_list = local_ip_addr_list
+        self.peer_ip_addr_list = peer_ip_addr_list
+        self.send_port_range = send_port_range
+        self.receive_port_range = receive_port_range
         self.running_transfers = {}
         self.monitored_transfers = {}
         self.transfer_validator = transfer_validator
         self.discovery_cycle = discovery_cycle
         self.transfer_manager = transfer_manager
-
-    def is_transfer_valid(self, local_address_ip, local_address_port, peer_address_ip, peer_address_port):
-        if local_address_ip == self.local_ip_addr and self.local_port_range[0] <= int(local_address_port) <= \
-                self.local_port_range[1] \
-                and peer_address_ip == self.peer_ip_addr and self.peer_port_range[0] <= int(
-            peer_address_port) <= \
-                self.peer_port_range[1]:
-            return True
-        else:
-            return False
 
     @staticmethod
     def extract_ip_port(text):
@@ -53,38 +44,44 @@ class TransferDiscovery(threading.Thread):
                 lines = line_in_ss.split("\\n")
                 # print(lines[0])
                 lines = lines[1:]
-                for i in range(len(lines)):
-                    if self.local_ip_addr in lines[i] and self.peer_ip_addr in lines[i]:
-                        # if True:
-                        first_parts = lines[i].split(" ")
-                        first_list = []
-                        for item in first_parts:
-                            if len(item.strip()) > 0:
-                                first_list.append(item)
+                for i in range(0, len(lines), 2):
+                    first_parts = lines[i].split(" ")
+                    first_list = []
+                    for item in first_parts:
+                        if len(item.strip()) > 0:
+                            first_list.append(item)
+                    if len(first_list) == 5:
                         # receiver_buffer_value = int(first_list[0].strip())
                         # send_buffer_value = int(first_list[1].strip())
-                        sender_ip, sender_port = self.extract_ip_port(first_list[2])
-                        receiver_ip, receiver_port = self.extract_ip_port(first_list[3])
+                        transfer_local_ip, transfer_local_port = self.extract_ip_port(first_list[2])
+                        transfer_peer_ip, transfer_peer_port = self.extract_ip_port(first_list[3])
 
-                        if self.transfer_validator.is_transfer_valid(sender_ip, sender_port,
-                                                                     receiver_ip, receiver_port,
-                                                                     self.local_ip_addr, self.local_port_range,
-                                                                     self.peer_ip_addr,
-                                                                     self.peer_port_range) and len(first_list) == 5:
-                            # print(self.is_transfer_valid(sender_ip, sender_port, receiver_ip, receiver_port), first_list)
+                        if self.transfer_validator.is_transfer_valid(transfer_local_ip, transfer_local_port,
+                                                                     transfer_peer_ip, transfer_peer_port,
+                                                                     self.local_ip_addr_list,
+                                                                     self.peer_ip_addr_list,
+                                                                     self.send_port_range,
+                                                                     self.receive_port_range) and len(first_list) == 5:
                             match = re.search(r"pid=(\d*),", first_list[4])
                             if match:
                                 pid = int(match[1])
                                 # print("Find transfer", pid, sender_ip, sender_port, receiver_ip, receiver_port)
-                                self.running_transfers[pid] = {"pid": pid, "local_ip": sender_ip,
-                                                               "local_port": sender_port,
-                                                               "peer_ip": receiver_ip,
-                                                               "peer_port": receiver_port}
+                                self.running_transfers[pid] = {"pid": pid, "local_ip": transfer_local_ip,
+                                                               "local_port": transfer_local_port,
+                                                               "peer_ip": transfer_peer_ip,
+                                                               "peer_port": transfer_peer_port}
+
                 new_transfers = set(self.running_transfers.keys()) - set(self.monitored_transfers.keys())
                 ended_transfers = set(self.monitored_transfers.keys()) - set(self.running_transfers.keys())
                 for tr in new_transfers:
-                    print("Adding new transfer", self.running_transfers[tr])
-                    self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr])
+                    if self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]),
+                                                        self.send_port_range):
+                        print("Adding new sender transfer", self.running_transfers[tr])
+                        self.transfer_manager.add_new_sender_monitoring_thread(self.running_transfers[tr])
+                    elif self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]),
+                                                          self.receive_port_range):
+                        print("Adding new receive transfer", self.running_transfers[tr])
+                        self.transfer_manager.add_new_receiver_transfer_monitoring_thread(self.running_transfers[tr])
                     self.monitored_transfers[tr] = self.running_transfers[tr]
                 for tr in ended_transfers:
                     print("Removing ended transfer", self.monitored_transfers[tr])

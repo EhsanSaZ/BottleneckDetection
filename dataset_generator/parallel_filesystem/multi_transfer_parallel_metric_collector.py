@@ -8,6 +8,7 @@ import zmq
 from AgentMetricCollector.Config import Config
 from AgentMetricCollector.discovery.transfer_discovery import TransferDiscovery
 from AgentMetricCollector.discovery.transfer_validation_strategy1 import transferValidation_strategy_1
+from AgentMetricCollector.discovery.transfer_validation_strategy2 import TransferValidationStrategy_2
 from AgentMetricCollector import system_monitoring_global_vars
 from transfer_manager import TransferManager
 from file_transfer_thread import FileTransferThread
@@ -110,11 +111,11 @@ if Config.send_to_cloud_mode:
 global_metrics_collector = globalMetricsMonitor(sleep_time=1)
 global_metrics_collector.start()
 
-transfer_validator = transferValidation_strategy_1()
+transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                                    src_path, global_vars.mdt_parent_path, global_vars.label_value)
-discovery_thread = TransferDiscovery(src_ip, src_port_range, dst_ip, dst_port_range, transfer_validator,
-                                     transfer_manager, discovery_cycle=1)
+discovery_thread = TransferDiscovery([src_ip, dst_ip], [src_ip, dst_ip], src_port_range, dst_port_range,
+                                     transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_thread.start()
 
 # file_transfer_thread = FileTransferThread(str(0), java_sender_app_path, dst_ip, port_number, src_path,
