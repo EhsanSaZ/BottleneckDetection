@@ -17,7 +17,7 @@ from AgentMetricCollector.Config import Config
 from AgentMetricCollector import system_monitoring_global_vars
 
 
-class statThread(threading.Thread):
+class SenderStatThread(threading.Thread):
     def __init__(self, src_ip, src_port, dst_ip, dst_port, zmq_context,
                  xsub_backend_socket_name,
                  remote_ost_index_to_ost_agent_address_dict, pid_str, src_path,
