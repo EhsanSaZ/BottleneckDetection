@@ -3,7 +3,7 @@ import threading
 
 import psutil
 
-import remote_global_vars
+import global_vars
 
 
 class RunServerThread(threading.Thread):
@@ -30,9 +30,9 @@ class RunServerThread(threading.Thread):
 
         # pid = check_output(['/sbin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
         # pid = check_output(['/bin/pidof', '-s', 'java', 'SimpleReceiver1.java'])
-        remote_global_vars.pid = str(proc.pid)
-        print(remote_global_vars.pid)
-        remote_global_vars.server_process = psutil.Process(proc.pid)
+        global_vars.pid = str(proc.pid)
+        print(global_vars.pid)
+        global_vars.server_process = psutil.Process(proc.pid)
         # global label_value
         # strings = ""
         # while (True):
