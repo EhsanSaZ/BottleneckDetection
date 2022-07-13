@@ -1,6 +1,7 @@
 from sender_stat_collector_thread import SenderStatThread
 from receiver_stat_collector_thread import ReceiverStatThread
 
+
 class TransferManager:
     def __init__(self, zmq_context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                  src_path, mdt_parent_path, label_value):
@@ -41,8 +42,11 @@ class TransferManager:
 
     def stop_monitoring_thread(self, transfer_info):
         # print(transfer_info)
-        pid = transfer_info["pid"]
-        thread = self.transfer_monitoring_threads_dict.get(pid)
-        if thread:
-            thread.stop()
-            del self.transfer_monitoring_threads_dict[pid]
+        try:
+            pid = transfer_info["pid"]
+            thread = self.transfer_monitoring_threads_dict.get(pid)
+            if thread:
+                thread.stop()
+                del self.transfer_monitoring_threads_dict[pid]
+        except Exception as e:
+            print(e)
