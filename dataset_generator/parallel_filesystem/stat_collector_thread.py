@@ -154,7 +154,7 @@ class StatThread(threading.Thread):
 
                     # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(self.pid, src_path)
                     file_ost_path_info = statistics_collector.collect_file_ost_path_info(self.pid_str,
-                                                                                         self.src_path)
+                                                                                         self.file_path)
                     if file_ost_path_info is None:
                         time.sleep(0.1)
                         continue
@@ -162,7 +162,7 @@ class StatThread(threading.Thread):
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
                     file_mdt_path_info = statistics_collector.collect_file_mdt_path_info(self.pid_str,
-                                                                                         self.src_path)
+                                                                                         self.file_path)
                     if file_mdt_path_info is None:
                         continue
                     else:
