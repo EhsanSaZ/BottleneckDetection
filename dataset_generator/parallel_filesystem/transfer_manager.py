@@ -12,7 +12,7 @@ class TransferManager:
         self.mdt_parent_path = mdt_parent_path
         self.label_value = label_value
 
-    def add_new_monitoring_thread(self, transfer_info):
+    def add_new_sender_monitoring_thread(self, transfer_info):
         # print(transfer_info)
         pid = transfer_info["pid"]
         source_ip = transfer_info["local_ip"]
@@ -25,7 +25,10 @@ class TransferManager:
                             self.src_path, self.mdt_parent_path, self.label_value)
         self.transfer_monitoring_threads_dict[pid] = thread
         thread.start()
-        
+
+    def add_new_receiver_transfer_monitoring_thread(self, transfer_info):
+        pass
+
     def stop_monitoring_thread(self, transfer_info):
         # print(transfer_info)
         pid = transfer_info["pid"]
