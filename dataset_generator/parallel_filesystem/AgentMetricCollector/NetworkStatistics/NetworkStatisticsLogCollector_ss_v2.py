@@ -2,8 +2,8 @@ import re
 import subprocess
 
 
-class RemoteNetworkStatisticsLogCollectorSS:
-    def __init__(self, server_ip, server_port_number, client_ip, client_port):
+class NetworkStatisticsLogCollectorSS_V2:
+    def __init__(self, source_ip, source_port, destination_ip, destination_port):
         self.send_buffer_value = 0
         self.data_segs_out = 0
         self.data_seg_out_so_far = 0
@@ -30,24 +30,24 @@ class RemoteNetworkStatisticsLogCollectorSS:
         self.reord_seen_so_far = 0
 
         self.line_in_ss = ""
-        self.server_ip = server_ip
-        self.server_port_number = server_port_number
-        self.client_ip = client_ip
-        self.client_port = client_port
+        self.source_ip = source_ip
+        self.source_port = source_port
+        self.destination_ip = destination_ip
+        self.destination_port = destination_port
 
     def execute_command(self):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
-                   'src', "{}:{}".format(self.server_ip, self.server_port_number),
-                   'dst', "{}:{}".format(self.client_ip, self.client_port)]
+                   'src', "{}:{}".format(self.source_ip, self.source_port),
+                   'dst', "{}:{}".format(self.destination_ip, self.destination_port)]
         ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
         self.line_in_ss = str(ss_proc.stdout.read())
 
     def parse_output(self):
-        if self.line_in_ss.count(self.server_ip) >= 1:
+        if self.line_in_ss.count(self.source_ip) >= 1 and self.line_in_ss.count(self.destination_ip) >= 1:
             parts = self.line_in_ss.split("\\n")
 
             for x in range(len(parts)):
-                if self.server_ip in parts[x] and self.server_port_number in parts[x]:
+                if self.source_ip in parts[x] and self.source_port in parts[x] and self.destination_ip in parts[x] and self.destination_port in parts[x]:
                     first_parts = parts[x].split(" ")
                     first_list = []
                     for item in first_parts:
