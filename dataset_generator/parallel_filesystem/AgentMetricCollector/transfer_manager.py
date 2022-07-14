@@ -14,7 +14,7 @@ class TransferManager:
         self.mdt_parent_path = mdt_parent_path
         self.label_value = label_value
 
-    def add_new_sender_monitoring_thread(self, transfer_info):
+    def add_new_monitoring_thread(self, transfer_info, is_sender, dataset_path, overhead_log_path):
         # print(transfer_info)
         pid = transfer_info["pid"]
         source_ip = transfer_info["local_ip"]
@@ -25,21 +25,7 @@ class TransferManager:
                             self.context, self.xsub_backend_socket_name,
                             self.remote_ost_index_to_ost_agent_address_dict, str(pid),
                             self.read_path, self.mdt_parent_path, self.label_value,
-                            1, "./sender/logs/dataset_", "./sender/overhead_logs/overhead_footprints.csv")
-        self.transfer_monitoring_threads_dict[pid] = thread
-        thread.start()
-
-    def add_new_receiver_transfer_monitoring_thread(self, transfer_info):
-        pid = transfer_info["pid"]
-        source_ip = transfer_info["local_ip"]
-        source_port = transfer_info["local_port"]
-        destination_ip = transfer_info["peer_ip"]
-        destination_port = transfer_info["peer_port"]
-        thread = StatThread(source_ip, source_port, destination_ip, destination_port,
-                                    self.context, self.xsub_backend_socket_name,
-                                    self.remote_ost_index_to_ost_agent_address_dict, str(pid),
-                                    self.write_path, self.mdt_parent_path, self.label_value,
-                            0, "./receiver/logs/dataset_", "./receiver/overhead_logs/overhead_footprints.csv")
+                            is_sender, dataset_path, overhead_log_path)
         self.transfer_monitoring_threads_dict[pid] = thread
         thread.start()
 
