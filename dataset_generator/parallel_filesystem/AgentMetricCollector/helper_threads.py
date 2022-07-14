@@ -3,8 +3,8 @@ import time
 
 import psutil
 
-from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
-from AgentMetricCollector import system_monitoring_global_vars
+from statistics_log_collector import StatisticsLogCollector
+import system_monitoring_global_vars
 
 
 class globalMetricsMonitor(threading.Thread):

@@ -4,14 +4,14 @@ from pathlib import Path
 import psutil
 import zmq
 
-from AgentMetricCollector.Config import Config
-from AgentMetricCollector.discovery.transfer_discovery import TransferDiscovery
-from AgentMetricCollector.discovery.transfer_validation_strategy2 import TransferValidationStrategy_2
+from Config import Config
+from discovery.transfer_discovery import TransferDiscovery
+from discovery.transfer_validation_strategy2 import TransferValidationStrategy_2
 from transfer_manager import TransferManager
 from helper_threads import globalMetricsMonitor
 from publisher import SendToCloud
 from file_transfer_thread import  FileTransferThread
-from dataset_generator.parallel_filesystem.run_server_thread import RunServerThread
+from run_server_thread import RunServerThread
 import global_vars
 
 remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_address_dict

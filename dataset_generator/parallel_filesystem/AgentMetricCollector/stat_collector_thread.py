@@ -9,12 +9,12 @@ import hashlib
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-from AgentMetricCollector.NetworkStatistics.NetworkStatisticsLogCollector_ss_v2 import NetworkStatisticsLogCollectorSS_V2
-from AgentMetricCollector.statistics_log_collector import StatisticsLogCollector
-from AgentMetricCollector.data_converter import DataConverter
-from dataset_generator.parallel_filesystem.helper_threads import fileWriteThread
-from AgentMetricCollector.Config import Config
-from AgentMetricCollector import system_monitoring_global_vars
+from NetworkStatistics.NetworkStatisticsLogCollector_ss_v2 import NetworkStatisticsLogCollectorSS_V2
+from statistics_log_collector import StatisticsLogCollector
+from data_converter import DataConverter
+from helper_threads import fileWriteThread
+from Config import Config
+import system_monitoring_global_vars
 
 
 class StatThread(threading.Thread):
