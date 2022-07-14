@@ -49,7 +49,7 @@ class TransferDiscovery(threading.Thread):
                 self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=0,
                                                                 dataset_path="./receiver/logs/dataset_",
                                                                 overhead_log_path="./receiver/overhead_logs/overhead_footprints.csv")
-                self.monitored_transfers[tr] = self.running_transfers[tr]
+            self.monitored_transfers[tr] = self.running_transfers[tr]
         for tr in ended_transfers:
             print("Removing ended transfer", self.monitored_transfers[tr])
             self.transfer_manager.stop_monitoring_thread(self.monitored_transfers[tr])
