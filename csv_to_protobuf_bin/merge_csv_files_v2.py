@@ -109,10 +109,10 @@ def get_correct_path(path):
         return path
 
 
-sender_logs_folder_name = "./unmerged_ds/series20/sender/logs"
-receiver_logs_folder_name = "./unmerged_ds/series20/receiver/logs/"
-through_put_logs_folder_name = "./unmerged_ds/series20/receiver/SimpleReceiverPerSecondMonitor/"
-main_folder_name = "series20"
+sender_logs_folder_name = "./unmerged_ds/series23/sender/logs"
+receiver_logs_folder_name = "./unmerged_ds/series23/receiver/logs/"
+through_put_logs_folder_name = "./unmerged_ds/series23/receiver/SimpleReceiverPerSecondMonitor/"
+main_folder_name = "series23"
 
 sender_logs_folder_name = get_correct_path(sender_logs_folder_name)
 receiver_logs_folder_name = get_correct_path(receiver_logs_folder_name)

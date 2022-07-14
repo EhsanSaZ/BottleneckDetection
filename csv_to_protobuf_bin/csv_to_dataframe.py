@@ -322,15 +322,16 @@ class CSV_to_Proto:
                     self.write_to_dataframe(folder + "/" + filename)
 
 
-folder_dir = "./csv_logs/AWS_FXS/series20/"
+folder_dir = "./csv_logs/AWS_FXS/series23/"
 if not folder_dir.endswith('/'):
     src_path = folder_dir + "/"
 # serialize_file = "emulab_d460_10Gbps_hdd_unmerged_all_cols_V2"
 # serialize_file = "utah_c6525-25g_25Gbps_ssd_unmerged_all_cols_V2"
 # serialize_file = "wisconsin_c220g1-10Gbps_ssd_unmerged_all_cols_V2"
-serialize_file = "utah_c6525-25g_1Gbps_ssd_unmerged_all_cols_V2"
+# serialize_file = "utah_c6525-25g_1Gbps_ssd_unmerged_all_cols_V2"
 # serialize_file = "wisconsin_c220g1-10Gbps_hdd_ssd_unmerged_all_cols_V2"
-
+# serialize_file = "tb4_v2_utah_c6525-25g_1Gbps_ssd_unmerged_all_cols_V2"
+serialize_file = "tb2_v2_utah_c6525-25g_25Gbps_ssd_unmerged_all_cols_V2"
 csv_to_python = CSV_to_Proto(folder_dir, serialize_file)
 csv_to_python.add_all_dataset_files(csv_to_python.folder_name)
 csv_to_python.create_dataframe(csv_to_python.serialize_file)
