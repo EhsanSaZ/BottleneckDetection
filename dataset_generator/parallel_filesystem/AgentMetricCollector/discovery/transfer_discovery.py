@@ -34,6 +34,27 @@ class TransferDiscovery(threading.Thread):
         else:
             return None, None
 
+    def process_running_transfers(self):
+        new_transfers = set(self.running_transfers.keys()) - set(self.monitored_transfers.keys())
+        ended_transfers = set(self.monitored_transfers.keys()) - set(self.running_transfers.keys())
+        for tr in new_transfers:
+            if self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]), self.send_port_range):
+                print("Adding new sender transfer", self.running_transfers[tr])
+                self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=1,
+                                                                dataset_path="./sender/logs/dataset_",
+                                                                overhead_log_path="./sender/overhead_logs/overhead_footprints.csv")
+            elif self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]),
+                                                  self.receive_port_range):
+                print("Adding new receive transfer", self.running_transfers[tr])
+                self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=0,
+                                                                dataset_path="./receiver/logs/dataset_",
+                                                                overhead_log_path="./receiver/overhead_logs/overhead_footprints.csv")
+                self.monitored_transfers[tr] = self.running_transfers[tr]
+        for tr in ended_transfers:
+            print("Removing ended transfer", self.monitored_transfers[tr])
+            self.transfer_manager.stop_monitoring_thread(self.monitored_transfers[tr])
+            del self.monitored_transfers[tr]
+
     def start_discovery(self):
         try:
             comm_ss = ['ss', '-t', '-i', '-p', 'state', 'ESTABLISHED']
@@ -70,21 +91,7 @@ class TransferDiscovery(threading.Thread):
                                                                "local_port": transfer_local_port,
                                                                "peer_ip": transfer_peer_ip,
                                                                "peer_port": transfer_peer_port}
-
-                new_transfers = set(self.running_transfers.keys()) - set(self.monitored_transfers.keys())
-                ended_transfers = set(self.monitored_transfers.keys()) - set(self.running_transfers.keys())
-                for tr in new_transfers:
-                    if self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]), self.send_port_range):
-                        print("Adding new sender transfer", self.running_transfers[tr])
-                        self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=1, dataset_path="./sender/logs/dataset_", overhead_log_path="./sender/overhead_logs/overhead_footprints.csv")
-                    elif self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]), self.receive_port_range):
-                        print("Adding new receive transfer", self.running_transfers[tr])
-                        self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=0, dataset_path="./receiver/logs/dataset_", overhead_log_path="./receiver/overhead_logs/overhead_footprints.csv")
-                        self.monitored_transfers[tr] = self.running_transfers[tr]
-                for tr in ended_transfers:
-                    print("Removing ended transfer", self.monitored_transfers[tr])
-                    self.transfer_manager.stop_monitoring_thread(self.monitored_transfers[tr])
-                    del self.monitored_transfers[tr]
+                self.process_running_transfers()
                 time.sleep(self.discovery_cycle)
         except Exception as e:
             traceback.print_exc()
