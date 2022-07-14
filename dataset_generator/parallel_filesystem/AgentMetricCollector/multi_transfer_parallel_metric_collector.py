@@ -25,12 +25,14 @@ src_path = Config.parallel_metric_collector_src_path
 dst_path = Config.remote_parallel_metric_collector_server_saving_directory
 
 src_ip = Config.parallel_metric_collector_src_ip
-src_port_range = Config.parallel_metric_collector_src_port_range
-dst_ip = Config.parallel_metric_collector_dst_ip
-dst_port_range = Config.parallel_metric_collector_dst_port_range
-
-port_number = Config.parallel_metric_collector_port_number
 local_port_number = None
+dst_ip = Config.parallel_metric_collector_dst_ip
+port_number = Config.parallel_metric_collector_port_number
+
+local_ip_range = Config.parallel_metric_collector_local_ip_range
+local_port_range = Config.parallel_metric_collector_local_port_range
+peer_ip_range = Config.parallel_metric_collector_peer_ip_range
+peer_port_range = Config.parallel_metric_collector_peer_port_range
 
 context = None
 cloud_server_host = None
@@ -52,9 +54,6 @@ if Config.send_to_cloud_mode:
 
     xpub_frontend_public_socket_ip = Config.xpub_frontend_socket_ip_sender
     xpub_frontend_public_socket_port = Config.xpub_frontend_socket_port_sender
-
-    # xpub_frontend_socket_ip_receiver = Config.xpub_frontend_socket_ip_receiver
-    # xpub_frontend_socket_port_receiver = Config.xpub_frontend_socket_port_receiver
 
     xsub_backend_socket_name = Config.xsub_backend_socket_name
 
@@ -118,7 +117,7 @@ global_metrics_collector.start()
 transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                                    src_path, dst_path, global_vars.mdt_parent_path, global_vars.label_value)
-discovery_thread = TransferDiscovery([src_ip, dst_ip], [src_ip, dst_ip], src_port_range, dst_port_range,
+discovery_thread = TransferDiscovery(local_ip_range, peer_ip_range, local_port_range, peer_port_range,
                                      transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_thread.start()
 
