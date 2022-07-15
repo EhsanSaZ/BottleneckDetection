@@ -21,8 +21,10 @@ java_sender_app_path = Config.parallel_metric_java_sender_app_path
 java_receiver_app_path = Config.remote_parallel_metric_collector_java_receiver_app_path
 # path to read file for transferring
 src_path = Config.parallel_metric_collector_src_path
+read_lustre_mnt_point_list = Config.parallel_metric_collector_read_lustre_mount_point
 # path to save received transferred data
 dst_path = Config.remote_parallel_metric_collector_server_saving_directory
+write_lustre_mnt_point_list = Config.parallel_metric_collector_write_lustre_mount_point
 
 src_ip = Config.parallel_metric_collector_src_ip
 local_port_number = None
@@ -116,7 +118,7 @@ global_metrics_collector.start()
 
 transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
-                                   src_path, dst_path, global_vars.mdt_parent_path, global_vars.label_value)
+                                   read_lustre_mnt_point_list, write_lustre_mnt_point_list, global_vars.mdt_parent_path, global_vars.label_value)
 discovery_thread = TransferDiscovery(local_ip_range, peer_ip_range, local_port_range, peer_port_range,
                                      transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_thread.start()

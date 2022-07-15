@@ -10,7 +10,9 @@ class Config:
     parallel_metric_collector_dst_ip = "127.0.0.1"  # used by the java client app
     parallel_metric_collector_port_number = "50505"  # used by the java client and server app
     parallel_metric_collector_src_path = "/home/esaeedizade/data/srcData/"  # used by the java client app
-    remote_parallel_metric_collector_server_saving_directory = "/home/esaeedizade/data//dstData/" # used by the java server app
+    remote_parallel_metric_collector_server_saving_directory = "/home/esaeedizade/data/dstData/" # used by the java server app
+    parallel_metric_collector_read_lustre_mount_point = ["/home/esaeedizade/data/srcData/"]
+    parallel_metric_collector_write_lustre_mount_point = ["/home/esaeedizade/data/dstData/"]
 
     parallel_metric_mdt_parent_path = '/proc/fs/lustre/mdc/'
     parallel_metric_java_sender_app_path = '/home/esaeedizade/Desktop/BottleneckDetection/dataset_generator/utilities/SimpleSender1.java'  # used by the java client app
