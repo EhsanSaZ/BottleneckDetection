@@ -253,8 +253,8 @@ class StatThread(threading.Thread):
                     self.is_transfer_done = True
                 except:
                     traceback.print_exc()
-                # processing_finish_time = time.time()
-                # processing_time = processing_finish_time - processing_start_time
+                processing_finish_time = time.time()
+                processing_time = processing_finish_time - processing_start_time
                 # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(global_vars.monitor_agent_pid,
                 # #                                                                           global_vars.monitor_agent_process)
                 # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
@@ -272,4 +272,4 @@ class StatThread(threading.Thread):
                 #         overhead_write = overheadFileWriteThread(self.over_head_write_thread_directory,overhead_main_output_string)
                 #         overhead_write.start()
                 #         overhead_main_output_string = ""
-                time.sleep(sleep_time)
+                time.sleep(sleep_time-processing_time)
