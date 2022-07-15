@@ -1,4 +1,5 @@
 from subprocess import Popen, PIPE
+import re
 
 
 class FileOscPathInfo:
@@ -17,6 +18,8 @@ class FileOscPathInfo:
             if len(line.strip()) > 0:
                 for mnt_path in lustre_mnt_point_list:
                     if mnt_path in line:
+                        # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b94ed33000
+                        re_pattern = r"(?P<info_part>.* )(?P<ost_dir_name>(?P<remote_ost_dir_name>(?P<lustre_name>.*)(?P<ost_str>-OST\d\d\d\d))-.*)"
                         slash_index = line.rfind(">")
                         file_name = line[slash_index + 1:].strip()
 
@@ -65,24 +68,36 @@ class FileOscPathInfo:
                                 parts = res.split("\n")
                                 ost_str = "-OST" + hex_ost_number
 
-                                for x in range(1, len(parts)):
-                                    ost_name_parts = parts[x].split(" ")
-                                    for part in ost_name_parts:
-                                        # print (part, file_mount_point, ost_str)
-                                        # if file_mount_point in part and ost_str in part and "OST" in part:
-                                        first_dash_index = part.find("-")
-                                        if first_dash_index != -1 and part[
-                                                                      0:first_dash_index] in file_mount_point and ost_str in part and "OST" in part:
-                                            first_dash_index = part.find("-")
-                                            second_dash_index = part.find("-", first_dash_index + 1)
+                                for i in range(1, len(parts)):
+                                    match = re.search(re_pattern, parts[i])
+                                    if match:
+                                        gp_dict = match.groupdict()
+                                        match_ost_dir_name = gp_dict.get("ost_dir_name") or ""
+                                        match_remote_ost_dir_name = gp_dict.get("remote_ost_dir_name") or ""
+                                        match_lustre_name = gp_dict.get("lustre_name") or ""
+                                        match_ost_str = gp_dict.get("ost_str") or ""
+                                        if match_lustre_name in file_mount_point and ost_str == match_ost_str and match_ost_dir_name != "":
+                                            ost_path = '/sys/kernel/debug/lustre/osc/' + match_ost_dir_name
 
-                                            first_part = part[:first_dash_index]
-                                            second_part = part[second_dash_index + 1:]
-
-                                            # ost_str = "-OST" + hex_ost_number
-                                            ost_dir_name = first_part + ost_str + "-" + second_part
-                                            ost_path = '/sys/kernel/debug/lustre/osc/' + ost_dir_name
-
-                                            # print(ost_path)
-                                            return ost_path, ost_dir_name, first_part + ost_str, ost_number
+                                            return ost_path, match_ost_dir_name, match_remote_ost_dir_name, ost_number
                                 break
+                                #     ost_name_parts = parts[x].split(" ")
+                                #     for part in ost_name_parts:
+                                #         # print (part, file_mount_point, ost_str)
+                                #         # if file_mount_point in part and ost_str in part and "OST" in part:
+                                #         first_dash_index = part.find("-")
+                                #         if first_dash_index != -1 and part[
+                                #                                       0:first_dash_index] in file_mount_point and ost_str in part and "OST" in part:
+                                #             first_dash_index = part.find("-")
+                                #             second_dash_index = part.find("-", first_dash_index + 1)
+                                #
+                                #             first_part = part[:first_dash_index]
+                                #             second_part = part[second_dash_index + 1:]
+                                #
+                                #             # ost_str = "-OST" + hex_ost_number
+                                #             ost_dir_name = first_part + ost_str + "-" + second_part
+                                #             ost_path = '/sys/kernel/debug/lustre/osc/' + ost_dir_name
+                                #
+                                #             # print(ost_path)
+                                #             return ost_path, ost_dir_name, first_part + ost_str, ost_number
+                                # break
