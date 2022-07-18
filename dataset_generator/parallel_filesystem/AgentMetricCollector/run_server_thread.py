@@ -36,7 +36,7 @@ class RunServerThread(threading.Thread):
         # global label_value
         # strings = ""
         # while (True):
-        #     line = str(sender_process.stdout.readline()).replace("\r", "\n")
+        #     line = str(proc.stdout.readline()).replace("\r", "\n")
         #     strings += line
         #     # if not line.decode("utf-8"):
         #     #     break
