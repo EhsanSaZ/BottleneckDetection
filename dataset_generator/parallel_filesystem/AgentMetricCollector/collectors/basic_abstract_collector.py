@@ -1,7 +1,8 @@
 import json
+from abc import ABC, abstractmethod
 
 
-class BasicAbstractCollector:
+class BasicAbstractCollector(ABC):
     def __init__(self, prefix):
         self.prefix = prefix
         self.metrics_list = []
@@ -58,6 +59,10 @@ class BasicAbstractCollector:
             pass
         else:
             return int(float(val))
+
+    @abstractmethod
+    def collect_metrics(self):
+        pass
 
     def get_metrics_name_list(self):
         return list(self.metrics_id_to_attr.values())
