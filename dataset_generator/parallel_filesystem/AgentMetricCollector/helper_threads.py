@@ -18,7 +18,8 @@ class globalMetricsMonitor(threading.Thread):
         while True:
             system_monitoring_global_vars.system_cpu_usage = psutil.cpu_percent()
             system_monitoring_global_vars.system_memory_usage = psutil.virtual_memory().percent
-            system_monitoring_global_vars.system_buffer_value = self.buffer_value_collector.get_buffer_value()
+            self.buffer_value_collector.collect_metrics()
+            system_monitoring_global_vars.system_buffer_value = self.buffer_value_collector.get_metrics_list()
             time.sleep(self.sleep_time)
 
 
