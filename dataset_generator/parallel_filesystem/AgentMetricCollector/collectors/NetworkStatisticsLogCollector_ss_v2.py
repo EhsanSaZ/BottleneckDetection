@@ -1,9 +1,15 @@
 import re
 import subprocess
 
+try:
+    from abstract_collector import AbstractCollector
+except ModuleNotFoundError:
+    from .abstract_collector import AbstractCollector
 
-class NetworkStatisticsLogCollectorSS_V2:
-    def __init__(self, source_ip, source_port, destination_ip, destination_port):
+
+class NetworkStatisticsLogCollectorSS_V2(AbstractCollector):
+    def __init__(self, source_ip, source_port, destination_ip, destination_port, prefix=""):
+        super().__init__(prefix)
         self.send_buffer_value = 0
         self.data_segs_out = 0
         self.data_seg_out_so_far = 0
@@ -34,6 +40,14 @@ class NetworkStatisticsLogCollectorSS_V2:
         self.source_port = source_port
         self.destination_ip = destination_ip
         self.destination_port = destination_port
+        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
+                                  7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
+                                  13: 'string', 14: 'string', 148: 'string', 149: 'string'}
+        self.metrics_id_to_attr = {1: 'avg_rtt_value', 2: 'pacing_rate', 3: 'cwnd_rate',
+                                   4: 'avg_retransmission_timeout_value',
+                                   5: 'byte_ack', 6: 'seg_out', 7: 'retrans', 8: 'mss_value', 9: 'ssthresh_value',
+                                   10: 'segs_in', 11: 'avg_send_value', 12: 'unacked_value', 13: 'rcv_space',
+                                   14: 'send_buffer_value', 148: 'avg_dsack_dups_value', 149: 'avg_reord_seen'}
 
     def execute_command(self):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
@@ -47,7 +61,8 @@ class NetworkStatisticsLogCollectorSS_V2:
             parts = self.line_in_ss.split("\\n")
 
             for x in range(len(parts)):
-                if self.source_ip in parts[x] and self.source_port in parts[x] and self.destination_ip in parts[x] and self.destination_port in parts[x]:
+                if self.source_ip in parts[x] and self.source_port in parts[x] and self.destination_ip in parts[
+                    x] and self.destination_port in parts[x]:
                     first_parts = parts[x].split(" ")
                     first_list = []
                     for item in first_parts:
@@ -137,16 +152,37 @@ class NetworkStatisticsLogCollectorSS_V2:
                             self.reord_seen = value - self.reord_seen_so_far
                             self.reord_seen_so_far = value
 
-    def get_log_str(self):
+    def collect_metrics(self):
+        self.collect_network_metrics()
+
+    def collect_network_metrics(self):
         self.execute_command()
         self.parse_output()
+        self.metrics_list = [str(self.total_rtt_value), str(self.total_pacing_rate),
+                             str(self.total_cwnd_value), str(self.total_rto_value), str(self.byte_ack / (1024 * 1024)),
+                             str(self.segs_out), str(self.retrans), str(self.total_mss_value),
+                             str(self.total_ssthresh_value), str(self.segs_in), str(self.send),
+                             str(self.unacked), str(self.rcv_space), str(self.send_buffer_value), str(self.dsack_dups),
+                             str(self.reord_seen)]
+        self.metrics_list_to_str()
+        self.metrics_list_to_dict()
 
-        return str(self.total_rtt_value) + "," + str(self.total_pacing_rate) + "," + str(
-            self.total_cwnd_value) + "," + str(self.total_rto_value) + "," + \
-               str(self.byte_ack / (1024 * 1024)) + "," + str(self.segs_out) + "," + str(self.retrans) + "," + \
-               str(self.total_mss_value) + "," + str(self.total_ssthresh_value) + "," + str(self.segs_in) + "," + \
-               str(self.send) + "," + str(self.unacked) + "," + str(self.rcv_space) + "," + \
-               str(self.send_buffer_value)
+    def metrics_list_to_str(self):
+        output_string = ""
+        for item in self.metrics_list:
+            output_string += "," + str(item)
+        if output_string.startswith(","):
+            output_string = output_string[1:]
+        self.metrics_str = output_string
+
+    def metrics_list_to_dict(self):
+        tmp_dict = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
+                self.metrics_list[index], type_)
+        self.metrics_dict = tmp_dict
 
     def check_established_connection_exist(self):
         self.execute_command()
