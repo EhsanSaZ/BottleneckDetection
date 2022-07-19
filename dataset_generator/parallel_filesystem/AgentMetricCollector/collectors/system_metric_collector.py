@@ -3,12 +3,12 @@ from subprocess import Popen, PIPE
 import psutil
 
 try:
-    from basic_abstract_collector import BasicAbstractCollector
+    from abstract_collector import AbstractCollector
 except ModuleNotFoundError:
-    from .basic_abstract_collector import BasicAbstractCollector
+    from .abstract_collector import AbstractCollector
 
 
-class SystemMetricCollector(BasicAbstractCollector):
+class SystemMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {30: 'string', 31: 'string', 32: 'string', 33: 'string', 34: 'string', 35: 'string',
@@ -34,6 +34,9 @@ class SystemMetricCollector(BasicAbstractCollector):
                                    80: 'end_data', 81: 'start_brk', 82: 'arg_start', 83: 'arg_end', 84: 'env_start',
                                    85: 'env_end', 86: 'exit_code', 87: 'cpu_usage_percentage',
                                    88: 'mem_usage_percentage'}
+
+    def collect_metrics(self, pid_str, target_process):
+        self.collect_system_metrics(pid_str, target_process)
 
     def collect_system_metrics(self, pid_str, target_process):
         pid = int(pid_str.strip())
