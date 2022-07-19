@@ -21,7 +21,7 @@ class SystemMetricCollector(BasicAbstractCollector):
                                   66: 'string', 67: 'string', 68: 'string', 69: 'string', 70: 'string', 71: 'string',
                                   72: 'string', 73: 'string', 74: 'string', 75: 'string', 76: 'string', 77: 'string',
                                   78: 'string', 79: 'string', 80: 'string', 81: 'string', 82: 'string', 83: 'string',
-                                  84: 'string', 85: 'string', 86: 'string'}
+                                  84: 'string', 85: 'string', 86: 'string', 87: 'string', 88: 'string'}
         self.metrics_id_to_attr = {30: 'rchar', 31: 'wchar', 32: 'syscr', 33: 'syscw', 34: 'read_bytes_io',
                                    35: 'write_bytes_io', 36: 'cancelled_write_bytes', 37: 'pid', 38: 'ppid', 39: 'pgrp',
                                    40: 'session', 41: 'tty_nr', 42: 'tpgid', 43: 'flags', 44: 'minflt', 45: 'cminflt',
@@ -33,7 +33,8 @@ class SystemMetricCollector(BasicAbstractCollector):
                                    72: 'exit_signal', 73: 'processor', 74: 'rt_priority', 75: 'policy',
                                    76: 'delayacct_blkio_ticks', 77: 'guest_time', 78: 'cguest_time', 79: 'start_data',
                                    80: 'end_data', 81: 'start_brk', 82: 'arg_start', 83: 'arg_end', 84: 'env_start',
-                                   85: 'env_end', 86: 'exit_code'}
+                                   85: 'env_end', 86: 'exit_code', 87: 'cpu_usage_percentage',
+                                   88: 'mem_usage_percentage'}
 
     def collect_system_metrics(self, pid_str, target_process):
         pid = int(pid_str.strip())
@@ -105,23 +106,9 @@ class SystemMetricCollector(BasicAbstractCollector):
 
     def metrics_list_to_dict(self):
         tmp_dict = {}
-        for index, key in enumerate(self.metrics_datatypes.keys()):
-            type_ = self.metrics_datatypes[key]
-            tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[key])] = self._get_data_type(
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
                 self.metrics_list[index], type_)
         self.metrics_dict = tmp_dict
-
-    def get_metrics_name_list(self):
-        return list(self.metrics_id_to_attr.values())
-    
-    def get_metrics_str(self):
-        return self.metrics_str
-
-    def get_metrics_list(self):
-        return self.metrics_list
-
-    def get_metrics_dict(self):
-        return self.metrics_dict
-
-    def get_metrics_json_str(self):
-        return json.dumps(self.get_metrics_dict())
