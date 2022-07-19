@@ -3,7 +3,7 @@ import time
 
 import psutil
 
-from statistics_log_collector import StatisticsLogCollector
+from collectors.buffer_value_stat_collector import BufferValueStatCollector
 import system_monitoring_global_vars
 
 
@@ -11,14 +11,14 @@ class globalMetricsMonitor(threading.Thread):
     def __init__(self, sleep_time):
         threading.Thread.__init__(self)
         self.sleep_time = sleep_time
-        self.statics_collector = StatisticsLogCollector()
+        self.buffer_value_collector = BufferValueStatCollector()
 
     def run(self):
         # global system_monitoring_global_vars.system_buffer_value, system_monitoring_global_vars.system_cpu_usage, system_monitoring_global_vars.system_memory_usage
         while True:
             system_monitoring_global_vars.system_cpu_usage = psutil.cpu_percent()
             system_monitoring_global_vars.system_memory_usage = psutil.virtual_memory().percent
-            system_monitoring_global_vars.system_buffer_value = self.statics_collector.get_buffer_value()
+            system_monitoring_global_vars.system_buffer_value = self.buffer_value_collector.get_buffer_value()
             time.sleep(self.sleep_time)
 
 
