@@ -17,8 +17,8 @@ except ModuleNotFoundError:
 
 
 class StatisticsLogCollector:
-    def __init__(self):
-        self.collect_system_metrics_obj = SystemMetricCollector()
+    def __init__(self, prefix=""):
+        self.collect_system_metrics_obj = SystemMetricCollector(prefix)
         self.buffer_value_stat_collector_obj = BufferValueStatCollector()
         self.file_osc_path_info_obj = FileOscPathInfo()
         self.file_mdc_path_info_obj = FileMdcPathInfo()
@@ -27,7 +27,8 @@ class StatisticsLogCollector:
         self.lustre_ost_stat_collector_obj = LustreOstStatCollector()
 
     def collect_system_metrics(self, pid_str, target_process):
-        return self.collect_system_metrics_obj.collect_system_metrics(pid_str, target_process)
+        self.collect_system_metrics_obj.collect_system_metrics(pid_str, target_process)
+        return self.collect_system_metrics_obj.get_metrics_list()
 
     def get_buffer_value(self):
         return self.buffer_value_stat_collector_obj.get_buffer_value()
