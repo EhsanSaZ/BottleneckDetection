@@ -1,4 +1,3 @@
-import json
 import traceback
 from subprocess import Popen, PIPE
 import psutil
