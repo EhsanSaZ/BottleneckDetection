@@ -61,7 +61,7 @@ class AbstractCollector(ABC):
             return int(float(val))
 
     @abstractmethod
-    def collect_metrics(self):
+    def collect_metrics(self, *args):
         pass
 
     def get_metrics_name_list(self):
