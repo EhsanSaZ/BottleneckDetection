@@ -2,7 +2,7 @@ import json
 from abc import ABC, abstractmethod
 
 
-class BasicAbstractCollector(ABC):
+class AbstractCollector(ABC):
     def __init__(self, prefix):
         self.prefix = prefix
         self.metrics_list = []
