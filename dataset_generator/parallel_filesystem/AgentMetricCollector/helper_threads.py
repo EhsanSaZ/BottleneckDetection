@@ -20,10 +20,12 @@ class globalMetricsMonitor(threading.Thread):
         while True:
             self.resource_usage_collector.collect_metrics()
             system_monitoring_global_vars.system_cpu_mem_usage = self.resource_usage_collector.get_metrics_list()
+            system_monitoring_global_vars.system_cpu_mem_usage_dict = self.resource_usage_collector.get_metrics_dict()
             # system_monitoring_global_vars.system_cpu_usage = self.resource_usage_collector.get_metrics_list()[0]
             # system_monitoring_global_vars.system_memory_usage = self.resource_usage_collector.get_metrics_list()[1]
             self.buffer_value_collector.collect_metrics()
             system_monitoring_global_vars.system_buffer_value = self.buffer_value_collector.get_metrics_list()
+            system_monitoring_global_vars.system_buffer_value_dict = self.buffer_value_collector.get_metrics_dict()
             time.sleep(self.sleep_time)
 
 
