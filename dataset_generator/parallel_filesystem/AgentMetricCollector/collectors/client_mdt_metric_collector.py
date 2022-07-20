@@ -6,7 +6,7 @@ except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
 
 
-class ClientGetMdtStat(AbstractCollector):
+class ClientMdtMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {112: 'string', 113: 'string', 114: 'string', 115: 'string', 116: 'string',
