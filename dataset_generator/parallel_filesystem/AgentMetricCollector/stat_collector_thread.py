@@ -8,7 +8,14 @@ import hashlib
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-from statistics_log_collector import StatisticsLogCollector
+from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V2
+from collectors.system_metric_collector import SystemMetricCollector
+from collectors.file_ost_path_info import FileOstPathInfo
+from collectors.file_mdt_path_info import FileMdtPathInfo
+from collectors.client_ost_metric_collector import ClientOstMetricCollector
+from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
+from collectors.lustre_ost_metric_collector import LustreOstMetricCollector
+
 from data_converter import DataConverter
 from helper_threads import fileWriteThread
 from Config import Config
@@ -58,11 +65,17 @@ class StatThread(threading.Thread):
             if "lustre" in x:
                 is_parallel_file_system = True
 
-        statistics_collector = StatisticsLogCollector(self.src_ip, self.src_port, self.dst_ip, self.dst_port,
-                                                      self.prefix)
+        network_metrics_collector = NetworkMetricCollectorSS_V2(self.src_ip, self.src_port, self.dst_ip, self.dst_port, self.prefix)
+        system_metrics_collector = SystemMetricCollector(self.prefix)
+        file_ost_path_info_extractor = FileOstPathInfo()
+        file_mdt_path_info_extractor = FileMdtPathInfo()
+        client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
+        client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
+        lustre_ost_metrics_collector = LustreOstMetricCollector(self.prefix)
+
         data_converter = DataConverter(file_system="lustre", prefix=self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
-        # is_parallel_file_system = True
+        is_parallel_file_system = True
 
         if is_parallel_file_system:
             # mdt_paths = []
@@ -135,30 +148,34 @@ class StatThread(threading.Thread):
                         # Send a request to the realtime detection service to add this new transfer
                     time_diff += 1
                     # epoc_time += 1
-                    network_value_list = statistics_collector.collect_network_metrics()
-                    system_value_list = statistics_collector.collect_system_metrics(self.pid_str,
-                                                                                    target_process)
-                    # buffer_value_list = statistics_collector.get_buffer_value()
+                    network_metrics_collector.collect_metrics()
+                    network_value_list = network_metrics_collector.get_metrics_list()
 
-                    file_ost_path_info = statistics_collector.collect_file_ost_path_info(self.pid_str, self.file_path)
+                    system_metrics_collector.collect_metrics(self.pid_str, target_process)
+                    system_value_list = system_metrics_collector.get_metrics_list()
+
+                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path)
                     if file_ost_path_info is None:
                         time.sleep(0.1)
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    file_mdt_path_info = statistics_collector.collect_file_mdt_path_info(self.pid_str, self.file_path)
+                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list = statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name)
+                    client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
+                    ost_value_list = client_ost_metrics_collector.get_metrics_list()
                     # print (ost_value_list, ost_stats_so_far)
-                    mdt_value_list = statistics_collector.get_mdt_stat(self.mdt_parent_path, mdt_dir_name)
+                    client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
+                    mdt_value_list = client_mdt_metrics_collector.get_metrics_list()
                     # print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = self.remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
-                    remote_ost_value_list = statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name)
+                    lustre_ost_metrics_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
+                    remote_ost_value_list = lustre_ost_metrics_collector.get_metrics_list()
                     # print (all_remote_ost_stats_so_far)
 
                     output_string = str(time.time())
