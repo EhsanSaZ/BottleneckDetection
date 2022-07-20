@@ -7,7 +7,7 @@ except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
 
 
-class NetworkStatisticsLogCollectorSS_V2(AbstractCollector):
+class NetworkMetricCollectorSS_V2(AbstractCollector):
     def __init__(self, source_ip, source_port, destination_ip, destination_port, prefix=""):
         super().__init__(prefix)
         self.send_buffer_value = 0
