@@ -6,7 +6,7 @@ except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
 
 
-class LustreOstStatCollector(AbstractCollector):
+class LustreOstMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {152: 'string', 153: 'string'}
