@@ -1,6 +1,5 @@
 import json
 import threading
-import copy
 import time
 import traceback
 import psutil
@@ -9,7 +8,6 @@ import hashlib
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-from NetworkStatistics.NetworkStatisticsLogCollector_ss_v2 import NetworkStatisticsLogCollectorSS_V2
 from statistics_log_collector import StatisticsLogCollector
 from data_converter import DataConverter
 from helper_threads import fileWriteThread
@@ -41,6 +39,7 @@ class StatThread(threading.Thread):
         self.prefix = "sender_" if self.is_sender else "receiver_"
         self.write_thread_directory = write_thread_directory
         self.over_head_write_thread_directory = over_head_write_thread_directory
+
     def run(self):
         self.collect_stat()
 
@@ -51,11 +50,6 @@ class StatThread(threading.Thread):
         return self._stop.isSet()
 
     def collect_stat(self):
-        # while 1:
-        #     if self.stopped():
-        #         return
-        #     print("collecting status")
-        #     time.sleep(1)
         is_parallel_file_system = False
         proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
@@ -64,40 +58,38 @@ class StatThread(threading.Thread):
             if "lustre" in x:
                 is_parallel_file_system = True
 
-        network_statistics_collector = NetworkStatisticsLogCollectorSS_V2(self.src_ip, self.src_port, self.dst_ip,
-                                                                       self.dst_port)
-        statistics_collector = StatisticsLogCollector()
+        statistics_collector = StatisticsLogCollector(self.src_ip, self.src_port, self.dst_ip, self.dst_port,
+                                                      self.prefix)
         data_converter = DataConverter(file_system="lustre", prefix=self.prefix)
-        # T ODO REMOVE THIS LINE ITS JUST A TEST
-        is_parallel_file_system = True
+        # TO DO REMOVE THIS LINE ITS JUST A TEST
+        # is_parallel_file_system = True
 
         if is_parallel_file_system:
-            mdt_paths = []
-            mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
-                                       "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
-                                       "mds_connect": 0.0, "mds_get_root": 0.0, "mds_statfs": 0.0,
-                                       "mds_sync": 0.0, "mds_quotactl": 0.0, "mds_getxattr": 0.0,
-                                       "mds_hsm_state_set": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0,
-                                       "seq_query": 0.0, "fld_query": 0.0,
-                                       "md_stats": {
-                                           "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0,
-                                           "intent_lock": 0.0,
-                                           "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
-                                           "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
-                                           "intent_getattr_async": 0.0, "revalidate_lock": 0.0
-                                       }}
-            all_mdt_stat_so_far_dict = {}
-            proc = Popen(['ls', '-l', self.mdt_parent_path], universal_newlines=True, stdout=PIPE)
-            res = proc.communicate()[0]
-            res_parts = res.split("\n")
-            for line in res_parts:
-                if len(line.strip()) > 0:
-                    if "total" not in line:
-                        parts = line.split(" ")
-                        # print(parts)
-                        mdt_paths.append(parts[-1])
-                        all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
-
+            # mdt_paths = []
+            # mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
+            #                            "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
+            #                            "mds_connect": 0.0, "mds_get_root": 0.0, "mds_statfs": 0.0,
+            #                            "mds_sync": 0.0, "mds_quotactl": 0.0, "mds_getxattr": 0.0,
+            #                            "mds_hsm_state_set": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0,
+            #                            "seq_query": 0.0, "fld_query": 0.0,
+            #                            "md_stats": {
+            #                                "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0,
+            #                                "intent_lock": 0.0,
+            #                                "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
+            #                                "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
+            #                                "intent_getattr_async": 0.0, "revalidate_lock": 0.0
+            #                            }}
+            # all_mdt_stat_so_far_dict = {}
+            # proc = Popen(['ls', '-l', self.mdt_parent_path], universal_newlines=True, stdout=PIPE)
+            # res = proc.communicate()[0]
+            # res_parts = res.split("\n")
+            # for line in res_parts:
+            #     if len(line.strip()) > 0:
+            #         if "total" not in line:
+            #             parts = line.split(" ")
+            #             print(parts)
+            #             mdt_paths.append(parts[-1])
+            #             all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
             is_first_time = True
             time_diff = 0
             epoc_time = 0
@@ -106,12 +98,7 @@ class StatThread(threading.Thread):
             overhead_epoc_count = 0
             main_output_string = ""
             overhead_main_output_string = ""
-            ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
-                                "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
-                                "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
-                                "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
 
-            all_remote_ost_stats_so_far = {}
             data_transfer_overhead = 0
             metric_publisher_socket = None
             if Config.send_to_cloud_mode:
@@ -143,79 +130,61 @@ class StatThread(threading.Thread):
                             id_str = "{}_{}_{}_{}_{}".format(discovery_time, self.dst_ip, self.dst_port, self.src_ip,
                                                              self.src_port)
                         transfer_id = hashlib.md5(id_str.encode('utf-8')).hexdigest()
-                        print(id_str)
+                        print(transfer_id)
                         # TODO
                         # Send a request to the realtime detection service to add this new transfer
                     time_diff += 1
                     # epoc_time += 1
+                    network_value_list = statistics_collector.collect_network_metrics()
                     system_value_list = statistics_collector.collect_system_metrics(self.pid_str,
                                                                                     target_process)
                     # buffer_value_list = statistics_collector.get_buffer_value()
 
-                    # ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = collect_file_ost_path_info(self.pid, src_path)
-                    file_ost_path_info = statistics_collector.collect_file_ost_path_info(self.pid_str,
-                                                                                         self.file_path)
+                    file_ost_path_info = statistics_collector.collect_file_ost_path_info(self.pid_str, self.file_path)
                     if file_ost_path_info is None:
                         time.sleep(0.1)
                         continue
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    file_mdt_path_info = statistics_collector.collect_file_mdt_path_info(self.pid_str,
-                                                                                         self.file_path)
+                    file_mdt_path_info = statistics_collector.collect_file_mdt_path_info(self.pid_str, self.file_path)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    ost_value_list, ost_stats_so_far = statistics_collector.process_ost_stat(ost_kernel_path,
-                                                                                             ost_dir_name,
-                                                                                             ost_stats_so_far)
+                    ost_value_list = statistics_collector.process_ost_stat(ost_kernel_path, ost_dir_name)
                     # print (ost_value_list, ost_stats_so_far)
-                    # # mdt_value_list, all_mdt_stat_so_far_dict = get_mdt_stat(self.mdt_parent_path, mdt_paths,
-                    # #                                                         all_mdt_stat_so_far_dict)
-                    mdt_value_list, mdt_stat_so_far_general = statistics_collector.get_mdt_stat(
-                        self.mdt_parent_path,
-                        mdt_dir_name,
-                        mdt_stat_so_far_general)
+                    mdt_value_list = statistics_collector.get_mdt_stat(self.mdt_parent_path, mdt_dir_name)
                     # print (mdt_value_list, mdt_stat_so_far_general)
                     ost_agent_address = self.remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
-                    remote_ost_value_list = [0.0, 0.0]
-                    if ost_agent_address != "":
-                        remote_ost_stats_so_far = all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
-                        remote_ost_value_list, remote_ost_stats_so_far = statistics_collector.process_lustre_ost_stats(
-                            ost_agent_address, remote_ost_dir_name, remote_ost_stats_so_far)
-                        all_remote_ost_stats_so_far[remote_ost_dir_name] = remote_ost_stats_so_far
+                    remote_ost_value_list = statistics_collector.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name)
                     # print (all_remote_ost_stats_so_far)
 
-                    output_string = str(time.time()) + ","
-                    output_string += network_statistics_collector.get_log_str()
+                    output_string = str(time.time())
 
+                    for item in network_value_list:
+                        output_string += "," + str(item)
                     for item in system_value_list:
                         output_string += "," + str(item)
                     for item in system_monitoring_global_vars.system_buffer_value:
                         output_string += "," + str(item)
-                    # # ost_value_list are metrics with index 79-95 in csv
-                    # for item in ost_value_list:
-                    #     output_string += "," + str(item)
+                    # ost_value_list are metrics with index 79-95 in csv
+                    for item in ost_value_list:
+                        output_string += "," + str(item)
                     # # values with index 112-147
-                    # for item in mdt_value_list:
-                    #     output_string += "," + str(item)
+                    for item in mdt_value_list:
+                        output_string += "," + str(item)
 
-                    output_string += "," + str(network_statistics_collector.dsack_dups)
-                    output_string += "," + str(network_statistics_collector.reord_seen)
-
-                    output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
-                    output_string += "," + str(system_monitoring_global_vars.system_memory_usage)
+                    for item in system_monitoring_global_vars.system_cpu_mem_usage:
+                        output_string += "," + str(item)
+                    # output_string += "," + str(statistics_collector.network_statistics_collector.dsack_dups)
+                    # output_string += "," + str(statistics_collector.network_statistics_collector.reord_seen)
+                    # output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
+                    # output_string += "," + str(system_monitoring_global_vars.system_memory_usage)
 
                     for item in remote_ost_value_list:
                         output_string += "," + str(item)
-
-                    # mdt_value_list : total_mdt_numbers at 100
-                    # repeat "total_mdt_numbers" of times in list
-                    # string of mdt name to use as key for map, foK36 metrics for each mdt
-                    # for item in mdt_value_list:
-                    #     output_string += "," + str(item)
 
                     output_string += "," + str(self.label_value) + "\n"
                     epoc_count += 1
@@ -229,7 +198,7 @@ class StatThread(threading.Thread):
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = self.is_sender
                         body = json.dumps(data)
-                        # print(body)
+                        # print(transfer_id, time.time())
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
                     elif not is_first_time:
@@ -245,13 +214,14 @@ class StatThread(threading.Thread):
                             write_thread.start()
                             main_output_string = ""
                     else:
-                        print("skip first transfer")
+                        # print("skip first transfer")
                         is_first_time = False
                 except psutil.NoSuchProcess as e:
                     print(e.msg)
                     print("EXITNG COLLECT STAT THREAD for {}".format(transfer_id))
                     self.is_transfer_done = True
                 except:
+                    print("EXITNG COLLECT STAT THREAD for {}".format(transfer_id))
                     traceback.print_exc()
                 processing_finish_time = time.time()
                 processing_time = processing_finish_time - processing_start_time
@@ -272,4 +242,4 @@ class StatThread(threading.Thread):
                 #         overhead_write = overheadFileWriteThread(self.over_head_write_thread_directory,overhead_main_output_string)
                 #         overhead_write.start()
                 #         overhead_main_output_string = ""
-                time.sleep(sleep_time-processing_time)
+                time.sleep(min(sleep_time, sleep_time - processing_time))
