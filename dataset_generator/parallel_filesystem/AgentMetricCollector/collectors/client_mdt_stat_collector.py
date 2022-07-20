@@ -1,7 +1,62 @@
 from subprocess import Popen, PIPE
 
+try:
+    from abstract_collector import AbstractCollector
+except ModuleNotFoundError:
+    from .abstract_collector import AbstractCollector
 
-class ClientGetMdtStat:
+
+class ClientGetMdtStat(AbstractCollector):
+    def __init__(self, prefix=""):
+        super().__init__(prefix)
+        self.metrics_datatypes = {112: 'string', 113: 'string', 114: 'string', 115: 'string', 116: 'string',
+                                  117: 'string', 118: 'string', 119: 'string', 120: 'string', 121: 'string',
+                                  122: 'string', 123: 'string', 124: 'string', 125: 'string', 126: 'string',
+                                  127: 'string', 128: 'string', 129: 'string', 130: 'string', 131: 'string',
+                                  132: 'string', 133: 'string', 134: 'string', 135: 'string', 136: 'string',
+                                  137: 'string', 138: 'string', 139: 'string', 140: 'string', 141: 'string',
+                                  142: 'string', 143: 'string', 144: 'string', 145: 'string', 146: 'string',
+                                  147: 'string'}
+        self.metrics_id_to_attr = {112: 'avg_waittime_md', 113: 'inflight_md', 114: 'unregistering_md',
+                                   115: 'timeouts_md', 116: 'req_waittime_md', 117: 'req_active_md',
+                                   118: 'mds_getattr_md', 119: 'mds_getattr_lock_md', 120: 'mds_close_md',
+                                   121: 'mds_readpage_md', 122: 'mds_connect_md', 123: 'mds_get_root_md',
+                                   124: 'mds_statfs_md', 125: 'mds_sync_md', 126: 'mds_quotactl_md',
+                                   127: 'mds_getxattr_md', 128: 'mds_hsm_state_set_md', 129: 'ldlm_cancel_md',
+                                   130: 'obd_ping_md', 131: 'seq_query_md', 132: 'fld_query_md', 133: 'close_md',
+                                   134: 'create_md', 135: 'enqueue_md', 136: 'getattr_md', 137: 'intent_lock_md',
+                                   138: 'link_md', 139: 'rename_md', 140: 'setattr_md', 141: 'fsync_md',
+                                   142: 'read_page_md', 143: 'unlink_md', 144: 'setxattr_md', 145: 'getxattr_md',
+                                   146: 'intent_getattr_async_md', 147: 'revalidate_lock_md'}
+        self.mdt_stat_so_far = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
+                                "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
+                                "mds_connect": 0.0, "mds_get_root": 0.0, "mds_statfs": 0.0,
+                                "mds_sync": 0.0, "mds_quotactl": 0.0, "mds_getxattr": 0.0,
+                                "mds_hsm_state_set": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0,
+                                "seq_query": 0.0, "fld_query": 0.0,
+                                "md_stats": {
+                                    "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0,
+                                    "intent_lock": 0.0,
+                                    "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
+                                    "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
+                                    "intent_getattr_async": 0.0, "revalidate_lock": 0.0
+                                }}
+
+    def collect_metrics(self, mdt_parent_path, mdt_dir_name):
+        self.get_mdt_stat(mdt_parent_path, mdt_dir_name, self.mdt_stat_so_far)
+
+    def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict):
+        value_list = []
+        mdt_full_path = mdt_parent_path + "/" + mdt_dir_name
+        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name)
+        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict)
+        value_list += a_list
+        self.mdt_stat_so_far = mdt_stat_latest_values
+        self.metrics_list = value_list
+        self.metrics_list_to_str()
+        self.metrics_list_to_dict()
+        # return value_list, mdt_stat_latest_values
+
     def process_mds_rpc(self, mdt_path, mdt_dir_name):
         # proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
         proc = Popen(['lctl', 'get_param', "mdc." + mdt_dir_name + ".import"], universal_newlines=True, stdout=PIPE)
@@ -74,8 +129,6 @@ class ClientGetMdtStat:
 
     def process_mdt_stat(self, mdt_path, mdt_dir_name, mdt_stat_so_far):
         value_list = []
-        if mdt_stat_so_far is None:
-            mdt_stat_so_far = {}
         # proc = Popen(['cat', mdt_path + "/stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg = "mdc." + mdt_dir_name + ".stats"
         proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
@@ -194,16 +247,26 @@ class ClientGetMdtStat:
         value_list.append(
             float((md_stats_latest_values.get("getxattr") or 0) - (md_stats_so_far_dict.get("getxattr") or 0)))
         value_list.append(float((md_stats_latest_values.get("ntent_getattr_async") or 0) - (
-                    md_stats_so_far_dict.get("ntent_getattr_async") or 0)))
+                md_stats_so_far_dict.get("ntent_getattr_async") or 0)))
         value_list.append(float(
             (md_stats_latest_values.get("revalidate_lock") or 0) - (md_stats_so_far_dict.get("revalidate_lock") or 0)))
 
         return value_list, mdt_stat_latest_values
 
-    def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict=None):
-        value_list = []
-        mdt_full_path = mdt_parent_path + "/" + mdt_dir_name
-        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name)
-        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict)
-        value_list += a_list
-        return value_list, mdt_stat_latest_values
+    def metrics_list_to_str(self):
+        output_string = ""
+        for item in self.metrics_list:
+            output_string += "," + str(item)
+        if output_string.startswith(","):
+            output_string = output_string[1:]
+        self.metrics_str = output_string
+
+    def metrics_list_to_dict(self):
+        tmp_dict = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
+                self.metrics_list[index], type_)
+        self.metrics_dict = tmp_dict
+
