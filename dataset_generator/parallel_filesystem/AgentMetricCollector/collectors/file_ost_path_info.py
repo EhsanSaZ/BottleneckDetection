@@ -2,8 +2,8 @@ from subprocess import Popen, PIPE
 import re
 
 
-class FileOscPathInfo:
-    def collect_file_ost_path_info(self, pid, lustre_mnt_point_list):
+class FileOstPathInfo:
+    def get_file_ost_path_info(self, pid, lustre_mnt_point_list):
         proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
         # total 0
         # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
