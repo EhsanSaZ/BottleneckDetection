@@ -74,7 +74,7 @@ class StatThread(threading.Thread):
         lustre_ost_metrics_collector = LustreOstMetricCollector(self.prefix)
 
         # TO DO REMOVE THIS LINE ITS JUST A TEST
-        is_parallel_file_system = True
+        # is_parallel_file_system = True
 
         if is_parallel_file_system:
             # mdt_paths = []
@@ -158,6 +158,7 @@ class StatThread(threading.Thread):
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
+                    client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
 
                     file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
                     if file_mdt_path_info is None:
@@ -165,9 +166,6 @@ class StatThread(threading.Thread):
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-
-                    client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
-
                     client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
 
                     ost_agent_address = self.remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
