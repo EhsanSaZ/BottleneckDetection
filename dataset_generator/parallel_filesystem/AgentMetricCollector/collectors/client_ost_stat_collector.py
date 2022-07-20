@@ -1,11 +1,33 @@
 from subprocess import Popen, PIPE
 
+try:
+    from abstract_collector import AbstractCollector
+except ModuleNotFoundError:
+    from .abstract_collector import AbstractCollector
 
-class ClientProcessOstStat:
-    def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far=None):
+
+class ClientProcessOstStat(AbstractCollector):
+    def __init__(self, prefix=""):
+        super().__init__(prefix)
+        self.metrics_datatypes = {95: 'string', 96: 'string', 97: 'string', 98: 'string', 99: 'string', 100: 'string',
+                                  101: 'string', 102: 'string', 103: 'string', 104: 'string', 105: 'string',
+                                  106: 'string', 107: 'string', 108: 'string', 109: 'string', 110: 'string',
+                                  111: 'string'}
+        self.metrics_id_to_attr = {95: 'req_waittime', 96: 'req_active', 97: 'read_bytes', 98: 'write_bytes',
+                                   99: 'ost_setattr', 100: 'ost_read', 101: 'ost_write', 102: 'ost_get_info',
+                                   103: 'ost_connect', 104: 'ost_punch', 105: 'ost_statfs', 106: 'ost_sync',
+                                   107: 'ost_quotactl', 108: 'ldlm_cancel', 109: 'obd_ping', 110: 'pending_read_pages',
+                                   111: 'read_RPCs_in_flight'}
+        self.ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
+                                 "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
+                                 "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
+                                 "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
+
+    def collect_metrics(self, ost_path, ost_dir_name):
+        self.process_ost_stat(ost_path, ost_dir_name, self.ost_stats_so_far)
+
+    def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far):
         value_list = []
-        if ost_stat_so_far is None:
-            ost_stat_so_far = {}
 
         # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg = "osc." + ost_dir_name + ".stats"
@@ -85,4 +107,25 @@ class ClientProcessOstStat:
                 index = metric_line.find(":")
                 value = float(metric_line[index + 1:])
                 value_list.append(value)
-        return value_list, ost_stat_latest_values
+        self.ost_stats_so_far = ost_stat_latest_values
+        self.metrics_list = value_list
+        self.metrics_list_to_str()
+        self.metrics_list_to_dict()
+        # return value_list, ost_stat_latest_values
+    
+    def metrics_list_to_str(self):
+        output_string = ""
+        for item in self.metrics_list:
+            output_string += "," + str(item)
+        if output_string.startswith(","):
+            output_string = output_string[1:]
+        self.metrics_str = output_string
+
+    def metrics_list_to_dict(self):
+        tmp_dict = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
+                self.metrics_list[index], type_)
+        self.metrics_dict = tmp_dict
