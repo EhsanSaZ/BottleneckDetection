@@ -6,7 +6,7 @@ except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
 
 
-class ClientProcessOstStat(AbstractCollector):
+class ClientOstMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {95: 'string', 96: 'string', 97: 'string', 98: 'string', 99: 'string', 100: 'string',
