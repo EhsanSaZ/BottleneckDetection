@@ -73,7 +73,6 @@ class StatThread(threading.Thread):
         client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
         lustre_ost_metrics_collector = LustreOstMetricCollector(self.prefix)
 
-        data_converter = DataConverter(file_system="lustre", prefix=self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         is_parallel_file_system = True
 
@@ -149,10 +148,8 @@ class StatThread(threading.Thread):
                     time_diff += 1
                     # epoc_time += 1
                     network_metrics_collector.collect_metrics()
-                    network_value_list = network_metrics_collector.get_metrics_list()
 
                     system_metrics_collector.collect_metrics(self.pid_str, target_process)
-                    system_value_list = system_metrics_collector.get_metrics_list()
 
                     file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path)
                     if file_ost_path_info is None:
@@ -161,64 +158,67 @@ class StatThread(threading.Thread):
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
+
                     file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
+
                     client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
-                    ost_value_list = client_ost_metrics_collector.get_metrics_list()
-                    # print (ost_value_list, ost_stats_so_far)
+
                     client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
-                    mdt_value_list = client_mdt_metrics_collector.get_metrics_list()
-                    # print (mdt_value_list, mdt_stat_so_far_general)
+
                     ost_agent_address = self.remote_ost_index_to_ost_agent_address_dict.get(ost_number) or ""
                     lustre_ost_metrics_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
-                    remote_ost_value_list = lustre_ost_metrics_collector.get_metrics_list()
-                    # print (all_remote_ost_stats_so_far)
 
-                    output_string = str(time.time())
-
-                    for item in network_value_list:
-                        output_string += "," + str(item)
-                    for item in system_value_list:
-                        output_string += "," + str(item)
-                    for item in system_monitoring_global_vars.system_buffer_value:
-                        output_string += "," + str(item)
-                    # ost_value_list are metrics with index 79-95 in csv
-                    for item in ost_value_list:
-                        output_string += "," + str(item)
-                    # # values with index 112-147
-                    for item in mdt_value_list:
-                        output_string += "," + str(item)
-
-                    for item in system_monitoring_global_vars.system_cpu_mem_usage:
-                        output_string += "," + str(item)
-                    # output_string += "," + str(statistics_collector.network_statistics_collector.dsack_dups)
-                    # output_string += "," + str(statistics_collector.network_statistics_collector.reord_seen)
-                    # output_string += "," + str(system_monitoring_global_vars.system_cpu_usage)
-                    # output_string += "," + str(system_monitoring_global_vars.system_memory_usage)
-
-                    for item in remote_ost_value_list:
-                        output_string += "," + str(item)
-
-                    output_string += "," + str(self.label_value) + "\n"
                     epoc_count += 1
                     # print(output_string)
+                    time_second = time.time()
                     if Config.send_to_cloud_mode and not is_first_time:
                         epoc_time += 1
                         data = {}
-                        metrics_data = data_converter.data_str_to_json(output_string)
+
+                        metrics_data = {"time_stamp": str(time_second)}
+                        metrics_data.update(network_metrics_collector.get_metrics_dict())
+                        metrics_data.update(system_metrics_collector.get_metrics_dict())
+                        for key in system_monitoring_global_vars.system_buffer_value_dict.keys():
+                            metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_buffer_value_dict[key]
+                        metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
+                        metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
+                        for key in system_monitoring_global_vars.system_cpu_mem_usage_dict.keys():
+                            metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
+                        metrics_data.update(lustre_ost_metrics_collector.get_metrics_dict())
+                        metrics_data.update({"label_value": self.label_value})
+
                         data["transfer_ID"] = transfer_id
                         data["data"] = metrics_data
                         data["sequence_number"] = epoc_time
                         data["is_sender"] = self.is_sender
                         body = json.dumps(data)
-                        # print(transfer_id, time.time())
+                        # print(transfer_id, metrics_data)
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
                     elif not is_first_time:
+                        output_string = str(time_second)
+                        for item in network_metrics_collector.get_metrics_list():
+                            output_string += "," + str(item)
+                        for item in system_metrics_collector.get_metrics_list():
+                            output_string += "," + str(item)
+                        for item in system_monitoring_global_vars.system_buffer_value:
+                            output_string += "," + str(item)
+                        # ost_value_list are metrics with index 79-95 in csv
+                        for item in client_ost_metrics_collector.get_metrics_list():
+                            output_string += "," + str(item)
+                        # # values with index 112-147
+                        for item in client_mdt_metrics_collector.get_metrics_list():
+                            output_string += "," + str(item)
+                        for item in system_monitoring_global_vars.system_cpu_mem_usage:
+                            output_string += "," + str(item)
+                        for item in lustre_ost_metrics_collector.get_metrics_list():
+                            output_string += "," + str(item)
+                        output_string += "," + str(self.label_value) + "\n"
                         main_output_string += output_string
                         if epoc_count % 5 == 0:
                             print("transferring file.... ", epoc_count, "label: ", self.label_value)
