@@ -1,10 +1,13 @@
 import re
 import subprocess
+from google.protobuf.json_format import ParseDict
 
 try:
     from abstract_collector import AbstractCollector
+    from protobuf_messages.network.network_metrics_pb2 import NetworkMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
+    from .protobuf_messages.network.network_metrics_pb2 import NetworkMetrics
 
 
 class NetworkMetricCollectorSS_V2(AbstractCollector):
@@ -42,12 +45,12 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         self.destination_port = destination_port
         self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
                                   7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
-                                  13: 'string', 14: 'string', 148: 'string', 149: 'string'}
+                                  13: 'string', 14: 'string', 15: 'string', 16: 'string'}
         self.metrics_id_to_attr = {1: 'avg_rtt_value', 2: 'pacing_rate', 3: 'cwnd_rate',
                                    4: 'avg_retransmission_timeout_value',
                                    5: 'byte_ack', 6: 'seg_out', 7: 'retrans', 8: 'mss_value', 9: 'ssthresh_value',
                                    10: 'segs_in', 11: 'avg_send_value', 12: 'unacked_value', 13: 'rcv_space',
-                                   14: 'send_buffer_value', 148: 'avg_dsack_dups_value', 149: 'avg_reord_seen'}
+                                   14: 'send_buffer_value', 15: 'avg_dsack_dups_value', 16: 'avg_reord_seen'}
 
     def execute_command(self):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
@@ -183,6 +186,19 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
             tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
                 self.metrics_list[index], type_)
         self.metrics_dict = tmp_dict
+
+    def get_metrics_list_to_dict_no_prefix(self):
+        metrics_dict_no_prefix = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            metrics_dict_no_prefix[self.metrics_id_to_attr[keys_list[index]]] = self._get_data_type(
+                self.metrics_list[index], type_)
+        return metrics_dict_no_prefix
+
+    def get_proto_message(self):
+        message = ParseDict(self.get_metrics_list_to_dict_no_prefix(), NetworkMetrics())
+        return message
 
     def check_established_connection_exist(self):
         self.execute_command()
