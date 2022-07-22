@@ -64,6 +64,10 @@ class AbstractCollector(ABC):
     def collect_metrics(self, *args):
         pass
 
+    @abstractmethod
+    def get_proto_message(self):
+        pass
+
     def get_metrics_name_list(self):
         return list(self.metrics_id_to_attr.values())
 
