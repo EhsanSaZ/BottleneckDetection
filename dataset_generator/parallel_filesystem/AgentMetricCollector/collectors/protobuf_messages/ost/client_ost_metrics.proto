@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+message ClientOstMetrics {
+  /*
+        The fields 1 - 15 are generated using following "lctl get_param osc.<ost-dir-name>.stats
+        it contains statistics for the osc that is connected to the <ost-dir-name> ost
+    */
+    optional uint64 req_waittime = 1;
+    optional uint64 req_active = 2;
+    optional uint64 read_bytes = 3;
+    optional uint64 write_bytes = 4;
+    optional uint64 ost_setattr = 5;
+    optional uint64 ost_read = 6;
+    optional uint64 ost_write = 7;
+    optional uint64 ost_get_info = 8;
+    optional uint64 ost_connect = 9;
+    optional uint64 ost_punch = 10;
+    optional uint64 ost_statfs = 11;
+    optional uint64 ost_sync = 12;
+    optional uint64 ost_quotactl = 13;
+    optional uint64 ldlm_cancel = 14;
+    optional uint64 obd_ping = 15;
+    /*
+        The fields 16 - 17 generated using following "lctl get_param osc.<ost-dir-name>.rpc_stats
+        it contains statistics for the osc that is connected to the <ost-dir-name> ost
+    */
+    optional uint64 pending_read_pages = 16;
+    optional uint64 read_RPCs_in_flight = 17;
+}
