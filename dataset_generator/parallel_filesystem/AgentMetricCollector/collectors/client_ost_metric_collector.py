@@ -1,23 +1,26 @@
 from subprocess import Popen, PIPE
 
+from google.protobuf.json_format import ParseDict
+
 try:
     from abstract_collector import AbstractCollector
+    from protobuf_messages.ost.client_ost_metrics_pb2 import ClientOstMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
+    from .protobuf_messages.ost.client_ost_metrics_pb2 import ClientOstMetrics
 
 
 class ClientOstMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
-        self.metrics_datatypes = {95: 'string', 96: 'string', 97: 'string', 98: 'string', 99: 'string', 100: 'string',
-                                  101: 'string', 102: 'string', 103: 'string', 104: 'string', 105: 'string',
-                                  106: 'string', 107: 'string', 108: 'string', 109: 'string', 110: 'string',
-                                  111: 'string'}
-        self.metrics_id_to_attr = {95: 'req_waittime', 96: 'req_active', 97: 'read_bytes', 98: 'write_bytes',
-                                   99: 'ost_setattr', 100: 'ost_read', 101: 'ost_write', 102: 'ost_get_info',
-                                   103: 'ost_connect', 104: 'ost_punch', 105: 'ost_statfs', 106: 'ost_sync',
-                                   107: 'ost_quotactl', 108: 'ldlm_cancel', 109: 'obd_ping', 110: 'pending_read_pages',
-                                   111: 'read_RPCs_in_flight'}
+        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
+                                  7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
+                                  13: 'string', 14: 'string', 15: 'string', 16: 'string', 17: 'string'}
+        self.metrics_id_to_attr = {1: 'req_waittime', 2: 'req_active', 3: 'read_bytes', 4: 'write_bytes',
+                                   5: 'ost_setattr', 6: 'ost_read', 7: 'ost_write', 8: 'ost_get_info', 9: 'ost_connect',
+                                   10: 'ost_punch', 11: 'ost_statfs', 12: 'ost_sync', 13: 'ost_quotactl',
+                                   14: 'ldlm_cancel', 15: 'obd_ping', 16: 'pending_read_pages',
+                                   17: 'read_RPCs_in_flight'}
         self.ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
                                  "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
                                  "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
@@ -112,7 +115,7 @@ class ClientOstMetricCollector(AbstractCollector):
         self.metrics_list_to_str()
         self.metrics_list_to_dict()
         # return value_list, ost_stat_latest_values
-    
+
     def metrics_list_to_str(self):
         output_string = ""
         for item in self.metrics_list:
@@ -129,3 +132,16 @@ class ClientOstMetricCollector(AbstractCollector):
             tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
                 self.metrics_list[index], type_)
         self.metrics_dict = tmp_dict
+
+    def get_metrics_list_to_dict_no_prefix(self):
+        metrics_dict_no_prefix = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            metrics_dict_no_prefix[self.metrics_id_to_attr[keys_list[index]]] = self._get_data_type(
+                self.metrics_list[index], type_)
+        return metrics_dict_no_prefix
+
+    def get_proto_message(self):
+        message = ParseDict(self.get_metrics_list_to_dict_no_prefix(), ClientOstMetrics())
+        return message
