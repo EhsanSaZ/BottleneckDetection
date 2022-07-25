@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message ResourceUsageMetrics{
-  // 1 - 2 are node cpu and memory cpu usage
-  optional float system_cpu_percent = 1;
-  optional float system_memory_percent = 2;
-}

@@ -3,10 +3,10 @@ from google.protobuf.json_format import ParseDict, MessageToDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.buffer_value.buffer_value_metrics_pb2 import BufferValueMetrics
+    from protobuf_messages.log_metrics_pb2 import BufferValueMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.buffer_value.buffer_value_metrics_pb2 import BufferValueMetrics
+    from .protobuf_messages.log_metrics_pb2 import BufferValueMetrics
 
 
 class BufferValueStatCollector(AbstractCollector):

@@ -3,10 +3,10 @@ from google.protobuf.json_format import ParseDict, MessageToDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.lustre_ost.lustre_ost_metrics_pb2 import LustreOstMetrics
+    from protobuf_messages.log_metrics_pb2 import LustreOstMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.lustre_ost.lustre_ost_metrics_pb2 import LustreOstMetrics
+    from .protobuf_messages.log_metrics_pb2 import LustreOstMetrics
 
 
 class LustreOstMetricCollector(AbstractCollector):

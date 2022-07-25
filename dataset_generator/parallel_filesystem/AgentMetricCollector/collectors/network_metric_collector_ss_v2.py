@@ -4,10 +4,10 @@ from google.protobuf.json_format import ParseDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.network.network_metrics_pb2 import NetworkMetrics
+    from protobuf_messages.log_metrics_pb2 import NetworkMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.network.network_metrics_pb2 import NetworkMetrics
+    from .protobuf_messages.log_metrics_pb2 import NetworkMetrics
 
 
 class NetworkMetricCollectorSS_V2(AbstractCollector):

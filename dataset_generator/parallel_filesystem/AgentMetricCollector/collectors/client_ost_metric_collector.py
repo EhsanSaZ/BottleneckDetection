@@ -4,10 +4,10 @@ from google.protobuf.json_format import ParseDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.ost.client_ost_metrics_pb2 import ClientOstMetrics
+    from protobuf_messages.log_metrics_pb2 import ClientOstMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.ost.client_ost_metrics_pb2 import ClientOstMetrics
+    from .protobuf_messages.log_metrics_pb2 import ClientOstMetrics
 
 
 class ClientOstMetricCollector(AbstractCollector):

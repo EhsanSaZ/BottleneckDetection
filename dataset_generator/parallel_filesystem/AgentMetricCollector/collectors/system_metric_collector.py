@@ -5,10 +5,10 @@ from google.protobuf.json_format import ParseDict, MessageToDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.system.system_metrics_pb2 import SystemMetrics
+    from protobuf_messages.log_metrics_pb2 import SystemMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.system.system_metrics_pb2 import SystemMetrics
+    from .protobuf_messages.log_metrics_pb2 import SystemMetrics
 
 class SystemMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
