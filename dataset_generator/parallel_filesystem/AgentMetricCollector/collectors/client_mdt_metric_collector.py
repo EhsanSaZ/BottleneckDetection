@@ -1,9 +1,13 @@
 from subprocess import Popen, PIPE
 
+from google.protobuf.json_format import ParseDict
+
 try:
     from abstract_collector import AbstractCollector
+    from protobuf_messages.mdt.client_mdt_metrics_pb2 import ClientMdtMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
+    from .protobuf_messages.mdt.client_mdt_metrics_pb2 import ClientMdtMetrics
 
 
 class ClientMdtMetricCollector(AbstractCollector):
@@ -269,4 +273,18 @@ class ClientMdtMetricCollector(AbstractCollector):
             tmp_dict["{}{}".format(self.prefix, self.metrics_id_to_attr[keys_list[index]])] = self._get_data_type(
                 self.metrics_list[index], type_)
         self.metrics_dict = tmp_dict
+
+    def get_metrics_list_to_dict_no_prefix(self):
+        metrics_dict_no_prefix = {}
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            metrics_dict_no_prefix[self.metrics_id_to_attr[keys_list[index]]] = self._get_data_type(
+                self.metrics_list[index], type_)
+        return metrics_dict_no_prefix
+
+    def get_proto_message(self):
+        message = ParseDict(self.get_metrics_list_to_dict_no_prefix(), ClientMdtMetrics())
+        return message
+
 
