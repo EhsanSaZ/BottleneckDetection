@@ -18,8 +18,8 @@ class Config:
     parallel_metric_java_sender_app_path = '/home/esaeedizade/Desktop/BottleneckDetection/dataset_generator/utilities/SimpleSender1.java'  # used by the java client app
     remote_parallel_metric_collector_java_receiver_app_path = '/home/esaeedizade/Desktop/BottleneckDetection/dataset_generator/parallel_filesystem/AgentMetricCollector/collectors/SimpleReceiver_per_second_thr_monitor.java'  # used by the java client app
 
-    send_to_cloud_mode = False
-
+    send_to_cloud_mode = True
+    communication_type = "PROTO"  #"JSON"  # PROTO
     cloud_server_address = "127.0.0.1"
     cloud_server_port = "60000"
 
