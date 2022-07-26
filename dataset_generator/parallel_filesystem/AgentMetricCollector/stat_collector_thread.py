@@ -15,8 +15,8 @@ from collectors.file_mdt_path_info import FileMdtPathInfo
 from collectors.client_ost_metric_collector import ClientOstMetricCollector
 from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
 from collectors.lustre_ost_metric_collector import LustreOstMetricCollector
+from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog
 
-from data_converter import DataConverter
 from helper_threads import fileWriteThread
 from Config import Config
 import system_monitoring_global_vars
@@ -174,7 +174,7 @@ class StatThread(threading.Thread):
                     epoc_count += 1
                     # print(output_string)
                     time_second = time.time()
-                    if Config.send_to_cloud_mode and not is_first_time:
+                    if Config.send_to_cloud_mode and Config.communication_type == "JSON" and not is_first_time:
                         epoc_time += 1
                         data = {}
 
@@ -198,6 +198,26 @@ class StatThread(threading.Thread):
                         # print(transfer_id, metrics_data)
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
+                    if Config.send_to_cloud_mode and Config.communication_type == "PROTO" and not is_first_time:
+                        monitoring_msg = MonitoringLog()
+
+                        metrics_msg = Metrics()
+                        metrics_msg.time_stamp = time_second
+                        metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
+                        metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
+                        metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
+                        metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
+                        metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
+                        metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
+                        metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_collector.get_proto_message())
+                        metrics_msg.label_value = int(self.label_value)
+
+                        monitoring_msg.metrics.CopyFrom(metrics_msg)
+                        monitoring_msg.transfer_ID = transfer_id
+                        monitoring_msg.sequence_number = epoc_time
+                        monitoring_msg.is_sender = self.is_sender
+
+                        metric_publisher_socket.send(monitoring_msg.SerializeToString())
                     elif not is_first_time:
                         output_string = str(time_second)
                         for item in network_metrics_collector.get_metrics_list():
