@@ -3,10 +3,10 @@ from google.protobuf.json_format import ParseDict
 
 try:
     from abstract_collector import AbstractCollector
-    from protobuf_messages.resource_usage.resource_usage_metrics_pb2 import ResourceUsageMetrics
+    from protobuf_messages.log_metrics_pb2 import ResourceUsageMetrics
 except ModuleNotFoundError:
     from .abstract_collector import AbstractCollector
-    from .protobuf_messages.resource_usage.resource_usage_metrics_pb2 import ResourceUsageMetrics
+    from .protobuf_messages.log_metrics_pb2 import ResourceUsageMetrics
 
 
 class ResourceUsageCollector(AbstractCollector):
