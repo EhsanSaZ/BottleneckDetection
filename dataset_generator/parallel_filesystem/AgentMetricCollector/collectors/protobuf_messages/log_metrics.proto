@@ -239,7 +239,6 @@ message Metrics{
 }
 
 message MonitoringLog {
-  optional double time_stamp = 1;
   optional string transfer_ID = 2;
   optional Metrics metrics = 3;
   optional uint64 sequence_number = 4;
