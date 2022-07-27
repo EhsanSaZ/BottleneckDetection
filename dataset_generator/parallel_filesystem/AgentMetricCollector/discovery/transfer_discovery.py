@@ -1,3 +1,4 @@
+import hashlib
 import re
 import subprocess
 import threading
@@ -87,7 +88,11 @@ class TransferDiscovery(threading.Thread):
                             if match:
                                 pid = int(match[1])
                                 # print("Find transfer", pid, sender_ip, sender_port, receiver_ip, receiver_port)
-                                self.running_transfers[pid] = {"pid": pid, "local_ip": transfer_local_ip,
+                                id_str = "{}-{}-{}-{}-{}".format(pid,
+                                                                 transfer_local_ip, transfer_local_port,
+                                                                 transfer_peer_ip, transfer_peer_port)
+                                id_hashed = hashlib.md5(id_str.encode('utf-8')).hexdigest()
+                                self.running_transfers[id_hashed] = {"pid": pid, "local_ip": transfer_local_ip,
                                                                "local_port": transfer_local_port,
                                                                "peer_ip": transfer_peer_ip,
                                                                "peer_port": transfer_peer_port}
