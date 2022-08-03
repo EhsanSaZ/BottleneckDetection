@@ -41,9 +41,6 @@ class LustreOstMetricZmqCollector(AbstractCollector):
                 body = {"ost_dir_name": remote_ost_dir_name, "time_stamp": time_stamp}
                 self.socket.send_json(body)
                 response = self.socket.recv_json()
-                receive_time = time.time()
-                if time_stamp != int(receive_time):
-                    print("send", time_stamp,"receive time", receive_time)
                 # print(r.json()["out_put"])
                 output = response["out_put"] or ""
                 value_list = []
