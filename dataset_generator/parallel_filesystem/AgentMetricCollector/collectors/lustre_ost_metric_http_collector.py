@@ -16,13 +16,14 @@ class LustreOstMetricHttpCollector(AbstractCollector):
         self.metrics_id_to_attr = {1: 'remote_ost_read_bytes', 2: 'remote_ost_write_bytes'}
         self.all_remote_ost_stats_so_far = {}
 
-    def collect_metrics(self, ost_agent_address, remote_ost_dir_name):
-        self.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name)
+    def collect_metrics(self, ost_agent_address, remote_ost_dir_name, time_stamp):
+        self.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, time_stamp)
 
-    def process_lustre_ost_stats(self, ost_agent_address, remote_ost_dir_name):
+    def process_lustre_ost_stats(self, ost_agent_address, remote_ost_dir_name, time_stamp):
         if ost_agent_address != "":
             path = "obdfilter." + remote_ost_dir_name + ".stats"
-            r = requests.post(ost_agent_address + "lctl_get_param", json={"path": path})
+            body = {"path": path, "ost_dir_name": remote_ost_dir_name, "time_stamp": time_stamp}
+            r = requests.post(ost_agent_address + "lctl_get_param", json=body)
             # print(r.json()["out_put"])
             output = r.json()["out_put"] or ""
             value_list = []
