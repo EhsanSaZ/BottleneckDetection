@@ -171,11 +171,11 @@ class StatThread(threading.Thread):
                     client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
 
                     ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
-                    lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
+                    lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name, int(processing_start_time))
 
                     epoc_count += 1
                     # print(output_string)
-                    time_second = time.time()
+                    time_second = processing_start_time
                     if Config.send_to_cloud_mode and Config.communication_type == "JSON" and not is_first_time:
                         epoc_time += 1
                         data = {}
