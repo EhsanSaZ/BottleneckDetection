@@ -9,7 +9,7 @@ except ModuleNotFoundError:
     from .protobuf_messages.log_metrics_pb2 import LustreOstMetrics
 
 
-class LustreOstMetricCollector(AbstractCollector):
+class LustreOstMetricHttpCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {1: 'string', 2: 'string'}
