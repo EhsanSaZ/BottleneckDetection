@@ -219,7 +219,10 @@ class StatThread(threading.Thread):
                         monitoring_msg.sequence_number = epoc_time
                         monitoring_msg.is_sender = self.is_sender
 
-                        metric_publisher_socket.send(monitoring_msg.SerializeToString())
+                        data = {}
+                        data["data"] = monitoring_msg.SerializeToString()
+                        data["request_type"] = "send_log_data"
+                        metric_publisher_socket.send_json(json.dumps(data))
                     elif not is_first_time:
                         output_string = str(time_second)
                         for item in network_metrics_collector.get_metrics_list():

@@ -1,15 +1,19 @@
 import traceback
-
+from model.log_metrics_pb2 import MonitoringLog
+from google.protobuf.json_format import MessageToDict
 
 def process_event_v2(data, db_connection, db_name):
     try:
         # print(data)
-        time_stamp_sec = int(data["data"]["time_stamp"])
-        data["time_stamp_sec"] = time_stamp_sec
+        monitoring_msg_str = data["data"]
+        monitoring_msg = MonitoringLog()
+        monitoring_msg.ParseFromString(monitoring_msg_str)
+
+        time_stamp_sec = int(monitoring_msg.metrics.time_stamp)
+        monitoring_msg_dict = MessageToDict(monitoring_msg)
+        monitoring_msg_dict["time_stamp_sec"] = time_stamp_sec
         logs_collection = db_connection[db_name].logs
-        insert_id = logs_collection.insert_one(data).inserted_id
-
-
+        insert_id = logs_collection.insert_one(monitoring_msg_dict).inserted_id
         # time_stamp_sec = int(data["data"]["time_stamp"])
         # data["time_stamp_sec"] = time_stamp_sec
         # transfer_collection = db_connection[db_name].logs
