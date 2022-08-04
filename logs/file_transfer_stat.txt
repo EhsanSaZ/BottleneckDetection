@@ -1,8 +1,0 @@
-label = 1111
-start time = Fri Dec 17 15:38:27 2021
-label = 1111
-start time = Fri Dec 17 16:04:20 2021
-label = 1111
-start time = Fri Dec 17 16:14:34 2021
-label = 1111
-start time = Fri Dec 17 16:17:12 2021
