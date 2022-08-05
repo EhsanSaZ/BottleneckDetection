@@ -28,3 +28,8 @@ class Config:
 
     xsub_backend_socket_name = "xsub_backend"
 
+    # OST Cache server configuration
+    cache_size = 100
+    cache_ttl = 15
+    rep_backend_socket_name = "ost_rep_backend"
+
