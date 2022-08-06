@@ -8,10 +8,10 @@ from zmq import ZMQError
 
 
 class LustreOstMetricCache(threading.Thread):
-    def __init__(self, cache_size, cache_ttl, rep_backend_socket_name, remote_ost_index_to_ost_agent_http_address_dict):
+    def __init__(self, context,  cache_size, cache_ttl, rep_backend_socket_name, remote_ost_index_to_ost_agent_http_address_dict):
         threading.Thread.__init__(self)
         self._stop = threading.Event()
-        self.context = zmq.Context()
+        self.context = context
         self.backend_socket = None
         self.rep_backend_socket_name = rep_backend_socket_name
         # self.frontend_socket = self.context.socket(zmq.REQ)
@@ -56,8 +56,10 @@ class LustreOstMetricCache(threading.Thread):
                 else:
                     self.backend_socket.send_json(response_body)
             except ZMQError as e:
-                traceback.print_exc()
+                # traceback.print_exc()
+                print(str(e))
                 self.reset_backend_socket()
             except Exception as e:
-                traceback.print_exc()
+                # traceback.print_exc()
+                print(str(e))
                 self.backend_socket.send_json({"out_put": "", "error": str(e)})
