@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 from pathlib import Path
 import psutil
 import zmq
@@ -50,9 +51,9 @@ xpub_frontend_public_socket_port = None
 
 xsub_backend_socket_name = None
 
+context = zmq.Context()
 # receiver_signaling_port = None
 if Config.send_to_cloud_mode:
-    context = zmq.Context()
     cloud_server_host = Config.cloud_server_address
     cloud_server_port = Config.cloud_server_port
 
@@ -125,7 +126,7 @@ discovery_thread = TransferDiscovery(local_ip_range, peer_ip_range, local_port_r
                                      transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_thread.start()
 
-ost_metric_cache_thread = LustreOstMetricCache(Config.cache_size, Config.cache_ttl, Config.ost_rep_backend_socket_name,
+ost_metric_cache_thread = LustreOstMetricCache(context, Config.cache_size, Config.cache_ttl, Config.ost_rep_backend_socket_name,
                                                       remote_ost_index_to_ost_agent_address_dict)
 ost_metric_cache_thread.start()
 
