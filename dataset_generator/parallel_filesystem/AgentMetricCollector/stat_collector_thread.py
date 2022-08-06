@@ -15,6 +15,7 @@ from collectors.file_mdt_path_info import FileMdtPathInfo
 from collectors.client_ost_metric_collector import ClientOstMetricCollector
 from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
 from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
+from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
 from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog
 
 from helper_threads import fileWriteThread
@@ -25,7 +26,8 @@ import system_monitoring_global_vars
 class StatThread(threading.Thread):
     def __init__(self, src_ip, src_port, dst_ip, dst_port, zmq_context,
                  xsub_backend_socket_name,
-                 remote_ost_index_to_ost_agent_http_address_dict,remote_ost_index_to_ost_agent_zmq_address_dict,
+                 ost_metric_backend_socket_name,
+                 remote_ost_index_to_ost_agent_http_address_dict,
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
                  write_thread_directory, over_head_write_thread_directory):
@@ -37,8 +39,8 @@ class StatThread(threading.Thread):
         self.dst_port = dst_port
         self.context = zmq_context
         self.xsub_backend_socket_name = xsub_backend_socket_name
+        self.ost_metric_backend_socket_name = ost_metric_backend_socket_name
         self.remote_ost_index_to_ost_agent_http_address_dict = remote_ost_index_to_ost_agent_http_address_dict
-        self.remote_ost_index_to_ost_agent_zmq_address_dict = remote_ost_index_to_ost_agent_zmq_address_dict
         self.pid_str = pid_str
         self.file_path = path
         self.is_transfer_done = False
@@ -73,8 +75,8 @@ class StatThread(threading.Thread):
         file_mdt_path_info_extractor = FileMdtPathInfo()
         client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
         client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
-        lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
-
+        # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
+        lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.prefix, self.ost_metric_backend_socket_name)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         # is_parallel_file_system = True
 
@@ -170,8 +172,9 @@ class StatThread(threading.Thread):
                     # print(mdt_kernel_path, mdt_dir_name)
                     client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
 
-                    ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
-                    lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name, int(processing_start_time))
+                    # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
+                    # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
+                    lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_time))
 
                     epoc_count += 1
                     # print(output_string)
@@ -189,7 +192,8 @@ class StatThread(threading.Thread):
                         metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
                         for key in system_monitoring_global_vars.system_cpu_mem_usage_dict.keys():
                             metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
-                        metrics_data.update(lustre_ost_metrics_http_collector.get_metrics_dict())
+                        # metrics_data.update(lustre_ost_metrics_http_collector.get_metrics_dict())
+                        metrics_data.update(lustre_ost_metrics_zmq_collector.get_metrics_dict())
                         metrics_data.update({"label_value": self.label_value})
 
                         data["transfer_ID"] = transfer_id
@@ -211,7 +215,8 @@ class StatThread(threading.Thread):
                         metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
                         metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
                         metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
-                        metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
+                        # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
+                        metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_zmq_collector.get_proto_message())
                         metrics_msg.label_value = int(self.label_value)
 
                         monitoring_msg.metrics.CopyFrom(metrics_msg)
@@ -239,7 +244,9 @@ class StatThread(threading.Thread):
                             output_string += "," + str(item)
                         for item in system_monitoring_global_vars.system_cpu_mem_usage:
                             output_string += "," + str(item)
-                        for item in lustre_ost_metrics_http_collector.get_metrics_list():
+                        # for item in lustre_ost_metrics_http_collector.get_metrics_list():
+                        #     output_string += "," + str(item)
+                        for item in lustre_ost_metrics_zmq_collector.get_metrics_list():
                             output_string += "," + str(item)
                         output_string += "," + str(self.label_value) + "\n"
                         main_output_string += output_string
