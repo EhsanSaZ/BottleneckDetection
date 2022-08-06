@@ -10,11 +10,12 @@ from discovery.transfer_validation_strategy2 import TransferValidationStrategy_2
 from transfer_manager import TransferManager
 from helper_threads import globalMetricsMonitor
 from publisher import SendToCloud
+from lustre_ost_metric_cache import LustreOstMetricCache
 from file_transfer_thread import  FileTransferThread
 from run_server_thread import RunServerThread
 import global_vars
 
-remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_address_dict
+remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_http_address_dict
 ost_rep_backend_socket_name = Config.ost_rep_backend_socket_name
 drive_name = Config.parallel_metric_collector_drive_name  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
@@ -124,6 +125,10 @@ discovery_thread = TransferDiscovery(local_ip_range, peer_ip_range, local_port_r
                                      transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_thread.start()
 
+ost_metric_cache_thread = LustreOstMetricCache(Config.cache_size, Config.cache_ttl, Config.ost_rep_backend_socket_name,
+                                                      remote_ost_index_to_ost_agent_address_dict)
+ost_metric_cache_thread.start()
+
 if run_java_app == "1":
     # pass
     file_transfer_thread = FileTransferThread(str(0), java_sender_app_path, dst_ip, port_number, src_path,
@@ -140,6 +145,7 @@ elif run_java_app == "2":
 
 discovery_thread.join()
 global_metrics_collector.join()
+ost_metric_cache_thread.join()
 
 if publisher_thread:
     publisher_thread.join()
