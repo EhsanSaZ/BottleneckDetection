@@ -15,6 +15,7 @@ from run_server_thread import RunServerThread
 import global_vars
 
 remote_ost_index_to_ost_agent_address_dict = Config.parallel_metric_remote_ost_index_to_ost_agent_address_dict
+ost_rep_backend_socket_name = Config.ost_rep_backend_socket_name
 drive_name = Config.parallel_metric_collector_drive_name  # drive_name = "sda" "nvme0n1" "xvdf" can be checked with lsblk command on ubuntu
 
 java_sender_app_path = Config.parallel_metric_java_sender_app_path
@@ -117,7 +118,7 @@ global_metrics_collector = globalMetricsMonitor(sleep_time=1)
 global_metrics_collector.start()
 
 transfer_validator = TransferValidationStrategy_2()
-transfer_manager = TransferManager(context, xsub_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
+transfer_manager = TransferManager(context, xsub_backend_socket_name, ost_rep_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
                                    read_lustre_mnt_point_list, write_lustre_mnt_point_list, global_vars.mdt_parent_path, global_vars.label_value)
 discovery_thread = TransferDiscovery(local_ip_range, peer_ip_range, local_port_range, peer_port_range,
                                      transfer_validator, transfer_manager, discovery_cycle=1)
