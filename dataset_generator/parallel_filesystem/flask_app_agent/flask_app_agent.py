@@ -16,11 +16,14 @@ def get_cat_data():
 
 @app.route('/lctl_get_param', methods=['POST'])
 def get_lctl_data():
-    data = request.json
-    file_path = data["path"]
-    proc = Popen(['lctl', 'get_param', file_path], universal_newlines=True, stdout=PIPE, stderr=PIPE)
-    res, err = proc.communicate()
-    return jsonify({"out_put": res, "error": err})
+    try:
+        data = request.json
+        file_path = data["path"]
+        proc = Popen(['lctl', 'get_param', file_path], universal_newlines=True, stdout=PIPE, stderr=PIPE)
+        res, err = proc.communicate()
+        return jsonify({"out_put": res, "error": err})
+    except Exception as e:
+        return jsonify({"out_put": "", "error": "internal error" + str(e)})
 
 
 if __name__ == '__main__':
