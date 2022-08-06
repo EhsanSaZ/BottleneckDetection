@@ -14,35 +14,42 @@ except ModuleNotFoundError:
 
 
 class LustreOstMetricZmqCollector(AbstractCollector):
-    def __init__(self, prefix=""):
+    def __init__(self, backend_socket_name, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {1: 'string', 2: 'string'}
         self.metrics_id_to_attr = {1: 'remote_ost_read_bytes', 2: 'remote_ost_write_bytes'}
         self.all_remote_ost_stats_so_far = {}
-        self.latest_ost_address = ""
+        self.latest_ost_number = -1
+        self.backend_socket_name = backend_socket_name
         self.context = zmq.Context()
+        self.socket = None
+        self.initialize_socket()
+
+    def initialize_socket(self):
         self.socket = self.context.socket(zmq.REQ)
+        self.socket.connect("inproc://{}".format(self.backend_socket_name))
 
     def reset_socket(self):
         self.socket.close()
-        self.socket = self.context.socket(zmq.REQ)
-        
-    def collect_metrics(self, ost_agent_address, remote_ost_dir_name, time_stamp):
-        self.process_lustre_ost_stats(ost_agent_address, remote_ost_dir_name, time_stamp)
+        self.initialize_socket()
 
-    def process_lustre_ost_stats(self, ost_agent_address, remote_ost_dir_name, time_stamp):
+    def collect_metrics(self, ost_number, remote_ost_dir_name, time_stamp):
+        self.process_lustre_ost_stats(ost_number, remote_ost_dir_name, time_stamp)
+
+    def process_lustre_ost_stats(self, ost_number, remote_ost_dir_name, time_stamp):
         try:
-            if ost_agent_address != "":
-                if ost_agent_address != self.latest_ost_address:
-                    self.reset_socket()
-                    self.socket.connect(ost_agent_address)
-                    self.latest_ost_address = ost_agent_address
-                # path = "obdfilter." + remote_ost_dir_name + ".stats"
-                body = {"ost_dir_name": remote_ost_dir_name, "time_stamp": time_stamp}
-                self.socket.send_json(body)
-                response = self.socket.recv_json()
-                # print(r.json()["out_put"])
-                output = response["out_put"] or ""
+            if ost_number != self.latest_ost_number:
+            #     self.reset_socket()
+            #     self.socket.connect(ost_agent_address)
+                self.latest_ost_number = ost_number
+            # path = "obdfilter." + remote_ost_dir_name + ".stats"
+            body = {"ost_dir_name": remote_ost_dir_name, "time_stamp": time_stamp,
+                    "ost_number": ost_number}
+            self.socket.send_json(body)
+            response = self.socket.recv_json()
+            # print(r.json()["out_put"])
+            output = response["out_put"] or ""
+            if output != "":
                 value_list = []
                 remote_ost_stats_so_far = self.all_remote_ost_stats_so_far.get(remote_ost_dir_name) or {}
                 output_parts = output.split("\n")
@@ -66,7 +73,7 @@ class LustreOstMetricZmqCollector(AbstractCollector):
             self.metrics_list_to_str()
             self.metrics_list_to_dict()
         except ZMQError as e:
-            self.latest_ost_address = ""
+            self.latest_ost_number = -1
             self.reset_socket()
         except Exception as e:
             traceback.print_exc()
