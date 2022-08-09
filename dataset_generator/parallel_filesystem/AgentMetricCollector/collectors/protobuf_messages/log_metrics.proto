@@ -244,3 +244,14 @@ message MonitoringLog {
   optional uint64 sequence_number = 4;
   optional int32 is_sender = 5;
 }
+
+message SendLogDataRequest {
+  string request_type = 1;
+  MonitoringLog data = 2;
+}
+
+message UnsubscribeRequest {
+  string request_type = 1;
+  string ip = 2;
+  string port = 3;
+}
