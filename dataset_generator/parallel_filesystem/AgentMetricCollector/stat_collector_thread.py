@@ -76,7 +76,7 @@ class StatThread(threading.Thread):
         client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
         client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
         # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
-        lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.prefix, self.ost_metric_backend_socket_name)
+        lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.ost_metric_backend_socket_name, self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         # is_parallel_file_system = True
 
