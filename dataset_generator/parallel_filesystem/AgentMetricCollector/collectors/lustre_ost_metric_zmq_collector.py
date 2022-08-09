@@ -14,14 +14,14 @@ except ModuleNotFoundError:
 
 
 class LustreOstMetricZmqCollector(AbstractCollector):
-    def __init__(self, backend_socket_name, prefix=""):
+    def __init__(self, zmq_context, backend_socket_name, prefix=""):
         super().__init__(prefix)
         self.metrics_datatypes = {1: 'string', 2: 'string'}
         self.metrics_id_to_attr = {1: 'remote_ost_read_bytes', 2: 'remote_ost_write_bytes'}
         self.all_remote_ost_stats_so_far = {}
         self.latest_ost_number = -1
         self.backend_socket_name = backend_socket_name
-        self.context = zmq.Context()
+        self.context = zmq_context
         self.socket = None
         self.initialize_socket()
 
