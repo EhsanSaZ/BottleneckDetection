@@ -245,13 +245,9 @@ message MonitoringLog {
   optional int32 is_sender = 5;
 }
 
-message SendLogDataRequest {
+message PublisherPayload {
   string request_type = 1;
   MonitoringLog data = 2;
-}
-
-message UnsubscribeRequest {
-  string request_type = 1;
-  string ip = 2;
-  string port = 3;
+  string ip = 3;
+  string port = 4;
 }

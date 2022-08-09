@@ -3,7 +3,7 @@ import threading
 import traceback
 import zmq
 import global_vars
-from collectors.protobuf_messages.log_metrics_pb2 import UnsubscribeRequest
+from collectors.protobuf_messages.log_metrics_pb2 import PublisherPayload
 # from AgentMetricCollector.ZMQMessages import Messages
 
 
@@ -62,7 +62,7 @@ class SendToCloud(threading.Thread):
             traceback.print_exc()
         # We never get here if everything is ok…
         if xpub_frontend_socket:
-            unsubscribe_request = UnsubscribeRequest()
+            unsubscribe_request = PublisherPayload()
             unsubscribe_request.request_type = "unsubscribe_publisher_info"
             unsubscribe_request.ip = self.xpub_frontend_public_socket_ip
             unsubscribe_request.port = self.xpub_frontend_public_socket_port
