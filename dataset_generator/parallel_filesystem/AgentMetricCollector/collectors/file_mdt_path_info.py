@@ -37,7 +37,7 @@ class FileMdtPathInfo:
                             parts = res.split("\n")
                             mdt_str = "-MDT" + hex_mdt_number
                             for x in range(1, len(parts)):
-                                match = re.search(re_pattern, parts[i])
+                                match = re.search(re_pattern, parts[x])
                                 if match:
                                     gp_dict = match.groupdict()
                                     match_mdt_dir_name = gp_dict.get("mdt_dir_name") or ""
