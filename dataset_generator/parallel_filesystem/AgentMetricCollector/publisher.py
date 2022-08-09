@@ -3,6 +3,7 @@ import threading
 import traceback
 import zmq
 import global_vars
+from collectors.protobuf_messages.log_metrics_pb2 import UnsubscribeRequest
 # from AgentMetricCollector.ZMQMessages import Messages
 
 
@@ -61,14 +62,19 @@ class SendToCloud(threading.Thread):
             traceback.print_exc()
         # We never get here if everything is ok…
         if xpub_frontend_socket:
-            un_sub_rq = {"request_type": "unsubscribe_publisher_info",
-                         "data": {
-                             "publisher": {
-                                 "ip": self.xpub_frontend_public_socket_ip,
-                                 "port": self.xpub_frontend_public_socket_port
-                             }
-                         }}
-            xpub_frontend_socket.send_json(json.dumps(un_sub_rq))
+            unsubscribe_request = UnsubscribeRequest()
+            unsubscribe_request.request_type = "unsubscribe_publisher_info"
+            unsubscribe_request.ip = self.xpub_frontend_public_socket_ip
+            unsubscribe_request.port = self.xpub_frontend_public_socket_port
+            xpub_frontend_socket.send(unsubscribe_request.SerializeToString())
+            # un_sub_rq = {"request_type": "unsubscribe_publisher_info",
+            #              "data": {
+            #                  "publisher": {
+            #                      "ip": self.xpub_frontend_public_socket_ip,
+            #                      "port": self.xpub_frontend_public_socket_port
+            #                  }
+            #              }}
+            # xpub_frontend_socket.send_json(json.dumps(un_sub_rq))
             xpub_frontend_socket.close()
         if xsub_backend_socket:
             xsub_backend_socket.close()
