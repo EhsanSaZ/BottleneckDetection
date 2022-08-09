@@ -16,8 +16,7 @@ from collectors.client_ost_metric_collector import ClientOstMetricCollector
 from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
 from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
 from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
-from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog
-
+from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog, SendLogDataRequest
 from helper_threads import fileWriteThread
 from Config import Config
 import system_monitoring_global_vars
@@ -224,10 +223,10 @@ class StatThread(threading.Thread):
                         monitoring_msg.sequence_number = epoc_time
                         monitoring_msg.is_sender = self.is_sender
 
-                        data = {}
-                        data["data"] = monitoring_msg.SerializeToString()
-                        data["request_type"] = "send_log_data"
-                        metric_publisher_socket.send_json(json.dumps(data))
+                        log_data_request = SendLogDataRequest()
+                        log_data_request.data.CopyFrom(monitoring_msg)
+                        log_data_request.request_type = "send_log_data"
+                        metric_publisher_socket.send(log_data_request.SerializeToString())
                     elif not is_first_time:
                         output_string = str(time_second)
                         for item in network_metrics_collector.get_metrics_list():
