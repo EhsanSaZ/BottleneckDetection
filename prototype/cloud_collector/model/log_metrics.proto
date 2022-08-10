@@ -142,77 +142,77 @@ message ClientOstMetrics {
         The fields 1 - 15 are generated using following "lctl get_param osc.<ost-dir-name>.stats
         it contains statistics for the osc that is connected to the <ost-dir-name> ost
     */
-  optional uint64 req_waittime = 1;
-  optional uint64 req_active = 2;
-  optional uint64 read_bytes = 3;
-  optional uint64 write_bytes = 4;
-  optional uint64 ost_setattr = 5;
-  optional uint64 ost_read = 6;
-  optional uint64 ost_write = 7;
-  optional uint64 ost_get_info = 8;
-  optional uint64 ost_connect = 9;
-  optional uint64 ost_punch = 10;
-  optional uint64 ost_statfs = 11;
-  optional uint64 ost_sync = 12;
-  optional uint64 ost_quotactl = 13;
-  optional uint64 ldlm_cancel = 14;
-  optional uint64 obd_ping = 15;
+  optional double req_waittime = 1;
+  optional double req_active = 2;
+  optional double read_bytes = 3;
+  optional double write_bytes = 4;
+  optional double ost_setattr = 5;
+  optional double ost_read = 6;
+  optional double ost_write = 7;
+  optional double ost_get_info = 8;
+  optional double ost_connect = 9;
+  optional double ost_punch = 10;
+  optional double ost_statfs = 11;
+  optional double ost_sync = 12;
+  optional double ost_quotactl = 13;
+  optional double ldlm_cancel = 14;
+  optional double obd_ping = 15;
   /*
       The fields 16 - 17 generated using following "lctl get_param osc.<ost-dir-name>.rpc_stats
       it contains statistics for the osc that is connected to the <ost-dir-name> ost
   */
-  optional uint64 pending_read_pages = 16;
-  optional uint64 read_RPCs_in_flight = 17;
+  optional double pending_read_pages = 16;
+  optional double read_RPCs_in_flight = 17;
 }
 message ClientMdtMetrics {
   /*
         The fields 1 - 4 are generated using following "lctl get_param mdc.<mdt-dir-name>.import
         it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
     */
-  optional uint64 avg_waittime_md = 1;
-  optional uint64 inflight_md = 2;
-  optional uint64 unregistering_md = 3;
-  optional uint64 timeouts_md = 4;
+  optional double avg_waittime_md = 1;
+  optional double inflight_md = 2;
+  optional double unregistering_md = 3;
+  optional double timeouts_md = 4;
   /*
       The fields 5 - 21 are generated using following "lctl get_param mdc.<mdt-dir-name>.import
       it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
   */
-  optional uint64 req_waittime_md = 5;
-  optional uint64 req_active_md = 6;
-  optional uint64 mds_getattr_md = 7;
-  optional uint64 mds_getattr_lock_md = 8;
-  optional uint64 mds_close_md = 9;
-  optional uint64 mds_readpage_md = 10;
-  optional uint64 mds_connect_md = 11;
-  optional uint64 mds_get_root_md = 12; // not appeared in stempede2
-  optional uint64 mds_statfs_md = 13;
-  optional uint64 mds_sync_md = 14;
-  optional uint64 mds_quotactl_md = 15;
-  optional uint64 mds_getxattr_md = 16;
-  optional uint64 mds_hsm_state_set_md = 17;// not appeared in stempede2
-  optional uint64 ldlm_cancel_md = 18;
-  optional uint64 obd_ping_md = 19;
-  optional uint64 seq_query_md = 20;
-  optional uint64 fld_query_md = 21;// not appeared in stempede2
+  optional double req_waittime_md = 5;
+  optional double req_active_md = 6;
+  optional double mds_getattr_md = 7;
+  optional double mds_getattr_lock_md = 8;
+  optional double mds_close_md = 9;
+  optional double mds_readpage_md = 10;
+  optional double mds_connect_md = 11;
+  optional double mds_get_root_md = 12; // not appeared in stempede2
+  optional double mds_statfs_md = 13;
+  optional double mds_sync_md = 14;
+  optional double mds_quotactl_md = 15;
+  optional double mds_getxattr_md = 16;
+  optional double mds_hsm_state_set_md = 17;// not appeared in stempede2
+  optional double ldlm_cancel_md = 18;
+  optional double obd_ping_md = 19;
+  optional double seq_query_md = 20;
+  optional double fld_query_md = 21;// not appeared in stempede2
   /*
       The fields 22 - 36 are generated using following "lctl get_param mdc.<mdt-dir-name>.md_stats
       it contains statistics for the mdc that is connected to the <mdt-dir-name> mdt
   */
-  optional uint64 close_md = 22;
-  optional uint64 create_md = 23;
-  optional uint64 enqueue_md = 24;
-  optional uint64 getattr_md = 25;
-  optional uint64 intent_lock_md = 26;
-  optional uint64 link_md = 27;
-  optional uint64 rename_md = 28;
-  optional uint64 setattr_md = 29;
-  optional uint64 fsync_md = 30;
-  optional uint64 read_page_md = 31;
-  optional uint64 unlink_md = 32;
-  optional uint64 setxattr_md = 33;
-  optional uint64 getxattr_md = 34;
-  optional uint64 intent_getattr_async_md = 35;// not appeared in stempede2
-  optional uint64 revalidate_lock_md = 36;
+  optional double close_md = 22;
+  optional double create_md = 23;
+  optional double enqueue_md = 24;
+  optional double getattr_md = 25;
+  optional double intent_lock_md = 26;
+  optional double link_md = 27;
+  optional double rename_md = 28;
+  optional double setattr_md = 29;
+  optional double fsync_md = 30;
+  optional double read_page_md = 31;
+  optional double unlink_md = 32;
+  optional double setxattr_md = 33;
+  optional double getxattr_md = 34;
+  optional double intent_getattr_async_md = 35;// not appeared in stempede2
+  optional double revalidate_lock_md = 36;
 }
 message ResourceUsageMetrics{
   // 1 - 2 are node cpu and memory cpu usage
@@ -221,8 +221,8 @@ message ResourceUsageMetrics{
 }
 message LustreOstMetrics {
   // 1 - 2 are remote ost read and write bytes
-  optional uint64 remote_ost_read_bytes = 1;
-  optional uint64 remote_ost_write_bytes = 2;
+  optional double remote_ost_read_bytes = 1;
+  optional double remote_ost_write_bytes = 2;
 }
 
 message Metrics{
@@ -243,4 +243,11 @@ message MonitoringLog {
   optional Metrics metrics = 3;
   optional uint64 sequence_number = 4;
   optional int32 is_sender = 5;
+}
+
+message PublisherPayload {
+  string request_type = 1;
+  MonitoringLog data = 2;
+  string ip = 3;
+  string port = 4;
 }
