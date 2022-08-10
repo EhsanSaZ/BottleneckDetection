@@ -204,6 +204,7 @@ class StatThread(threading.Thread):
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
                     if Config.send_to_cloud_mode and Config.communication_type == "PROTO" and not is_first_time:
+                        epoc_time += 1
                         monitoring_msg = MonitoringLog()
 
                         metrics_msg = Metrics()
