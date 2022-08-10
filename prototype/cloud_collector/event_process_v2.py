@@ -2,12 +2,10 @@ import traceback
 from model.log_metrics_pb2 import MonitoringLog
 from google.protobuf.json_format import MessageToDict
 
-def process_event_v2(data, db_connection, db_name):
+def process_event_v2(message, db_connection, db_name):
     try:
         # print(data)
-        monitoring_msg_str = data["data"]
-        monitoring_msg = MonitoringLog()
-        monitoring_msg.ParseFromString(monitoring_msg_str)
+        monitoring_msg = message.data
 
         time_stamp_sec = int(monitoring_msg.metrics.time_stamp)
         monitoring_msg_dict = MessageToDict(monitoring_msg)
