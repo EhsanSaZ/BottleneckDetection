@@ -9,7 +9,7 @@ import pika
 
 
 class SendToRabbit(threading.Thread):
-    def __init__(self, backend_socket_name, zmq_context, rabbit_host, rabbit_port=5672, rabbitmq_heartbeat_interval=60):
+    def __init__(self, backend_socket_name, zmq_context, rabbit_host, rabbit_log_queue_name, heartbeat_queue_name, rabbit_port=5672, rabbitmq_heartbeat_interval=60):
         super().__init__()
         self.rabbit_host = rabbit_host
         self.rabbit_port = rabbit_port
@@ -20,6 +20,8 @@ class SendToRabbit(threading.Thread):
         self.rabbitmq_channel = None
         self.xsub_backend_socket = None
         self.poller = zmq.Poller()
+        self.rabbit_log_queue_name = rabbit_log_queue_name
+        self.heartbeat_queue_name = heartbeat_queue_name
 
     def check_rabbit_connection(self):
         if not self.rabbitmq_channel or self.rabbitmq_channel.is_closed:
@@ -27,27 +29,27 @@ class SendToRabbit(threading.Thread):
                 self.rabbitmq_connection.close()
             self.rabbitmq_connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.rabbit_host, port=self.rabbit_port, heartbeat=self.rabbitmq_HEARTBEAT_INTERVAL))
             self.rabbitmq_channel = self.rabbitmq_connection.channel()
-            self.rabbitmq_channel.queue_declare(queue='transfer_monitoring_logs')
-            self.rabbitmq_channel.queue_declare(queue='HEARTBEAT_QUEUE', arguments={'x-message-ttl': 500})
+            self.rabbitmq_channel.queue_declare(queue=self.rabbit_log_queue_name)
+            self.rabbitmq_channel.queue_declare(queue=self.heartbeat_queue_name, arguments={'x-message-ttl': 500})
         # print(f"Monitoring agent is ready to publish data to rabbitmq.")
 
     def run(self):
         while True:
             try:
                 if self.xsub_backend_socket is None:
-                    self.xsub_backend_socket = self.context.socket(zmq.XSUB)
+                    self.xsub_backend_socket = self.context.socket(zmq.SUB)
                     self.xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
+                    self.xsub_backend_socket.subscribe("")
                     self.poller.register(self.xsub_backend_socket, zmq.POLLIN)
 
                 socks = dict(self.poller.poll(self.rabbitmq_HEARTBEAT_INTERVAL * 500))
                 self.check_rabbit_connection()
                 if socks.get(self.xsub_backend_socket) == zmq.POLLIN:
                     msg = self.xsub_backend_socket.recv()
-                    print("send msg")
-                    self.rabbitmq_channel.basic_publish(exchange='', routing_key='transfer_monitoring_logs', body=msg)
+                    self.rabbitmq_channel.basic_publish(exchange='', routing_key=self.rabbit_log_queue_name, body=msg)
                 else:
-                    print(time.time(), "send HB")
-                    self.rabbitmq_channel.basic_publish(exchange='', routing_key='HEARTBEAT_QUEUE', body=b'')
+                    # print(time.time(), "send HB")
+                    self.rabbitmq_channel.basic_publish(exchange='', routing_key=self.heartbeat_queue_name, body=b'')
             except StreamLostError as e:
                 self.rabbitmq_channel = None
                 self.rabbitmq_connection = None
@@ -63,6 +65,7 @@ class SendToRabbit(threading.Thread):
                 traceback.print_exc()
         # We never get here if everything is ok…
         if self.xsub_backend_socket:
+            self.poller.unregister(self.xsub_backend_socket)
             self.xsub_backend_socket.setsockopt(zmq.LINGER, 0)
             self.xsub_backend_socket.close()
 
