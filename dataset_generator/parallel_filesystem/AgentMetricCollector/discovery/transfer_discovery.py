@@ -29,9 +29,12 @@ class TransferDiscovery(threading.Thread):
         if ip_port_match:
             ip_part = ip_port_match.groupdict().get("ip_part")
             ipv4_match = re.search(ipv4_re, ip_part)
-            ip = ipv4_match.groupdict().get("ipv4") or ""
-            port = ip_port_match.groupdict().get("port_part") or "-1"
-            return ip, port
+            if ipv4_match:
+                ip = ipv4_match.groupdict().get("ipv4") or ""
+                port = ip_port_match.groupdict().get("port_part") or "-1"
+                return ip, port
+            else:
+                return None, None
         else:
             return None, None
 
