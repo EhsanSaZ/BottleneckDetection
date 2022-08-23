@@ -10,7 +10,8 @@ from discovery.transfer_discovery import TransferDiscovery
 from discovery.transfer_validation_strategy2 import TransferValidationStrategy_2
 from transfer_manager import TransferManager
 from helper_threads import globalMetricsMonitor
-from publisher import SendToCloud
+# from publisher import SendToCloud
+from rabbitmq_publisher import SendToRabbit
 from lustre_ost_metric_cache import LustreOstMetricCache
 from file_transfer_thread import  FileTransferThread
 from run_server_thread import RunServerThread
@@ -111,9 +112,12 @@ if not Config.send_to_cloud_mode:
 
 publisher_thread = None
 if Config.send_to_cloud_mode:
-    publisher_thread = SendToCloud(cloud_server_host, cloud_server_port,
-                                   xpub_frontend_public_socket_ip, xpub_frontend_public_socket_port,
-                                   xsub_backend_socket_name, context)
+    # publisher_thread = SendToCloud(cloud_server_host, cloud_server_port,
+    #                               xpub_frontend_public_socket_ip, xpub_frontend_public_socket_port,
+    #                               xsub_backend_socket_name, context)
+    publisher_thread = SendToRabbit(xsub_backend_socket_name, context,
+                                    Config.rabbit_log_queue_name, Config.heartbeat_queue_name,
+                                    Config.rabbit_host, Config.rabbit_port, Config.rabbitmq_heartbeat_interval)
     publisher_thread.start()
 
 global_metrics_collector = globalMetricsMonitor(sleep_time=1)

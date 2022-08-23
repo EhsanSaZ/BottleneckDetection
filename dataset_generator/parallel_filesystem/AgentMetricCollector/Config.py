@@ -28,6 +28,13 @@ class Config:
 
     xsub_backend_socket_name = "xsub_backend"
 
+    # rabbit publisher
+    rabbit_host = "localhost"
+    rabbit_port = 5672
+    rabbit_log_queue_name = "transfer_monitoring_logs"
+    heartbeat_queue_name = "HEARTBEAT_QUEUE"
+    rabbitmq_heartbeat_interval = 60
+
     # OST Cache server configuration
     cache_size = 100
     cache_ttl = 15
