@@ -226,7 +226,7 @@ message LustreOstMetrics {
 }
 
 message Metrics{
-  optional double time_stamp = 1;
+  optional string timestamp = 1;
   optional NetworkMetrics network_metrics = 2;
   optional SystemMetrics system_metrics = 3;
   optional BufferValueMetrics buffer_value_metrics = 4;
@@ -250,4 +250,5 @@ message PublisherPayload {
   MonitoringLog data = 2;
   string ip = 3;
   string port = 4;
+  string timestamp = 5;
 }
