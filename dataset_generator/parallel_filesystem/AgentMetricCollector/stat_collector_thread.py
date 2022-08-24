@@ -8,6 +8,7 @@ import hashlib
 from datetime import datetime
 from subprocess import Popen, PIPE
 
+from google.protobuf.json_format import MessageToDict
 from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V2
 from collectors.system_metric_collector import SystemMetricCollector
 from collectors.file_ost_path_info import FileOstPathInfo
@@ -203,12 +204,12 @@ class StatThread(threading.Thread):
                         # print(transfer_id, metrics_data)
                         # data_transfer_overhead = len(body.encode('utf-8'))
                         metric_publisher_socket.send_json(body)
-                    if Config.send_to_cloud_mode and Config.communication_type == "PROTO" and not is_first_time:
+                    elif Config.send_to_cloud_mode and Config.communication_type == "PROTO" and not is_first_time:
                         epoc_time += 1
                         monitoring_msg = MonitoringLog()
 
                         metrics_msg = Metrics()
-                        metrics_msg.time_stamp = time_second
+                        metrics_msg.timestamp = datetime.fromtimestamp(time_second).strftime("%H:%M:%S %m-%d-%Y")
                         metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
                         metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
                         metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
@@ -227,7 +228,9 @@ class StatThread(threading.Thread):
                         log_data_request = PublisherPayload()
                         log_data_request.request_type = "send_log_data"
                         log_data_request.data.CopyFrom(monitoring_msg)
-                        metric_publisher_socket.send(log_data_request.SerializeToString())
+                        log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time)).strftime("%H:%M:%S.%f %m-%d-%Y")
+                        metric_publisher_socket.send_json(MessageToDict(log_data_request))
+                        # metric_publisher_socket.send(log_data_request.SerializeToString())
                     elif not is_first_time:
                         output_string = str(time_second)
                         for item in network_metrics_collector.get_metrics_list():
