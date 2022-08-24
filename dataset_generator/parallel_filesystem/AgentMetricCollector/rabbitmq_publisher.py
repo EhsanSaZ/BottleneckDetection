@@ -9,7 +9,7 @@ import pika
 
 
 class SendToRabbit(threading.Thread):
-    def __init__(self, backend_socket_name, zmq_context, rabbit_host, rabbit_log_queue_name, heartbeat_queue_name, rabbit_port=5672, rabbitmq_heartbeat_interval=60):
+    def __init__(self, backend_socket_name, zmq_context, rabbit_log_queue_name, heartbeat_queue_name, rabbit_host, rabbit_port=5672, rabbitmq_heartbeat_interval=60):
         super().__init__()
         self.rabbit_host = rabbit_host
         self.rabbit_port = rabbit_port
@@ -36,6 +36,7 @@ class SendToRabbit(threading.Thread):
     def run(self):
         while True:
             try:
+                self.check_rabbit_connection()
                 if self.xsub_backend_socket is None:
                     self.xsub_backend_socket = self.context.socket(zmq.SUB)
                     self.xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
@@ -43,7 +44,6 @@ class SendToRabbit(threading.Thread):
                     self.poller.register(self.xsub_backend_socket, zmq.POLLIN)
 
                 socks = dict(self.poller.poll(self.rabbitmq_HEARTBEAT_INTERVAL * 500))
-                self.check_rabbit_connection()
                 if socks.get(self.xsub_backend_socket) == zmq.POLLIN:
                     msg = self.xsub_backend_socket.recv()
                     self.rabbitmq_channel.basic_publish(exchange='', routing_key=self.rabbit_log_queue_name, body=msg)
