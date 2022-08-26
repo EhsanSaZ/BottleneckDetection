@@ -28,6 +28,7 @@ class SendToRabbit(threading.Thread):
         self.host_name = os.uname()[1]
         self.cluster_name = cluster_name
         self._rabbit_log_queue_name = "{}_at_{}".format(self.host_name, self.cluster_name)
+        self.retry_number = 7
 
     def check_rabbit_connection(self):
         if not self.rabbitmq_channel or self.rabbitmq_channel.is_closed:
@@ -39,35 +40,47 @@ class SendToRabbit(threading.Thread):
             self.rabbitmq_channel = self.rabbitmq_connection.channel()
             self.rabbitmq_channel.queue_declare(queue=self._rabbit_log_queue_name)
             self.rabbitmq_channel.queue_declare(queue=self.heartbeat_queue_name, arguments={'x-message-ttl': 500})
+            self.result = self.rabbitmq_channel.queue_declare(queue='', exclusive=True)
+            self.callback_queue = self.result.method.queue
         # print(f"Monitoring agent is ready to publish data to rabbitmq.")
 
     def on_response(self, ch, method, props, body):
         if self.corr_id == props.correlation_id:
             self.response = body
         else:
+            print("got this {} but last req is {}".format(props.correlation_id, self.corr_id) )
             self.response = None
 
     def advertise_rabbit_log_queue_name(self):
         self.check_rabbit_connection()
-        self.result = self.rabbitmq_channel.queue_declare(queue='', exclusive=True)
-        self.callback_queue = self.result.method.queue
-        self.response = None
+        sleep_time = 1
+        retry = 1
         self.corr_id = str(uuid.uuid4())
-        self.rabbitmq_channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response,
-                                            auto_ack=True)
-        self.rabbitmq_channel.basic_publish(exchange='', routing_key='rpc_queue',
-                                            properties=pika.BasicProperties(reply_to=self.callback_queue,
-                                                                            correlation_id=self.corr_id, ),
-                                            body=json.dumps({"rabbit_log_queue_name_1": self._rabbit_log_queue_name}))
-        self.rabbitmq_connection.process_data_events(time_limit=5)
-        if self.response is not None:
-            response_json = json.loads(self.response)
-            if response_json["status"] == 200:
-                global_vars.ready_to_publish = True
-                print("ready to publish data")
-        else:
-            # TODO handle retry if no response is back
-            print("NO RESPONSE")
+        while retry <= self.retry_number:
+            self.check_rabbit_connection()
+            self.response = None
+            self.rabbitmq_channel.basic_consume(queue=self.callback_queue, on_message_callback=self.on_response, auto_ack=True)
+            body = json.dumps({"request_type": "register_new_queue",
+                               "body": {"rabbit_log_queue_name": self._rabbit_log_queue_name}
+                               })
+            self.rabbitmq_channel.basic_publish(exchange='', routing_key='rpc_queue', properties=pika.BasicProperties(reply_to=self.callback_queue, correlation_id=self.corr_id), body=body)
+            self.rabbitmq_connection.process_data_events(time_limit=sleep_time)
+            if self.response is not None:
+                response_json = json.loads(self.response)
+                if response_json["status"] == 200:
+                    global_vars.ready_to_publish = True
+                    print("ready to publish data")
+                break
+            else:
+                # T ODO handle retry if no response is back
+                sleep_time = sleep_time * 2
+                retry += 1
+                print("NO RESPONSE for request {} Retry after {} seconds".format(self.corr_id, sleep_time))
+                time.sleep(sleep_time)
+        if retry > self.retry_number:
+            print("failed to register the queue to the server")
+            return False
+        return True
 
     def run(self):
         self.advertise_rabbit_log_queue_name()
