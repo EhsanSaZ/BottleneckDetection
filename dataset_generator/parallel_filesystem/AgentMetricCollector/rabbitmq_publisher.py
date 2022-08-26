@@ -70,6 +70,9 @@ class SendToRabbit(threading.Thread):
                 if response_json["status"] == 200:
                     global_vars.ready_to_publish = True
                     print("ready to publish data")
+                else:
+                    print("Error in registering queue, {}", format(response_json))
+                    return False
                 break
             else:
                 # T ODO handle retry if no response is back
