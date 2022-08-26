@@ -115,7 +115,7 @@ if Config.send_to_cloud_mode:
     # publisher_thread = SendToCloud(cloud_server_host, cloud_server_port,
     #                               xpub_frontend_public_socket_ip, xpub_frontend_public_socket_port,
     #                               xsub_backend_socket_name, context)
-    publisher_thread = SendToRabbit(xsub_backend_socket_name, context,
+    publisher_thread = SendToRabbit(xsub_backend_socket_name, context, Config.cluster_name,
                                     Config.rabbit_log_queue_name, Config.heartbeat_queue_name,
                                     Config.rabbit_host, Config.rabbit_port, Config.rabbitmq_heartbeat_interval)
     publisher_thread.start()
