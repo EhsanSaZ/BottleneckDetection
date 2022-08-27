@@ -99,7 +99,7 @@ class SendToRabbit(threading.Thread):
                 socks = dict(self.poller.poll(self.rabbitmq_HEARTBEAT_INTERVAL * 500))
                 if socks.get(self.xsub_backend_socket) == zmq.POLLIN:
                     msg = self.xsub_backend_socket.recv()
-                    self.rabbitmq_channel.basic_publish(exchange='', routing_key=self.rabbit_log_queue_name, body=msg)
+                    self.rabbitmq_channel.basic_publish(exchange='', routing_key=self._rabbit_log_queue_name, body=msg)
                 else:
                     print(time.time(), "send HB")
                     self.rabbitmq_channel.basic_publish(exchange='', routing_key=self.heartbeat_queue_name, body=b'')
