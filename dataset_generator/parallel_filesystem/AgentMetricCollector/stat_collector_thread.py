@@ -21,7 +21,7 @@ from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog,
 from helper_threads import fileWriteThread
 from Config import Config
 import system_monitoring_global_vars
-
+import global_vars
 
 class StatThread(threading.Thread):
     def __init__(self, src_ip, src_port, dst_ip, dst_port, zmq_context,
@@ -80,7 +80,7 @@ class StatThread(threading.Thread):
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         # is_parallel_file_system = True
 
-        if is_parallel_file_system:
+        if global_vars.ready_to_publish:
             # mdt_paths = []
             # mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
             #                            "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
@@ -154,27 +154,27 @@ class StatThread(threading.Thread):
                     network_metrics_collector.collect_metrics()
 
                     system_metrics_collector.collect_metrics(self.pid_str, target_process)
+                    if is_parallel_file_system:
+                        file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path)
+                        if file_ost_path_info is None:
+                            time.sleep(0.1)
+                            continue
+                        else:
+                            ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
+                        # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
+                        client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
 
-                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path)
-                    if file_ost_path_info is None:
-                        time.sleep(0.1)
-                        continue
-                    else:
-                        ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
-                    # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
+                        file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
+                        if file_mdt_path_info is None:
+                            continue
+                        else:
+                            mdt_kernel_path, mdt_dir_name = file_mdt_path_info
+                        # print(mdt_kernel_path, mdt_dir_name)
+                        client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
 
-                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
-                    if file_mdt_path_info is None:
-                        continue
-                    else:
-                        mdt_kernel_path, mdt_dir_name = file_mdt_path_info
-                    # print(mdt_kernel_path, mdt_dir_name)
-                    client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
-
-                    # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
-                    # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
-                    lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_time))
+                        # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
+                        # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
+                        lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_time))
 
                     epoc_count += 1
                     # print(output_string)
