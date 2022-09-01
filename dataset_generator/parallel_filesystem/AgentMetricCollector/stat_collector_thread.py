@@ -292,4 +292,4 @@ class StatThread(threading.Thread):
             #         overhead_write = overheadFileWriteThread(self.over_head_write_thread_directory,overhead_main_output_string)
             #         overhead_write.start()
             #         overhead_main_output_string = ""
-            time.sleep(min(sleep_time, sleep_time - processing_time))
+            time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
