@@ -6,14 +6,16 @@ import zmq
 from pika.exceptions import StreamLostError
 import uuid
 
-import global_vars
+# import global_vars
+from multiprocessing import Process
 import pika
 
 
-class SendToRabbit(threading.Thread):
-    def __init__(self, backend_socket_name, zmq_context, cluster_name, rabbit_log_queue_name, heartbeat_queue_name,
-                 rabbit_host, rabbit_port=5672, rabbitmq_heartbeat_interval=60):
-        super().__init__()
+class SendToRabbit(Process):
+    def __init__(self, backend_socket_name, zmq_context, cluster_name, rabbit_log_queue_name, heartbeat_queue_name, ready_to_publish,
+                 rabbit_host, rabbit_port=5672, rabbitmq_heartbeat_interval=60, **kwargs):
+        # super().__init__()
+        super(SendToRabbit, self).__init__(**kwargs)
         self.rabbit_host = rabbit_host
         self.rabbit_port = rabbit_port
         self.rabbitmq_HEARTBEAT_INTERVAL = rabbitmq_heartbeat_interval
@@ -28,6 +30,7 @@ class SendToRabbit(threading.Thread):
         self.host_name = os.uname()[1]
         self.cluster_name = cluster_name
         self._rabbit_log_queue_name = "{}_at_{}".format(self.host_name, self.cluster_name)
+        self.ready_to_publish = ready_to_publish
         self.retry_number = 7
 
     def check_rabbit_connection(self):
@@ -68,7 +71,7 @@ class SendToRabbit(threading.Thread):
             if self.response is not None:
                 response_json = json.loads(self.response)
                 if response_json["status"] == 200:
-                    global_vars.ready_to_publish = True
+                    self.ready_to_publish.value = True
                     print("ready to publish data")
                 else:
                     print("Error in registering queue, {}", format(response_json))
@@ -92,7 +95,7 @@ class SendToRabbit(threading.Thread):
                 self.check_rabbit_connection()
                 if self.xsub_backend_socket is None:
                     self.xsub_backend_socket = self.context.socket(zmq.SUB)
-                    self.xsub_backend_socket.bind("inproc://{}".format(self.xsub_backend_socket_name))
+                    self.xsub_backend_socket.bind("ipc://{}".format(self.xsub_backend_socket_name))
                     self.xsub_backend_socket.subscribe("")
                     self.poller.register(self.xsub_backend_socket, zmq.POLLIN)
 

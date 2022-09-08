@@ -1,5 +1,6 @@
 import threading
 import traceback
+from multiprocessing import Process, Event
 
 import zmq
 import requests
@@ -7,10 +8,11 @@ from cachetools import TTLCache
 from zmq import ZMQError
 
 
-class LustreOstMetricCache(threading.Thread):
-    def __init__(self, context,  cache_size, cache_ttl, rep_backend_socket_name, remote_ost_index_to_ost_agent_http_address_dict):
-        threading.Thread.__init__(self)
-        self._stop = threading.Event()
+class LustreOstMetricCache(Process):
+    def __init__(self, context,  cache_size, cache_ttl, rep_backend_socket_name, remote_ost_index_to_ost_agent_http_address_dict, **kwargs):
+        # threading.Thread.__init__(self)
+        super(LustreOstMetricCache, self).__init__(**kwargs)
+        self._stop = Event()
         self.context = context
         self.backend_socket = None
         self.rep_backend_socket_name = rep_backend_socket_name
@@ -25,11 +27,11 @@ class LustreOstMetricCache(threading.Thread):
         self._stop.set()
 
     def stopped(self):
-        return self._stop.isSet()
+        return self._stop.is_set()
 
     def initialize_backend_socket(self):
         self.backend_socket = self.context.socket(zmq.REP)
-        self.backend_socket.bind("inproc://{}".format(self.rep_backend_socket_name))
+        self.backend_socket.bind("ipc://{}".format(self.rep_backend_socket_name))
 
     def reset_backend_socket(self):
         self.backend_socket.close()

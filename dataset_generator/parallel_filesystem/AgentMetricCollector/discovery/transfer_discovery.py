@@ -4,13 +4,14 @@ import subprocess
 import threading
 import traceback
 import time
+from multiprocessing import Process
 
-
-class TransferDiscovery(threading.Thread):
+class TransferDiscovery(Process):
     def __init__(self, local_ip_addr_list, peer_ip_addr_list,
                  send_port_range, receive_port_range,
-                 transfer_validator, transfer_manager, discovery_cycle=1):
-        threading.Thread.__init__(self)
+                 transfer_validator, transfer_manager, discovery_cycle=1, **kwargs):
+        # threading.Thread.__init__(self)
+        super(TransferDiscovery, self).__init__(**kwargs)
         self.local_ip_addr_list = local_ip_addr_list
         self.peer_ip_addr_list = peer_ip_addr_list
         self.send_port_range = send_port_range
@@ -44,19 +45,19 @@ class TransferDiscovery(threading.Thread):
         for tr in new_transfers:
             if self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]), self.send_port_range):
                 print("Adding new sender transfer", self.running_transfers[tr])
-                self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=1,
-                                                                dataset_path="./sender/logs/dataset_",
-                                                                overhead_log_path="./sender/overhead_logs/overhead_footprints.csv")
+                self.transfer_manager.add_new_monitoring_process(self.running_transfers[tr], is_sender=1,
+                                                                 dataset_path="./sender/logs/dataset_",
+                                                                 overhead_log_path="./sender/overhead_logs/overhead_footprints.csv")
             elif self.transfer_validator.in_range(int(self.running_transfers[tr]["local_port"]),
                                                   self.receive_port_range):
                 print("Adding new receive transfer", self.running_transfers[tr])
-                self.transfer_manager.add_new_monitoring_thread(self.running_transfers[tr], is_sender=0,
-                                                                dataset_path="./receiver/logs/dataset_",
-                                                                overhead_log_path="./receiver/overhead_logs/overhead_footprints.csv")
+                self.transfer_manager.add_new_monitoring_process(self.running_transfers[tr], is_sender=0,
+                                                                 dataset_path="./receiver/logs/dataset_",
+                                                                 overhead_log_path="./receiver/overhead_logs/overhead_footprints.csv")
             self.monitored_transfers[tr] = self.running_transfers[tr]
         for tr in ended_transfers:
             print("Removing ended transfer", self.monitored_transfers[tr])
-            self.transfer_manager.stop_monitoring_thread(self.monitored_transfers[tr])
+            self.transfer_manager.stop_monitoring_process(self.monitored_transfers[tr])
             del self.monitored_transfers[tr]
 
     def start_discovery(self):

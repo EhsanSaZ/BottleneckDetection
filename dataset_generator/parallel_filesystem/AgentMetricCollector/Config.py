@@ -11,9 +11,9 @@ class Config:
                                                                        3: "http://10.10.1.5:1234/",
                                                                        4: "http://10.10.1.5:1235/"}
 
-    parallel_metric_collector_local_ip_range = ["10.10.2.1"]#["134.197.94.169", "127.0.0.1", "127.0.1.1"]
+    parallel_metric_collector_local_ip_range = ["134.197.94.169", "127.0.0.1", "127.0.1.1"]#["10.10.2.1"]#
     parallel_metric_collector_local_port_range = [40000, 41000]
-    parallel_metric_collector_peer_ip_range = ["10.10.2.2", "10.10.2.3", "10.10.2.4", "10.10.2.5", "10.10.2.6", "10.10.2.7", "10.10.2.8", "10.10.2.9", "10.10.2.10", "10.10.2.11"] #["134.197.94.169", "127.0.0.1", "127.0.1.1"]
+    parallel_metric_collector_peer_ip_range = ["134.197.94.169", "127.0.0.1", "127.0.1.1"]#["10.10.2.2", "10.10.2.3", "10.10.2.4", "10.10.2.5", "10.10.2.6", "10.10.2.7", "10.10.2.8", "10.10.2.9", "10.10.2.10", "10.10.2.11"] #
     parallel_metric_collector_peer_port_range = [50000, 51000]
     parallel_metric_collector_drive_name = "sda"
 
@@ -40,7 +40,7 @@ class Config:
     xsub_backend_socket_name = "xsub_backend"
 
     # rabbit publisher
-    rabbit_host = "c220g1-030616.wisc.cloudlab.us"
+    rabbit_host = "localhost"
     rabbit_port = 5672
     rabbit_log_queue_name = "transfer_monitoring_logs"
     heartbeat_queue_name = "HEARTBEAT_QUEUE"
