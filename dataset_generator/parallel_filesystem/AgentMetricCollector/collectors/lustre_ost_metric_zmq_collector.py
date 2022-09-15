@@ -27,7 +27,7 @@ class LustreOstMetricZmqCollector(AbstractCollector):
 
     def initialize_socket(self):
         self.socket = self.context.socket(zmq.REQ)
-        self.socket.connect("inproc://{}".format(self.backend_socket_name))
+        self.socket.connect("ipc://{}".format(self.backend_socket_name))
 
     def reset_socket(self):
         self.socket.close()
