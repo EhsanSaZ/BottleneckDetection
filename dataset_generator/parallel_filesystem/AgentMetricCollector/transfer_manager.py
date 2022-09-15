@@ -43,6 +43,7 @@ class TransferManager:
             process = self.transfer_monitoring_processes_dict.get(pid)
             if process:
                 process.stop()
+                process.join()
                 # process.terminate()
                 del self.transfer_monitoring_processes_dict[pid]
         except Exception as e:
