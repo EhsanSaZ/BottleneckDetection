@@ -235,7 +235,7 @@ class StatProcess(Process):
                     log_data_request.data.CopyFrom(monitoring_msg)
                     log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time)).strftime("%H:%M:%S.%f %m-%d-%Y")
                     metric_publisher_socket.send_json(MessageToDict(log_data_request))
-                    metric_publisher_socket.send(log_data_request.SerializeToString())
+                    # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
                     output_string = str(time_second)
                     for item in network_metrics_collector.get_metrics_list():
