@@ -11,6 +11,7 @@ from datetime import datetime
 from subprocess import Popen, PIPE
 
 from google.protobuf.json_format import MessageToDict
+from google.protobuf.json_format import ParseDict
 from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V2
 from collectors.system_metric_collector import SystemMetricCollector
 from collectors.file_ost_path_info import FileOstPathInfo
@@ -19,7 +20,7 @@ from collectors.client_ost_metric_collector import ClientOstMetricCollector
 from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
 from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
 from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
-from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog, PublisherPayload
+from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog, PublisherPayload, ResourceUsageMetrics, BufferValueMetrics
 from helper_threads import fileWriteThread
 from Config import Config
 # import system_monitoring_global_vars
@@ -33,7 +34,8 @@ class StatProcess(Process):
                  remote_ost_index_to_ost_agent_http_address_dict,
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
-                 write_thread_directory, over_head_write_thread_directory, ready_to_publish, **kwargs):
+                 write_thread_directory, over_head_write_thread_directory, ready_to_publish,
+                 cpu_mem_dict, buffer_value_dict, **kwargs):
         # threading.Thread.__init__(self)
         super(StatProcess, self).__init__(**kwargs)
         self._stop = Event()
@@ -55,6 +57,8 @@ class StatProcess(Process):
         self.write_thread_directory = write_thread_directory
         self.over_head_write_thread_directory = over_head_write_thread_directory
         self.ready_to_publish = ready_to_publish
+        self.cpu_mem_dict = cpu_mem_dict
+        self.buffer_value_dict = buffer_value_dict
 
     def run(self):
         self.collect_stat()
@@ -218,9 +222,18 @@ class StatProcess(Process):
                     metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
                     metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
                     # metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
+                    buffer_value_dict_no_prefix = {}
+                    for key in self.buffer_value_dict.keys():
+                        buffer_value_dict_no_prefix[key] = self.buffer_value_dict[key]
+                    metrics_msg.buffer_value_metrics.MergeFrom(ParseDict(buffer_value_dict_no_prefix, BufferValueMetrics()))
+
                     metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
                     metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
                     # metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
+                    cpu_mem_dict_no_prefix = {}
+                    for key in self.cpu_mem_dict.keys():
+                        cpu_mem_dict_no_prefix[key] = self.cpu_mem_dict[key]
+                    metrics_msg.resource_usage_metrics.MergeFrom(ParseDict(cpu_mem_dict_no_prefix, ResourceUsageMetrics()))
                     # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
                     metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_zmq_collector.get_proto_message())
                     metrics_msg.label_value = int(self.label_value)
@@ -297,4 +310,5 @@ class StatProcess(Process):
             #         overhead_write = overheadFileWriteThread(self.over_head_write_thread_directory,overhead_main_output_string)
             #         overhead_write.start()
             #         overhead_main_output_string = ""
-            time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
+            # time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
+            time.sleep(abs(sleep_time - (processing_time % sleep_time)))

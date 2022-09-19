@@ -4,7 +4,7 @@ from stat_collector_thread import StatProcess
 
 class TransferManager:
     def __init__(self, zmq_context, xsub_backend_socket_name, ost_rep_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
-                 read_path_list, write_path_list, mdt_parent_path, label_value, ready_to_publish):
+                 read_path_list, write_path_list, mdt_parent_path, label_value, ready_to_publish, cpu_mem_dict, buffer_value_dict):
         self.transfer_monitoring_processes_dict = {}
         self.context = zmq_context
         self.xsub_backend_socket_name = xsub_backend_socket_name
@@ -15,6 +15,8 @@ class TransferManager:
         self.mdt_parent_path = mdt_parent_path
         self.label_value = label_value
         self.ready_to_publish = ready_to_publish
+        self.cpu_mem_dict = cpu_mem_dict
+        self.buffer_value_dict = buffer_value_dict
 
     def add_new_monitoring_process(self, transfer_info, is_sender, dataset_path, overhead_log_path):
         # print(transfer_info)
@@ -24,6 +26,8 @@ class TransferManager:
         source_port = transfer_info["local_port"]
         destination_ip = transfer_info["peer_ip"]
         destination_port = transfer_info["peer_port"]
+        # print(self.cpu_mem_dict, )
+        # print(self.buffer_value_dict)
         if is_sender:
             lustre_mnt_point_list = self.read_lustre_mnt_point_list
         else:
@@ -32,7 +36,8 @@ class TransferManager:
                             self.context, self.xsub_backend_socket_name, self.ost_rep_backend_socket_name,
                             self.remote_ost_index_to_ost_agent_address_dict, str(pid),
                             lustre_mnt_point_list, self.mdt_parent_path, self.label_value,
-                            is_sender, dataset_path, overhead_log_path, self.ready_to_publish)
+                            is_sender, dataset_path, overhead_log_path, self.ready_to_publish,
+                              self.cpu_mem_dict, self.buffer_value_dict)
         self.transfer_monitoring_processes_dict[pid] = process
         process.start()
 
