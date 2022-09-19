@@ -38,15 +38,15 @@ class QueueRegistrator:
                     if pl["pipeline.id"] == pipeline_id:
                         pl["pipeline.id"] = pipeline_id
                         pl["path.config"] = pipeline_docker_config_path
-                        pl["pipeline.workers"] = 1
+                        pl["pipeline.workers"] = 32
                         new_pl = False
                         break
                 if new_pl:
-                    pl = {"pipeline.id": pipeline_id, "path.config": pipeline_docker_config_path, "pipeline.workers": 1}
+                    pl = {"pipeline.id": pipeline_id, "path.config": pipeline_docker_config_path, "pipeline.workers": 32}
                     data.append(pl)
             else:
                 data = []
-                pl = {"pipeline.id": pipeline_id, "path.config": pipeline_docker_config_path, "pipeline.workers": 1}
+                pl = {"pipeline.id": pipeline_id, "path.config": pipeline_docker_config_path, "pipeline.workers": 32}
                 data.append(pl)
             f.truncate(0)
             f.seek(0)
