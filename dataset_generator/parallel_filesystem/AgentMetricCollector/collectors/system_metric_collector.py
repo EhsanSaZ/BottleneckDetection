@@ -51,7 +51,6 @@ class SystemMetricCollector(AbstractCollector):
             proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
             res = proc.communicate()[0]
             res_parts = res.split(self.seperator_string)
-            io_output = res_parts[0]
             io_output_parts = res_parts[0].split("\n")
             for line in io_output_parts:
                 if len(line.strip()) > 0:
