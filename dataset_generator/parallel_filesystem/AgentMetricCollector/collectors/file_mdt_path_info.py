@@ -4,6 +4,7 @@ import re
 
 class FileMdtPathInfo:
     def get_file_mdt_path_info(self, pid, lustre_mnt_point_list):
+        seperator_string = '--result--'
         proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
         # total 0
         # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
@@ -24,20 +25,27 @@ class FileMdtPathInfo:
                         first_slash_index = file_name.find("/")
                         second_slash_index = file_name.find("/", first_slash_index + 1)
                         file_mount_point = file_name[first_slash_index + 1: first_slash_index + second_slash_index]
+                        cmd = "lfs getstripe -m {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/mdc/".format(file_name=file_name, seperator=seperator_string)
 
-                        proc = Popen(['lfs', 'getstripe', '-m', file_name], universal_newlines=True, stdout=PIPE)
-                        res1 = proc.communicate()[0]
-                        if res1 is not None:
-                            mdt_number = int(res1)
+                        # proc = Popen(['lfs', 'getstripe', '-m', file_name], universal_newlines=True, stdout=PIPE)
+                        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+                        res = proc.communicate()[0]
+                        res_parts_2 = res.split(seperator_string)
+
+                        # res1 = proc.communicate()[0]
+                        mdt_number_part = res_parts_2[0]
+                        if mdt_number_part is not None:
+                            mdt_number = int(mdt_number_part)
                             hex_mdt_number = '{0:0{1}X}'.format(int(mdt_number), 4)
-                            proc = Popen(['ls', '-l', '/sys/kernel/debug/lustre/mdc/'], universal_newlines=True,
-                                         stdout=PIPE)
+
+                            # proc = Popen(['ls', '-l', '/sys/kernel/debug/lustre/mdc/'], universal_newlines=True,
+                            #              stdout=PIPE)
                             # drwxr-xr-x 2 root root 0 Jan 18 15:41 lustre-MDT0000-mdc-ffff8ec77790f800
-                            res = proc.communicate()[0]
-                            parts = res.split("\n")
+                            # res = proc.communicate()[0]
+                            ls_lustre_mdc_output_parts = res_parts_2[1].split("\n")
                             mdt_str = "-MDT" + hex_mdt_number
-                            for x in range(1, len(parts)):
-                                match = re.search(re_pattern, parts[x])
+                            for x in range(1, len(ls_lustre_mdc_output_parts)):
+                                match = re.search(re_pattern, ls_lustre_mdc_output_parts[x])
                                 if match:
                                     gp_dict = match.groupdict()
                                     match_mdt_dir_name = gp_dict.get("mdt_dir_name") or ""
