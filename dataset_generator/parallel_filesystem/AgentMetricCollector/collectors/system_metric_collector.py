@@ -36,34 +36,30 @@ class SystemMetricCollector(AbstractCollector):
                                    51: 'end_data', 52: 'start_brk', 53: 'arg_start', 54: 'arg_end', 55: 'env_start',
                                    56: 'env_end', 57: 'exit_code', 58: 'cpu_usage_percentage',
                                    59: 'mem_usage_percentage'}
+        self.seperator_string = '--result--'
 
     def collect_metrics(self, pid_str, target_process):
         self.collect_system_metrics(pid_str, target_process)
 
     def collect_system_metrics(self, pid_str, target_process):
-        pid = int(pid_str.strip())
+        # pid = int(pid_str.strip())
+        cmd = "cat /proc/{pid}/io; echo {seperator}; cat /proc/{pid}/stat".format(pid=pid_str.strip(), seperator=self.seperator_string)
 
         value_list = []
-        # create process to collect io metrics
+        # create process to collect io and stat metrics
         try:
-            proc = Popen(['cat', '/proc/' + str(pid).strip() + '/io'], universal_newlines=True, stdout=PIPE)
+            proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
             res = proc.communicate()[0]
-            res_parts = res.split("\n")
-            for line in res_parts:
+            res_parts = res.split(self.seperator_string)
+            io_output = res_parts[0]
+            io_output_parts = res_parts[0].split("\n")
+            for line in io_output_parts:
                 if len(line.strip()) > 0:
                     index = line.rfind(":")
                     value = int(line[index + 1:].strip())
                     value_list.append(value)
-        except:
-            print("io stat not possible")
-            traceback.print_exc()
-
-        # create process to collect stat metrics
-        try:
-            proc = Popen(['cat', '/proc/' + str(pid).strip() + '/stat'], universal_newlines=True, stdout=PIPE)
-            res = proc.communicate()[0]
-            res_parts = res.split(" ")
-            for line in res_parts:
+            stat_output_part = res_parts[1].split(" ")
+            for line in stat_output_part:
                 if len(line.strip()) > 0:
                     try:
                         value = int(line.strip())
@@ -72,8 +68,16 @@ class SystemMetricCollector(AbstractCollector):
                         # only convert numbers to int as pass error for other strings
                         pass
                         # traceback.print_exc()
+            # proc = Popen(['cat', '/proc/' + str(pid).strip() + '/io'], universal_newlines=True, stdout=PIPE)
+            # res = proc.communicate()[0]
+            # res_parts = res.split("\n")
+            # for line in res_parts:
+            #     if len(line.strip()) > 0:
+            #         index = line.rfind(":")
+            #         value = int(line[index + 1:].strip())
+            #         value_list.append(value)
         except:
-            print("stat not possible")
+            print("io / stat  not possible")
             traceback.print_exc()
 
         # create process to collect cpu memory metrics
