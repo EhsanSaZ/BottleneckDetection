@@ -195,10 +195,12 @@ class StatProcess(Process):
                     metrics_data = {"time_stamp": str(time_second)}
                     metrics_data.update(network_metrics_collector.get_metrics_dict())
                     metrics_data.update(system_metrics_collector.get_metrics_dict())
+                    # TODO Update this  system_monitoring_global_vars
                     # for key in system_monitoring_global_vars.system_buffer_value_dict.keys():
                     #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_buffer_value_dict[key]
                     metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
                     metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
+                    # TODO Update this  system_monitoring_global_vars
                     # for key in system_monitoring_global_vars.system_cpu_mem_usage_dict.keys():
                     #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
                     # metrics_data.update(lustre_ost_metrics_http_collector.get_metrics_dict())
