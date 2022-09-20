@@ -32,7 +32,7 @@ class FileOstPathInfo:
                         # proc = Popen(['lfs', 'getstripe', file_name], universal_newlines=True, stdout=PIPE)
                         proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
                         res = proc.communicate()[0]
-                        res_parts = res.split(seperator_string)
+                        res_parts_2 = res.split(seperator_string)
 
                         # /expanse/lustre/scratch/ehsansa/temp_project/sample_text.txt
                         # lmm_stripe_count:  1
@@ -45,7 +45,7 @@ class FileOstPathInfo:
                         #
                         # res1 = proc.communicate()[0]
 
-                        getstripe_output_parts = res_parts[0].split("\n")
+                        getstripe_output_parts = res_parts_2[0].split("\n")
                         for x in range(len(getstripe_output_parts)):
                             if "obdidx" in getstripe_output_parts[x] or "l_ost_idx" in getstripe_output_parts[x]:
                                 ost_number = 0
@@ -71,7 +71,7 @@ class FileOstPathInfo:
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b900cb0000
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b94ed33000
                                 # res = proc.communicate()[0]
-                                ls_lustre_osc_output_parts = res_parts[1].split("\n")
+                                ls_lustre_osc_output_parts = res_parts_2[1].split("\n")
                                 ost_str = "-OST" + hex_ost_number
 
                                 for i in range(1, len(ls_lustre_osc_output_parts)):
