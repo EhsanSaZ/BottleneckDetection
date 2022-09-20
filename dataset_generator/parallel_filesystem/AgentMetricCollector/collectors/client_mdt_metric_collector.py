@@ -45,6 +45,7 @@ class ClientMdtMetricCollector(AbstractCollector):
                                     "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
                                     "intent_getattr_async": 0.0, "revalidate_lock": 0.0
                                 }}
+        self.seperator_string = '--result--'
 
     def collect_metrics(self, mdt_parent_path, mdt_dir_name):
         self.get_mdt_stat(mdt_parent_path, mdt_dir_name, self.mdt_stat_so_far)
@@ -52,8 +53,17 @@ class ClientMdtMetricCollector(AbstractCollector):
     def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict):
         value_list = []
         mdt_full_path = mdt_parent_path + "/" + mdt_dir_name
-        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name)
-        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict)
+
+        get_param_arg_import = "mdc." + mdt_dir_name + ".import"
+        get_param_arg_stats = "mdc." + mdt_dir_name + ".stats"
+        get_param_arg_md_stats = "mdc." + mdt_dir_name + ".md_stats"
+        cmd = "lctl get_param {get_param_arg_import}; echo {seperator};lctl get_param {get_param_arg_stats};echo {seperator};lctl get_param {get_param_arg_md_stats}".format(get_param_arg_import=get_param_arg_import, seperator=self.seperator_string, get_param_arg_stats=get_param_arg_stats, get_param_arg_md_stats=get_param_arg_md_stats)
+        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+        res = proc.communicate()[0]
+        res_parts = res.split(self.seperator_string)
+
+        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name, res_parts[0])
+        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict, res_parts[1], res_parts[2])
         value_list += a_list
         self.mdt_stat_so_far = mdt_stat_latest_values
         self.metrics_list = value_list
@@ -61,10 +71,10 @@ class ClientMdtMetricCollector(AbstractCollector):
         self.metrics_list_to_dict()
         # return value_list, mdt_stat_latest_values
 
-    def process_mds_rpc(self, mdt_path, mdt_dir_name):
+    def process_mds_rpc(self, mdt_path, mdt_dir_name, import_output):
         # proc = Popen(['cat', mdt_path + "/import"], universal_newlines=True, stdout=PIPE)
-        proc = Popen(['lctl', 'get_param', "mdc." + mdt_dir_name + ".import"], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
+        # proc = Popen(['lctl', 'get_param', "mdc." + mdt_dir_name + ".import"], universal_newlines=True, stdout=PIPE)
+        # res = proc.communicate()[0]
         # import:
         # name: home-MDT0001-mdc-ffff9575076ae800
         # target: home-MDT0001_UUID
@@ -97,7 +107,7 @@ class ClientMdtMetricCollector(AbstractCollector):
         #    last_replay: 0
         #    peer_committed: 513097842389
         #    last_checked: 513097842389
-        res_parts = res.split("\n")
+        res_parts = import_output.split("\n")
         value_list = []
         value_dict = {}
         for metric_line in res_parts:
@@ -131,12 +141,12 @@ class ClientMdtMetricCollector(AbstractCollector):
         value_list.append(value_dict.get('timeouts') or 0.0)
         return value_list
 
-    def process_mdt_stat(self, mdt_path, mdt_dir_name, mdt_stat_so_far):
+    def process_mdt_stat(self, mdt_path, mdt_dir_name, mdt_stat_so_far, stats_output, md_stats_output):
         value_list = []
         # proc = Popen(['cat', mdt_path + "/stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg = "mdc." + mdt_dir_name + ".stats"
-        proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
+        # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
+        # res = proc.communicate()[0]
         # snapshot_time             1638394164.84885 secs.usecs
         # req_waittime              1601539009 samples [usec] 26 580651352 586616437586 3987813690702099508
         # req_active                1601539009 samples [reqs] 1 15430 6031711524 7029879056572
@@ -152,7 +162,7 @@ class ClientMdtMetricCollector(AbstractCollector):
         # ldlm_cancel               243276775 samples [usec] 27 12112838 400480363179 533988366777608771
         # obd_ping                  21790 samples [usec] 55 17192 12801137 14145734419
         # seq_query                 180 samples [usec] 42 1142 18729 4607773
-        res_parts = res.split("\n")
+        res_parts = stats_output.split("\n")
         mdt_stat_latest_values = {}
         for metric_line in res_parts:
             if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg not in metric_line:
@@ -196,9 +206,9 @@ class ClientMdtMetricCollector(AbstractCollector):
 
         # proc = Popen(['cat', mdt_path + "/md_stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg = "mdc." + mdt_dir_name + ".md_stats"
-        proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
-        res_parts = res.split("\n")
+        # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
+        # res = proc.communicate()[0]
+        res_parts = md_stats_output.split("\n")
         md_stats_so_far_dict = mdt_stat_so_far.get("md_stats") or None
         if md_stats_so_far_dict is None:
             md_stats_so_far_dict = {}
