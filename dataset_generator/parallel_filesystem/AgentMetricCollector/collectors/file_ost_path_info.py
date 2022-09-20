@@ -4,6 +4,7 @@ import re
 
 class FileOstPathInfo:
     def get_file_ost_path_info(self, pid, lustre_mnt_point_list):
+        seperator_string = '--result--'
         proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
         # total 0
         # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
@@ -26,8 +27,13 @@ class FileOstPathInfo:
                         first_slash_index = file_name.find("/")
                         second_slash_index = file_name.find("/", first_slash_index + 1)
                         file_mount_point = file_name[first_slash_index + 1: first_slash_index + second_slash_index]
+                        cmd = "lfs getstripe {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/osc".format(file_name=file_name, seperator=seperator_string)
 
-                        proc = Popen(['lfs', 'getstripe', file_name], universal_newlines=True, stdout=PIPE)
+                        # proc = Popen(['lfs', 'getstripe', file_name], universal_newlines=True, stdout=PIPE)
+                        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+                        res = proc.communicate()[0]
+                        res_parts = res.split(seperator_string)
+
                         # /expanse/lustre/scratch/ehsansa/temp_project/sample_text.txt
                         # lmm_stripe_count:  1
                         # lmm_stripe_size:   1048576
@@ -37,39 +43,39 @@ class FileOstPathInfo:
                         #	obdidx		 objid		 objid		 group
                         #	    61	      10861858	     0xa5bd22	   0xac0000400
                         #
-                        res1 = proc.communicate()[0]
+                        # res1 = proc.communicate()[0]
 
-                        res_parts1 = res1.split("\n")
-                        for x in range(len(res_parts1)):
-                            if "obdidx" in res_parts1[x] or "l_ost_idx" in res_parts1[x]:
+                        getstripe_output_parts = res_parts[0].split("\n")
+                        for x in range(len(getstripe_output_parts)):
+                            if "obdidx" in getstripe_output_parts[x] or "l_ost_idx" in getstripe_output_parts[x]:
                                 ost_number = 0
-                                if "obdidx" in res_parts1[x]:
-                                    parts = res_parts1[x + 1].strip().split("\t")
+                                if "obdidx" in getstripe_output_parts[x]:
+                                    parts = getstripe_output_parts[x + 1].strip().split("\t")
                                     # print(parts)
                                     # print(parts[0])
                                     ost_number = int(parts[0].strip())
                                     # print(ost_number)
                                 else:
-                                    parts = res_parts1[x].strip().split("l_ost_idx: ")[1].split(",")
+                                    parts = getstripe_output_parts[x].strip().split("l_ost_idx: ")[1].split(",")
                                     ost_number = int(parts[0].strip())
                                 # Convert obdidx or l_ost_idx from 10 base into hex
                                 # hex_ost_number = hex(int(ost_number))
                                 # x_insex = hex_ost_number.rfind("x")
                                 # hex_ost_number = hex_ost_number[x_insex + 1:]
                                 hex_ost_number = '{0:0{1}X}'.format(int(ost_number), 4)
-                                proc = Popen(['ls', '-l', '/sys/kernel/debug/lustre/osc'], universal_newlines=True,
-                                             stdout=PIPE)
+                                # proc = Popen(['ls', '-l', '/sys/kernel/debug/lustre/osc'], universal_newlines=True,
+                                #              stdout=PIPE)
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0045-osc-ffff92b94ed33000
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b900cb0000
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0046-osc-ffff92b94ed33000
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b900cb0000
                                 # dr-xr-xr-x 2 root root 0 Nov 22 14:14 expanse-OST0047-osc-ffff92b94ed33000
-                                res = proc.communicate()[0]
-                                parts = res.split("\n")
+                                # res = proc.communicate()[0]
+                                ls_lustre_osc_output_parts = res_parts[1].split("\n")
                                 ost_str = "-OST" + hex_ost_number
 
-                                for i in range(1, len(parts)):
-                                    match = re.search(re_pattern, parts[i])
+                                for i in range(1, len(ls_lustre_osc_output_parts)):
+                                    match = re.search(re_pattern, ls_lustre_osc_output_parts[i])
                                     if match:
                                         gp_dict = match.groupdict()
                                         match_ost_dir_name = gp_dict.get("ost_dir_name") or ""
@@ -81,7 +87,7 @@ class FileOstPathInfo:
 
                                             return ost_path, match_ost_dir_name, match_remote_ost_dir_name, ost_number
                                 break
-                                #     ost_name_parts = parts[x].split(" ")
+                                #     ost_name_parts = ls_lustre_osc_output_parts[x].split(" ")
                                 #     for part in ost_name_parts:
                                 #         # print (part, file_mount_point, ost_str)
                                 #         # if file_mount_point in part and ost_str in part and "OST" in part:
