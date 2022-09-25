@@ -7,7 +7,7 @@ import traceback
 import psutil
 import zmq
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from subprocess import Popen, PIPE
 
 from google.protobuf.json_format import MessageToDict
@@ -248,8 +248,10 @@ class StatProcess(Process):
                     log_data_request = PublisherPayload()
                     log_data_request.request_type = "send_log_data"
                     log_data_request.data.CopyFrom(monitoring_msg)
-                    log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time)).strftime("%H:%M:%S.%f %m-%d-%Y")
-                    metric_publisher_socket.send_json(MessageToDict(log_data_request))
+                    # log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    msg = MessageToDict(log_data_request)
+                    msg["@timestamp"] = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    metric_publisher_socket.send_json(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
                     output_string = str(time_second)
