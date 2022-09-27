@@ -219,39 +219,53 @@ class StatProcess(Process):
                     epoc_time += 1
                     monitoring_msg = MonitoringLog()
 
-                    metrics_msg = Metrics()
-                    metrics_msg.timestamp = datetime.fromtimestamp(time_second).strftime("%H:%M:%S %m-%d-%Y")
-                    metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
-                    metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
-                    # metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
-                    buffer_value_dict_no_prefix = {}
+                    # metrics_msg = Metrics()
+                    # metrics_msg.timestamp = datetime.fromtimestamp(time_second).strftime("%H:%M:%S %m-%d-%Y")
+                    # metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
+                    # metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
+                    # # metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
+                    # buffer_value_dict_no_prefix = {}
+                    # for key in self.buffer_value_dict.keys():
+                    #     buffer_value_dict_no_prefix[key] = self.buffer_value_dict[key]
+                    # metrics_msg.buffer_value_metrics.MergeFrom(ParseDict(buffer_value_dict_no_prefix, BufferValueMetrics()))
+                    #
+                    # metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
+                    # metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
+                    # # metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
+                    # cpu_mem_dict_no_prefix = {}
+                    # for key in self.cpu_mem_dict.keys():
+                    #     cpu_mem_dict_no_prefix[key] = self.cpu_mem_dict[key]
+                    # metrics_msg.resource_usage_metrics.MergeFrom(ParseDict(cpu_mem_dict_no_prefix, ResourceUsageMetrics()))
+                    # # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
+                    # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_zmq_collector.get_proto_message())
+                    # metrics_msg.label_value = int(self.label_value)
+                    #
+                    # monitoring_msg.metrics.CopyFrom(metrics_msg)
+                    # monitoring_msg.transfer_ID = transfer_id
+                    # monitoring_msg.sequence_number = epoc_time
+                    # monitoring_msg.is_sender = self.is_sender
+                    #
+                    # log_data_request = PublisherPayload()
+                    # log_data_request.request_type = "send_log_data"
+                    # log_data_request.data.CopyFrom(monitoring_msg)
+                    # # log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    # msg = MessageToDict(log_data_request)
+                    # msg["@timestamp"] = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    # metric_publisher_socket.send_json(msg)
+                    ts = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    metrics = ""
+                    metrics += network_metrics_collector.get_metrics_str()
+                    metrics += "," + system_metrics_collector.get_metrics_str()
                     for key in self.buffer_value_dict.keys():
-                        buffer_value_dict_no_prefix[key] = self.buffer_value_dict[key]
-                    metrics_msg.buffer_value_metrics.MergeFrom(ParseDict(buffer_value_dict_no_prefix, BufferValueMetrics()))
-
-                    metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
-                    metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
-                    # metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
-                    cpu_mem_dict_no_prefix = {}
+                        metrics += "," + self.buffer_value_dict[key]
+                    metrics += "," + client_ost_metrics_collector.get_metrics_str()
+                    metrics += "," + client_mdt_metrics_collector.get_metrics_str()
                     for key in self.cpu_mem_dict.keys():
-                        cpu_mem_dict_no_prefix[key] = self.cpu_mem_dict[key]
-                    metrics_msg.resource_usage_metrics.MergeFrom(ParseDict(cpu_mem_dict_no_prefix, ResourceUsageMetrics()))
-                    # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
-                    metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_zmq_collector.get_proto_message())
-                    metrics_msg.label_value = int(self.label_value)
-
-                    monitoring_msg.metrics.CopyFrom(metrics_msg)
-                    monitoring_msg.transfer_ID = transfer_id
-                    monitoring_msg.sequence_number = epoc_time
-                    monitoring_msg.is_sender = self.is_sender
-
-                    log_data_request = PublisherPayload()
-                    log_data_request.request_type = "send_log_data"
-                    log_data_request.data.CopyFrom(monitoring_msg)
-                    # log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
-                    msg = MessageToDict(log_data_request)
-                    msg["@timestamp"] = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
-                    metric_publisher_socket.send_json(msg)
+                        metrics += "," + self.cpu_mem_dict[key]
+                    metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
+                    metrics += "," + self.label_value
+                    msg = "{time} {tid} {sender} {metrics}".format(time=ts, tid=transfer_id, sender=self.is_sender, metrics=metrics)
+                    metric_publisher_socket.send_string(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
                     output_string = str(time_second)
