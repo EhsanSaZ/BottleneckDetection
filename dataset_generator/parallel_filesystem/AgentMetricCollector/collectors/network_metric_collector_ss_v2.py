@@ -172,8 +172,12 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
 
     def metrics_list_to_str(self):
         output_string = ""
-        for item in self.metrics_list:
-            output_string += "," + str(item)
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            output_string += "," + str(self._get_data_type(self.metrics_list[index], type_))
+        # for item in self.metrics_list:
+        #     output_string += "," + str(item)
         if output_string.startswith(","):
             output_string = output_string[1:]
         self.metrics_str = output_string
