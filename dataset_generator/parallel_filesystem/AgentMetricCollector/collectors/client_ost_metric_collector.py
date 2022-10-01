@@ -25,17 +25,21 @@ class ClientOstMetricCollector(AbstractCollector):
                                  "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
                                  "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
                                  "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
+        self.seperator_string = '--result--'
 
     def collect_metrics(self, ost_path, ost_dir_name):
         self.process_ost_stat(ost_path, ost_dir_name, self.ost_stats_so_far)
 
     def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far):
         value_list = []
-
         # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
-        get_param_arg = "osc." + ost_dir_name + ".stats"
-        proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
+        get_param_arg_stats = "osc." + ost_dir_name + ".stats"
+        get_param_arg_rpc_stats = "osc." + ost_dir_name + ".rpc_stats"
+        cmd = "lctl get_param {get_param_arg_stats}; echo {seperator};lctl get_param {get_param_arg_rpc_stats}".format(get_param_arg_stats=get_param_arg_stats, seperator=self.seperator_string, get_param_arg_rpc_stats=get_param_arg_rpc_stats)
+        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+        # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
+        res_parts = res.split(self.seperator_string)
         # snapshot_time             1637627183.394337 secs.usecs
         # req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
         # req_active                393906200 samples [reqs] 1 8243 1164349055 731470318467
@@ -52,10 +56,10 @@ class ClientOstMetricCollector(AbstractCollector):
         # ost_quotactl              1070893 samples [usec] 38 1131469 294654538 2901933400418
         # ldlm_cancel               31083060 samples [usec] 31 12008431 99565826195 17460575057288663
         # obd_ping                  43765 samples [usec] 52 130743 28356809 55768300189
-        res_parts = res.split("\n")
+        ost_stats_parts = res_parts[0].split("\n")
         ost_stat_latest_values = {}
-        for metric_line in res_parts:
-            if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg not in metric_line:
+        for metric_line in ost_stats_parts:
+            if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg_stats not in metric_line:
                 tokens = str(metric_line).split(" ")
                 ost_stat_latest_values[tokens[0]] = float(tokens[len(tokens) - 2])
                 # value_list.append(tokens[0])
@@ -91,16 +95,16 @@ class ClientOstMetricCollector(AbstractCollector):
         value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
 
         # proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
-        get_param_arg = "osc." + ost_dir_name + ".rpc_stats"
-        proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
-        res_parts = res.split("\n")
+        # get_param_arg = "osc." + ost_dir_name + ".rpc_stats"
+        # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
+        # res = proc.communicate()[0]
+        rpc_stats_part = res_parts[1].split("\n")
         # snapshot_time:         1638393148.677361 (secs.usecs)
         # read RPCs in flight:  0
         # write RPCs in flight: 0
         # pending write pages:  0
         # pending read pages:   0
-        for metric_line in res_parts:
+        for metric_line in rpc_stats_part:
             if "pending read pages" in metric_line:
                 index = metric_line.find(":")
                 value = float(metric_line[index + 1:])
@@ -118,8 +122,12 @@ class ClientOstMetricCollector(AbstractCollector):
 
     def metrics_list_to_str(self):
         output_string = ""
-        for item in self.metrics_list:
-            output_string += "," + str(item)
+        keys_list = list(self.metrics_id_to_attr.keys())
+        for index in range(len(self.metrics_list)):
+            type_ = self.metrics_datatypes[keys_list[index]]
+            output_string += "," + str(self._get_data_type(self.metrics_list[index], type_))
+        # for item in self.metrics_list:
+        #     output_string += "," + str(item)
         if output_string.startswith(","):
             output_string = output_string[1:]
         self.metrics_str = output_string
