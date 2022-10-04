@@ -48,6 +48,14 @@ class Config:
     cluster_name = "cluster_1"
 
     # OST Cache server configuration
-    cache_size = 100
-    cache_ttl = 15
+    ost_cache_size = 100
+    ost_cache_ttl = 15
     ost_rep_backend_socket_name = "ost_rep_backend"
+    # Client OST Cache server configuration
+    client_ost_cache_size = 100
+    client_ost_cache_ttl = 15
+    client_ost_rep_backend_socket_name = "client_ost_rep_backend"
+    # Client MDT Cache server configuration
+    client_mdt_cache_size = 100
+    client_mdt_cache_ttl = 15
+    client_mdt_rep_backend_socket_name = "client_mdt_rep_backend"
