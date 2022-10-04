@@ -16,9 +16,11 @@ from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V
 from collectors.system_metric_collector import SystemMetricCollector
 from collectors.file_ost_path_info import FileOstPathInfo
 from collectors.file_mdt_path_info import FileMdtPathInfo
-from collectors.client_ost_metric_collector import ClientOstMetricCollector
-from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
-from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
+# from collectors.client_ost_metric_collector import ClientOstMetricCollector
+from collectors.client_ost_metric_zmq_collector import ClientOstMetricZmqCollector
+# from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
+from collectors.client_mdt_metric_zmq_collector import ClientMdtMetricZmqCollector
+# from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
 from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
 from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog, PublisherPayload, ResourceUsageMetrics, BufferValueMetrics
 from helper_threads import fileWriteThread
@@ -31,6 +33,8 @@ class StatProcess(Process):
     def __init__(self, src_ip, src_port, dst_ip, dst_port, zmq_context,
                  xsub_backend_socket_name,
                  ost_metric_backend_socket_name,
+                 client_ost_metric_backend_socket_name,
+                 client_mdt_metric_backend_socket_name,
                  remote_ost_index_to_ost_agent_http_address_dict,
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
@@ -46,6 +50,8 @@ class StatProcess(Process):
         self.context = zmq_context
         self.xsub_backend_socket_name = xsub_backend_socket_name
         self.ost_metric_backend_socket_name = ost_metric_backend_socket_name
+        self.client_ost_metric_backend_socket_name = client_ost_metric_backend_socket_name
+        self.client_mdt_metric_backend_socket_name = client_mdt_metric_backend_socket_name
         self.remote_ost_index_to_ost_agent_http_address_dict = remote_ost_index_to_ost_agent_http_address_dict
         self.pid_str = pid_str
         self.file_path = path
@@ -70,6 +76,13 @@ class StatProcess(Process):
         return self._stop.is_set()
 
     def collect_stat(self):
+        # import cProfile
+        # import pstats, math
+        # import io
+        # import pandas as pd
+        # pr = cProfile.Profile()
+        # pr.enable()
+        # self.profile_name = str(self.pid)
         is_parallel_file_system = False
         proc = Popen(['ls', '-l', '/proc/fs/'], universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
@@ -82,8 +95,10 @@ class StatProcess(Process):
         system_metrics_collector = SystemMetricCollector(self.prefix)
         file_ost_path_info_extractor = FileOstPathInfo()
         file_mdt_path_info_extractor = FileMdtPathInfo()
-        client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
-        client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
+        # client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
+        client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, "client_ost_rep_backend", self.prefix)
+        # client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
+        client_mdt_metrics_collector = ClientMdtMetricZmqCollector(self.context, "client_mdt_rep_backend", self.prefix)
         # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
         lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.context, self.ost_metric_backend_socket_name, self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
@@ -138,7 +153,8 @@ class StatProcess(Process):
             self.is_transfer_done = True
         transfer_id = None
         while 1:
-            processing_start_time = time.time()
+            processing_start_date = datetime.now(tz=timezone.utc)
+            processing_start_timestampt = datetime.timestamp(processing_start_date)
             # print("COLLECTING", transfer_id, processing_start_time)
 
             if self.is_transfer_done or self.stopped():
@@ -171,7 +187,7 @@ class StatProcess(Process):
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    client_ost_metrics_collector.collect_metrics(ost_kernel_path, ost_dir_name)
+                    client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt))
 
                     file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
                     if file_mdt_path_info is None:
@@ -183,11 +199,11 @@ class StatProcess(Process):
 
                     # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
                     # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
-                    lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_time))
+                    lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_timestampt))
 
                 epoc_count += 1
                 # print(output_string)
-                time_second = processing_start_time
+                time_second = processing_start_timestampt
                 if Config.send_to_cloud_mode and Config.communication_type == "JSON" and not is_first_time and self.ready_to_publish.value:
                     epoc_time += 1
                     data = {}
@@ -252,7 +268,7 @@ class StatProcess(Process):
                     # msg = MessageToDict(log_data_request)
                     # msg["@timestamp"] = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
                     # metric_publisher_socket.send_json(msg)
-                    ts = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
+                    ts = datetime.fromtimestamp(float(processing_start_timestampt), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
                     metrics += "," + system_metrics_collector.get_metrics_str()
@@ -310,7 +326,7 @@ class StatProcess(Process):
                 print("EXITNG COLLECT STAT THREAD for {}".format(transfer_id))
                 traceback.print_exc()
             processing_finish_time = time.time()
-            processing_time = processing_finish_time - processing_start_time
+            processing_time = processing_finish_time - processing_start_timestampt
             # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(global_vars.monitor_agent_pid,
             # #                                                                           global_vars.monitor_agent_process)
             # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
@@ -330,3 +346,16 @@ class StatProcess(Process):
             #         overhead_main_output_string = ""
             # time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
             time.sleep(abs(sleep_time - (processing_time % sleep_time)))
+        # pr.disable()
+        # result = io.StringIO()
+        # pstats.Stats(pr,stream=result).print_stats()
+        # result=result.getvalue()
+        # # chop the string into a csv-like buffer
+        # result='ncalls'+result.split('ncalls')[-1]
+        # result='\n'.join([','.join(line.rstrip().split(None,5)) for line in result.split('\n')])
+        # # save it to disk
+        #
+        # with open('{}_profile_data.csv'.format(self.profile_name), 'w+') as f:
+        #     #f=open(result.rsplit('.')[0]+'.csv','w')
+        #     f.write(result)
+        #     f.close()
