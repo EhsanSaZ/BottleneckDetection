@@ -257,22 +257,17 @@ def sender_agent(sender_ip, sender_port, receiver_ip, receiver_port, transfer_id
                       }})
     message = socket.recv()
     print(f"Received reply [ {message} ]")
-    socket.send_json({})
-    message = socket.recv()
-    print(f"Received reply [ {message} ]")
 
     socket_sender_t_id = context.socket(zmq.REQ)
     socket_sender_t_id.connect("tcp://{}:{}".format(detector_host, detector_port))
     socket_sender_t_id.send_json({"request_type": "new_transfer", "data": {"transfer_id": transfer_id}})
 
-    socket2 = context.socket(zmq.XPUB)
+    socket2 = context.socket(zmq.PUB)
     socket2.bind("tcp://{}:{}".format(sender_ip, sender_port))
     s_payload = copy.deepcopy(global_sender_payload)
     sequence_number = 1
     time_stamp = 1655240678.9673095
     transfer_ID = transfer_id
-    counter = 0
-
     while (True):
         s_payload["transfer_ID"] = transfer_ID
         s_payload["sequence_number"] = sequence_number
@@ -281,19 +276,6 @@ def sender_agent(sender_ip, sender_port, receiver_ip, receiver_port, transfer_id
         socket2.send_json(body)
         time_stamp += 1
         sequence_number += 1
-        # counter += 1
-        # if counter == 5:
-        #     socket2.send_json(json.dumps({"request_type": "unsubscribe_publisher_info",
-        #                                   "data": {
-        #                                       "sender": {
-        #                                           "ip": sender_ip,
-        #                                           "port": sender_port
-        #                                       },
-        #                                       "receiver": {
-        #                                           "ip": receiver_ip,
-        #                                           "port": receiver_port
-        #                                       }
-        #                                   }}))
         time.sleep(1)
 
 
@@ -326,8 +308,8 @@ with ThreadPoolExecutor(max_workers=100) as executor:
         # print(str(u_id))
         futures.append(
             executor.submit(sender_agent, "127.0.0.1", str(sender_port), "127.0.0.1", str(receiver_port), str(u_id)))
-        # futures.append(
-        #     executor.submit(receiver_agent, "127.0.0.1", str(sender_port), "127.0.0.1", str(receiver_port), str(u_id)))
+        futures.append(
+            executor.submit(receiver_agent, "127.0.0.1", str(sender_port), "127.0.0.1", str(receiver_port), str(u_id)))
         sender_port += 1
         receiver_port += 1
 
