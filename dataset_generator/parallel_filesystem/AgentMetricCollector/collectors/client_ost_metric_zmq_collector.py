@@ -60,7 +60,7 @@ class ClientOstMetricZmqCollector(AbstractCollector):
                 ost_stats_parts = stat_response.split("\n")
                 ost_stat_latest_values = {}
                 for metric_line in ost_stats_parts:
-                    if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg_stats not in metric_line:
+                    if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line:
                         tokens = str(metric_line).split(" ")
                         ost_stat_latest_values[tokens[0]] = float(tokens[len(tokens) - 2])
                 value_list.append(float((ost_stat_latest_values.get("req_waittime") or 0) - (ost_stat_so_far.get("req_waittime") or 0)))
