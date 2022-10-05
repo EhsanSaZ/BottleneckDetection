@@ -27,10 +27,10 @@ class ClientOstMetricCollector(AbstractCollector):
                                  "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
         self.seperator_string = '--result--'
 
-    def collect_metrics(self, ost_path, ost_dir_name):
-        self.process_ost_stat(ost_path, ost_dir_name, self.ost_stats_so_far)
+    def collect_metrics(self, ost_dir_name, time_stamp):
+        self.process_ost_stat(ost_dir_name, self.ost_stats_so_far)
 
-    def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far):
+    def process_ost_stat(self, ost_dir_name, ost_stat_so_far):
         value_list = []
         # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg_stats = "osc." + ost_dir_name + ".stats"
