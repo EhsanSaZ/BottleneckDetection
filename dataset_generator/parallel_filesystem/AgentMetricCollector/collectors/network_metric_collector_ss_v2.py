@@ -56,12 +56,12 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
                    'src', "{}:{}".format(self.source_ip, self.source_port),
                    'dst', "{}:{}".format(self.destination_ip, self.destination_port)]
-        ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
+        ss_proc = subprocess.Popen(comm_ss, universal_newlines=True, stdout=subprocess.PIPE)
         self.line_in_ss = str(ss_proc.stdout.read())
 
     def parse_output(self):
         if self.line_in_ss.count(self.source_ip) >= 1 and self.line_in_ss.count(self.destination_ip) >= 1:
-            parts = self.line_in_ss.split("\\n")
+            parts = self.line_in_ss.split("\n")
 
             for x in range(len(parts)):
                 if self.source_ip in parts[x] and self.source_port in parts[x] and self.destination_ip in parts[
