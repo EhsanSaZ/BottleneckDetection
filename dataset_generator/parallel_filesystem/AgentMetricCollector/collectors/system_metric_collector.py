@@ -38,18 +38,21 @@ class SystemMetricCollector(AbstractCollector):
                                    59: 'mem_usage_percentage'}
         self.seperator_string = '--result--'
 
-    def collect_metrics(self, pid_str, target_process):
-        self.collect_system_metrics(pid_str, target_process)
+    def collect_metrics(self, pid_str, target_process, from_string=None):
+        self.collect_system_metrics(pid_str, target_process, from_string)
 
-    def collect_system_metrics(self, pid_str, target_process):
+    def collect_system_metrics(self, pid_str, target_process, from_string):
         # pid = int(pid_str.strip())
         cmd = "cat /proc/{pid}/io; echo {seperator}; cat /proc/{pid}/stat".format(pid=pid_str.strip(), seperator=self.seperator_string)
 
         value_list = []
         # create process to collect io and stat metrics
         try:
-            proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
-            res = proc.communicate()[0]
+            if from_string:
+                res = from_string
+            else:
+                proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+                res = proc.communicate()[0]
             res_parts = res.split(self.seperator_string)
             io_output_parts = res_parts[0].split("\n")
             for line in io_output_parts:

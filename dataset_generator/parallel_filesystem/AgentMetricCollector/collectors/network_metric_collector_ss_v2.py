@@ -155,11 +155,14 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
                             self.reord_seen = value - self.reord_seen_so_far
                             self.reord_seen_so_far = value
 
-    def collect_metrics(self):
-        self.collect_network_metrics()
+    def collect_metrics(self, from_string=None):
+        self.collect_network_metrics(from_string)
 
-    def collect_network_metrics(self):
-        self.execute_command()
+    def collect_network_metrics(self, from_string=None):
+        if from_string:
+            self.line_in_ss = from_string
+        else:
+            self.execute_command()
         self.parse_output()
         self.metrics_list = [str(self.total_rtt_value), str(self.total_pacing_rate),
                              str(self.total_cwnd_value), str(self.total_rto_value), str(self.byte_ack / (1024 * 1024)),
