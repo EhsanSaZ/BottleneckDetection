@@ -16,10 +16,10 @@ from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V
 from collectors.system_metric_collector import SystemMetricCollector
 from collectors.file_ost_path_info import FileOstPathInfo
 from collectors.file_mdt_path_info import FileMdtPathInfo
-# from collectors.client_ost_metric_collector import ClientOstMetricCollector
-from collectors.client_ost_metric_zmq_collector import ClientOstMetricZmqCollector
-# from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
-from collectors.client_mdt_metric_zmq_collector import ClientMdtMetricZmqCollector
+from collectors.client_ost_metric_collector import ClientOstMetricCollector
+# from collectors.client_ost_metric_zmq_collector import ClientOstMetricZmqCollector
+from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
+# from collectors.client_mdt_metric_zmq_collector import ClientMdtMetricZmqCollector
 # from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
 from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
 from collectors.protobuf_messages.log_metrics_pb2 import Metrics, MonitoringLog, PublisherPayload, ResourceUsageMetrics, BufferValueMetrics
@@ -75,6 +75,27 @@ class StatProcess(Process):
     def stopped(self):
         return self._stop.is_set()
 
+    def run_monitor_commands(self):
+
+        seperator = '--result--'
+        command_seperator = '--command_result--'
+        network_metrics_command = "ss -it state ESTABLISHED src {}:{} dst {}:{}".format(self.src_ip, self.src_port,
+                                                                                        self.dst_ip, self.dst_port)
+        system_metrics_command = "cat /proc/{pid}/io; echo {seperator}; cat /proc/{pid}/stat".format(pid=self.pid_str,
+                                                                                                     seperator=seperator)
+        read_fd_command = "ls -l /proc/{pid}/fd/".format(pid=self.pid_str)
+        all_commands = "{} ; echo {seperator}; {} ; echo {seperator}; {}".format(network_metrics_command,
+                                                                                 system_metrics_command,
+                                                                                 read_fd_command,
+                                                                                 seperator=command_seperator)
+        proc = Popen(all_commands, shell=True, universal_newlines=True, stdout=PIPE)
+        res = proc.communicate()[0]
+        res_parts = res.split(command_seperator)
+        network_output = res_parts[0]
+        system_output = res_parts[1]
+        fd_output = res_parts[2]
+        return network_output, system_output, fd_output
+
     def collect_stat(self):
         # import cProfile
         # import pstats, math
@@ -95,41 +116,15 @@ class StatProcess(Process):
         system_metrics_collector = SystemMetricCollector(self.prefix)
         file_ost_path_info_extractor = FileOstPathInfo()
         file_mdt_path_info_extractor = FileMdtPathInfo()
-        # client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
-        client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, "client_ost_rep_backend", self.prefix)
-        # client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
-        client_mdt_metrics_collector = ClientMdtMetricZmqCollector(self.context, "client_mdt_rep_backend", self.prefix)
+        client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
+        # client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, self.client_ost_metric_backend_socket_name, self.prefix)
+        client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
+        # client_mdt_metrics_collector = ClientMdtMetricZmqCollector(self.context, self.client_mdt_metric_backend_socket_name, self.prefix)
         # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
         lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.context, self.ost_metric_backend_socket_name, self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         # is_parallel_file_system = True
 
-        # if global_vars.ready_to_publish:
-        # mdt_paths = []
-        # mdt_stat_so_far_general = {"req_waittime": 0.0, "req_active": 0.0, "mds_getattr": 0.0,
-        #                            "mds_getattr_lock": 0.0, "mds_close": 0.0, "mds_readpage": 0.0,
-        #                            "mds_connect": 0.0, "mds_get_root": 0.0, "mds_statfs": 0.0,
-        #                            "mds_sync": 0.0, "mds_quotactl": 0.0, "mds_getxattr": 0.0,
-        #                            "mds_hsm_state_set": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0,
-        #                            "seq_query": 0.0, "fld_query": 0.0,
-        #                            "md_stats": {
-        #                                "close": 0.0, "create": 0.0, "enqueue": 0.0, "getattr": 0.0,
-        #                                "intent_lock": 0.0,
-        #                                "link": 0.0, "rename": 0.0, "setattr": 0.0, "fsync": 0.0, "read_page": 0.0,
-        #                                "unlink": 0.0, "setxattr": 0.0, "getxattr": 0.0,
-        #                                "intent_getattr_async": 0.0, "revalidate_lock": 0.0
-        #                            }}
-        # all_mdt_stat_so_far_dict = {}
-        # proc = Popen(['ls', '-l', self.mdt_parent_path], universal_newlines=True, stdout=PIPE)
-        # res = proc.communicate()[0]
-        # res_parts = res.split("\n")
-        # for line in res_parts:
-        #     if len(line.strip()) > 0:
-        #         if "total" not in line:
-        #             parts = line.split(" ")
-        #             print(parts)
-        #             mdt_paths.append(parts[-1])
-        #             all_mdt_stat_so_far_dict[parts[-1]] = copy.deepcopy(mdt_stat_so_far_general)
         is_first_time = True
         time_diff = 0
         epoc_time = 0
@@ -176,11 +171,11 @@ class StatProcess(Process):
                     # Send a request to the realtime detection service to add this new transfer
                 time_diff += 1
                 # epoc_time += 1
-                network_metrics_collector.collect_metrics()
-
-                system_metrics_collector.collect_metrics(self.pid_str, target_process)
+                network_output, system_output, fd_output = self.run_monitor_commands()
+                network_metrics_collector.collect_metrics(from_string=network_output)
+                system_metrics_collector.collect_metrics(self.pid_str, target_process, from_string=system_output)
                 if is_parallel_file_system:
-                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path)
+                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path, from_string=fd_output)
                     if file_ost_path_info is None:
                         time.sleep(0.1)
                         continue
@@ -189,7 +184,7 @@ class StatProcess(Process):
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
                     client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt))
 
-                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path)
+                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
                     if file_mdt_path_info is None:
                         continue
                     else:
