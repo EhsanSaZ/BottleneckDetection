@@ -35,6 +35,7 @@ class LustreClientOstMetricSharedMemCache(Process):
                 rpc_stats_part = res_parts[1]
                 stats_list = re.split('(osc\..*\.stats=)', ost_stats_parts)
                 rpc_stats_list = re.split('(osc\..*\.rpc_stats=)', rpc_stats_part)
+                temp_dict = {}
                 i = 0
                 while i < len(stats_list):
                     stat = stats_list[i]
@@ -45,7 +46,7 @@ class LustreClientOstMetricSharedMemCache(Process):
                         if match:
                             # print(match.groupdict().get('ost_dir_name'), stats_list[i + 1])
                             _key = "{}".format(match.groupdict().get('ost_dir_name'))
-                            self.client_ost_metrics_dict[_key] = {"stats": stats_list[i + 1]}
+                            temp_dict[_key] = {"stats": stats_list[i + 1]}
                             i += 2
                         else:
                             i += 1
@@ -58,12 +59,12 @@ class LustreClientOstMetricSharedMemCache(Process):
                         match = re.match(r"osc.(?P<ost_dir_name>.*).rpc_stats=", rpc_stat)
                         if match:
                             _key = "{}".format(match.groupdict().get('ost_dir_name'))
-                            self.client_ost_metrics_dict[_key].update(
-                                {"rpc_stats": rpc_stats_list[i + 1], "status": "success"})
+                            temp_dict[_key].update({"rpc_stats": rpc_stats_list[i + 1]})
                             i += 2
                         else:
                             i += 1
-
+                for _key in temp_dict.keys():
+                    self.client_ost_metrics_dict[_key] = temp_dict[_key]
                 time.sleep(self.sleep_time)
             except Exception as e:
                 traceback.print_exc()
