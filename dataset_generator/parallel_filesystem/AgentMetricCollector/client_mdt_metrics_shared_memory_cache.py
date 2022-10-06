@@ -37,6 +37,7 @@ class LustreClientMdtMetricSharedMemCache(Process):
                 stats_list = re.split('(mdc\..*\.stats=)', mdt_stats_parts)
                 md_stats_list = re.split('(mdc\..*\.md_stats=)', mdt_md_stats_parts)
 
+                temp_dict = {}
                 i = 0
                 while i < len(import_list):
                     _import = import_list[i]
@@ -46,7 +47,7 @@ class LustreClientMdtMetricSharedMemCache(Process):
                         match = re.match(r"mdc.(?P<mdt_dir_name>.*).import=", _import)
                         if match:
                             _key = "{}".format(match.groupdict().get('mdt_dir_name'))
-                            self.client_mdt_metrics_dict[_key] = {"import": import_list[i + 1]}
+                            temp_dict[_key] = {"import": import_list[i + 1]}
                             i += 2
                         else:
                             i += 1
@@ -59,7 +60,7 @@ class LustreClientMdtMetricSharedMemCache(Process):
                         match = re.match(r"mdc.(?P<mdt_dir_name>.*).stats=", stat)
                         if match:
                             _key = "{}".format(match.groupdict().get('mdt_dir_name'))
-                            self.client_mdt_metrics_dict[_key].update({"stats": stats_list[i + 1]})
+                            temp_dict[_key].update({"stats": stats_list[i + 1]})
                             i += 2
                         else:
                             i += 1
@@ -72,10 +73,12 @@ class LustreClientMdtMetricSharedMemCache(Process):
                         match = re.match(r"mdc.(?P<mdt_dir_name>.*).md_stats=", md_stat)
                         if match:
                             _key = "{}".format(match.groupdict().get('mdt_dir_name'))
-                            self.client_mdt_metrics_dict[_key].update({"md_stats": md_stats_list[i + 1], "status": "success"})
+                            temp_dict[_key].update({"md_stats": md_stats_list[i + 1]})
                             i += 2
                         else:
                             i += 1
+                for _key in temp_dict.keys():
+                    self.client_mdt_metrics_dict[_key] = temp_dict[_key]
                 time.sleep(self.sleep_time)
             except Exception as e:
                 traceback.print_exc()
