@@ -73,7 +73,7 @@ class LustreClientOstMetricCache(Process):
                             match = re.match(r"osc.(?P<ost_dir_name>.*).rpc_stats=", rpc_stat)
                             if match:
                                 _key = "{}_{}".format(match.groupdict().get('ost_dir_name'), requested_timestamp)
-                                self.cache[_key].update({"rpc_stats": stats_list[i + 1], "status": "success"})
+                                self.cache[_key].update({"rpc_stats": rpc_stats_list[i + 1], "status": "success"})
                                 i += 2
                             else:
                                 i += 1
