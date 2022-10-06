@@ -5,7 +5,8 @@ from stat_collector_thread import StatProcess
 class TransferManager:
     def __init__(self, zmq_context, xsub_backend_socket_name, ost_rep_backend_socket_name,
                  client_ost_metric_backend_socket_name, client_mdt_metric_backend_socket_name, remote_ost_index_to_ost_agent_address_dict,
-                 read_path_list, write_path_list, mdt_parent_path, label_value, ready_to_publish, cpu_mem_dict, buffer_value_dict):
+                 read_path_list, write_path_list, mdt_parent_path, label_value, ready_to_publish, cpu_mem_dict, buffer_value_dict,
+                 client_ost_metrics_dict, client_mdt_metrics_dict):
         self.transfer_monitoring_processes_dict = {}
         self.context = zmq_context
         self.xsub_backend_socket_name = xsub_backend_socket_name
@@ -20,6 +21,8 @@ class TransferManager:
         self.ready_to_publish = ready_to_publish
         self.cpu_mem_dict = cpu_mem_dict
         self.buffer_value_dict = buffer_value_dict
+        self.client_ost_metrics_dict = client_ost_metrics_dict
+        self.client_mdt_metrics_dict = client_mdt_metrics_dict
 
     def add_new_monitoring_process(self, transfer_info, is_sender, dataset_path, overhead_log_path):
         # print(transfer_info)
@@ -41,7 +44,8 @@ class TransferManager:
                             self.remote_ost_index_to_ost_agent_address_dict, str(pid),
                             lustre_mnt_point_list, self.mdt_parent_path, self.label_value,
                             is_sender, dataset_path, overhead_log_path, self.ready_to_publish,
-                              self.cpu_mem_dict, self.buffer_value_dict)
+                            self.cpu_mem_dict, self.buffer_value_dict,
+                            self.client_ost_metrics_dict, self.client_mdt_metrics_dict)
         self.transfer_monitoring_processes_dict[pid] = process
         process.start()
 

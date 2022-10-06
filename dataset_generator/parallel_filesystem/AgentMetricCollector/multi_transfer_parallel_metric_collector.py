@@ -13,8 +13,10 @@ from helper_threads import globalMetricsMonitor
 # from publisher import SendToCloud
 from rabbitmq_publisher import SendToRabbit
 from lustre_ost_metric_cache import LustreOstMetricCache
-from client_ost_metrics_cache import LustreClientOstMetricCache
+# from client_ost_metrics_cache import LustreClientOstMetricCache
 from client_mdt_metrics_cache import LustreClientMdtMetricCache
+from client_ost_metrics_shared_memory_cache import LustreClientOstMetricSharedMemCache
+from client_mdt_metrics_shared_memory_cache import LustreClientMdtMetricSharedMemCache
 from file_transfer_thread import  FileTransferThread
 from run_server_thread import RunServerThread
 
@@ -136,13 +138,20 @@ if Config.send_to_cloud_mode:
 global_metrics_collector_process = globalMetricsMonitor(1, global_vars.system_cpu_mem_usage, global_vars.system_cpu_mem_usage_dict, global_vars.system_buffer_value, global_vars.system_buffer_value_dict)
 global_metrics_collector_process.start()
 
+global_client_ost_metrics_collector_process = LustreClientOstMetricSharedMemCache(global_vars.client_ost_metrics_dict, 1)
+global_client_ost_metrics_collector_process.start()
+
+global_client_mdt_metrics_collector_process = LustreClientMdtMetricSharedMemCache(global_vars.client_mdt_metrics_dict, 1)
+global_client_mdt_metrics_collector_process.start()
+
 transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, ost_rep_backend_socket_name,
                                    Config.client_ost_rep_backend_socket_name, Config.client_mdt_rep_backend_socket_name,
                                    remote_ost_index_to_ost_agent_address_dict, read_lustre_mnt_point_list,
                                    write_lustre_mnt_point_list,global_vars.global_dict["mdt_parent_path"],
                                    global_vars.global_dict["label_value"], global_vars.ready_to_publish,
-                                   global_vars.system_cpu_mem_usage_dict, global_vars.system_buffer_value_dict)
+                                   global_vars.system_cpu_mem_usage_dict, global_vars.system_buffer_value_dict,
+                                   global_vars.client_ost_metrics_dict, global_vars.client_mdt_metrics_dict)
 
 discovery_process = TransferDiscovery(local_ip_range, peer_ip_range, local_port_range, peer_port_range, transfer_validator, transfer_manager, discovery_cycle=1)
 discovery_process.start()
@@ -150,11 +159,11 @@ discovery_process.start()
 ost_metric_cache_process = LustreOstMetricCache(context, Config.ost_cache_size, Config.ost_cache_ttl, Config.ost_rep_backend_socket_name, remote_ost_index_to_ost_agent_address_dict)
 ost_metric_cache_process.start()
 
-client_ost_metric_process = LustreClientOstMetricCache(context, Config.client_ost_cache_size, Config.client_ost_cache_ttl, Config.client_ost_rep_backend_socket_name)
-client_ost_metric_process.start()
+# client_ost_metric_process = LustreClientOstMetricCache(context, Config.client_ost_cache_size, Config.client_ost_cache_ttl, Config.client_ost_rep_backend_socket_name)
+# client_ost_metric_process.start()
 
-client_mdt_metric_process = LustreClientMdtMetricCache(context, Config.client_mdt_cache_size, Config.client_mdt_cache_ttl, Config.client_mdt_rep_backend_socket_name)
-client_mdt_metric_process.start()
+# client_mdt_metric_process = LustreClientMdtMetricCache(context, Config.client_mdt_cache_size, Config.client_mdt_cache_ttl, Config.client_mdt_rep_backend_socket_name)
+# client_mdt_metric_process.start()
 
 if run_java_app == "1":
     # pass
@@ -178,10 +187,12 @@ elif run_java_app == "2":
 #     time.sleep(1)
 
 discovery_process.join()
+global_client_ost_metrics_collector_process.join()
+global_client_mdt_metrics_collector_process.join()
 global_metrics_collector_process.join()
 ost_metric_cache_process.join()
-client_ost_metric_process.join()
-
+# client_ost_metric_process.join()
+# client_mdt_metric_process.join()
 if publisher_process:
     publisher_process.join()
 
