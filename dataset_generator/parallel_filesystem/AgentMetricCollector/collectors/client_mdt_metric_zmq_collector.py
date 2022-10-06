@@ -95,7 +95,6 @@ class ClientMdtMetricZmqCollector(AbstractCollector):
 
     def process_mds_rpc(self, import_output):
         res_parts = import_output.split("\n")
-        res_parts = import_output.split("\n")
         value_list = []
         value_dict = {}
         for metric_line in res_parts:
