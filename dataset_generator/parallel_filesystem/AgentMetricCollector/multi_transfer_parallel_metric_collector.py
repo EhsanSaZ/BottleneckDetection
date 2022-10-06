@@ -128,7 +128,7 @@ if not Config.send_to_cloud_mode:
     Path("./receiver/overhead_logs").mkdir(parents=True, exist_ok=True)
     Path("./receiver/SimpleReceiverLog").mkdir(parents=True, exist_ok=True)
 
-publisher_thread = None
+publisher_process = None
 if Config.send_to_cloud_mode:
     publisher_process = SendToRabbit(xsub_backend_socket_name, context, Config.cluster_name, Config.rabbit_log_queue_name, Config.heartbeat_queue_name, global_vars.ready_to_publish, Config.rabbit_host, Config.rabbit_port, Config.rabbitmq_heartbeat_interval)
     publisher_process.start()
@@ -179,9 +179,10 @@ elif run_java_app == "2":
 
 discovery_process.join()
 global_metrics_collector_process.join()
-# ost_metric_cache_thread.join()
+ost_metric_cache_process.join()
+client_ost_metric_process.join()
 
-if publisher_thread:
-    publisher_thread.join()
+if publisher_process:
+    publisher_process.join()
 
 is_transfer_done = True
