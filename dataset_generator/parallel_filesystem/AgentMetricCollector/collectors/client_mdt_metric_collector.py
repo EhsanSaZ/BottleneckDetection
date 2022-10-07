@@ -47,23 +47,31 @@ class ClientMdtMetricCollector(AbstractCollector):
                                 }}
         self.seperator_string = '--result--'
 
-    def collect_metrics(self, mdt_parent_path, mdt_dir_name):
-        self.get_mdt_stat(mdt_parent_path, mdt_dir_name, self.mdt_stat_so_far)
+    def collect_metrics(self, mdt_parent_path, mdt_dir_name, from_dict=None):
+        self.get_mdt_stat(mdt_parent_path, mdt_dir_name, self.mdt_stat_so_far, from_dict)
 
-    def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict):
+    def get_mdt_stat(self, mdt_parent_path, mdt_dir_name, mdt_stat_so_far_dict, from_dict):
         value_list = []
         mdt_full_path = mdt_parent_path + "/" + mdt_dir_name
 
         get_param_arg_import = "mdc." + mdt_dir_name + ".import"
         get_param_arg_stats = "mdc." + mdt_dir_name + ".stats"
         get_param_arg_md_stats = "mdc." + mdt_dir_name + ".md_stats"
-        cmd = "lctl get_param {get_param_arg_import}; echo {seperator};lctl get_param {get_param_arg_stats};echo {seperator};lctl get_param {get_param_arg_md_stats}".format(get_param_arg_import=get_param_arg_import, seperator=self.seperator_string, get_param_arg_stats=get_param_arg_stats, get_param_arg_md_stats=get_param_arg_md_stats)
-        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
-        res_parts = res.split(self.seperator_string)
+        if from_dict is None:
+            cmd = "lctl get_param {get_param_arg_import}; echo {seperator};lctl get_param {get_param_arg_stats};echo {seperator};lctl get_param {get_param_arg_md_stats}".format(get_param_arg_import=get_param_arg_import, seperator=self.seperator_string, get_param_arg_stats=get_param_arg_stats, get_param_arg_md_stats=get_param_arg_md_stats)
+            proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+            res = proc.communicate()[0]
+            res_parts = res.split(self.seperator_string)
+            import_part = res_parts[0]
+            stats_part = res_parts[1]
+            md_stats_part = res_parts[2]
+        else:
+            import_part = from_dict.get("import")
+            stats_part = from_dict.get("stats")
+            md_stats_part = from_dict.get("md_stats")
 
-        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name, res_parts[0])
-        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict, res_parts[1], res_parts[2])
+        value_list += self.process_mds_rpc(mdt_full_path, mdt_dir_name, import_part)
+        a_list, mdt_stat_latest_values = self.process_mdt_stat(mdt_full_path, mdt_dir_name, mdt_stat_so_far_dict, stats_part, md_stats_part)
         value_list += a_list
         self.mdt_stat_so_far = mdt_stat_latest_values
         self.metrics_list = value_list
