@@ -39,7 +39,8 @@ class StatProcess(Process):
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
                  write_thread_directory, over_head_write_thread_directory, ready_to_publish,
-                 cpu_mem_dict, buffer_value_dict, **kwargs):
+                 cpu_mem_dict, buffer_value_dict,
+                 client_ost_metrics_dict, client_mdt_metrics_dict, **kwargs):
         # threading.Thread.__init__(self)
         super(StatProcess, self).__init__(**kwargs)
         self._stop = Event()
@@ -65,6 +66,8 @@ class StatProcess(Process):
         self.ready_to_publish = ready_to_publish
         self.cpu_mem_dict = cpu_mem_dict
         self.buffer_value_dict = buffer_value_dict
+        self.client_ost_metrics_dict = client_ost_metrics_dict
+        self.client_mdt_metrics_dict = client_mdt_metrics_dict
 
     def run(self):
         self.collect_stat()
@@ -150,6 +153,7 @@ class StatProcess(Process):
         while 1:
             processing_start_date = datetime.now(tz=timezone.utc)
             processing_start_timestampt = datetime.timestamp(processing_start_date)
+            # processing_start_timestampt = time.time()
             # print("COLLECTING", transfer_id, processing_start_time)
 
             if self.is_transfer_done or self.stopped():
@@ -182,7 +186,7 @@ class StatProcess(Process):
                     else:
                         ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number = file_ost_path_info
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
-                    client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt))
+                    client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt), self.client_ost_metrics_dict.get(ost_dir_name))
 
                     file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
                     if file_mdt_path_info is None:
@@ -191,6 +195,7 @@ class StatProcess(Process):
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
                     client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
+                    # client_mdt_metrics_collector.collect_metrics(mdt_dir_name, int(processing_start_timestampt))
 
                     # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
                     # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
@@ -320,7 +325,9 @@ class StatProcess(Process):
             except:
                 print("EXITNG COLLECT STAT THREAD for {}".format(transfer_id))
                 traceback.print_exc()
-            processing_finish_time = time.time()
+            processing_finish_date = datetime.now(tz=timezone.utc)
+            processing_finish_time = datetime.timestamp(processing_finish_date)
+            # processing_finish_time = time.time()
             processing_time = processing_finish_time - processing_start_timestampt
             # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(global_vars.monitor_agent_pid,
             # #                                                                           global_vars.monitor_agent_process)
