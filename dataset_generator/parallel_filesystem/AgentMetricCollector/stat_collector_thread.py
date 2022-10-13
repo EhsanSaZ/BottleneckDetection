@@ -14,8 +14,10 @@ from google.protobuf.json_format import MessageToDict
 from google.protobuf.json_format import ParseDict
 from collectors.network_metric_collector_ss_v2 import NetworkMetricCollectorSS_V2
 from collectors.system_metric_collector import SystemMetricCollector
-from collectors.file_ost_path_info import FileOstPathInfo
-from collectors.file_mdt_path_info import FileMdtPathInfo
+# from collectors.file_ost_path_info import FileOstPathInfo
+from collectors.file_ost_path_info_v2 import FileOstPathInfoV2
+# from collectors.file_mdt_path_info import FileMdtPathInfo
+from collectors.file_mdt_path_info_v2 import FileMdtPathInfoV2
 from collectors.client_ost_metric_collector import ClientOstMetricCollector
 # from collectors.client_ost_metric_zmq_collector import ClientOstMetricZmqCollector
 from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
@@ -68,6 +70,10 @@ class StatProcess(Process):
         self.buffer_value_dict = buffer_value_dict
         self.client_ost_metrics_dict = client_ost_metrics_dict
         self.client_mdt_metrics_dict = client_mdt_metrics_dict
+        self.latest_file_name = None
+        self.latest_ost_path_output = None
+        self.latest_mdt_path_output = None
+        self.latest_file_mount_point = None
 
     def run(self):
         self.collect_stat()
@@ -98,7 +104,48 @@ class StatProcess(Process):
         system_output = res_parts[1]
         fd_output = res_parts[2]
         return network_output, system_output, fd_output
+    def run_ost_mdt_path_info_commands(self, pid,  lustre_mnt_point_list, fd_output=None):
+        seperator = '--result--'
+        command_seperator = '--command_result--'
+        if fd_output:
+            res = fd_output
+        else:
+            proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
+            # total 0
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 1 -> /dev/pts/98
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 2 -> /dev/pts/98
+            # lr-x------ 1 ehsansa sub102 64 Nov 22 14:09 3 -> /home/ehsansa/sample_text.txt
+            res = proc.communicate()[0]
+        res_parts = res.split("\n")
+        for line in res_parts:
+            if len(line.strip()) > 0:
+                for mnt_path in lustre_mnt_point_list:
+                    if mnt_path in line:
+                        # lr-x------ 1 ehsansa sub102 64 Nov 22 14:09 3 -> /home/ehsansa/sample_text.txt
+                        slash_index = line.rfind(">")
 
+                        file_name = line[slash_index + 1:].strip()
+                        first_slash_index = file_name.find("/")
+                        second_slash_index = file_name.find("/", first_slash_index + 1)
+                        file_mount_point = file_name[first_slash_index + 1: first_slash_index + second_slash_index]
+                        if self.latest_file_name != file_name:
+                            self.latest_file_name = file_name
+                            ost_path_info_cmd = "lfs getstripe {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/osc".format(file_name=file_name, seperator=seperator)
+                            mdt_path_info_cmd = "lfs getstripe -m {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/mdc/".format(file_name=file_name, seperator=seperator)
+                            all_commands = "{} ; echo {seperator}; {} ;".format(ost_path_info_cmd, mdt_path_info_cmd, seperator=command_seperator)
+
+                            proc = Popen(all_commands, shell=True, universal_newlines=True, stdout=PIPE)
+                            all_res = proc.communicate()[0]
+                            all_res_parts = all_res.split(command_seperator)
+                            # ost_path_output = all_res_parts[0]
+                            # mdt_path_output = all_res_parts[1]
+                            self.latest_ost_path_output = all_res_parts[0]
+                            self.latest_mdt_path_output = all_res_parts[1]
+                            self.latest_file_mount_point = file_mount_point
+                        return self.latest_ost_path_output, self.latest_mdt_path_output, self.latest_file_mount_point
+
+        return None, None, None
     def collect_stat(self):
         # import cProfile
         # import pstats, math
@@ -117,8 +164,10 @@ class StatProcess(Process):
 
         network_metrics_collector = NetworkMetricCollectorSS_V2(self.src_ip, self.src_port, self.dst_ip, self.dst_port, self.prefix)
         system_metrics_collector = SystemMetricCollector(self.prefix)
-        file_ost_path_info_extractor = FileOstPathInfo()
-        file_mdt_path_info_extractor = FileMdtPathInfo()
+        # file_ost_path_info_extractor = FileOstPathInfo()
+        file_ost_path_info_extractor = FileOstPathInfoV2()
+        # file_mdt_path_info_extractor = FileMdtPathInfo()
+        file_mdt_path_info_extractor = FileMdtPathInfoV2()
         client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
         # client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, self.client_ost_metric_backend_socket_name, self.prefix)
         client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
@@ -179,7 +228,11 @@ class StatProcess(Process):
                 network_metrics_collector.collect_metrics(from_string=network_output)
                 system_metrics_collector.collect_metrics(self.pid_str, target_process, from_string=system_output)
                 if is_parallel_file_system:
-                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path, from_string=fd_output)
+                    ost_path_output, mdt_path_output, file_mount_point = self.run_ost_mdt_path_info_commands(self.pid_str, self.file_path, fd_output=fd_output)
+                    # print(ost_path_output, mdt_path_output)
+
+                    # file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path, from_string=fd_output)
+                    file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(file_mount_point, from_string=ost_path_output)
                     if file_ost_path_info is None:
                         time.sleep(0.1)
                         continue
@@ -188,13 +241,15 @@ class StatProcess(Process):
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
                     client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt), self.client_ost_metrics_dict.get(ost_dir_name))
 
-                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
+                    # file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
+                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(file_mount_point, from_string=mdt_path_output)
                     if file_mdt_path_info is None:
                         continue
                     else:
                         mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
+                    client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name, self.client_mdt_metrics_dict.get(mdt_dir_name))
+                    # client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
                     # client_mdt_metrics_collector.collect_metrics(mdt_dir_name, int(processing_start_timestampt))
 
                     # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
