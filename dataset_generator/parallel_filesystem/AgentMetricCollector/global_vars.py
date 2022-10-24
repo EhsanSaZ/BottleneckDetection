@@ -32,3 +32,5 @@ system_buffer_value = Array('d', [0, 0, 0, 0, 0, 0])
 # system_buffer_value_dict = {"tcp_rcv_buffer_min": 0, "tcp_rcv_buffer_default": 0, "tcp_rcv_buffer_max": 0, "tcp_snd_buffer_min": 0, "tcp_snd_buffer_default": 0, "tcp_snd_buffer_max": 0}
 system_buffer_value_dict = manager.dict({"tcp_rcv_buffer_min": 0, "tcp_rcv_buffer_default": 0, "tcp_rcv_buffer_max": 0,
                             "tcp_snd_buffer_min": 0, "tcp_snd_buffer_default": 0, "tcp_snd_buffer_max": 0})
+client_ost_metrics_dict = manager.dict({})
+client_mdt_metrics_dict = manager.dict({})

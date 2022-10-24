@@ -56,12 +56,12 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
                    'src', "{}:{}".format(self.source_ip, self.source_port),
                    'dst', "{}:{}".format(self.destination_ip, self.destination_port)]
-        ss_proc = subprocess.Popen(comm_ss, stdout=subprocess.PIPE)
+        ss_proc = subprocess.Popen(comm_ss, universal_newlines=True, stdout=subprocess.PIPE)
         self.line_in_ss = str(ss_proc.stdout.read())
 
     def parse_output(self):
         if self.line_in_ss.count(self.source_ip) >= 1 and self.line_in_ss.count(self.destination_ip) >= 1:
-            parts = self.line_in_ss.split("\\n")
+            parts = self.line_in_ss.split("\n")
 
             for x in range(len(parts)):
                 if self.source_ip in parts[x] and self.source_port in parts[x] and self.destination_ip in parts[
@@ -155,11 +155,14 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
                             self.reord_seen = value - self.reord_seen_so_far
                             self.reord_seen_so_far = value
 
-    def collect_metrics(self):
-        self.collect_network_metrics()
+    def collect_metrics(self, from_string=None):
+        self.collect_network_metrics(from_string)
 
-    def collect_network_metrics(self):
-        self.execute_command()
+    def collect_network_metrics(self, from_string=None):
+        if from_string:
+            self.line_in_ss = from_string
+        else:
+            self.execute_command()
         self.parse_output()
         self.metrics_list = [str(self.total_rtt_value), str(self.total_pacing_rate),
                              str(self.total_cwnd_value), str(self.total_rto_value), str(self.byte_ack / (1024 * 1024)),

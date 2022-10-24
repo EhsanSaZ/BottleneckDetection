@@ -27,19 +27,25 @@ class ClientOstMetricCollector(AbstractCollector):
                                  "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
         self.seperator_string = '--result--'
 
-    def collect_metrics(self, ost_path, ost_dir_name):
-        self.process_ost_stat(ost_path, ost_dir_name, self.ost_stats_so_far)
+    def collect_metrics(self, ost_dir_name, time_stamp, from_dict=None):
+        self.process_ost_stat(ost_dir_name, self.ost_stats_so_far, from_dict)
 
-    def process_ost_stat(self, ost_path, ost_dir_name, ost_stat_so_far):
+    def process_ost_stat(self, ost_dir_name, ost_stat_so_far, from_dict):
         value_list = []
         # proc = Popen(['cat', ost_path + "/stats"], universal_newlines=True, stdout=PIPE)
         get_param_arg_stats = "osc." + ost_dir_name + ".stats"
         get_param_arg_rpc_stats = "osc." + ost_dir_name + ".rpc_stats"
-        cmd = "lctl get_param {get_param_arg_stats}; echo {seperator};lctl get_param {get_param_arg_rpc_stats}".format(get_param_arg_stats=get_param_arg_stats, seperator=self.seperator_string, get_param_arg_rpc_stats=get_param_arg_rpc_stats)
-        proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
-        # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
-        res = proc.communicate()[0]
-        res_parts = res.split(self.seperator_string)
+        if from_dict is None:
+            cmd = "lctl get_param {get_param_arg_stats}; echo {seperator};lctl get_param {get_param_arg_rpc_stats}".format(get_param_arg_stats=get_param_arg_stats, seperator=self.seperator_string, get_param_arg_rpc_stats=get_param_arg_rpc_stats)
+            proc = Popen(cmd, shell=True, universal_newlines=True, stdout=PIPE)
+            # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
+            res = proc.communicate()[0]
+            res_parts = res.split(self.seperator_string)
+            ost_stats_parts = res_parts[0].split("\n")
+            rpc_stats_part = res_parts[1].split("\n")
+        else:
+            ost_stats_parts = from_dict.get("stats").split("\n")
+            rpc_stats_part = from_dict.get("rpc_stats").split("\n")
         # snapshot_time             1637627183.394337 secs.usecs
         # req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
         # req_active                393906200 samples [reqs] 1 8243 1164349055 731470318467
@@ -56,7 +62,6 @@ class ClientOstMetricCollector(AbstractCollector):
         # ost_quotactl              1070893 samples [usec] 38 1131469 294654538 2901933400418
         # ldlm_cancel               31083060 samples [usec] 31 12008431 99565826195 17460575057288663
         # obd_ping                  43765 samples [usec] 52 130743 28356809 55768300189
-        ost_stats_parts = res_parts[0].split("\n")
         ost_stat_latest_values = {}
         for metric_line in ost_stats_parts:
             if len(metric_line.strip()) > 0 and "snapshot_time" not in metric_line and get_param_arg_stats not in metric_line:
@@ -98,7 +103,7 @@ class ClientOstMetricCollector(AbstractCollector):
         # get_param_arg = "osc." + ost_dir_name + ".rpc_stats"
         # proc = Popen(['lctl', 'get_param', get_param_arg], universal_newlines=True, stdout=PIPE)
         # res = proc.communicate()[0]
-        rpc_stats_part = res_parts[1].split("\n")
+
         # snapshot_time:         1638393148.677361 (secs.usecs)
         # read RPCs in flight:  0
         # write RPCs in flight: 0

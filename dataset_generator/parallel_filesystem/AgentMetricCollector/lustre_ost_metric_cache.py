@@ -49,7 +49,8 @@ class LustreOstMetricCache(Process):
                     ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
                     if ost_agent_address != "":
                         path = "obdfilter." + data["ost_dir_name"] + ".stats"
-                        response = requests.post(ost_agent_address + "lctl_get_param", json={"path": path})
+                        # response = requests.post(ost_agent_address + "lctl_get_param", json={"path": path})
+                        response = requests.post(ost_agent_address + "lctl_get_param", json={"path": data["ost_dir_name"]})
                         response_body = response.json()
                     else:
                         response_body = {"out_put": "", "error": "No address found for ost index {}".format(ost_number)}

@@ -3,15 +3,18 @@ import re
 
 
 class FileOstPathInfo:
-    def get_file_ost_path_info(self, pid, lustre_mnt_point_list):
+    def get_file_ost_path_info(self, pid, lustre_mnt_point_list, from_string=None):
         seperator_string = '--result--'
-        proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
-        # total 0
-        # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
-        # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 1 -> /dev/pts/98
-        # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 2 -> /dev/pts/98
-        # lr-x------ 1 ehsansa sub102 64 Nov 22 14:09 3 -> /home/ehsansa/sample_text.txt
-        res = proc.communicate()[0]
+        if from_string:
+            res = from_string
+        else:
+            proc = Popen(['ls', '-l', '/proc/' + str(int(pid.strip())) + '/fd/'], universal_newlines=True, stdout=PIPE)
+            # total 0
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 0 -> /dev/pts/98
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 1 -> /dev/pts/98
+            # lrwx------ 1 ehsansa sub102 64 Nov 22 13:48 2 -> /dev/pts/98
+            # lr-x------ 1 ehsansa sub102 64 Nov 22 14:09 3 -> /home/ehsansa/sample_text.txt
+            res = proc.communicate()[0]
 
         # print (res)
         res_parts = res.split("\n")
