@@ -225,6 +225,11 @@ message LustreOstMetrics {
   optional double remote_ost_write_bytes = 2;
 }
 
+message DTNLustreIoMetrics {
+  optional double dtn_lustre_read_bytes = 1;
+  optional double dtn_lustre_write_bytes = 2;
+}
+
 message Metrics{
   optional string timestamp = 1;
   optional NetworkMetrics network_metrics = 2;
@@ -234,7 +239,8 @@ message Metrics{
   optional ClientMdtMetrics client_mdt_metrics = 6;
   optional ResourceUsageMetrics resource_usage_metrics = 7;
   optional LustreOstMetrics  lustre_ost_metrics = 8;
-  optional int32 label_value = 9;
+  optional DTNLustreIoMetrics dtn_lustre_io_metrics = 9;
+  optional int32 label_value = 10;
 
 }
 

@@ -157,6 +157,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       proto3_optional :remote_ost_read_bytes, :double, 1
       proto3_optional :remote_ost_write_bytes, :double, 2
     end
+    add_message "DTNLustreIoMetrics" do
+      proto3_optional :dtn_lustre_read_bytes, :double, 1
+      proto3_optional :dtn_lustre_write_bytes, :double, 2
+    end
     add_message "Metrics" do
       proto3_optional :timestamp, :string, 1
       proto3_optional :network_metrics, :message, 2, "NetworkMetrics"
@@ -166,7 +170,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       proto3_optional :client_mdt_metrics, :message, 6, "ClientMdtMetrics"
       proto3_optional :resource_usage_metrics, :message, 7, "ResourceUsageMetrics"
       proto3_optional :lustre_ost_metrics, :message, 8, "LustreOstMetrics"
-      proto3_optional :label_value, :int32, 9
+      proto3_optional :dtn_lustre_io_metrics, :message, 9, "DTNLustreIoMetrics"
+      proto3_optional :label_value, :int32, 10
     end
     add_message "MonitoringLog" do
       proto3_optional :transfer_ID, :string, 2
@@ -191,6 +196,7 @@ ClientOstMetrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Cli
 ClientMdtMetrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("ClientMdtMetrics").msgclass
 ResourceUsageMetrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("ResourceUsageMetrics").msgclass
 LustreOstMetrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("LustreOstMetrics").msgclass
+DTNLustreIoMetrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("DTNLustreIoMetrics").msgclass
 Metrics = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("Metrics").msgclass
 MonitoringLog = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("MonitoringLog").msgclass
 PublisherPayload = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("PublisherPayload").msgclass
