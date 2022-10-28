@@ -34,3 +34,5 @@ system_buffer_value_dict = manager.dict({"tcp_rcv_buffer_min": 0, "tcp_rcv_buffe
                             "tcp_snd_buffer_min": 0, "tcp_snd_buffer_default": 0, "tcp_snd_buffer_max": 0})
 client_ost_metrics_dict = manager.dict({})
 client_mdt_metrics_dict = manager.dict({})
+client_io_metrics_dict = manager.dict({})
+dtn_io_metrics_dict = manager.dict({"dtn_lustre_read_bytes": 0.0, "dtn_lustre_write_bytes": 0.0})
