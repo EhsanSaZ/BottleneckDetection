@@ -15,6 +15,7 @@ class Config:
     parallel_metric_collector_local_port_range = [40000, 41000]
     parallel_metric_collector_peer_ip_range = ["134.197.94.169", "127.0.0.1", "127.0.1.1"]#["10.10.2.2", "10.10.2.3", "10.10.2.4", "10.10.2.5", "10.10.2.6", "10.10.2.7", "10.10.2.8", "10.10.2.9", "10.10.2.10", "10.10.2.11"] #
     parallel_metric_collector_peer_port_range = [50000, 51000]
+    lustre_NIC_name = "enp6s0f1"
     parallel_metric_collector_drive_name = "sda"
 
     parallel_metric_collector_src_ip = "10.10.2.1"

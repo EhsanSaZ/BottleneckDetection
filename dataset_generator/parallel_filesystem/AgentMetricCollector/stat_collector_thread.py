@@ -42,7 +42,8 @@ class StatProcess(Process):
                  mdt_parent_path, label_value, is_sender,
                  write_thread_directory, over_head_write_thread_directory, ready_to_publish,
                  cpu_mem_dict, buffer_value_dict,
-                 client_ost_metrics_dict, client_mdt_metrics_dict, dtn_io_metrics_dict, **kwargs):
+                 client_ost_metrics_dict, client_mdt_metrics_dict,
+                 dtn_io_metrics_dict, system_lustre_nic_io_dict, **kwargs):
         # threading.Thread.__init__(self)
         super(StatProcess, self).__init__(**kwargs)
         self._stop = Event()
@@ -71,6 +72,7 @@ class StatProcess(Process):
         self.client_ost_metrics_dict = client_ost_metrics_dict
         self.client_mdt_metrics_dict = client_mdt_metrics_dict
         self.dtn_io_metrics_dict = dtn_io_metrics_dict
+        self.system_lustre_nic_io_dict = system_lustre_nic_io_dict
         self.latest_file_name = None
         self.latest_ost_path_output = None
         self.latest_mdt_path_output = None
@@ -337,6 +339,8 @@ class StatProcess(Process):
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
                     for key in self.dtn_io_metrics_dict.keys():
                         metrics += "," + self.dtn_io_metrics_dict[key]
+                    for key in self.system_lustre_nic_io_dict.keys():
+                        metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + self.label_value
                     msg = "{time} {tid} {sender} {metrics}".format(time=ts, tid=transfer_id, sender=self.is_sender, metrics=metrics)
                     metric_publisher_socket.send_string(msg)

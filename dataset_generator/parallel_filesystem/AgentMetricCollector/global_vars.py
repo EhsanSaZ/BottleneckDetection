@@ -20,6 +20,7 @@ should_run.value = False
 system_memory_usage = Value('d', -1)
 system_cpu_usage = Value('d', -1)
 system_cpu_mem_usage = Array('d', [-1, -1])
+system_lustre_nic_io_dict = manager.dict({"nic_send_bytes": 0.0, "nic_receive_bytes": 0.0})
 # system_cpu_mem_usage = manager.list(range(2))
 
 # system_cpu_mem_usage_dict = {"system_cpu_percent": -1, "system_memory_percent": -1}

@@ -11,10 +11,10 @@ from multiprocessing import Process
 
 class globalMetricsMonitor(Process):
     def __init__(self, sleep_time, system_cpu_mem_usage_list, system_cpu_mem_usage_dict,
-                 system_buffer_value_list, system_buffer_value_dict, client_io_metrics_dict, dtn_io_metrics_dict, **kwargs):
+                 system_buffer_value_list, system_buffer_value_dict, client_io_metrics_dict, dtn_io_metrics_dict, lustre_nic_name, system_lustre_nic_io_dict, **kwargs):
         super(globalMetricsMonitor, self).__init__(**kwargs)
         self.sleep_time = sleep_time
-        self.resource_usage_collector = ResourceUsageCollector()
+        self.resource_usage_collector = ResourceUsageCollector(lustre_nic_name)
         self.buffer_value_collector = BufferValueStatCollector()
         self.dtn_io_metric_collector = DtnIoMetricsCollector()
         self.system_cpu_mem_usage_list = system_cpu_mem_usage_list
@@ -23,6 +23,7 @@ class globalMetricsMonitor(Process):
         self.system_buffer_value_dict = system_buffer_value_dict
         self.client_io_metrics_dict = client_io_metrics_dict
         self.dtn_io_metrics_dict = dtn_io_metrics_dict
+        self.system_lustre_nic_io_dict = system_lustre_nic_io_dict
 
     def run(self):
         # global system_monitoring_global_vars.system_buffer_value, system_monitoring_global_vars.system_cpu_usage, system_monitoring_global_vars.system_memory_usage
@@ -34,6 +35,10 @@ class globalMetricsMonitor(Process):
             # system_monitoring_global_vars.system_cpu_mem_usage_dict = self.resource_usage_collector.get_metrics_dict()
             self.system_cpu_mem_usage_dict["system_cpu_percent"] = self.resource_usage_collector.get_metrics_dict()["system_cpu_percent"]
             self.system_cpu_mem_usage_dict["system_memory_percent"] = self.resource_usage_collector.get_metrics_dict()["system_memory_percent"]
+
+            self.system_lustre_nic_io_dict["nic_send_bytes"] = self.resource_usage_collector.get_metrics_dict()["nic_send_bytes"]
+            self.system_lustre_nic_io_dict["nic_receive_bytes"] = self.resource_usage_collector.get_metrics_dict()["nic_receive_bytes"]
+
             # # system_monitoring_global_vars.system_cpu_mem_usage_proto_message.CopyFrom(self.resource_usage_collector.get_proto_message())
             # # system_monitoring_global_vars.system_cpu_usage = self.resource_usage_collector.get_metrics_list()[0]
             # # system_monitoring_global_vars.system_memory_usage = self.resource_usage_collector.get_metrics_list()[1]

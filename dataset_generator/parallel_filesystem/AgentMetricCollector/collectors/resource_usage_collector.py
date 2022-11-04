@@ -10,18 +10,36 @@ except ModuleNotFoundError:
 
 
 class ResourceUsageCollector(AbstractCollector):
-    def __init__(self, prefix=""):
+    def __init__(self, lustre_nic_name, prefix=""):
         super().__init__(prefix)
-        self.metrics_datatypes = {1: 'string', 2: 'string'}
-        self.metrics_id_to_attr = {1: 'system_cpu_percent', 2: 'system_memory_percent'}
+        self.lustre_nic_name = lustre_nic_name
+        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4:'string'}
+        self.metrics_id_to_attr = {1: 'system_cpu_percent', 2: 'system_memory_percent', 3:'nic_send_bytes', 4:'nic_receive_bytes'}
+        self.nic_io_sofar = None
+        self.is_first_time = True
 
     def collect_metrics(self):
-        self.get_cpu_mem()
+        self.get_cpu_mem_nic()
 
-    def get_cpu_mem(self):
+    def get_cpu_mem_nic(self):
         value_list = []
         value_list.append(str(psutil.cpu_percent()))
         value_list.append(str(psutil.virtual_memory().percent))
+
+        nic_io_latest = psutil.net_io_counters(pernic=True).get(self.lustre_nic_name) or None
+        if nic_io_latest:
+            if self.is_first_time:
+                value_list.append('0')
+                value_list.append('0')
+                self.nic_io_sofar = nic_io_latest
+                self.is_first_time = False
+            else:
+                value_list.append(str(nic_io_latest[0] - self.nic_io_sofar[0]))
+                value_list.append(str(nic_io_latest[1] - self.nic_io_sofar[1]))
+                self.nic_io_sofar = nic_io_latest
+        else:
+            value_list.append('0')
+            value_list.append('0')
         self.metrics_list = value_list
         self.metrics_list_to_str()
         self.metrics_list_to_dict()

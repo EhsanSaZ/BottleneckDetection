@@ -218,6 +218,8 @@ message ResourceUsageMetrics{
   // 1 - 2 are node cpu and memory cpu usage
   optional float system_cpu_percent = 1;
   optional float system_memory_percent = 2;
+  optional double nic_send_bytes = 3;
+  optional double nic_receive_bytes = 4;
 }
 message LustreOstMetrics {
   // 1 - 2 are remote ost read and write bytes

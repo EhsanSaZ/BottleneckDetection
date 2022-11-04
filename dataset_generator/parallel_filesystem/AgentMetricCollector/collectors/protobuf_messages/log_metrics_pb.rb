@@ -152,6 +152,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "ResourceUsageMetrics" do
       proto3_optional :system_cpu_percent, :float, 1
       proto3_optional :system_memory_percent, :float, 2
+      proto3_optional :nic_send_bytes, :double, 3
+      proto3_optional :nic_receive_bytes, :double, 4
     end
     add_message "LustreOstMetrics" do
       proto3_optional :remote_ost_read_bytes, :double, 1
