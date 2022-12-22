@@ -16,7 +16,7 @@ max_thread_name = 17
 # if not src_path.endswith('/'):
 #     src_path = src_path + "/"
 
-
+Gbps = 1024 * 1024 * 1024 / 8
 class ReadThread(Thread):
 
     def __init__(self, filename, src_path):
@@ -34,10 +34,19 @@ class ReadThread(Thread):
                 proc = subprocess.run(['vmtouch -ve ' + str(file_)], stdout=subprocess.PIPE, universal_newlines=True, shell=True)
                 print("Reading " + file_)
                 with open(file_, 'rb', buffering=0) as f:
+                    t1 = -1
+                    read_size = 0
                     while True:
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
                             break
+                        now = time.time()
+                        read_size += BUFFER_SIZE
+                        if now - t1 >= 1:
+                            print("throughput is {} Gbps/s".format((read_size/Gbps) / (now - t1)))
+                            t1 = time.time()
+                            read_size = 0
+
                 # file_count += 1
                 # if file_count == len(all_files):
                 #     print(" Start a new round")
