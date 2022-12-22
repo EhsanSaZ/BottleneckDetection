@@ -346,26 +346,43 @@ class StatProcess(Process):
                     metric_publisher_socket.send_string(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
-                    output_string = str(time_second)
-                    for item in network_metrics_collector.get_metrics_list():
-                        output_string += "," + str(item)
-                    for item in system_metrics_collector.get_metrics_list():
-                        output_string += "," + str(item)
-                    # for item in system_monitoring_global_vars.system_buffer_value:
+                    # output_string = str(time_second)
+                    # for item in network_metrics_collector.get_metrics_list():
                     #     output_string += "," + str(item)
-                    # ost_value_list are metrics with index 79-95 in csv
-                    for item in client_ost_metrics_collector.get_metrics_list():
-                        output_string += "," + str(item)
-                    # # values with index 112-147
-                    for item in client_mdt_metrics_collector.get_metrics_list():
-                        output_string += "," + str(item)
-                    # for item in system_monitoring_global_vars.system_cpu_mem_usage:
+                    # for item in system_metrics_collector.get_metrics_list():
                     #     output_string += "," + str(item)
-                    # for item in lustre_ost_metrics_http_collector.get_metrics_list():
+                    # # for item in system_monitoring_global_vars.system_buffer_value:
+                    # #     output_string += "," + str(item)
+                    # # ost_value_list are metrics with index 79-95 in csv
+                    # for item in client_ost_metrics_collector.get_metrics_list():
                     #     output_string += "," + str(item)
-                    for item in lustre_ost_metrics_zmq_collector.get_metrics_list():
-                        output_string += "," + str(item)
-                    output_string += "," + str(self.label_value) + "\n"
+                    # # # values with index 112-147
+                    # for item in client_mdt_metrics_collector.get_metrics_list():
+                    #     output_string += "," + str(item)
+                    # # for item in system_monitoring_global_vars.system_cpu_mem_usage:
+                    # #     output_string += "," + str(item)
+                    # # for item in lustre_ost_metrics_http_collector.get_metrics_list():
+                    # #     output_string += "," + str(item)
+                    # for item in lustre_ost_metrics_zmq_collector.get_metrics_list():
+                    #     output_string += "," + str(item)
+                    # output_string += "," + str(self.label_value) + "\n"
+                    # main_output_string += output_string
+                    metrics = ""
+                    metrics += network_metrics_collector.get_metrics_str()
+                    metrics += "," + system_metrics_collector.get_metrics_str()
+                    for key in self.buffer_value_dict.keys():
+                        metrics += "," + self.buffer_value_dict[key]
+                    metrics += "," + client_ost_metrics_collector.get_metrics_str()
+                    metrics += "," + client_mdt_metrics_collector.get_metrics_str()
+                    for key in self.cpu_mem_dict.keys():
+                        metrics += "," + self.cpu_mem_dict[key]
+                    metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
+                    for key in self.dtn_io_metrics_dict.keys():
+                        metrics += "," + self.dtn_io_metrics_dict[key]
+                    for key in self.system_lustre_nic_io_dict.keys():
+                        metrics += "," + self.system_lustre_nic_io_dict[key]
+                    metrics += "," + self.label_value + "\n"
+                    output_string = "{},{}".format(str(time_second), metrics)
                     main_output_string += output_string
                     if epoc_count % 5 == 0:
                         print("transferring file.... ", epoc_count, "label: ", self.label_value)
