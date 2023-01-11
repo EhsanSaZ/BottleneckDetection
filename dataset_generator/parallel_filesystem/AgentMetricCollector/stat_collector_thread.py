@@ -376,11 +376,11 @@ class StatProcess(Process):
                     metrics += "," + client_mdt_metrics_collector.get_metrics_str()
                     for key in self.cpu_mem_dict.keys():
                         metrics += "," + self.cpu_mem_dict[key]
+                    for key in self.system_lustre_nic_io_dict.keys():
+                        metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
                     for key in self.dtn_io_metrics_dict.keys():
                         metrics += "," + self.dtn_io_metrics_dict[key]
-                    for key in self.system_lustre_nic_io_dict.keys():
-                        metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + self.label_value + "\n"
                     output_string = "{},{}".format(str(time_second), metrics)
                     main_output_string += output_string
