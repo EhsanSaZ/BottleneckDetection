@@ -172,7 +172,7 @@ ost_metric_cache_process.start()
 if run_java_app == "1":
     # pass
     file_transfer_thread = FileTransferThread(str(0), java_sender_app_path, dst_ip, port_number, src_path,
-                                              global_vars.label_value,
+                                              global_vars.global_dict["label_value"],
                                               src_ip, local_port_number)
     file_transfer_thread.start()
     file_transfer_thread.join()
