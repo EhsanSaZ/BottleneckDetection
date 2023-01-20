@@ -18,7 +18,7 @@ class DtnIoMetricsCollector(AbstractCollector):
         self.metrics_id_to_attr = {1: 'dtn_lustre_read_bytes', 2: 'dtn_lustre_write_bytes'}
         self.dtn_io_so_far = {"dtn_lustre_read_bytes": 0.0, "dtn_lustre_write_bytes": 0.0}
         self.seperator_string = '--result--'
-        self.first_time = False
+        self.first_time = True
     def collect_metrics(self, from_dict=None):
         self.process_client_io_stat(from_dict)
 
@@ -39,8 +39,8 @@ class DtnIoMetricsCollector(AbstractCollector):
                         client_io_latest_value[tokens[0]] = float(tokens[len(tokens) - 1])
             dtn_io_latest_value["dtn_lustre_read_bytes"] += client_io_latest_value.get("read_bytes") or 0
             dtn_io_latest_value["dtn_lustre_write_bytes"] += client_io_latest_value.get("write_bytes") or 0
-            if self.first_time is False:
-                self.first_time = True
+            if self.first_time is True:
+                self.first_time = False
         if not self.first_time:
             value_list.append(float((dtn_io_latest_value.get("dtn_lustre_read_bytes") or 0) - (self.dtn_io_so_far.get("dtn_lustre_read_bytes") or 0)))
             value_list.append(float((dtn_io_latest_value.get("dtn_lustre_write_bytes") or 0) - (self.dtn_io_so_far.get("dtn_lustre_write_bytes") or 0)))
