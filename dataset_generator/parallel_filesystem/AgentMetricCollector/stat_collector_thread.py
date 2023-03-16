@@ -93,20 +93,17 @@ class StatProcess(Process):
         command_seperator = '--command_result--'
         network_metrics_command = "ss -it state ESTABLISHED src {}:{} dst {}:{}".format(self.src_ip, self.src_port,
                                                                                         self.dst_ip, self.dst_port)
-        system_metrics_command = "cat /proc/{pid}/io; echo {seperator}; cat /proc/{pid}/stat".format(pid=self.pid_str,
-                                                                                                     seperator=seperator)
+        # system_metrics_command = "cat /proc/{pid}/io; echo {seperator}; cat /proc/{pid}/stat".format(pid=self.pid_str,
+        #                                                                                              seperator=seperator)
         read_fd_command = "ls -l /proc/{pid}/fd/".format(pid=self.pid_str)
-        all_commands = "{} ; echo {seperator}; {} ; echo {seperator}; {}".format(network_metrics_command,
-                                                                                 system_metrics_command,
-                                                                                 read_fd_command,
-                                                                                 seperator=command_seperator)
+        all_commands = "{} ; echo {seperator}; {}".format(network_metrics_command,read_fd_command, seperator=command_seperator)
         proc = Popen(all_commands, shell=True, universal_newlines=True, stdout=PIPE)
         res = proc.communicate()[0]
         res_parts = res.split(command_seperator)
         network_output = res_parts[0]
-        system_output = res_parts[1]
-        fd_output = res_parts[2]
-        return network_output, system_output, fd_output
+        # system_output = res_parts[1]
+        fd_output = res_parts[1]
+        return network_output, fd_output
     def run_ost_mdt_path_info_commands(self, pid,  lustre_mnt_point_list, fd_output=None):
         seperator = '--result--'
         command_seperator = '--command_result--'
@@ -135,8 +132,8 @@ class StatProcess(Process):
                         if self.latest_file_name != file_name:
                             self.latest_file_name = file_name
                             ost_path_info_cmd = "lfs getstripe {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/osc".format(file_name=file_name, seperator=seperator)
-                            mdt_path_info_cmd = "lfs getstripe -m {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/mdc/".format(file_name=file_name, seperator=seperator)
-                            all_commands = "{} ; echo {seperator}; {} ;".format(ost_path_info_cmd, mdt_path_info_cmd, seperator=command_seperator)
+                            # mdt_path_info_cmd = "lfs getstripe -m {file_name}; echo {seperator}; ls -l /sys/kernel/debug/lustre/mdc/".format(file_name=file_name, seperator=seperator)
+                            all_commands = "{} ;".format(ost_path_info_cmd, seperator=command_seperator)
 
                             proc = Popen(all_commands, shell=True, universal_newlines=True, stdout=PIPE)
                             all_res = proc.communicate()[0]
@@ -144,11 +141,11 @@ class StatProcess(Process):
                             # ost_path_output = all_res_parts[0]
                             # mdt_path_output = all_res_parts[1]
                             self.latest_ost_path_output = all_res_parts[0]
-                            self.latest_mdt_path_output = all_res_parts[1]
+                            # self.latest_mdt_path_output = all_res_parts[1]
                             self.latest_file_mount_point = file_mount_point
-                        return self.latest_ost_path_output, self.latest_mdt_path_output, self.latest_file_mount_point
+                        return self.latest_ost_path_output, self.latest_file_mount_point
 
-        return None, None, None
+        return None, None
     def collect_stat(self):
         # import cProfile
         # import pstats, math
@@ -166,14 +163,14 @@ class StatProcess(Process):
                 is_parallel_file_system = True
 
         network_metrics_collector = NetworkMetricCollectorSS_V2(self.src_ip, self.src_port, self.dst_ip, self.dst_port, self.prefix)
-        system_metrics_collector = SystemMetricCollector(self.prefix)
+        # system_metrics_collector = SystemMetricCollector(self.prefix)
         # file_ost_path_info_extractor = FileOstPathInfo()
         file_ost_path_info_extractor = FileOstPathInfoV2()
         # file_mdt_path_info_extractor = FileMdtPathInfo()
         file_mdt_path_info_extractor = FileMdtPathInfoV2()
         client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
         # client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, self.client_ost_metric_backend_socket_name, self.prefix)
-        client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
+        # client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
         # client_mdt_metrics_collector = ClientMdtMetricZmqCollector(self.context, self.client_mdt_metric_backend_socket_name, self.prefix)
         # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
         lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.context, self.ost_metric_backend_socket_name, self.prefix)
@@ -227,11 +224,11 @@ class StatProcess(Process):
                     # Send a request to the realtime detection service to add this new transfer
                 time_diff += 1
                 # epoc_time += 1
-                network_output, system_output, fd_output = self.run_monitor_commands()
+                network_output, fd_output = self.run_monitor_commands()
                 network_metrics_collector.collect_metrics(from_string=network_output)
-                system_metrics_collector.collect_metrics(self.pid_str, target_process, from_string=system_output)
+                # system_metrics_collector.collect_metrics(self.pid_str, target_process, from_string=system_output)
                 if is_parallel_file_system:
-                    ost_path_output, mdt_path_output, file_mount_point = self.run_ost_mdt_path_info_commands(self.pid_str, self.file_path, fd_output=fd_output)
+                    ost_path_output, file_mount_point = self.run_ost_mdt_path_info_commands(self.pid_str, self.file_path, fd_output=fd_output)
                     # print(ost_path_output, mdt_path_output)
 
                     # file_ost_path_info = file_ost_path_info_extractor.get_file_ost_path_info(self.pid_str, self.file_path, from_string=fd_output)
@@ -245,13 +242,13 @@ class StatProcess(Process):
                     client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt), self.client_ost_metrics_dict.get(ost_dir_name))
 
                     # file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
-                    file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(file_mount_point, from_string=mdt_path_output)
-                    if file_mdt_path_info is None:
-                        continue
-                    else:
-                        mdt_kernel_path, mdt_dir_name = file_mdt_path_info
+                    # file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(file_mount_point, from_string=mdt_path_output)
+                    # if file_mdt_path_info is None:
+                    #     continue
+                    # else:
+                    #     mdt_kernel_path, mdt_dir_name = file_mdt_path_info
                     # print(mdt_kernel_path, mdt_dir_name)
-                    client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name, self.client_mdt_metrics_dict.get(mdt_dir_name))
+                    # client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name, self.client_mdt_metrics_dict.get(mdt_dir_name))
                     # client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
                     # client_mdt_metrics_collector.collect_metrics(mdt_dir_name, int(processing_start_timestampt))
 
@@ -268,12 +265,12 @@ class StatProcess(Process):
                     # print(transfer_id)
                     metrics_data = {"time_stamp": str(time_second)}
                     metrics_data.update(network_metrics_collector.get_metrics_dict())
-                    metrics_data.update(system_metrics_collector.get_metrics_dict())
+                    # metrics_data.update(system_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
                     # for key in system_monitoring_global_vars.system_buffer_value_dict.keys():
                     #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_buffer_value_dict[key]
                     metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
-                    metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
+                    # metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
                     # for key in system_monitoring_global_vars.system_cpu_mem_usage_dict.keys():
                     #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
@@ -329,16 +326,16 @@ class StatProcess(Process):
                     ts = datetime.fromtimestamp(float(processing_start_timestampt), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
-                    metrics += "," + system_metrics_collector.get_metrics_str()
+                    # metrics += "," + system_metrics_collector.get_metrics_str()
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
-                    metrics += "," + client_mdt_metrics_collector.get_metrics_str()
-                    for key in self.cpu_mem_dict.keys():
-                        metrics += "," + self.cpu_mem_dict[key]
+                    # metrics += "," + client_mdt_metrics_collector.get_metrics_str()
+                    # for key in self.cpu_mem_dict.keys():
+                    #     metrics += "," + self.cpu_mem_dict[key]
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
-                    for key in self.dtn_io_metrics_dict.keys():
-                        metrics += "," + self.dtn_io_metrics_dict[key]
+                    # for key in self.dtn_io_metrics_dict.keys():
+                    #     metrics += "," + self.dtn_io_metrics_dict[key]
                     for key in self.system_lustre_nic_io_dict.keys():
                         metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + self.label_value
@@ -369,18 +366,18 @@ class StatProcess(Process):
                     # main_output_string += output_string
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
-                    metrics += "," + system_metrics_collector.get_metrics_str()
+                    # metrics += "," + system_metrics_collector.get_metrics_str()
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
-                    metrics += "," + client_mdt_metrics_collector.get_metrics_str()
-                    for key in self.cpu_mem_dict.keys():
-                        metrics += "," + self.cpu_mem_dict[key]
+                    # metrics += "," + client_mdt_metrics_collector.get_metrics_str()
+                    # for key in self.cpu_mem_dict.keys():
+                    #     metrics += "," + self.cpu_mem_dict[key]
                     for key in self.system_lustre_nic_io_dict.keys():
                         metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
-                    for key in self.dtn_io_metrics_dict.keys():
-                        metrics += "," + self.dtn_io_metrics_dict[key]
+                    # for key in self.dtn_io_metrics_dict.keys():
+                    #     metrics += "," + self.dtn_io_metrics_dict[key]
                     metrics += "," + self.label_value + "\n"
                     output_string = "{},{}".format(str(time_second), metrics)
                     main_output_string += output_string

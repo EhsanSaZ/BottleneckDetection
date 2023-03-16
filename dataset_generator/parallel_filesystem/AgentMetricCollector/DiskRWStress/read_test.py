@@ -17,8 +17,9 @@ max_thread_name = 17
 #     src_path = src_path + "/"
 
 Gbps = 1024 * 1024 * 1024 / 8
-class ReadThread(Thread):
 
+read_size = 0
+class ReadThread(Thread):
     def __init__(self, filename, src_path):
         Thread.__init__(self)
         self.folder_name = filename
@@ -29,23 +30,19 @@ class ReadThread(Thread):
         random.shuffle(all_files)
         # file_count = 0
         # proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
+        # for file_ in all_files:
+        #     subprocess.run(['vmtouch -ve ' + str(file_)], stdout=subprocess.PIPE, universal_newlines=True, shell=True)
+        #     print("VMTouch ", file_)
         while True:
             for file_ in all_files:
-                proc = subprocess.run(['vmtouch -ve ' + str(file_)], stdout=subprocess.PIPE, universal_newlines=True, shell=True)
+                subprocess.run(['vmtouch -ve ' + str(file_)], stdout=subprocess.PIPE, universal_newlines=True, shell=True)
                 print("Reading " + file_)
-                with open(file_, 'rb', buffering=0) as f:
-                    t1 = -1
-                    read_size = 0
+                with open(file_, 'rb') as f:
                     while True:
                         bytes_read = f.read(BUFFER_SIZE)
                         if not bytes_read:
                             break
-                        now = time.time()
-                        read_size += BUFFER_SIZE
-                        if now - t1 >= 1:
-                            print("throughput is {} Gbps/s".format((read_size/Gbps) / (now - t1)))
-                            t1 = time.time()
-                            read_size = 0
+                        read_size += bytes_read
 
                 # file_count += 1
                 # if file_count == len(all_files):
@@ -53,6 +50,16 @@ class ReadThread(Thread):
                 #     file_count = 0
                 #     proc = subprocess.run(['sudo ./clearCacheScript.sh'], universal_newlines=True, shell=True)
 
+
+class monitor(Thread):
+    global read_size
+    def run(self):
+        current_read = 0
+        while True:
+            throughput = (read_size - current_read)/Gbps
+            print("throughput is {}".format(throughput))
+            current_read = read_size
+            time.sleep(1)
 
 src_path = str(sys.argv[1])
 thread_number = int(sys.argv[2])
@@ -62,11 +69,13 @@ if not src_path.endswith('/'):
 
 start_time = time.time()
 threads = []
+
 for x in range(thread_number):
     new_thread = ReadThread(str((x+1) % max_thread_name), src_path)
     new_thread.start()
     threads.append(new_thread)
-
+m_thread = monitor()
+m_thread.start()
 for t in threads:
     t.join()
 

@@ -144,8 +144,8 @@ global_metrics_collector_process.start()
 global_client_ost_metrics_collector_process = LustreClientOstMetricSharedMemCache(global_vars.client_ost_metrics_dict, global_vars.client_io_metrics_dict, 1)
 global_client_ost_metrics_collector_process.start()
 
-global_client_mdt_metrics_collector_process = LustreClientMdtMetricSharedMemCache(global_vars.client_mdt_metrics_dict, 1)
-global_client_mdt_metrics_collector_process.start()
+# global_client_mdt_metrics_collector_process = LustreClientMdtMetricSharedMemCache(global_vars.client_mdt_metrics_dict, 1)
+# global_client_mdt_metrics_collector_process.start()
 
 transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, ost_rep_backend_socket_name,

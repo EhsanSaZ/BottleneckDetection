@@ -43,15 +43,20 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         self.source_port = source_port
         self.destination_ip = destination_ip
         self.destination_port = destination_port
-        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
-                                  7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
-                                  13: 'string', 14: 'string', 15: 'string', 16: 'string'}
-        self.metrics_id_to_attr = {1: 'avg_rtt_value', 2: 'pacing_rate', 3: 'cwnd_rate',
-                                   4: 'avg_retransmission_timeout_value',
-                                   5: 'byte_ack', 6: 'seg_out', 7: 'retrans', 8: 'mss_value', 9: 'ssthresh_value',
-                                   10: 'segs_in', 11: 'avg_send_value', 12: 'unacked_value', 13: 'rcv_space',
-                                   14: 'send_buffer_value', 15: 'avg_dsack_dups_value', 16: 'avg_reord_seen'}
+        # self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
+        #                           7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
+        #                           13: 'string', 14: 'string', 15: 'string', 16: 'string'}
+        # self.metrics_id_to_attr = {1: 'avg_rtt_value', 2: 'pacing_rate', 3: 'cwnd_rate',
+        #                            4: 'avg_retransmission_timeout_value',
+        #                            5: 'byte_ack', 6: 'seg_out', 7: 'retrans', 8: 'mss_value', 9: 'ssthresh_value',
+        #                            10: 'segs_in', 11: 'avg_send_value', 12: 'unacked_value', 13: 'rcv_space',
+        #                            14: 'send_buffer_value', 15: 'avg_dsack_dups_value', 16: 'avg_reord_seen'}
 
+        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string'}
+        self.metrics_id_to_attr = {1: 'avg_rtt_value',
+                                   2: 'segs_in',
+                                   3: 'seg_out',
+                                   4: 'retrans'}
     def execute_command(self):
         comm_ss = ['ss', '-t', '-i', 'state', 'ESTABLISHED',
                    'src', "{}:{}".format(self.source_ip, self.source_port),
@@ -86,33 +91,33 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
                             # value = float(metrics_parts[y][s_index+1:])
                             # self.data_segs_out=(value-data_seg_out_so_far)
                             # self.data_seg_out_so_far = value
-                        elif re.search(r'\brto\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.total_rto_value = value
+                        # elif re.search(r'\brto\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.total_rto_value = value
                         elif re.search(r'\brtt\b', metrics_parts[y]):
                             s_index = metrics_parts[y].find(":")
                             e_index = metrics_parts[y].find("/")
                             value = float(metrics_parts[y][s_index + 1:e_index])
                             self.total_rtt_value = value
-                        elif re.search(r'\bmss\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
+                        # elif re.search(r'\bmss\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
                             # print("value ",value)
-                            self.total_mss_value = value
-                        elif re.search(r'\bcwnd\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.total_cwnd_value = value
-                        elif re.search(r'\bssthresh\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.total_ssthresh_value = value
-                        elif re.search(r'\bbytes_acked\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.byte_ack = (value - self.byte_ack_so_far)
-                            self.byte_ack_so_far = value
+                            # self.total_mss_value = value
+                        # elif re.search(r'\bcwnd\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.total_cwnd_value = value
+                        # elif re.search(r'\bssthresh\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.total_ssthresh_value = value
+                        # elif re.search(r'\bbytes_acked\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.byte_ack = (value - self.byte_ack_so_far)
+                        #     self.byte_ack_so_far = value
                         elif re.search(r'\bsegs_out\b', metrics_parts[y]):
                             s_index = metrics_parts[y].find(":")
                             value = float(metrics_parts[y][s_index + 1:])
@@ -125,35 +130,35 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
                             value = float(metrics_parts[y][s_index + 1:])
                             self.segs_in = (value - self.segs_in_sofar)
                             self.segs_in_sofar = value
-                        elif re.search(r'\bsend\b', metrics_parts[y]):
-                            value = metrics_parts[y + 1].strip()
-                            self.send = value
-                        elif re.search(r'\bpacing_rate\b', metrics_parts[y]):
-                            value = metrics_parts[y + 1].strip()
-                            self.total_pacing_rate = value
-                        elif re.search(r'\bunacked\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.unacked = value
+                        # elif re.search(r'\bsend\b', metrics_parts[y]):
+                        #     value = metrics_parts[y + 1].strip()
+                        #     self.send = value
+                        # elif re.search(r'\bpacing_rate\b', metrics_parts[y]):
+                        #     value = metrics_parts[y + 1].strip()
+                        #     self.total_pacing_rate = value
+                        # elif re.search(r'\bunacked\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.unacked = value
                         elif re.search(r'\bretrans\b', metrics_parts[y]):
                             s_index = metrics_parts[y].find("/")
                             value = float(metrics_parts[y][s_index + 1:])
                             self.retrans = value - self.retrans_so_far
                             self.retrans_so_far = value
-                        elif re.search(r'\brcv_space\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.rcv_space = value
-                        elif re.search(r'\bdsack_dups\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.dsack_dups = value - self.dsack_dups_so_far
-                            self.dsack_dups_so_far = value
-                        elif re.search(r'\breord_seen\b', metrics_parts[y]):
-                            s_index = metrics_parts[y].find(":")
-                            value = float(metrics_parts[y][s_index + 1:])
-                            self.reord_seen = value - self.reord_seen_so_far
-                            self.reord_seen_so_far = value
+                        # elif re.search(r'\brcv_space\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.rcv_space = value
+                        # elif re.search(r'\bdsack_dups\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.dsack_dups = value - self.dsack_dups_so_far
+                        #     self.dsack_dups_so_far = value
+                        # elif re.search(r'\breord_seen\b', metrics_parts[y]):
+                        #     s_index = metrics_parts[y].find(":")
+                        #     value = float(metrics_parts[y][s_index + 1:])
+                        #     self.reord_seen = value - self.reord_seen_so_far
+                        #     self.reord_seen_so_far = value
 
     def collect_metrics(self, from_string=None):
         self.collect_network_metrics(from_string)
@@ -164,12 +169,10 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         else:
             self.execute_command()
         self.parse_output()
-        self.metrics_list = [str(self.total_rtt_value), str(self.total_pacing_rate),
-                             str(self.total_cwnd_value), str(self.total_rto_value), str(self.byte_ack / (1024 * 1024)),
-                             str(self.segs_out), str(self.retrans), str(self.total_mss_value),
-                             str(self.total_ssthresh_value), str(self.segs_in), str(self.send),
-                             str(self.unacked), str(self.rcv_space), str(self.send_buffer_value), str(self.dsack_dups),
-                             str(self.reord_seen)]
+        self.metrics_list = [str(self.total_rtt_value),
+                             str(self.segs_in),
+                             str(self.segs_out),
+                             str(self.retrans)]
         self.metrics_list_to_str()
         self.metrics_list_to_dict()
 

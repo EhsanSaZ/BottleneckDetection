@@ -13,18 +13,24 @@ except ModuleNotFoundError:
 class ClientOstMetricCollector(AbstractCollector):
     def __init__(self, prefix=""):
         super().__init__(prefix)
-        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
-                                  7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
-                                  13: 'string', 14: 'string', 15: 'string', 16: 'string', 17: 'string'}
-        self.metrics_id_to_attr = {1: 'req_waittime', 2: 'req_active', 3: 'read_bytes', 4: 'write_bytes',
-                                   5: 'ost_setattr', 6: 'ost_read', 7: 'ost_write', 8: 'ost_get_info', 9: 'ost_connect',
-                                   10: 'ost_punch', 11: 'ost_statfs', 12: 'ost_sync', 13: 'ost_quotactl',
-                                   14: 'ldlm_cancel', 15: 'obd_ping', 16: 'pending_read_pages',
-                                   17: 'read_RPCs_in_flight'}
-        self.ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
-                                 "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
-                                 "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
-                                 "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
+        # self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
+        #                           7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
+        #                           13: 'string', 14: 'string', 15: 'string', 16: 'string', 17: 'string'}
+        # self.metrics_id_to_attr = {1: 'req_waittime', 2: 'req_active', 3: 'read_bytes', 4: 'write_bytes',
+        #                            5: 'ost_setattr', 6: 'ost_read', 7: 'ost_write', 8: 'ost_get_info', 9: 'ost_connect',
+        #                            10: 'ost_punch', 11: 'ost_statfs', 12: 'ost_sync', 13: 'ost_quotactl',
+        #                            14: 'ldlm_cancel', 15: 'obd_ping', 16: 'pending_read_pages',
+        #                            17: 'read_RPCs_in_flight'}
+        # self.ost_stats_so_far = {"req_waittime": 0.0, "req_active": 0.0, "read_bytes": 0.0, "write_bytes": 0.0,
+        #                          "ost_setattr": 0.0, "ost_read": 0.0, "ost_write": 0.0, "ost_get_info": 0.0,
+        #                          "ost_connect": 0.0, "ost_punch": 0.0, "ost_statfs": 0.0, "ost_sync": 0.0,
+        #                          "ost_quotactl": 0.0, "ldlm_cancel": 0.0, "obd_ping": 0.0}
+        # self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string', 5: 'string', 6: 'string',
+        #                           7: 'string', 8: 'string', 9: 'string', 10: 'string', 11: 'string', 12: 'string',
+        #                           13: 'string', 14: 'string', 15: 'string', 16: 'string', 17: 'string'}
+        self.metrics_id_to_attr = {1: 'read_bytes', 2: 'write_bytes'}
+        self.ost_stats_so_far = {"read_bytes": 0.0, "write_bytes": 0.0,}
+        self.metrics_datatypes = {1: 'string', 2: 'string'}
         self.seperator_string = '--result--'
 
     def collect_metrics(self, ost_dir_name, time_stamp, from_dict=None):
@@ -45,7 +51,7 @@ class ClientOstMetricCollector(AbstractCollector):
             rpc_stats_part = res_parts[1].split("\n")
         else:
             ost_stats_parts = from_dict.get("stats").split("\n")
-            rpc_stats_part = from_dict.get("rpc_stats").split("\n")
+            # rpc_stats_part = from_dict.get("rpc_stats").split("\n")
         # snapshot_time             1637627183.394337 secs.usecs
         # req_waittime              393905757 samples [usec] 31 17820911 483362372205 28824671200467887
         # req_active                393906200 samples [reqs] 1 8243 1164349055 731470318467
@@ -71,33 +77,33 @@ class ClientOstMetricCollector(AbstractCollector):
                 # value = float(tokens[len(tokens) - 2])
                 # value_list.append(value)
 
-        value_list.append(
-            float((ost_stat_latest_values.get("req_waittime") or 0) - (ost_stat_so_far.get("req_waittime") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("req_active") or 0) - (ost_stat_so_far.get("req_active") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("req_waittime") or 0) - (ost_stat_so_far.get("req_waittime") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("req_active") or 0) - (ost_stat_so_far.get("req_active") or 0)))
         value_list.append(
             float((ost_stat_latest_values.get("read_bytes") or 0) - (ost_stat_so_far.get("read_bytes") or 0)))
         value_list.append(
             float((ost_stat_latest_values.get("write_bytes") or 0) - (ost_stat_so_far.get("write_bytes") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_setattr") or 0) - (ost_stat_so_far.get("ost_setattr") or 0)))
-        value_list.append(float((ost_stat_latest_values.get("ost_read") or 0) - (ost_stat_so_far.get("ost_read") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_write") or 0) - (ost_stat_so_far.get("ost_write") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_get_info") or 0) - (ost_stat_so_far.get("ost_get_info") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_connect") or 0) - (ost_stat_so_far.get("ost_connect") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_punch") or 0) - (ost_stat_so_far.get("ost_punch") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_statfs") or 0) - (ost_stat_so_far.get("ost_statfs") or 0)))
-        value_list.append(float((ost_stat_latest_values.get("ost_sync") or 0) - (ost_stat_so_far.get("ost_sync") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ost_quotactl") or 0) - (ost_stat_so_far.get("ost_quotactl") or 0)))
-        value_list.append(
-            float((ost_stat_latest_values.get("ldlm_cancel") or 0) - (ost_stat_so_far.get("ldlm_cancel") or 0)))
-        value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_setattr") or 0) - (ost_stat_so_far.get("ost_setattr") or 0)))
+        # value_list.append(float((ost_stat_latest_values.get("ost_read") or 0) - (ost_stat_so_far.get("ost_read") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_write") or 0) - (ost_stat_so_far.get("ost_write") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_get_info") or 0) - (ost_stat_so_far.get("ost_get_info") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_connect") or 0) - (ost_stat_so_far.get("ost_connect") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_punch") or 0) - (ost_stat_so_far.get("ost_punch") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_statfs") or 0) - (ost_stat_so_far.get("ost_statfs") or 0)))
+        # value_list.append(float((ost_stat_latest_values.get("ost_sync") or 0) - (ost_stat_so_far.get("ost_sync") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ost_quotactl") or 0) - (ost_stat_so_far.get("ost_quotactl") or 0)))
+        # value_list.append(
+        #     float((ost_stat_latest_values.get("ldlm_cancel") or 0) - (ost_stat_so_far.get("ldlm_cancel") or 0)))
+        # value_list.append(float((ost_stat_latest_values.get("obd_ping") or 0) - (ost_stat_so_far.get("obd_ping") or 0)))
 
         # proc = Popen(['cat', ost_path + "/rpc_stats"], universal_newlines=True, stdout=PIPE)
         # get_param_arg = "osc." + ost_dir_name + ".rpc_stats"
@@ -109,16 +115,16 @@ class ClientOstMetricCollector(AbstractCollector):
         # write RPCs in flight: 0
         # pending write pages:  0
         # pending read pages:   0
-        for metric_line in rpc_stats_part:
-            if "pending read pages" in metric_line:
-                index = metric_line.find(":")
-                value = float(metric_line[index + 1:])
-                value_list.append(value)
-
-            if "read RPCs in flight" in metric_line:
-                index = metric_line.find(":")
-                value = float(metric_line[index + 1:])
-                value_list.append(value)
+        # for metric_line in rpc_stats_part:
+        #     if "pending read pages" in metric_line:
+        #         index = metric_line.find(":")
+        #         value = float(metric_line[index + 1:])
+        #         value_list.append(value)
+        #
+        #     if "read RPCs in flight" in metric_line:
+        #         index = metric_line.find(":")
+        #         value = float(metric_line[index + 1:])
+        #         value_list.append(value)
         self.ost_stats_so_far = ost_stat_latest_values
         self.metrics_list = value_list
         self.metrics_list_to_str()
