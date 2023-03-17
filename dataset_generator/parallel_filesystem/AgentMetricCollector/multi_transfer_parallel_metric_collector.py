@@ -192,7 +192,7 @@ elif run_java_app == "2":
 
 discovery_process.join()
 global_client_ost_metrics_collector_process.join()
-global_client_mdt_metrics_collector_process.join()
+# global_client_mdt_metrics_collector_process.join()
 global_metrics_collector_process.join()
 ost_metric_cache_process.join()
 # client_ost_metric_process.join()
