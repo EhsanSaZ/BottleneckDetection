@@ -276,6 +276,8 @@ class StatProcess(Process):
                     #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
                     # metrics_data.update(lustre_ost_metrics_http_collector.get_metrics_dict())
                     metrics_data.update(lustre_ost_metrics_zmq_collector.get_metrics_dict())
+                    for key in self.system_lustre_nic_io_dict.keys():
+                        metrics_data["{}{}".format(self.prefix, key)] = self.system_lustre_nic_io_dict[key]
                     metrics_data.update({"label_value": self.label_value})
 
                     data["transfer_ID"] = transfer_id
