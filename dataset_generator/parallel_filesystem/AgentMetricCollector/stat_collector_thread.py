@@ -259,7 +259,7 @@ class StatProcess(Process):
                 epoc_count += 1
                 # print(output_string)
                 time_second = processing_start_timestampt
-                if Config.send_to_cloud_mode and Config.communication_type == "JSON" and not is_first_time and self.ready_to_publish.value:
+                if Config.send_to_cloud_mode and Config.communication_type == "JSON" and not is_first_time and self.ready_to_publish:
                     epoc_time += 1
                     data = {}
                     # print(transfer_id)
