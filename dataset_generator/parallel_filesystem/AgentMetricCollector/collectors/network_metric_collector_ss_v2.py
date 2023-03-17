@@ -52,7 +52,7 @@ class NetworkMetricCollectorSS_V2(AbstractCollector):
         #                            10: 'segs_in', 11: 'avg_send_value', 12: 'unacked_value', 13: 'rcv_space',
         #                            14: 'send_buffer_value', 15: 'avg_dsack_dups_value', 16: 'avg_reord_seen'}
 
-        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string'}
+        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4: 'string'}
         self.metrics_id_to_attr = {1: 'avg_rtt_value',
                                    2: 'segs_in',
                                    3: 'seg_out',
