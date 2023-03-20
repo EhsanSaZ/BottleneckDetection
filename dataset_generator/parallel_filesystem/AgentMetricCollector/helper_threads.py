@@ -11,18 +11,18 @@ from multiprocessing import Process
 
 class globalMetricsMonitor(Process):
     def __init__(self, sleep_time, system_cpu_mem_usage_list, system_cpu_mem_usage_dict,
-                 system_buffer_value_list, system_buffer_value_dict, client_io_metrics_dict, dtn_io_metrics_dict, lustre_nic_name, system_lustre_nic_io_dict, **kwargs):
+                 system_buffer_value_list, system_buffer_value_dict, lustre_nic_name, system_lustre_nic_io_dict, **kwargs):
         super(globalMetricsMonitor, self).__init__(**kwargs)
         self.sleep_time = sleep_time
         self.resource_usage_collector = ResourceUsageCollector(lustre_nic_name)
         self.buffer_value_collector = BufferValueStatCollector()
-        self.dtn_io_metric_collector = DtnIoMetricsCollector()
+        # self.dtn_io_metric_collector = DtnIoMetricsCollector()
         self.system_cpu_mem_usage_list = system_cpu_mem_usage_list
         self.system_cpu_mem_usage_dict = system_cpu_mem_usage_dict
         self.system_buffer_value_list = system_buffer_value_list
         self.system_buffer_value_dict = system_buffer_value_dict
-        self.client_io_metrics_dict = client_io_metrics_dict
-        self.dtn_io_metrics_dict = dtn_io_metrics_dict
+        # self.client_io_metrics_dict = client_io_metrics_dict
+        # self.dtn_io_metrics_dict = dtn_io_metrics_dict
         self.system_lustre_nic_io_dict = system_lustre_nic_io_dict
 
     def run(self):
@@ -60,9 +60,9 @@ class globalMetricsMonitor(Process):
             #
             # system_monitoring_global_vars.system_buffer_value_dict = self.buffer_value_collector.get_metrics_dict()
             # system_monitoring_global_vars.system_buffer_value_proto_message.CopyFrom(self.buffer_value_collector.get_proto_message())
-            self.dtn_io_metric_collector.collect_metrics(from_dict=self.client_io_metrics_dict)
-            self.dtn_io_metrics_dict['dtn_lustre_read_bytes'] = self.dtn_io_metric_collector.get_metrics_dict()["dtn_lustre_read_bytes"]
-            self.dtn_io_metrics_dict['dtn_lustre_write_bytes'] = self.dtn_io_metric_collector.get_metrics_dict()["dtn_lustre_write_bytes"]
+            # self.dtn_io_metric_collector.collect_metrics(from_dict=self.client_io_metrics_dict)
+            # self.dtn_io_metrics_dict['dtn_lustre_read_bytes'] = self.dtn_io_metric_collector.get_metrics_dict()["dtn_lustre_read_bytes"]
+            # self.dtn_io_metrics_dict['dtn_lustre_write_bytes'] = self.dtn_io_metric_collector.get_metrics_dict()["dtn_lustre_write_bytes"]
 
             time.sleep(self.sleep_time)
 

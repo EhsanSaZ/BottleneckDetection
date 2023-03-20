@@ -43,7 +43,7 @@ class StatProcess(Process):
                  write_thread_directory, over_head_write_thread_directory, ready_to_publish,
                  cpu_mem_dict, buffer_value_dict,
                  client_ost_metrics_dict, client_mdt_metrics_dict,
-                 dtn_io_metrics_dict, system_lustre_nic_io_dict, **kwargs):
+                system_lustre_nic_io_dict, **kwargs):
         # threading.Thread.__init__(self)
         super(StatProcess, self).__init__(**kwargs)
         self._stop = Event()
@@ -71,7 +71,7 @@ class StatProcess(Process):
         self.buffer_value_dict = buffer_value_dict
         self.client_ost_metrics_dict = client_ost_metrics_dict
         self.client_mdt_metrics_dict = client_mdt_metrics_dict
-        self.dtn_io_metrics_dict = dtn_io_metrics_dict
+        # self.dtn_io_metrics_dict = dtn_io_metrics_dict
         self.system_lustre_nic_io_dict = system_lustre_nic_io_dict
         self.latest_file_name = None
         self.latest_ost_path_output = None

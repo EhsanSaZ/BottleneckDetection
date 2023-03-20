@@ -6,7 +6,7 @@ import re
 
 
 class LustreClientOstMetricSharedMemCache(Process):
-    def __init__(self, client_ost_metrics_dict, client_io_metrics_dict, sleep_time, **kwargs):
+    def __init__(self, client_ost_metrics_dict, sleep_time, **kwargs):
         super(LustreClientOstMetricSharedMemCache, self).__init__(**kwargs)
         self.client_ost_metrics_dict = client_ost_metrics_dict
         # self.client_io_metrics_dict = client_io_metrics_dict
