@@ -17,14 +17,14 @@ monitor_agent_pid = Value('i', -1)
 global_dict['monitor_agent_process'] = None
 should_run.value = False
 
-system_memory_usage = Value('d', -1)
-system_cpu_usage = Value('d', -1)
-system_cpu_mem_usage = Array('d', [-1, -1])
+# system_memory_usage = Value('d', -1)
+# system_cpu_usage = Value('d', -1)
+# system_cpu_mem_usage = Array('d', [-1, -1])
 system_lustre_nic_io_dict = manager.dict({"nic_send_bytes": 0.0, "nic_receive_bytes": 0.0})
 # system_cpu_mem_usage = manager.list(range(2))
 
 # system_cpu_mem_usage_dict = {"system_cpu_percent": -1, "system_memory_percent": -1}
-system_cpu_mem_usage_dict = manager.dict({"system_cpu_percent": -1, "system_memory_percent": -1})
+# system_cpu_mem_usage_dict = manager.dict({"system_cpu_percent": -1, "system_memory_percent": -1})
 # system_cpu_mem_usage_proto_message = ResourceUsageMetrics()
 # system_cpu_mem_usage_proto_message.system_cpu_percent = -1
 # system_cpu_mem_usage_proto_message.system_memory_percent = -1
