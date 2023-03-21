@@ -149,12 +149,12 @@ global_client_ost_metrics_collector_process.start()
 
 transfer_validator = TransferValidationStrategy_2()
 transfer_manager = TransferManager(context, xsub_backend_socket_name, ost_rep_backend_socket_name,
-                                   Config.client_ost_rep_backend_socket_name, Config.client_mdt_rep_backend_socket_name,
+                                   Config.client_ost_rep_backend_socket_name,
                                    remote_ost_index_to_ost_agent_address_dict, read_lustre_mnt_point_list,
                                    write_lustre_mnt_point_list,global_vars.global_dict["mdt_parent_path"],
                                    global_vars.global_dict["label_value"], global_vars.ready_to_publish,
                                    global_vars.system_buffer_value_dict,
-                                   global_vars.client_ost_metrics_dict, global_vars.client_mdt_metrics_dict,
+                                   global_vars.client_ost_metrics_dict,
                                    global_vars.system_lustre_nic_io_dict)
 
 discovery_process = TransferDiscovery(local_ip_range, peer_ip_range, local_port_range, peer_port_range, transfer_validator, transfer_manager, discovery_cycle=1)

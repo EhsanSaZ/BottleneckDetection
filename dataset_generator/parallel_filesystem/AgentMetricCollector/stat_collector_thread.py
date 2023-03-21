@@ -20,7 +20,7 @@ from collectors.file_ost_path_info_v2 import FileOstPathInfoV2
 from collectors.file_mdt_path_info_v2 import FileMdtPathInfoV2
 from collectors.client_ost_metric_collector import ClientOstMetricCollector
 # from collectors.client_ost_metric_zmq_collector import ClientOstMetricZmqCollector
-from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
+# from collectors.client_mdt_metric_collector import ClientMdtMetricCollector
 # from collectors.client_mdt_metric_zmq_collector import ClientMdtMetricZmqCollector
 # from collectors.lustre_ost_metric_http_collector import LustreOstMetricHttpCollector
 from collectors.lustre_ost_metric_zmq_collector import LustreOstMetricZmqCollector
@@ -36,13 +36,12 @@ class StatProcess(Process):
                  xsub_backend_socket_name,
                  ost_metric_backend_socket_name,
                  client_ost_metric_backend_socket_name,
-                 client_mdt_metric_backend_socket_name,
                  remote_ost_index_to_ost_agent_http_address_dict,
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
                  write_thread_directory, over_head_write_thread_directory, ready_to_publish,
                  buffer_value_dict,
-                 client_ost_metrics_dict, client_mdt_metrics_dict,
+                 client_ost_metrics_dict,
                 system_lustre_nic_io_dict, **kwargs):
         # threading.Thread.__init__(self)
         super(StatProcess, self).__init__(**kwargs)
@@ -55,7 +54,7 @@ class StatProcess(Process):
         self.xsub_backend_socket_name = xsub_backend_socket_name
         self.ost_metric_backend_socket_name = ost_metric_backend_socket_name
         self.client_ost_metric_backend_socket_name = client_ost_metric_backend_socket_name
-        self.client_mdt_metric_backend_socket_name = client_mdt_metric_backend_socket_name
+        # self.client_mdt_metric_backend_socket_name = client_mdt_metric_backend_socket_name
         self.remote_ost_index_to_ost_agent_http_address_dict = remote_ost_index_to_ost_agent_http_address_dict
         self.pid_str = pid_str
         self.file_path = path
@@ -70,7 +69,7 @@ class StatProcess(Process):
         # self.cpu_mem_dict = cpu_mem_dict
         self.buffer_value_dict = buffer_value_dict
         self.client_ost_metrics_dict = client_ost_metrics_dict
-        self.client_mdt_metrics_dict = client_mdt_metrics_dict
+        # self.client_mdt_metrics_dict = client_mdt_metrics_dict
         # self.dtn_io_metrics_dict = dtn_io_metrics_dict
         self.system_lustre_nic_io_dict = system_lustre_nic_io_dict
         self.latest_file_name = None
