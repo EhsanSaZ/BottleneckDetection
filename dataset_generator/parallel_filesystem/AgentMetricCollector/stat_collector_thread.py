@@ -162,16 +162,9 @@ class StatProcess(Process):
                 is_parallel_file_system = True
 
         network_metrics_collector = NetworkMetricCollectorSS_V2(self.src_ip, self.src_port, self.dst_ip, self.dst_port, self.prefix)
-        # system_metrics_collector = SystemMetricCollector(self.prefix)
-        # file_ost_path_info_extractor = FileOstPathInfo()
         file_ost_path_info_extractor = FileOstPathInfoV2()
-        # file_mdt_path_info_extractor = FileMdtPathInfo()
-        file_mdt_path_info_extractor = FileMdtPathInfoV2()
+        # file_mdt_path_info_extractor = FileMdtPathInfoV2()
         client_ost_metrics_collector = ClientOstMetricCollector(self.prefix)
-        # client_ost_metrics_collector = ClientOstMetricZmqCollector(self.context, self.client_ost_metric_backend_socket_name, self.prefix)
-        # client_mdt_metrics_collector = ClientMdtMetricCollector(self.prefix)
-        # client_mdt_metrics_collector = ClientMdtMetricZmqCollector(self.context, self.client_mdt_metric_backend_socket_name, self.prefix)
-        # lustre_ost_metrics_http_collector = LustreOstMetricHttpCollector(self.prefix)
         lustre_ost_metrics_zmq_collector = LustreOstMetricZmqCollector(self.context, self.ost_metric_backend_socket_name, self.prefix)
         # TO DO REMOVE THIS LINE ITS JUST A TEST
         # is_parallel_file_system = True
@@ -240,19 +233,6 @@ class StatProcess(Process):
                     # print(ost_kernel_path, ost_dir_name, remote_ost_dir_name, ost_number)
                     client_ost_metrics_collector.collect_metrics(ost_dir_name, int(processing_start_timestampt), self.client_ost_metrics_dict.get(ost_dir_name))
 
-                    # file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(self.pid_str, self.file_path, from_string=fd_output)
-                    # file_mdt_path_info = file_mdt_path_info_extractor.get_file_mdt_path_info(file_mount_point, from_string=mdt_path_output)
-                    # if file_mdt_path_info is None:
-                    #     continue
-                    # else:
-                    #     mdt_kernel_path, mdt_dir_name = file_mdt_path_info
-                    # print(mdt_kernel_path, mdt_dir_name)
-                    # client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name, self.client_mdt_metrics_dict.get(mdt_dir_name))
-                    # client_mdt_metrics_collector.collect_metrics(self.mdt_parent_path, mdt_dir_name)
-                    # client_mdt_metrics_collector.collect_metrics(mdt_dir_name, int(processing_start_timestampt))
-
-                    # ost_agent_address = self.remote_ost_index_to_ost_agent_http_address_dict.get(ost_number) or ""
-                    # lustre_ost_metrics_http_collector.collect_metrics(ost_agent_address, remote_ost_dir_name)
                     lustre_ost_metrics_zmq_collector.collect_metrics(ost_number, remote_ost_dir_name, int(processing_start_timestampt))
 
                 epoc_count += 1
@@ -264,19 +244,14 @@ class StatProcess(Process):
                     # print(transfer_id)
                     metrics_data = {"time_stamp": str(time_second)}
                     metrics_data.update(network_metrics_collector.get_metrics_dict())
-                    # metrics_data.update(system_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
                     for key in self.buffer_value_dict.keys():
                         metrics_data["{}{}".format(self.prefix, key)] = self.buffer_value_dict[key]
                     metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
-                    # metrics_data.update(client_mdt_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
-                    # for key in system_monitoring_global_vars.system_cpu_mem_usage_dict.keys():
-                    #     metrics_data["{}{}".format(self.prefix, key)] = system_monitoring_global_vars.system_cpu_mem_usage_dict[key]
-                    # metrics_data.update(lustre_ost_metrics_http_collector.get_metrics_dict())
-                    metrics_data.update(lustre_ost_metrics_zmq_collector.get_metrics_dict())
                     for key in self.system_lustre_nic_io_dict.keys():
                         metrics_data["{}{}".format(self.prefix, key)] = self.system_lustre_nic_io_dict[key]
+                    metrics_data.update(lustre_ost_metrics_zmq_collector.get_metrics_dict())
                     metrics_data.update({"label_value": self.label_value})
 
                     data["transfer_ID"] = transfer_id
@@ -289,96 +264,30 @@ class StatProcess(Process):
                     metric_publisher_socket.send_json(body)
                 elif Config.send_to_cloud_mode and Config.communication_type == "PROTO" and not is_first_time and self.ready_to_publish:
                     epoc_time += 1
-                    monitoring_msg = MonitoringLog()
-
-                    # metrics_msg = Metrics()
-                    # metrics_msg.timestamp = datetime.fromtimestamp(time_second).strftime("%H:%M:%S %m-%d-%Y")
-                    # metrics_msg.network_metrics.CopyFrom(network_metrics_collector.get_proto_message())
-                    # metrics_msg.system_metrics.CopyFrom(system_metrics_collector.get_proto_message())
-                    # # metrics_msg.buffer_value_metrics.MergeFrom(system_monitoring_global_vars.system_buffer_value_proto_message)
-                    # buffer_value_dict_no_prefix = {}
-                    # for key in self.buffer_value_dict.keys():
-                    #     buffer_value_dict_no_prefix[key] = self.buffer_value_dict[key]
-                    # metrics_msg.buffer_value_metrics.MergeFrom(ParseDict(buffer_value_dict_no_prefix, BufferValueMetrics()))
-                    #
-                    # metrics_msg.client_ost_metrics.CopyFrom(client_ost_metrics_collector.get_proto_message())
-                    # metrics_msg.client_mdt_metrics.CopyFrom(client_mdt_metrics_collector.get_proto_message())
-                    # # metrics_msg.resource_usage_metrics.MergeFrom(system_monitoring_global_vars.system_cpu_mem_usage_proto_message)
-                    # cpu_mem_dict_no_prefix = {}
-                    # for key in self.cpu_mem_dict.keys():
-                    #     cpu_mem_dict_no_prefix[key] = self.cpu_mem_dict[key]
-                    # metrics_msg.resource_usage_metrics.MergeFrom(ParseDict(cpu_mem_dict_no_prefix, ResourceUsageMetrics()))
-                    # # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_http_collector.get_proto_message())
-                    # metrics_msg.lustre_ost_metrics.CopyFrom(lustre_ost_metrics_zmq_collector.get_proto_message())
-                    # metrics_msg.label_value = int(self.label_value)
-                    #
-                    # monitoring_msg.metrics.CopyFrom(metrics_msg)
-                    # monitoring_msg.transfer_ID = transfer_id
-                    # monitoring_msg.sequence_number = epoc_time
-                    # monitoring_msg.is_sender = self.is_sender
-                    #
-                    # log_data_request = PublisherPayload()
-                    # log_data_request.request_type = "send_log_data"
-                    # log_data_request.data.CopyFrom(monitoring_msg)
-                    # # log_data_request.timestamp = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
-                    # msg = MessageToDict(log_data_request)
-                    # msg["@timestamp"] = datetime.fromtimestamp(float(processing_start_time), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
-                    # metric_publisher_socket.send_json(msg)
                     ts = datetime.fromtimestamp(float(processing_start_timestampt), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
-                    # metrics += "," + system_metrics_collector.get_metrics_str()
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
-                    # metrics += "," + client_mdt_metrics_collector.get_metrics_str()
-                    # for key in self.cpu_mem_dict.keys():
-                    #     metrics += "," + self.cpu_mem_dict[key]
-                    metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
-                    # for key in self.dtn_io_metrics_dict.keys():
-                    #     metrics += "," + self.dtn_io_metrics_dict[key]
                     for key in self.system_lustre_nic_io_dict.keys():
                         metrics += "," + self.system_lustre_nic_io_dict[key]
+                    metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
                     metrics += "," + self.label_value
                     msg = "{time} {tid} {sender} {metrics}".format(time=ts, tid=transfer_id, sender=self.is_sender, metrics=metrics)
                     metric_publisher_socket.send_string(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
+                    epoc_time += 1
                     # output_string = str(time_second)
-                    # for item in network_metrics_collector.get_metrics_list():
-                    #     output_string += "," + str(item)
-                    # for item in system_metrics_collector.get_metrics_list():
-                    #     output_string += "," + str(item)
-                    # # for item in system_monitoring_global_vars.system_buffer_value:
-                    # #     output_string += "," + str(item)
-                    # # ost_value_list are metrics with index 79-95 in csv
-                    # for item in client_ost_metrics_collector.get_metrics_list():
-                    #     output_string += "," + str(item)
-                    # # # values with index 112-147
-                    # for item in client_mdt_metrics_collector.get_metrics_list():
-                    #     output_string += "," + str(item)
-                    # # for item in system_monitoring_global_vars.system_cpu_mem_usage:
-                    # #     output_string += "," + str(item)
-                    # # for item in lustre_ost_metrics_http_collector.get_metrics_list():
-                    # #     output_string += "," + str(item)
-                    # for item in lustre_ost_metrics_zmq_collector.get_metrics_list():
-                    #     output_string += "," + str(item)
-                    # output_string += "," + str(self.label_value) + "\n"
-                    # main_output_string += output_string
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
-                    # metrics += "," + system_metrics_collector.get_metrics_str()
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
-                    # metrics += "," + client_mdt_metrics_collector.get_metrics_str()
-                    # for key in self.cpu_mem_dict.keys():
-                    #     metrics += "," + self.cpu_mem_dict[key]
                     for key in self.system_lustre_nic_io_dict.keys():
                         metrics += "," + self.system_lustre_nic_io_dict[key]
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
-                    # for key in self.dtn_io_metrics_dict.keys():
-                    #     metrics += "," + self.dtn_io_metrics_dict[key]
                     metrics += "," + self.label_value + "\n"
                     output_string = "{},{}".format(str(time_second), metrics)
                     main_output_string += output_string
