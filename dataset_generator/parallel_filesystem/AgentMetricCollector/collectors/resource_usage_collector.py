@@ -13,8 +13,8 @@ class ResourceUsageCollector(AbstractCollector):
     def __init__(self, lustre_nic_name, prefix=""):
         super().__init__(prefix)
         self.lustre_nic_name = lustre_nic_name
-        self.metrics_datatypes = {1: 'string', 2: 'string', 3: 'string', 4:'string'}
-        self.metrics_id_to_attr = {1: 'system_cpu_percent', 2: 'system_memory_percent', 3:'nic_send_bytes', 4:'nic_receive_bytes'}
+        self.metrics_datatypes = {1: 'string', 2: 'string'}
+        self.metrics_id_to_attr = {1:'nic_send_bytes', 2:'nic_receive_bytes'}
         self.nic_io_sofar = None
         self.is_first_time = True
 
@@ -23,8 +23,8 @@ class ResourceUsageCollector(AbstractCollector):
 
     def get_cpu_mem_nic(self):
         value_list = []
-        value_list.append(str(psutil.cpu_percent()))
-        value_list.append(str(psutil.virtual_memory().percent))
+        # value_list.append(str(psutil.cpu_percent()))
+        # value_list.append(str(psutil.virtual_memory().percent))
 
         nic_io_latest = psutil.net_io_counters(pernic=True).get(self.lustre_nic_name) or None
         if nic_io_latest:
