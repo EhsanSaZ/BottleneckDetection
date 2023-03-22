@@ -247,7 +247,8 @@ class StatProcess(Process):
                     # TODO Update this  system_monitoring_global_vars
                     for key in self.cpu_mem_dict.keys():
                         metrics_data["{}{}".format(self.prefix, key)] = self.cpu_mem_dict[key]
-                    for key in self.buffer_value_dict.keys():
+                    # for key in self.buffer_value_dict.keys():
+                    for key in ["tcp_rcv_buffer_max", "tcp_snd_buffer_max"]:
                         metrics_data["{}{}".format(self.prefix, key)] = self.buffer_value_dict[key]
                     metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
@@ -271,7 +272,8 @@ class StatProcess(Process):
                     metrics += network_metrics_collector.get_metrics_str()
                     for key in self.cpu_mem_dict.keys():
                         metrics += "," + self.cpu_mem_dict[key]
-                    for key in self.buffer_value_dict.keys():
+                    # for key in self.buffer_value_dict.keys():
+                    for key in ["tcp_rcv_buffer_max", "tcp_snd_buffer_max"]:
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
                     for key in self.system_lustre_nic_io_dict.keys():
@@ -288,7 +290,8 @@ class StatProcess(Process):
                     metrics += network_metrics_collector.get_metrics_str()
                     for key in self.cpu_mem_dict.keys():
                         metrics += "," + self.cpu_mem_dict[key]
-                    for key in self.buffer_value_dict.keys():
+                    # for key in self.buffer_value_dict.keys():
+                    for key in ["tcp_rcv_buffer_max", "tcp_snd_buffer_max"]:
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
                     for key in self.system_lustre_nic_io_dict.keys():
