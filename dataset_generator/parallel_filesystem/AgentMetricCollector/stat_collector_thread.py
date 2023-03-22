@@ -40,7 +40,7 @@ class StatProcess(Process):
                  pid_str, path,
                  mdt_parent_path, label_value, is_sender,
                  write_thread_directory, over_head_write_thread_directory, ready_to_publish,
-                 buffer_value_dict,
+                 cpu_mem_dict, buffer_value_dict,
                  client_ost_metrics_dict,
                 system_lustre_nic_io_dict, **kwargs):
         # threading.Thread.__init__(self)
@@ -66,7 +66,7 @@ class StatProcess(Process):
         self.write_thread_directory = write_thread_directory
         self.over_head_write_thread_directory = over_head_write_thread_directory
         self.ready_to_publish = ready_to_publish
-        # self.cpu_mem_dict = cpu_mem_dict
+        self.cpu_mem_dict = cpu_mem_dict
         self.buffer_value_dict = buffer_value_dict
         self.client_ost_metrics_dict = client_ost_metrics_dict
         # self.client_mdt_metrics_dict = client_mdt_metrics_dict
@@ -245,6 +245,8 @@ class StatProcess(Process):
                     metrics_data = {"time_stamp": str(time_second)}
                     metrics_data.update(network_metrics_collector.get_metrics_dict())
                     # TODO Update this  system_monitoring_global_vars
+                    for key in self.cpu_mem_dict.keys():
+                        metrics_data["{}{}".format(self.prefix, key)] = self.cpu_mem_dict[key]
                     for key in self.buffer_value_dict.keys():
                         metrics_data["{}{}".format(self.prefix, key)] = self.buffer_value_dict[key]
                     metrics_data.update(client_ost_metrics_collector.get_metrics_dict())
@@ -267,6 +269,8 @@ class StatProcess(Process):
                     ts = datetime.fromtimestamp(float(processing_start_timestampt), tz=timezone.utc).isoformat(sep='T', timespec='milliseconds')
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
+                    for key in self.cpu_mem_dict.keys():
+                        metrics += "," + self.cpu_mem_dict[key]
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()
@@ -282,6 +286,8 @@ class StatProcess(Process):
                     # output_string = str(time_second)
                     metrics = ""
                     metrics += network_metrics_collector.get_metrics_str()
+                    for key in self.cpu_mem_dict.keys():
+                        metrics += "," + self.cpu_mem_dict[key]
                     for key in self.buffer_value_dict.keys():
                         metrics += "," + self.buffer_value_dict[key]
                     metrics += "," + client_ost_metrics_collector.get_metrics_str()

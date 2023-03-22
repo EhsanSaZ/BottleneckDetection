@@ -135,7 +135,7 @@ if Config.send_to_cloud_mode:
     publisher_process = SendToRabbit(xsub_backend_socket_name, context, Config.cluster_name, Config.rabbit_log_queue_name, Config.heartbeat_queue_name, global_vars.ready_to_publish, Config.rabbit_host, Config.rabbit_port, Config.rabbitmq_heartbeat_interval)
     publisher_process.start()
 
-global_metrics_collector_process = globalMetricsMonitor(1,
+global_metrics_collector_process = globalMetricsMonitor(1, global_vars.system_cpu_mem_usage_dict,
                                                         global_vars.system_buffer_value, global_vars.system_buffer_value_dict,
 
                                                         Config.lustre_NIC_name, global_vars.system_lustre_nic_io_dict)
@@ -153,7 +153,7 @@ transfer_manager = TransferManager(context, xsub_backend_socket_name, ost_rep_ba
                                    remote_ost_index_to_ost_agent_address_dict, read_lustre_mnt_point_list,
                                    write_lustre_mnt_point_list,global_vars.global_dict["mdt_parent_path"],
                                    global_vars.global_dict["label_value"], global_vars.ready_to_publish,
-                                   global_vars.system_buffer_value_dict,
+                                   global_vars.system_cpu_mem_usage_dict, global_vars.system_buffer_value_dict,
                                    global_vars.client_ost_metrics_dict,
                                    global_vars.system_lustre_nic_io_dict)
 

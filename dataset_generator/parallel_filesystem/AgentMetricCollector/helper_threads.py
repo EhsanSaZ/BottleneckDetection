@@ -10,7 +10,7 @@ from collectors.DTN_io_metric_collector import DtnIoMetricsCollector
 from multiprocessing import Process
 
 class globalMetricsMonitor(Process):
-    def __init__(self, sleep_time,
+    def __init__(self, sleep_time, system_cpu_mem_usage_dict,
                  system_buffer_value_list, system_buffer_value_dict, lustre_nic_name, system_lustre_nic_io_dict, **kwargs):
         super(globalMetricsMonitor, self).__init__(**kwargs)
         self.sleep_time = sleep_time
@@ -18,7 +18,7 @@ class globalMetricsMonitor(Process):
         self.buffer_value_collector = BufferValueStatCollector()
         # self.dtn_io_metric_collector = DtnIoMetricsCollector()
         # self.system_cpu_mem_usage_list = system_cpu_mem_usage_list
-        # self.system_cpu_mem_usage_dict = system_cpu_mem_usage_dict
+        self.system_cpu_mem_usage_dict = system_cpu_mem_usage_dict
         self.system_buffer_value_list = system_buffer_value_list
         self.system_buffer_value_dict = system_buffer_value_dict
         # self.client_io_metrics_dict = client_io_metrics_dict
@@ -33,8 +33,8 @@ class globalMetricsMonitor(Process):
             # self.system_cpu_mem_usage_list[0] = float(self.resource_usage_collector.get_metrics_list()[0])
             # self.system_cpu_mem_usage_list[1] = float(self.resource_usage_collector.get_metrics_list()[1])
             # system_monitoring_global_vars.system_cpu_mem_usage_dict = self.resource_usage_collector.get_metrics_dict()
-            # self.system_cpu_mem_usage_dict["system_cpu_percent"] = self.resource_usage_collector.get_metrics_dict()["system_cpu_percent"]
-            # self.system_cpu_mem_usage_dict["system_memory_percent"] = self.resource_usage_collector.get_metrics_dict()["system_memory_percent"]
+            self.system_cpu_mem_usage_dict["system_cpu_percent"] = self.resource_usage_collector.get_metrics_dict()["system_cpu_percent"]
+            self.system_cpu_mem_usage_dict["system_memory_percent"] = self.resource_usage_collector.get_metrics_dict()["system_memory_percent"]
 
             self.system_lustre_nic_io_dict["nic_send_bytes"] = self.resource_usage_collector.get_metrics_dict()["nic_send_bytes"]
             self.system_lustre_nic_io_dict["nic_receive_bytes"] = self.resource_usage_collector.get_metrics_dict()["nic_receive_bytes"]

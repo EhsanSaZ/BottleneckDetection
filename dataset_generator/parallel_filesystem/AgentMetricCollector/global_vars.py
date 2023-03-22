@@ -24,7 +24,7 @@ system_lustre_nic_io_dict = manager.dict({"nic_send_bytes": 0.0, "nic_receive_by
 # system_cpu_mem_usage = manager.list(range(2))
 
 # system_cpu_mem_usage_dict = {"system_cpu_percent": -1, "system_memory_percent": -1}
-# system_cpu_mem_usage_dict = manager.dict({"system_cpu_percent": -1, "system_memory_percent": -1})
+system_cpu_mem_usage_dict = manager.dict({"system_cpu_percent": -1, "system_memory_percent": -1})
 # system_cpu_mem_usage_proto_message = ResourceUsageMetrics()
 # system_cpu_mem_usage_proto_message.system_cpu_percent = -1
 # system_cpu_mem_usage_proto_message.system_memory_percent = -1
