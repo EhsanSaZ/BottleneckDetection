@@ -29,6 +29,7 @@ from helper_threads import fileWriteThread
 from Config import Config
 # import system_monitoring_global_vars
 import global_vars
+from helper_threads import overheadFileWriteThread
 from multiprocessing import Process, Event
 
 class StatProcess(Process):
@@ -76,6 +77,7 @@ class StatProcess(Process):
         self.latest_ost_path_output = None
         self.latest_mdt_path_output = None
         self.latest_file_mount_point = None
+        self.monitoring_agent = psutil.Process(int(global_vars.monitor_agent_pid.value))
 
     def run(self):
         self.collect_stat()
@@ -281,6 +283,7 @@ class StatProcess(Process):
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
                     metrics += "," + self.label_value
                     msg = "{time} {tid} {sender} {metrics}".format(time=ts, tid=transfer_id, sender=self.is_sender, metrics=metrics)
+                    # data_transfer_overhead = len(msg.encode('utf-8'))
                     metric_publisher_socket.send_string(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
@@ -329,8 +332,8 @@ class StatProcess(Process):
             # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
             #                                                    processing_time,
             #                                                    data_transfer_overhead,
-            #                                                    global_vars.monitor_agent_process.cpu_percent(),
-            #                                                    global_vars.monitor_agent_process.memory_percent())
+            #                                                    self.monitoring_agent.cpu_percent(),
+            #                                                    self.monitoring_agent.memory_percent())
             # overhead_epoc_count += 1
             # if not is_first_time:
             #     overhead_main_output_string += overhead_output_string
@@ -338,7 +341,7 @@ class StatProcess(Process):
             #         overhead_epoc_count = 0
             #         overhead_write = overheadFileWriteThread("./sender/overhead_logs/overhead_footprints.csv", overhead_main_output_string)
             #         overhead_write = overheadFileWriteThread("./receiver/overhead_logs/overhead_footprints.csv",overhead_main_output_string)
-            #         overhead_write = overheadFileWriteThread(self.over_head_write_thread_directory,overhead_main_output_string)
+            #         overhead_write = overheadFileWriteThread(overhead_main_output_string, self.over_head_write_thread_directory)
             #         overhead_write.start()
             #         overhead_main_output_string = ""
             # time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
