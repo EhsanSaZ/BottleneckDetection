@@ -1,0 +1,9 @@
+- path.config: /usr/share/pipelinesConfig/allpl/p3.conf
+  pipeline.id: my-pipeline_1
+  pipeline.workers: 1
+- path.config: /usr/share/pipelinesConfig/allpl/node0.lustre-cluster.anomaly-pg0.wisc.cloudlab.us_at_wisconsine_c220g1_cluster.conf
+  pipeline.id: node0.lustre-cluster.anomaly-pg0.wisc.cloudlab.us_at_wisconsine_c220g1_cluster
+  pipeline.workers: 1
+- path.config: /usr/share/pipelinesConfig/allpl/node1.lustre-cluster.anomaly-pg0.wisc.cloudlab.us_at_cluster_1.conf
+  pipeline.id: node1.lustre-cluster.anomaly-pg0.wisc.cloudlab.us_at_cluster_1
+  pipeline.workers: 1

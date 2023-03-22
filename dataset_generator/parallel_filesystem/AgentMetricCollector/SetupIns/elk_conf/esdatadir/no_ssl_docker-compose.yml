@@ -1,0 +1,158 @@
+version: "2.2"
+
+services:
+  setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    user: "0"
+    command: >
+      bash -c '
+        if [ x${ELASTIC_PASSWORD} == x ]; then
+          echo "Set the ELASTIC_PASSWORD environment variable in the .env file";
+          exit 1;
+        elif [ x${KIBANA_PASSWORD} == x ]; then
+          echo "Set the KIBANA_PASSWORD environment variable in the .env file";
+          exit 1;
+        fi;
+        echo "Setting kibana_system password";
+        until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://es01:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+        echo "All done!";
+      '
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata01:/usr/share/elasticsearch/data
+    ports:
+      - ${ES_PORT}:9200
+    environment:
+      - node.name=es01
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es02,es03
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+#      - xpack.security.http.ssl.key=certs/es01/es01.key
+#      - xpack.security.http.ssl.certificate=certs/es01/es01.crt
+#      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.http.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.enabled=false
+#      - xpack.security.transport.ssl.key=certs/es01/es01.key
+#      - xpack.security.transport.ssl.certificate=certs/es01/es01.crt
+#      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=${LICENSE}
+#      - http.cors.allow-origin: '*'
+#      - http.cors.enabled: true
+#      - http.cors.allow-credentials: true
+#      - http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
+#      - http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  es02:
+    depends_on:
+      - es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+      - esdata02:/usr/share/elasticsearch/data
+    environment:
+      - node.name=es02
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es01,es03
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+#      - xpack.security.http.ssl.key=certs/es02/es02.key
+#      - xpack.security.http.ssl.certificate=certs/es02/es02.crt
+#      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.http.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.enabled=false
+#      - xpack.security.transport.ssl.key=certs/es02/es02.key
+#      - xpack.security.transport.ssl.certificate=certs/es02/es02.crt
+#      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=${LICENSE}
+#      - http.cors.allow-origin: "*"
+#      - http.cors.enabled: true
+#      - http.cors.allow-credentials: true
+#      - http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
+#      - http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  es03:
+    depends_on:
+      - es02
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    volumes:
+#      - certs:/usr/share/elasticsearch/config/certs
+      - esdata03:/usr/share/elasticsearch/data
+    environment:
+      - node.name=es03
+      - cluster.name=${CLUSTER_NAME}
+      - cluster.initial_master_nodes=es01,es02,es03
+      - discovery.seed_hosts=es01,es02
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+#      - xpack.security.http.ssl.key=certs/es03/es03.key
+#      - xpack.security.http.ssl.certificate=certs/es03/es03.crt
+#      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.http.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.enabled=false
+#      - xpack.security.transport.ssl.key=certs/es03/es03.key
+#      - xpack.security.transport.ssl.certificate=certs/es03/es03.crt
+#      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.license.self_generated.type=${LICENSE}
+#      - http.cors.allow-origin: "*"
+#      - http.cors.enabled: true
+#      - http.cors.allow-credentials: true
+#      - http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
+#      - http.cors.allow-headers: X-Requested-With, X-Auth-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept
+    mem_limit: ${MEM_LIMIT}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+  kibana:
+    depends_on:
+      - es01
+      - es02
+      - es03
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    volumes:
+#      - certs:/usr/share/kibana/config/certs
+      - kibanadata:/usr/share/kibana/data
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+#      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+    mem_limit: ${MEM_LIMIT}
+networks:
+  default:
+    name: mynetwork
+    external: true
+
+volumes:
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+  esdata03:
+    driver: local
+  kibanadata:
+    driver: local
+
+

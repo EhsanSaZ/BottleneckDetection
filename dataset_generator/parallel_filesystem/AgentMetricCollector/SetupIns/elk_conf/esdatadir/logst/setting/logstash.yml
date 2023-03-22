@@ -1,0 +1,10 @@
+config:
+  reload:
+    automatic: true
+monitoring:
+  enabled: true
+  elasticsearch:
+    hosts: http://es01:9200
+
+
+

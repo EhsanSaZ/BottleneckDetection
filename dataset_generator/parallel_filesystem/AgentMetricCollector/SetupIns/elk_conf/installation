@@ -1,0 +1,34 @@
+1- install docker
+sudo yum install -y yum-utils
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl start docker
+sudo docker run hello-world
+
+2- install docker compose
+
+3- mount a new disk for docker volume usage
+sudo mkfs -t ext4 /dev/sdb1
+sudo mkdir -p [mountpoint]
+sudo mount -t auto /dev/sdb1 [mountpoint]
+
+4- change docker volume usage disk
+You can change where Docker stores its files including volumes by changing one of its startup parameters called --data-root.
+If you're using systemd for service management, the file is usually located at /lib/systemd/system/docker.service. Edit the file as such:
+```
+# Old - taken from the generated docker.service file in Ubuntu 16.04's docker.io package
+ExecStart=/usr/bin/dockerd -H fd:// $DOCKER_OPTS
+
+# New
+ExecStart=/usr/bin/dockerd --data-root /new_location/ -H fd:// $DOCKER_OPTS
+```
+Alternatively, you can edit the Docker daemon configuration file which defaults to /etc/docker/daemon.json.
+Restart the Docker daemon and your volumes will be under /new_location/volumes/{volume_name}/_data
+
+Set vm.max_map_count to at least 262144edit
+The vm.max_map_count kernel setting must be set to at least 262144 for production use.
+
+How you set vm.max_map_count depends on your platform.

@@ -1,0 +1,25 @@
+version: "2.2"
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.3.3
+    volumes:
+      -  ${PWD}/logst/setting/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ${PWD}/logst/pipeline/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+#      -  ${PWD}/logst/pipeline/:/usr/share/logstash/pipeline/
+      -  ${PWD}/logst/allpl/:/usr/share/pipelinesConfig/allpl/
+    ports:
+      - "5044:5044"
+      - "50000:50000/tcp"
+      - "50000:50000/udp"
+      - "9600:9600"
+      - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: -Xms512m -Xmx512m
+      LOGSTASH_INTERNAL_PASSWORD: qwerty
+    #command: bash -c "bin/logstash-plugin install logstash-codec-protobuf && /usr/local/bin/docker-entrypoint"
+networks:
+  default:
+    name: mynetwork
+    external: true
+
