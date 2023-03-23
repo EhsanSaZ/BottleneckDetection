@@ -77,7 +77,8 @@ class StatProcess(Process):
         self.latest_ost_path_output = None
         self.latest_mdt_path_output = None
         self.latest_file_mount_point = None
-        self.monitoring_agent = psutil.Process(int(global_vars.monitor_agent_pid.value))
+        # self.monitoring_agent = psutil.Process(int(global_vars.monitor_agent_pid.value))
+        # self.stat_collector_process = psutil.Process(self.pid)
 
     def run(self):
         self.collect_stat()
@@ -147,6 +148,20 @@ class StatProcess(Process):
                         return self.latest_ost_path_output, self.latest_file_mount_point
 
         return None, None
+
+    def get_process_usage(self):
+        cpu_percent = self.monitoring_agent.cpu_percent()
+        memory_info = self.monitoring_agent.memory_info().rss
+
+        children = self.monitoring_agent.children(recursive=True)
+        for child in children:
+            try:
+                cpu_percent += child.cpu_percent()
+                memory_info += child.memory_info().rss
+            except Exception as e:
+                pass
+        return cpu_percent, memory_info, self.stat_collector_process.cpu_percent(), self.stat_collector_process.memory_info().rss
+
     def collect_stat(self):
         # import cProfile
         # import pstats, math
@@ -283,7 +298,7 @@ class StatProcess(Process):
                     metrics += "," + lustre_ost_metrics_zmq_collector.get_metrics_str()
                     metrics += "," + self.label_value
                     msg = "{time} {tid} {sender} {metrics}".format(time=ts, tid=transfer_id, sender=self.is_sender, metrics=metrics)
-                    # data_transfer_overhead = len(msg.encode('utf-8'))
+                    data_transfer_overhead = len(msg.encode('utf-8'))
                     metric_publisher_socket.send_string(msg)
                     # metric_publisher_socket.send(log_data_request.SerializeToString())
                 elif not is_first_time:
@@ -327,24 +342,18 @@ class StatProcess(Process):
             processing_finish_time = datetime.timestamp(processing_finish_date)
             # processing_finish_time = time.time()
             processing_time = processing_finish_time - processing_start_timestampt
-            # # cpu_memory_overhead = agent_resource_usage_collector.get_process_io_stats(global_vars.monitor_agent_pid,
-            # #                                                                           global_vars.monitor_agent_process)
-            # overhead_output_string = "{},{},{},{},{}\n".format(processing_finish_time,
-            #                                                    processing_time,
-            #                                                    data_transfer_overhead,
-            #                                                    self.monitoring_agent.cpu_percent(),
-            #                                                    self.monitoring_agent.memory_percent())
+
+            # cpu_percent, memory_info, collector_cpu, collecter_mem_info = self.get_process_usage()
+            # overhead_output_string = "{},{},{},{},{}\n".format(data_transfer_overhead, cpu_percent, memory_info, collector_cpu, collecter_mem_info)
             # overhead_epoc_count += 1
             # if not is_first_time:
             #     overhead_main_output_string += overhead_output_string
             #     if overhead_epoc_count % 10 == 0:
             #         overhead_epoc_count = 0
-            #         overhead_write = overheadFileWriteThread("./sender/overhead_logs/overhead_footprints.csv", overhead_main_output_string)
-            #         overhead_write = overheadFileWriteThread("./receiver/overhead_logs/overhead_footprints.csv",overhead_main_output_string)
             #         overhead_write = overheadFileWriteThread(overhead_main_output_string, self.over_head_write_thread_directory)
             #         overhead_write.start()
             #         overhead_main_output_string = ""
-            # time.sleep(min(sleep_time, abs(sleep_time - processing_time)))
+
             time.sleep(abs(sleep_time - (processing_time % sleep_time)))
         # pr.disable()
         # result = io.StringIO()
