@@ -344,7 +344,7 @@ class StatProcess(Process):
             processing_time = processing_finish_time - processing_start_timestampt
 
             # cpu_percent, memory_info, collector_cpu, collecter_mem_info = self.get_process_usage()
-            # overhead_output_string = "{},{},{},{},{}\n".format(data_transfer_overhead, cpu_percent, memory_info, collector_cpu, collecter_mem_info)
+            # overhead_output_string = "{},{},{},{},{},{}\n".format(processing_time, data_transfer_overhead, cpu_percent, memory_info, collector_cpu, collecter_mem_info)
             # overhead_epoc_count += 1
             # if not is_first_time:
             #     overhead_main_output_string += overhead_output_string
